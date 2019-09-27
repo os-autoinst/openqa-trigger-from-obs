@@ -7,7 +7,6 @@ openSUSE%: FORCE
 .PONY: FORCE
 FORCE:
 
-
 test:
 	(cd t && bash run.sh)
 

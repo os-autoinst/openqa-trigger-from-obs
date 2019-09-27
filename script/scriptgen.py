@@ -35,7 +35,7 @@ for flavor in {FLAVORLIST,}; do
         src=$(grep $flavor __envdir/files_iso.lst | grep $arch | head -n 1)
         [ ! -z "$src" ] || continue
         dest=$src
-        [ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-$flavor}
+        [ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}
         echo "rsync --timeout=3600 PRODUCTISOPATH/*$src /var/lib/openqa/factory/iso/$dest"
         echo "rsync --timeout=3600 PRODUCTISOPATH/*$src.sha256 /var/lib/openqa/factory/iso/$dest.sha256"
     done
@@ -74,8 +74,8 @@ for flavor in {FLAVORLIST,}; do
         build1=$build
         destiso=$iso
         [ -z "__STAGING" ] || build1=__STAGING.$build 
-        [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-$flavor}
-        [ -z "__STAGING" ] || flavor=$flavor-STAGING:__STAGING'''
+        [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
+        [ -z "__STAGING" ] || flavor=Staging-$flavor'''
 
 openqa_call_calc_isobuild = '''
         buildREPOID=$(grep REPOTYPE __envdir/files_iso.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+' | head -n 1) || :'''
