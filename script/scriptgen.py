@@ -73,7 +73,9 @@ for flavor in {FLAVORLIST,}; do
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+') || continue
         build1=$build
         destiso=$iso
+        version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build 
+        [ -z "__STAGING" ] || version=${version}:S:__STAGING
         [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
         [ -z "__STAGING" ] || flavor=Staging-$flavor'''
 
@@ -87,7 +89,7 @@ openqa_call_start2 = '''
  _OBSOLETE=1 \\\\
  DISTRI=DISTRIVALUE \\\\
  ARCH=$arch \\\\
- VERSION=VERSIONVALUE \\\\
+ VERSION=$version \\\\
  BUILD=$build1 \\\\'''
 
 openqa_call_legacy_builds=''' BUILD_HA=$build1 \\\\
