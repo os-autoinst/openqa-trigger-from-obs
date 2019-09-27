@@ -1,0 +1,19 @@
+version: 2
+
+jobs:
+  test:
+    docker:
+      - image: registry.opensuse.org/opensuse/tumbleweed
+    steps:
+      - run: 
+          command: |
+            zypper -n in --no-recommends make python3 tar git-core || :
+      - checkout
+      - run: make test_regen_all
+      - run: make test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test

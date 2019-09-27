@@ -1,0 +1,36 @@
+/usr/share/openqa/script/client isos post --host https://openqa.opensuse.org \
+ _OBSOLETE=1 \
+ DISTRI=opensuse \
+ ARCH=x86_64 \
+ VERSION=15.2 \
+ BUILD=497.4 \
+ ISO=openSUSE-Leap-15.2-NET-x86_64-Build497.4-Media.iso \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ FULLURL=1 \
+ REPO_0=openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ REPO_OSS=openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ REPO_1=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
+ REPO_NON_OSS=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
+ FLAVOR=NET
+
+/usr/share/openqa/script/client isos post --host https://openqa.opensuse.org \
+ _OBSOLETE=1 \
+ DISTRI=opensuse \
+ ARCH=x86_64 \
+ VERSION=15.2 \
+ BUILD=497.4 \
+ ISO=openSUSE-Leap-15.2-DVD-x86_64-Build497.4-Media.iso \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ FULLURL=1 \
+ REPO_0=openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ REPO_OSS=openSUSE-15.2-oss-i586-x86_64-Build497.4 \
+ REPO_1=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
+ REPO_NON_OSS=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
+ FLAVOR=DVD
+

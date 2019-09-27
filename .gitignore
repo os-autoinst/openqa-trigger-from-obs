@@ -1,3 +1,4 @@
+/openSUSE*
 /t/*/*.after
 /t/*/*.diff
 /t/*/read_files.sh

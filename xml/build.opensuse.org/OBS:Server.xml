@@ -1,0 +1,5 @@
+<openQA project_pattern="OBS:Server:(?P&lt;version&gt;[2-9].[0-9]:Staging|Unstable)" dist_path="http://download.opensuse.org/repositories/OBS:/Server:/${version//:Staging/:\/Staging}/images">
+    <flavor name="Appliance" distri="obs">
+        <hdd filemask='obs-server[^"]*.x86_64-[^"]*\.qcow2'/>
+    </flavor>
+</openQA>

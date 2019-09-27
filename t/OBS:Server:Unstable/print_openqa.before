@@ -1,0 +1,9 @@
+/usr/share/openqa/script/client isos post --host https://openqa.opensuse.org \
+ _OBSOLETE=1 \
+ DISTRI=obs \
+ ARCH=x86_64 \
+ VERSION=Unstable \
+ BUILD=1.490 \
+ HDD_URL_1=http://download.opensuse.org/repositories/OBS:/Server:/Unstable/images/obs-server.x86_64-2.10.51-qcow2-Build1.490.qcow2 \
+ FLAVOR=Appliance
+
