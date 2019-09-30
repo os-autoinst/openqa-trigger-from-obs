@@ -447,8 +447,6 @@ def parse_dir(root, d, files):
             continue
 
         dist_path = output.rstrip("\r\n")
-        if not dist_path.startswith("http"):
-            dist_path = "PUBLISH/" + dist_path
 
         return (root + "/" + f, dist_path, version)
 

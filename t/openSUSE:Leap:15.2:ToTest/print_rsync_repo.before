@@ -1,4 +1,4 @@
-rsync --timeout=3600 -r PUBLISH/openSUSE:Leap:15.2:ToTest/images/local/*openSUSE-ftp-ftp*x86_64*/*Media1/* /var/lib/openqa/factory/repo/openSUSE-15.2-oss-i586-x86_64-CURRENT/
+rsync --timeout=3600 -r obspublish::openqa/openSUSE:Leap:15.2:ToTest/images/local/*openSUSE-ftp-ftp*x86_64*/*Media1/* /var/lib/openqa/factory/repo/openSUSE-15.2-oss-i586-x86_64-CURRENT/
 rsync --timeout=3600 -r --link-dir /var/lib/openqa/factory/repo/openSUSE-15.2-oss-i586-x86_64-CURRENT /var/lib/openqa/factory/repo/openSUSE-15.2-oss-i586-x86_64-CURRENT /var/lib/openqa/factory/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4
-rsync --timeout=3600 -r PUBLISH/openSUSE:Leap:15.2:ToTest/images/local/*openSUSE-Addon-NonOss-ftp-ftp*x86_64*/*Media1/* /var/lib/openqa/factory/repo/openSUSE-15.2-non-oss-i586-x86_64-CURRENT/
+rsync --timeout=3600 -r obspublish::openqa/openSUSE:Leap:15.2:ToTest/images/local/*openSUSE-Addon-NonOss-ftp-ftp*x86_64*/*Media1/* /var/lib/openqa/factory/repo/openSUSE-15.2-non-oss-i586-x86_64-CURRENT/
 rsync --timeout=3600 -r --link-dir /var/lib/openqa/factory/repo/openSUSE-15.2-non-oss-i586-x86_64-CURRENT /var/lib/openqa/factory/repo/openSUSE-15.2-non-oss-i586-x86_64-CURRENT /var/lib/openqa/factory/repo/openSUSE-15.2-non-oss-i586-x86_64-Build497.4

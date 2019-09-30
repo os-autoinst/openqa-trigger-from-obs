@@ -1,6 +1,6 @@
 <openQA 
 	project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?):(?P&lt;tail&gt;ToTest)"
-	dist_path="openSUSE:Leap:15${sp}:${tail}/images/local"
+	dist_path="obspublish::openqa/openSUSE:Leap:15${sp}:${tail}/images/local"
 	iso_path="*product*">
 	<flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
 		<repos>
