@@ -85,7 +85,7 @@ openqa_call_calc_isobuild = '''
 openqa_call_start2 = '''
         [ ! -z "$build"  ] || continue
         
-        echo "/usr/share/openqa/script/client isos post --host https://openqa.opensuse.org \\\\
+        echo "/usr/share/openqa/script/client isos post --host http://openqa.opensuse.org \\\\
  _OBSOLETE=1 \\\\
  DISTRI=DISTRIVALUE \\\\
  ARCH=$arch \\\\
