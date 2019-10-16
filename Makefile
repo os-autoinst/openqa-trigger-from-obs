@@ -7,6 +7,10 @@ openSUSE%: FORCE
 .PONY: FORCE
 FORCE:
 
+install_apparmor:
+	install -d -m 755 "$(DESTDIR)"/etc/apparmor.d
+	install -m 644 profiles/apparmor.d/local/usr.share.openqa.script.openqa "$(DESTDIR)"/etc/apparmor.d/local/
+
 test:
 	(cd t && bash run.sh)
 

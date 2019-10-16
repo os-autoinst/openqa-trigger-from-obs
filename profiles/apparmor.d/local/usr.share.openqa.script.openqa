@@ -1,0 +1,72 @@
+  /opt/openqa-trigger-from-obs/ r,
+  /opt/openqa-trigger-from-obs/** r,
+
+  profile /usr/bin/bash {
+    #include <abstractions/base>
+
+    /usr/bin/awk ix,
+    /usr/bin/gawk ix,
+    /usr/bin/bash mrix,
+    /usr/bin/bsdtar ix,
+    /usr/bin/cat ix,
+    /usr/bin/cp ix,
+    /usr/bin/head ix,
+    /usr/bin/date ix,
+    /usr/bin/dirname ix,
+    /usr/bin/grep ix,
+    /usr/bin/ln ix,
+    /usr/bin/ls ix,
+    /usr/bin/mkdir ix,
+    /usr/bin/rm ix,
+    /usr/bin/rsync Px -> /usr/share/openqa/script/openqa//internal_rsync,
+    /usr/bin/sort ix,
+    /usr/bin/tee ix,
+
+    /usr/share/openqa/script/client rPx -> /usr/share/openqa/script/openqa//openqa_client,
+
+    /opt/openqa-trigger-from-obs/** r,
+    /opt/openqa-trigger-from-obs/openSUSE*/files*.lst rw,
+    /opt/openqa-trigger-from-obs/openSUSE*/.run*/files*.lst rw,
+    /opt/openqa-trigger-from-obs/openSUSE*/.run*/generate_{rsync*,openqa}.err w,
+    /opt/openqa-trigger-from-obs/openSUSE*/.run*/{rsync*,openqa}.cmd rw,
+    /var/lib/openqa/share/factory/iso/** r,
+    /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
+  }
+
+  profile internal_rsync {
+    #include <abstractions/base>
+    #include <abstractions/nameservice>
+
+    capability net_bind_service,
+    network tcp,
+
+    /usr/bin/rsync mrix,
+
+    /var/lib/openqa/share/factory/{iso,repo}/** rw,
+    link subset /var/lib/openqa/share/factory/iso/** -> /var/lib/openqa/share/factory/iso/**,
+    link subset /var/lib/openqa/share/factory/repo/** -> /var/lib/openqa/share/factory/repo/**,
+
+    /opt/openqa-trigger-from-obs/SUSE*/.run*/rsync*.log w,
+  }
+
+  profile openqa_client {
+    #include <abstractions/base>
+    #include <abstractions/nameservice>
+    #include <abstractions/openssl>
+    #include <abstractions/ssl_certs>
+    #include <abstractions/perl>
+
+    capability net_bind_service,
+    network tcp,
+
+    /usr/bin/perl mrix,
+
+    /usr/share/openqa/script/client rix,
+    /etc/openqa/client.conf r,
+    /usr/share/openqa/lib/** r,
+
+    /var/lib/openqa/share/factory/iso/** r,
+    /var/lib/openqa/share/factory/repo/** r,
+
+    /opt/openqa-trigger-from-obs/SUSE*/.run*/openqa*.log w,
+  }
