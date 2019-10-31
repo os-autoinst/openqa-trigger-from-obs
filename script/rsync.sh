@@ -43,7 +43,6 @@ ln -fs -T "$(pwd)/$logdir" $environ/.run_last
 
 [ ! -e "$environ/print_openqa.sh" ] || bash -e "$environ/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
-
 for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
   bash -x "$environ/.run_last/$f" > "$logdir/$f".log 2>&1
 done

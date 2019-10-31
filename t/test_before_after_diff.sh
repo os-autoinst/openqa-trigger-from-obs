@@ -16,7 +16,7 @@ for d in "$@" ; do
 	else 
 		for sh in {print_rsync_iso,print_rsync_repo,print_openqa}; do
 			bash $d/${sh}.sh > $d/$sh.after
-			diff $d/$sh.before $d/$sh.after > $d/$sh.diff || echo "FAIL $d $sh : $(cat $d/$sh.diff)"  $((++errs))
+			diff -u $d/$sh.before $d/$sh.after > $d/$sh.diff || echo "FAIL $d $sh : $(cat $d/$sh.diff)"  $((++errs))
 		done
 	fi
 done
