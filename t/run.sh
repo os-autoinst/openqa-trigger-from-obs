@@ -5,6 +5,7 @@ fail=0
 
 for dir in *; do
     [ -d "$dir" ] || continue
+    [ "$dir" != docker ] || continue
     # run general checks
     for file in test*.sh; do
         [ -f "$file" ] || continue
@@ -32,4 +33,20 @@ for dir in *; do
     done
 done
 
-( exit $fail )
+(
+dockerfail=0 
+cd docker
+for t in *.sh; do
+    [ -x "$t" ] || continue
+    ./$t
+    if [ $? -eq 0 ] ; then
+        echo "P:$t"
+    else
+        : $((dockerfail++))
+        echo "F-$t"
+    fi
+done
+exit $dockerfail
+)
+dockerfail=$?
+( exit $((fail + dockerfail))  )
