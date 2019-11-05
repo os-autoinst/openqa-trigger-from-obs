@@ -8,6 +8,7 @@ errs=0
 for d in "$@" ; do
 	[ "$d" != "--update-before" ] || update_before=1
 	[ -d "$d" ] || continue
+	[ "$d" != docker ] || continue
 	d=$(basename $d)
 	if [ $update_before == 1 ] ; then 
 		for sh in {print_rsync_iso,print_rsync_repo,print_openqa}; do
