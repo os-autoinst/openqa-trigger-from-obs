@@ -1,6 +1,6 @@
 #include <tunables/global>
 
-/opt/openqa-trigger-from-obs/script/rsync.sh {
+/opt/openqa-trigger-from-obs/script/rsync.sh flags=(attach_disconnected) {
   #include <abstractions/base>
 
   /usr/bin/awk ix,
@@ -32,7 +32,7 @@
   /var/lib/openqa/share/factory/iso/** r,
   /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
 
-  profile rsync {
+  profile rsync flags=(attach_disconnected) {
     #include <abstractions/base>
     #include <abstractions/nameservice>
 
@@ -46,6 +46,7 @@
     link subset /var/lib/openqa/share/factory/repo/** -> /var/lib/openqa/share/factory/repo/**,
 
     /opt/openqa-trigger-from-obs/openSUSE*/.run*/rsync*.log w,
+    # /var/lib/docker/** r,
   }
 
   profile openqa_client {

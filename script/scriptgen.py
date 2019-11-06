@@ -24,7 +24,7 @@ read_files_hdd = '''rsync --list-only PRODUCTPATH/ | grep -o 'ISOMASK' | awk '{ 
 read_files_iso = '''rsync --list-only PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envdir/files_iso.lst
 ( exit ${PIPESTATUS[0]} )'''
 
-read_files_repo = '''rsync --list-only PRODUCTREPOPATH/ | grep -P 'Media1?(.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS'  >> __envdir/files_repo.lst
+read_files_repo = '''rsync --list-only PRODUCTREPOPATH/ | grep -P 'Media[1-3]?(.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS'  >> __envdir/files_repo.lst
 ( exit ${PIPESTATUS[0]} )'''
 
 rsync_iso = '''
@@ -57,7 +57,7 @@ for arch in "${archs[@]}"; do
 rsync_repodir2 = '''
         dest=${dest//-Media2/}
         echo rsync --timeout=3600 -r RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
-        echo rsync --timeout=3600 -r --link-dir /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
+        echo rsync --timeout=3600 -r --link-dest /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
     done < <(grep $arch __envdir/files_repo.lst | grep Media2)
 done
 '''
@@ -341,12 +341,12 @@ class ActionGenerator:
                 self.p(rsync_repo1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
                 for ren in self.renames:
                     self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                self.p(rsync_repodir2, f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include={PACKAGES,} --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
+                self.p(rsync_repodir2, f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
             if r.attrib.get("source",""):
                 self.p(rsync_repo1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
                 for ren in self.renames:
                     self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                self.p(rsync_repodir2, f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include={PACKAGES,} --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
+                self.p(rsync_repodir2, f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
 
 
     def gen_print_openqa(self,f):
