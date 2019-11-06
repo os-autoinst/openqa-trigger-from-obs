@@ -31,7 +31,7 @@ basename=${basename,,}
 basename=${basename//:/_}
 containername="localtest.${basename,,}"
 
-[[ ${BASH_SOURCE[0]} != *privileged.sh ]] || SKIP test "${PRIVILEGED_TESTS}" != 1 # PRIVILEGED_TESTS is not set to 1
+SKIP test "${PRIVILEGED_TESTS}" != 1 # PRIVILEGED_TESTS is not set to 1
 docker_info="$(docker info >/dev/null 2>&1)" || SKIP test 1 # Docker doesn't seem to be running
 testsetup=${testcase%.*}.setup.sh
 dockerfile=${testcase%.*}.Dockerfile
@@ -118,15 +118,11 @@ docker exec "$containername" pwd >& /dev/null || (echo Cannot start container; e
 # on host, so we must disable the profile again
 # so it doesn't interfere with the test
 # (feel free to remove this line if it is not needed)
-docker exec -i "$containername" systemctl enable --now postgresql
 
-echo '
-/usr/share/openqa/script/openqa {
-  profile /usr/bin/ssh {
-  }
-}' | sudo tee /etc/apparmor.d/usr.share.openqa.script.openqa
+echo 'cd /opt/openqa-trigger-from-obs && make install_apparmor' | docker exec -i "$containername" bash -x
+echo 'sed -i "s,/usr/share/openqa/script/openqa {,/usr/share/openqa/script/openqa flags=(attach_disconnected) {," /etc/apparmor.d/usr.share.openqa.script.openqa' | docker exec -i "$containername" bash -x
+echo 'echo " /var/lib/docker/** r," >> /etc/apparmor.d/local/usr.share.openqa.script.openqa && rcapparmor restart' | docker exec -i "$containername" bash -x
 
-sudo apparmor_parser -R /etc/apparmor.d/usr.share.openqa.script.openqa || :
 
 set +e
 docker exec -i "$containername" bash < "$testcase"

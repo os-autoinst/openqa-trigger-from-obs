@@ -1,0 +1,4 @@
+  /opt/openqa-trigger-from-obs/ r,
+  /opt/openqa-trigger-from-obs/** r,
+
+  /opt/openqa-trigger-from-obs/script/rsync.sh px -> /opt/openqa-trigger-from-obs/script/rsync.sh,
