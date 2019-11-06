@@ -154,10 +154,11 @@ openqa_call_repot1 = '''
 openqa_call_repot2 = '''
             echo " REPO_$i=$dest \\\\"
             [[ $dest =~ license ]] || echo " REPO_$repoKey=$dest \\\\"
-            [[ ! $repoKey =~ _DEBUGINFO ]] || [ -z "DEBUG_PACKAGES" ] || echo " REPO_${repoKey}_PACKAGES='DEBUG_PACKAGES' \\\\"
-            [[ ! $repoKey =~ _SOURCE ]] || [ -z "SOURCE_PACKAGES" ] || echo " REPO_${repoKey}_PACKAGES='SOURCE_PACKAGES' \\\\"
+            [[ ! $repoKey =~ _DEBUGINFO ]] || [ -z "DEBUG_PACKAGES" ] || echo " REPO_${{repoKey}}_PACKAGES='DEBUG_PACKAGES' \\\\"
+            [[ ! $repoKey =~ _SOURCE ]] || [ -z "SOURCE_PACKAGES" ] || echo " REPO_${{repoKey}}_PACKAGES='SOURCE_PACKAGES' \\\\"
             : $((i++))
-        done < <(grep $arch __envdir/files_repo.lst | sort)'''
+        done < <(grep $arch __envdir/files_repo.lst {} | sort)'''
+
 
 openqa_call_end = '''
         echo " FLAVOR=$flavor"
@@ -381,7 +382,15 @@ class ActionGenerator:
                 self.p("            dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
             if i==0:
                 self.p("            [ $i != 0 ] || {{ {};  }}".format(openqa_call_repo0), f, "REPO0_ISO", "$dest", f)
-            self.p(openqa_call_repot2, f, "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"DEBUG_PACKAGES",r.attrib.get("debug",""),"SOURCE_PACKAGES",r.attrib.get("source",""))
+            media_filter = ""
+            if r.attrib.get("debug","") == "" or r.attrib.get("source","") == "":
+                if r.attrib.get("debug","") == "" and r.attrib.get("source","") == "":
+                    media_filter = "| grep Media1 "
+                elif r.attrib.get("debug","") == "":
+                    media_filter = "| grep -E '(Media1|Media3)' "
+                else:
+                    media_filter = "| grep -E '(Media1|Media2)' "
+            self.p(openqa_call_repot2.format(media_filter), f, "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"DEBUG_PACKAGES",r.attrib.get("debug","").strip('{}'),"SOURCE_PACKAGES",r.attrib.get("source",""))
 
         if self.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
