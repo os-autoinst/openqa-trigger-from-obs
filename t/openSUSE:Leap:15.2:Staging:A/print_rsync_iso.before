@@ -1,2 +1,2 @@
 rsync --timeout=3600 obspublish-stage::openqa/openSUSE:Leap:15.2:Staging:A/images/x86_64/*product*/*openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso
-rsync --timeout=3600 obspublish-stage::openqa/openSUSE:Leap:15.2:Staging:A/images/x86_64/*product*/*openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso.sha256 /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso.sha256
+rsync --timeout=3600 obspublish-stage::openqa/openSUSE:Leap:15.2:Staging:A/images/x86_64/*product*/*openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso.sha256

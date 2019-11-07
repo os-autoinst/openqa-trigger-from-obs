@@ -37,7 +37,7 @@ for flavor in {FLAVORLIST,}; do
         dest=$src
         [ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}
         echo "rsync --timeout=3600 PRODUCTISOPATH/*$src /var/lib/openqa/factory/iso/$dest"
-        echo "rsync --timeout=3600 PRODUCTISOPATH/*$src.sha256 /var/lib/openqa/factory/iso/$dest.sha256"
+        echo "rsync --timeout=3600 PRODUCTISOPATH/*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
     done
 done'''
 
@@ -100,7 +100,8 @@ openqa_call_legacy_builds=''' BUILD_HA=$build1 \\\\
 openqa_call_calc_isobuild = '''
         buildREPOID=$(grep REPOTYPE __envdir/files_iso.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+' | head -n 1) || :'''
 
-openqa_call_start_iso = ''' ISO=${destiso} \\\\"'''
+openqa_call_start_iso = ''' ISO=${destiso} \\\\
+ ASSET_ISO_SHA256=${destiso}.sha256 \\\\"'''
 
 openqa_call_repo0 = ''' echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
@@ -362,7 +363,8 @@ class ActionGenerator:
             if self.productpath.startswith('http'):
                 self.p(" HDD_URL_1=PRODUCTPATH/$destiso \\\\\"", f)
             else:
-                self.p(" HDD_1=$destiso \\\\\"", f)
+                self.p(" HDD_1=$destiso \\\\", f)
+                self.p(" ASSET_HDD_1_SHA256=$destiso.sha256 \\\\\"", f)
         else:
             self.p(openqa_call_start_iso, f)
             for iso in self.isos:
