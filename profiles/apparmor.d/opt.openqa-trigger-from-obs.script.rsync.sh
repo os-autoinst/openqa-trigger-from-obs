@@ -61,6 +61,7 @@
 
     /usr/share/openqa/script/client rix,
     /usr/share/openqa/lib/** r,
+    /var/lib/openqa/.config/openqa/client.conf r,
     /etc/openqa/client.conf r,
 
     /var/lib/openqa/share/factory/iso/** r,
