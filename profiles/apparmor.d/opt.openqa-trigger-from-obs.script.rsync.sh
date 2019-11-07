@@ -29,7 +29,7 @@
   /opt/openqa-trigger-from-obs/openSUSE*/.run_last rw,
   /opt/openqa-trigger-from-obs/openSUSE*/.run*/ rw,
   /opt/openqa-trigger-from-obs/openSUSE*/.run*/* rw,
-  /var/lib/openqa/share/factory/iso/** r,
+  /var/lib/openqa/share/factory/{iso,other}/** r,
   /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
 
   profile rsync flags=(attach_disconnected) {
@@ -41,7 +41,7 @@
 
     /usr/bin/rsync mrix,
 
-    /var/lib/openqa/share/factory/{iso,repo}/** rw,
+    /var/lib/openqa/share/factory/{iso,repo,other}/** rw,
     link subset /var/lib/openqa/share/factory/iso/** -> /var/lib/openqa/share/factory/iso/**,
     link subset /var/lib/openqa/share/factory/repo/** -> /var/lib/openqa/share/factory/repo/**,
 
@@ -64,8 +64,7 @@
     /var/lib/openqa/.config/openqa/client.conf r,
     /etc/openqa/client.conf r,
 
-    /var/lib/openqa/share/factory/iso/** r,
-    /var/lib/openqa/share/factory/repo/** r,
+    /var/lib/openqa/share/factory/{iso,repo,other}/** r,
 
     /opt/openqa-trigger-from-obs/openSUSE*/.run*/openqa*.log w,
   }
