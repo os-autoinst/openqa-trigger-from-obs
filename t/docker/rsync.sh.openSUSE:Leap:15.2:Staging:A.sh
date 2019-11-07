@@ -10,9 +10,6 @@ python3 script/scriptgen.py openSUSE:Leap:15.2:Staging:A
 sed -i "s/openqa.opensuse.org/127.0.0.1/g" openSUSE:Leap:15.2:Staging:A/print_openqa.sh
 echo geekotest > rsync.secret'
 
-# install /opt/openqa-trigger-from-obs/profiles/apparmor.d/opt.openqa-trigger-from-obs.script.rsync.sh /etc/apparmor.d
-# rcapparmor restart 
-
 echo '127.0.0.1 obspublish-stage' >> /etc/hosts
 systemctl enable --now postgresql
 
@@ -58,8 +55,7 @@ mkdir -p /var/lib/openqa/.config/openqa/
 cp /etc/openqa/client.conf /var/lib/openqa/.config/openqa/
 chown "$dbuser" /var/lib/openqa/.config/openqa/client.conf
 
-systemctl enable --now rsyncd 
-# openqa-client --host http://127.0.0.1 /api/v1/obs_rsync/openSUSE:Leap:15.2:Staging:A/runs put || :
+systemctl enable --now rsyncd
 
 su "$dbuser" -c '/opt/openqa-trigger-from-obs/script/rsync.sh openSUSE:Leap:15.2:Staging:A'
 
