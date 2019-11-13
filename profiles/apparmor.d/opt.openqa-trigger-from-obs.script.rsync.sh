@@ -11,6 +11,7 @@
   /usr/bin/cp ix,
   /usr/bin/head ix,
   /usr/bin/date ix,
+  /usr/bin/diff ix,
   /usr/bin/dirname ix,
   /usr/bin/grep ix,
   /usr/bin/ln ix,
