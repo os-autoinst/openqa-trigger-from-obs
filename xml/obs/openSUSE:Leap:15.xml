@@ -4,7 +4,7 @@
 	iso_path="*product*">
 	<flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
 		<repos>
-			<oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,mraa-debug*}" source="coreutils*" mid="oss-"/>
+			<oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,mraa-debug*}" source="coreutils*" mid="oss-" mirror="1"/>
 			<non-oss folder="openSUSE-Addon-NonOss-ftp-ftp"/>
 		</repos>
 		<renames>

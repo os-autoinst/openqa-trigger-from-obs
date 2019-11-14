@@ -3,10 +3,12 @@ import os
 import re
 from subprocess import check_output, CalledProcessError, STDOUT
 import argparse
+import copy
 from contextlib import suppress
 from xml.etree import ElementTree
+from collections import defaultdict
 
-p = '''# GENERATED FILE - DO NOT EDIT 
+header = '''# GENERATED FILE - DO NOT EDIT 
 set -e
 '''
 
@@ -27,21 +29,56 @@ read_files_iso = '''rsync --list-only PRODUCTISOPATH/ | grep -P 'Media1?.iso$' |
 read_files_repo = '''rsync --list-only PRODUCTREPOPATH/ | grep -P 'Media[1-3]?(.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS'  >> __envdir/files_repo.lst
 ( exit ${PIPESTATUS[0]} )'''
 
-rsync_iso = '''
+def rsync_iso_staging(brand):
+    if brand == 'obs': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
+
+rsync_iso = lambda brand : '''
 archs=(aarch64 ppc64le s390x x86_64)
 
 for flavor in {FLAVORLIST,}; do
     for arch in "${archs[@]}"; do
-        src=$(grep $flavor __envdir/files_iso.lst | grep $arch | head -n 1)
+        filter=$flavor
+        [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
+        src=$(grep "$filter" __envdir/files_iso.lst | grep $arch | head -n 1)
         [ ! -z "$src" ] || continue
         dest=$src
-        [ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}
+        ''' + rsync_iso_staging(brand) + '''
         echo "rsync --timeout=3600 PRODUCTISOPATH/*$src /var/lib/openqa/factory/iso/$dest"
         echo "rsync --timeout=3600 PRODUCTISOPATH/*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
+
+
+        [ ! -d /var/lib/openqa/factory/repo/${dest%.iso} ] || continue
+        [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo mkdir -p /var/lib/openqa/factory/repo/${dest%.iso}
+        [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo bsdtar xf /var/lib/openqa/factory/iso/$dest -C /var/lib/openqa/factory/repo/${dest%.iso}
     done
 done'''
 
 rsync_repo1 = '''
+echo '# REPOLIST'
+buildid=$(cat __envdir/files_iso.lst | grep -E 'FLAVORORS' | grep -o 'Build[^-]*' | head -n 1)
+[ -z "__STAGING" ] || buildid=${buildid//Build/Build__STAGING.}
+
+for repo in {REPOLIST,}; do
+    while read src; do
+        [ ! -z "$src" ] || continue
+        dest=$src
+        destPrefix=${dest%-Media*}
+        destSuffix=${dest#$destPrefix}
+        dest=$destPrefix
+'''
+
+rsync_repo2 = '''
+        destPrefix=$dest
+        repoDest=$destPrefix-$buildid$destSuffix
+        repoCur=$destPrefix-CURRENT$destSuffix
+        [ -z "__STAGING" ] || repoCur=$destPrefix-__STAGING-CURRENT$destSuffix 
+        echo "rsync --timeout=3600 -r PRODUCTPATH/repo/$src/ /var/lib/openqa/factory/repo/$repoCur"
+        echo "rsync --timeout=3600 -r --link-dest /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
+    done < <(grep $repo-POOL __envdir/files_repo.lst)
+done
+'''
+
+rsync_repodir1 = '''
 archs=(aarch64 ppc64le s390x x86_64)
 buildid=$(cat __envdir/files_iso.lst | grep -E 'FLAVORORS' | grep -o 'Build[^-]*' | head -n 1)
 
@@ -54,7 +91,8 @@ for arch in "${archs[@]}"; do
         mid=''
         dest=$destPrefix$mid$destSuffix'''
 
-rsync_repodir2 = '''
+def rsync_repodir2(brand): 
+    if brand == 'obs': return '''
         dest=${dest//-Media2/}
         echo rsync --timeout=3600 -r RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
         echo rsync --timeout=3600 -r --link-dest /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
@@ -62,12 +100,19 @@ rsync_repodir2 = '''
 done
 '''
 
-openqa_call_start = '''
+def openqa_call_start_staging(brand):
+    if brand == 'obs': return '''[ -z "__STAGING" ] || version=${version}:S:__STAGING
+        [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
+        [ -z "__STAGING" ] || flavor=Staging-$flavor'''
+
+
+openqa_call_start = lambda brand: '''
 archs=(aarch64 ppc64le s390x x86_64)
 
-for flavor in {FLAVORLIST,}; do
+for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
+        [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
         iso=$(grep "$filter" __envdir/files_iso.lst | grep $arch | head -n 1)
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+') || continue
@@ -75,17 +120,10 @@ for flavor in {FLAVORLIST,}; do
         destiso=$iso
         version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build 
-        [ -z "__STAGING" ] || version=${version}:S:__STAGING
-        [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
-        [ -z "__STAGING" ] || flavor=Staging-$flavor'''
-
-openqa_call_calc_isobuild = '''
-        buildREPOID=$(grep REPOTYPE __envdir/files_iso.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+' | head -n 1) || :'''
-
-openqa_call_start2 = '''
+	''' + openqa_call_start_staging(brand) + '''
         [ ! -z "$build"  ] || continue
         
-        echo "/usr/share/openqa/script/client isos post --host http://openqa.opensuse.org \\\\
+        echo "/usr/share/openqa/script/client isos post --host localhost \\\\
  _OBSOLETE=1 \\\\
  DISTRI=DISTRIVALUE \\\\
  ARCH=$arch \\\\
@@ -97,40 +135,56 @@ openqa_call_legacy_builds=''' BUILD_HA=$build1 \\\\
  BUILD_SES=$build1 \\\\
  BUILD_SLE=$build1 \\\\'''
 
-openqa_call_calc_isobuild = '''
-        buildREPOID=$(grep REPOTYPE __envdir/files_iso.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+' | head -n 1) || :'''
-
 openqa_call_start_iso = ''' ISO=${destiso} \\\\
  ASSET_ISO_SHA256=${destiso}.sha256 \\\\"'''
 
-openqa_call_repo0 = ''' echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
+# if MIRROREPO is set - expressions for FLAVORASREPOORS will elaluate to false 
+def openqa_call_repo0(brand):
+    if brand == 'obs': return ''' [ -z "FLAVORASREPOORSMIRRORREPO" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) == 0"MIRRORREPO" ] || {
+    echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
- FULLURL=1 \\\\"'''
+ FULLURL=1 \\\\"
+    }'''
 
-openqa_call_repo0a = ''' echo " REPO_0=${destiso%.iso} \\\\"'''
+openqa_call_repo0a = ''' [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo " REPO_0=${destiso%.iso} \\\\"'''
 
-openqa_call_repot = '''
+def openqa_call_repot_part1(brand):
+    if brand == 'obs': return '''[ -z "__STAGING" ] || repo=${repo//Module/Staging:__STAGING-Module}
+                [ -z "__STAGING" ] || repo=${repo//Product/Staging:__STAGING-Product}'''
+
+def openqa_call_repot_part2(brand):
+    if brand == 'obs': return 'repoDest=$repoPrefix-Build$build$repoSuffix'
+
+def openqa_call_repot_part3(brand):
+    if brand == 'obs': return '''[[ $repoDest != *Media2* ]] || repoKey=${repoKey}_DEBUG
+                [[ $repoDest != *Media3* ]] || repoKey=${repoKey}_SOURCE'''
+
+openqa_call_repot = lambda brand: '''
         for repot in {REPOLIST,}; do
             while read repo; do
-                [ -z "__STAGING" ] || repo=${repo//Module/Staging:__STAGING-Module}
-                [ -z "__STAGING" ] || repo=${repo//Product/Staging:__STAGING-Product}
+                ''' + openqa_call_repot_part1(brand) + '''
                 repoPrefix=${repo%-Media*}
                 repoSuffix=${repo#$repoPrefix}
-                repoDest=$repoPrefix-Build$build$repoSuffix
+                ''' + openqa_call_repot_part2(brand) + '''
                 repoKey=REPOPREFIX${repot}
                 repoKey=${repoKey^^}
                 repoKey=${repoKey//-/_}
                 echo " REPO_$i=$repoDest \\\\"
-                [[ $repoDest != *Media2* ]] || repoKey=${repoKey}_DEBUG
-                [[ $repoDest != *Media3* ]] || repoKey=${repoKey}_SOURCE
+                ''' + openqa_call_repot_part3(brand) + '''
                 [[ $repo =~ license ]] || echo " REPO_$repoKey=$repoDest \\\\"
                 : $((i++))
             done < <(grep $repot-POOL __envdir/files_repo.lst | grep REPOTYPE | grep $arch | sort)
         done'''
 
-openqa_call_repot1 = '''
+def openqa_call_repot1_debugsource(brand):
+    if brand == 'obs': return '''[[ $dest != *Media2* ]] || repoKey=${repoKey}_DEBUGINFO
+            [[ $dest != *Media2* ]] || dest=$dest-debuginfo
+            [[ $dest != *Media3* ]] || repoKey=${repoKey}_SOURCE
+            [[ $dest != *Media3* ]] || dest=$dest-source'''
+
+openqa_call_repot1 = lambda brand: '''
         while read src; do
             dest=$src
             destPrefix=${dest%$arch*}
@@ -143,10 +197,7 @@ openqa_call_repot1 = '''
             repoKey=REPOKEY
             repoKey=${repoKey^^}
             repoKey=${repoKey//-/_}
-            [[ $dest != *Media2* ]] || repoKey=${repoKey}_DEBUGINFO
-            [[ $dest != *Media2* ]] || dest=$dest-debuginfo
-            [[ $dest != *Media3* ]] || repoKey=${repoKey}_SOURCE
-            [[ $dest != *Media3* ]] || dest=$dest-source
+            ''' + openqa_call_repot1_debugsource(brand) + '''
             dest=${dest//-Media1/}
             dest=${dest//-Media2/}
             dest=${dest//-Media3/}
@@ -161,7 +212,8 @@ openqa_call_repot2 = '''
         done < <(grep $arch __envdir/files_repo.lst {} | sort)'''
 
 
-openqa_call_end = '''
+def openqa_call_end(brand):
+    if brand == 'obs': return '''
         echo " FLAVOR=$flavor"
         echo ""
     done
@@ -169,14 +221,17 @@ done
 '''
 
 class ActionGenerator:
-    def __init__(self, envdir, productpath, version):
+    def __init__(self, envdir, productpath, version, brand):
         self.flavors = []
+        self.flavor_aliases = defaultdict(list)
         self.hdds = []
         self.isos = []
         self.iso_extract_as_repo = {}
+        self.mirror_repo = ""
         self.repos = []
         self.repodirs = []
         self.renames = []
+        self.brand = brand
         self.envdir = envdir
         self.productpath = productpath
         self.version = version
@@ -206,12 +261,17 @@ class ActionGenerator:
 
         if self.flavors:
             s=s.replace("FLAVORLIST",','.join(self.flavors))
+            aliases = copy.deepcopy(self.flavors)
+            for k, values in self.flavor_aliases.items():
+                aliases.extend(values)
+            s=s.replace("FLAVORALIASLIST",','.join(aliases))
             s=s.replace("FLAVORORS", '|'.join(self.flavors))
             s=s.replace("FLAVORASREPOORS", '|'.join([f for f in self.flavors if self.iso_extract_as_repo.get(f,0)]))
 
         if self.repos:
             s=s.replace("REPOLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in self.repos]))
             s=s.replace("REPOORS",   '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in self.repos]))
+        s=s.replace("MIRRORREPO", self.mirror_repo)   
         if self.domain:
             s=s.replace("opensuse.org",self.domain)
         print(s, file=f)
@@ -252,6 +312,18 @@ class ActionGenerator:
                 self.repodirs.append(t)
             else:
                 self.repos.append(t)
+            if t.attrib.get("mirror",""):
+                self.mirror_repo = t.tag
+        for t in node.findall("./alias"):
+            prefix=t.attrib.get("prefix","")
+            suffix=t.attrib.get("suffix","")
+            suffix=suffix.replace("${version}", self.version)
+            name=t.attrib.get("name","")
+            for p in prefix.split("|"):
+                for n in name.split("|"):
+                    for s in suffix.split("|"):
+                        self.flavor_aliases[node.attrib.get("name","")].append(p + n + s)
+
         for t in node.findall(".//renames/*"):
             if "to" in t.attrib:
                 self.renames.append([t.attrib.get("from",t.tag), t.attrib["to"]])
@@ -296,9 +368,16 @@ class ActionGenerator:
             elif fname == "print_openqa.sh":
                 self.gen_print_openqa(f)
 
+    def media2_name(self):
+        if self.brand == 'obs':
+            return 'debug'
+
+    def media3_name(self):
+        if self.brand == 'obs':
+            return 'source'
 
     def gen_read_files(self,f):
-        print(p, file=f)
+        print(header, file=f)
         self.p(clear_iso, f)
         self.p(clear_repo, f)
         for hdd in self.hdds:
@@ -310,54 +389,59 @@ class ActionGenerator:
             self.p(read_files_iso, f)
         if self.repos:
             self.p(read_files_repo, f)
-            if any(repo.attrib.get("debug","") for repo in self.repos):
-                self.p(read_files_repo, f, "Media1", "Media2", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get("debug",""), self.repos)]))
-            if any(repo.attrib.get("source","") for repo in self.repos):
-                self.p(read_files_repo, f, "Media1", "Media3", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get("source",""), self.repos)]))
+            if any(repo.attrib.get(self.media2_name(),"") for repo in self.repos):
+                self.p(read_files_repo, f, "Media1", "Media2", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get(self.media2_name(),""), self.repos)]))
+            if any(repo.attrib.get(self.media3_name(),"") for repo in self.repos):
+                self.p(read_files_repo, f, "Media1", "Media3", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get(self.media3_name(),""), self.repos)]))
         for repodir in self.repodirs:
             self.p(read_files_repo, f, "PRODUCTREPOPATH", self.productpath + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(repodir.attrib["folder"]) )
 
     def gen_print_array_flavor_filter(self,f):
-        if not self.hdds:
-            return
-        self.p('declare -A flavor_filter',f)
+        if len(self.hdds) or len(self.flavor_aliases):
+            self.p('declare -A flavor_filter',f)
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
             self.p("flavor_filter[{}]='{}'".format(fl, h), f)
-        
+        for fl, alias_list in self.flavor_aliases.items():
+            for alias in alias_list:
+                self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
 
     def gen_print_rsync_iso(self,f):
-        print(p, file=f)
+        print(header, file=f)
         if self.isos or (self.hdds and not self.productpath.startswith('http')):
             self.gen_print_array_flavor_filter(f)
-            self.p(rsync_iso, f)
+            self.p(rsync_iso(self.brand), f)
 
     def gen_print_rsync_repo(self,f):
-        print(p, file=f)
-        for r in self.repodirs:
-            self.p(rsync_repo1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+        print(header, file=f)
+        if self.repos:
+            self.p(rsync_repo1, f)
             for ren in self.renames:
                 self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-            self.p(rsync_repodir2, f,"PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"Media2","Media1","-debuginfo","","RSYNCFILTER","")
-            if r.attrib.get("debug",""):
-                self.p(rsync_repo1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
-                for ren in self.renames:
-                    self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                self.p(rsync_repodir2, f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
-            if r.attrib.get("source",""):
-                self.p(rsync_repo1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
-                for ren in self.renames:
-                    self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                self.p(rsync_repodir2, f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
+            self.p(rsync_repo2, f)
 
+        for r in self.repodirs:
+            self.p(rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+            for ren in self.renames:
+                self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
+            self.p(rsync_repodir2(self.brand), f,"PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"Media2","Media1","-debuginfo","","RSYNCFILTER","")
+            if r.attrib.get("debug",""):
+                self.p(rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+                for ren in self.renames:
+                    self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
+                self.p(rsync_repodir2(self.brand), f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
+            if r.attrib.get("source",""):
+                self.p(rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+                for ren in self.renames:
+                    self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
+                self.p(rsync_repodir2(self.brand), f, "PRODUCTREPOPATH", self.productpath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
 
     def gen_print_openqa(self,f):
-        print(p, file=f)
+        print(header, file=f)
         self.gen_print_array_flavor_filter(f)
-        self.p(openqa_call_start, f)
+        self.p(openqa_call_start(self.brand), f)
         if self.legacy_builds:
             self.p(openqa_call_legacy_builds, f)
-        self.p(openqa_call_start2, f)
         i=0
         if self.hdds:
             if self.productpath.startswith('http'):
@@ -370,7 +454,7 @@ class ActionGenerator:
             for iso in self.isos:
                 if self.iso_extract_as_repo.get(iso,0):
                     i += 1
-                    self.p(openqa_call_repo0, f, "REPO0_ISO","${destiso%.iso}", f)
+                    self.p(openqa_call_repo0(self.brand), f, "REPO0_ISO","${destiso%.iso}", f)
                     self.p(openqa_call_repo0a, f, "REPO0_ISO","${destiso%.iso}", f)
                     break # for now only REPO_0
         self.p(" i={}".format(i), f)
@@ -379,11 +463,11 @@ class ActionGenerator:
             self.p(" i=9", f) # temporary to simplify diff with old rsync scripts, may be removed later
             self.p(openqa_call_repot, f, "REPOTYPE", "''", "REPOPREFIX", "SLE_")
         for r in self.repodirs:
-            self.p(openqa_call_repot1, f, "REPOKEY", r.attrib.get("rename",r.tag),"mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+            self.p(openqa_call_repot1(self.brand), f, "REPOKEY", r.attrib.get("rename",r.tag),"mid=''", "mid='{}'".format(r.attrib.get("mid","")))
             for ren in self.renames:
                 self.p("            dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
             if i==0:
-                self.p("            [ $i != 0 ] || {{ {};  }}".format(openqa_call_repo0), f, "REPO0_ISO", "$dest", f)
+                self.p("            [ $i != 0 ] || {{ {};  }}".format(openqa_call_repo0(self.brand)), f, "REPO0_ISO", "$dest", f)
             media_filter = ""
             if r.attrib.get("debug","") == "" or r.attrib.get("source","") == "":
                 if r.attrib.get("debug","") == "" and r.attrib.get("source","") == "":
@@ -397,7 +481,7 @@ class ActionGenerator:
         if self.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
 
-        self.p(openqa_call_end, f)
+        self.p(openqa_call_end(self.brand), f)
 
 def parse_dir(root, d, files):
     for f in files:
@@ -465,13 +549,13 @@ def parse_dir(root, d, files):
 
 def gen_files(project):
     xmlfile=""
-    for root, _, files in os.walk("xml/build.opensuse.org"):
+    for root, _, files in os.walk("xml/obs"):
         (xmlfile, dist_path, version) = parse_dir(root, project, files)
     if not xmlfile:
         print('Cannot find xml file for {} ...'.format(project), file=sys.stderr)
         return 1
 
-    a = ActionGenerator(os.getcwd() +"/"+ project, dist_path, version)
+    a = ActionGenerator(os.getcwd() +"/"+ project, dist_path, version, 'obs')
     if a is None:
         print('Couldnt initialize', file=sys.stderr)
         sys.exit(1)
