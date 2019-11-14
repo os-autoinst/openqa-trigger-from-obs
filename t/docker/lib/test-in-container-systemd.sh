@@ -71,7 +71,7 @@ RUN zypper -n install --no-recommends perl-Mojolicious-Plugin-AssetPack
 RUN zypper -n install --no-recommends openQA-local-db apache2
 
 RUN zypper -n install apparmor-profiles apparmor-utils
-RUN zypper -n install curl hostname iputils vim command-not-found
+RUN zypper -n install curl hostname iputils vim command-not-found bsdtar zip
 
 RUN zypper -n install make
 

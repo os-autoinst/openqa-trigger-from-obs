@@ -46,7 +46,7 @@ API_SECRET=$(hexdump -n 8 -e '2/4 "%08X" 1 "\n"' /dev/urandom)
 echo "INSERT INTO api_keys (key, secret, user_id, t_created, t_updated) VALUES ('${API_KEY}', '${API_SECRET}', 2, NOW(), NOW());" | su postgres -c "psql $dbname"
 
 cat >> /etc/openqa/client.conf <<EOF
-[127.0.0.1]
+[localhost]
 key = ${API_KEY}
 secret = ${API_SECRET}
 EOF

@@ -1,4 +1,4 @@
-/usr/share/openqa/script/client isos post --host http://openqa.opensuse.org \
+/usr/share/openqa/script/client isos post --host localhost \
  _OBSOLETE=1 \
  DISTRI=opensuse \
  ARCH=x86_64 \
