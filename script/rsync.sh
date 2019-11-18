@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 environ=$1
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -41,7 +41,9 @@ mkdir $logdir
 cp $environ/*.lst $logdir/
 cp $environ/*.sh $logdir/
 
-ln -fs -T "$(pwd)/$logdir" $environ/.run_last
+# remove symbolic link if exists
+[ ! -L "$environ/.run_last" ] || rm "$environ/.run_last"
+ln -s -T "$(pwd)/$logdir" $environ/.run_last
 
 [ ! -e "$environ/print_openqa.sh" ] || bash -e "$environ/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
