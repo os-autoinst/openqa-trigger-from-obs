@@ -120,8 +120,13 @@ docker exec "$containername" pwd >& /dev/null || (echo Cannot start container; e
 # (feel free to remove this line if it is not needed)
 
 echo 'cd /opt/openqa-trigger-from-obs && make install_apparmor' | docker exec -i "$containername" bash -x
+# these are hacks to make apparmor tolerate container
 echo 'sed -i "s,/usr/share/openqa/script/openqa {,/usr/share/openqa/script/openqa flags=(attach_disconnected) {," /etc/apparmor.d/usr.share.openqa.script.openqa' | docker exec -i "$containername" bash -x
-echo 'echo " /var/lib/docker/** r," >> /etc/apparmor.d/local/usr.share.openqa.script.openqa && rcapparmor restart' | docker exec -i "$containername" bash -x
+echo 'echo " /var/lib/docker/** r," >> /etc/apparmor.d/local/usr.share.openqa.script.openqa' | docker exec -i "$containername" bash -x
+echo 'sed -i "s,/opt/openqa-trigger-from-obs/script/rsync.sh {,/opt/openqa-trigger-from-obs/script/rsync.sh flags=(attach_disconnected) {," /etc/apparmor.d/opt.openqa-trigger-from-obs.script.rsync.sh' | docker exec -i "$containername" bash -x
+echo 'sed -i "/\/usr\/bin\/rsync mrix,/a  \/var\/lib\/docker\/** r," /etc/apparmor.d/opt.openqa-trigger-from-obs.script.rsync.sh' | docker exec -i "$containername" bash -x
+echo 'echo " /var/lib/docker/** r," >> /etc/apparmor.d/local/opt.openqa-trigger-from-obs.script.rsync.sh' | docker exec -i "$containername" bash -x
+echo 'rcapparmor restart' | docker exec -i "$containername" bash -x
 
 
 set +e

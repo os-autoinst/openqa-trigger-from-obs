@@ -11,6 +11,7 @@ install_apparmor:
 	install -d -m 755 "$(DESTDIR)"/etc/apparmor.d
 	install -d -m 755 "$(DESTDIR)"/etc/apparmor.d/local
 	install -m 644 profiles/apparmor.d/opt.openqa-trigger-from-obs.script.rsync.sh "$(DESTDIR)"/etc/apparmor.d/
+	install -m 644 profiles/apparmor.d/local/opt.openqa-trigger-from-obs.script.rsync.sh "$(DESTDIR)"/etc/apparmor.d/local/
 	install -m 644 profiles/apparmor.d/local/usr.share.openqa.script.openqa "$(DESTDIR)"/etc/apparmor.d/local/
 
 test:
