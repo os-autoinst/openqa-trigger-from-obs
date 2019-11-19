@@ -5,6 +5,7 @@
  VERSION=15.2:S:A \
  BUILD=A.248.1 \
  ISO=openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso.sha256 | tail -c 64) \
  ASSET_ISO_SHA256=openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso.sha256 \
  STAGING=A \
  FLAVOR=Staging-DVD

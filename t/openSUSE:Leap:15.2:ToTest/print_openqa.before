@@ -5,6 +5,7 @@
  VERSION=15.2 \
  BUILD=497.4 \
  ISO=openSUSE-Leap-15.2-NET-x86_64-Build497.4-Media.iso \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-NET-x86_64-Build497.4-Media.iso.sha256 | tail -c 64) \
  ASSET_ISO_SHA256=openSUSE-Leap-15.2-NET-x86_64-Build497.4-Media.iso.sha256 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
@@ -30,6 +31,7 @@
  VERSION=15.2 \
  BUILD=497.4 \
  ISO=openSUSE-Leap-15.2-DVD-x86_64-Build497.4-Media.iso \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-DVD-x86_64-Build497.4-Media.iso.sha256 | tail -c 64) \
  ASSET_ISO_SHA256=openSUSE-Leap-15.2-DVD-x86_64-Build497.4-Media.iso.sha256 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \

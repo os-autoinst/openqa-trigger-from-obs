@@ -31,6 +31,7 @@
   /usr/bin/rm ix,
   /usr/bin/rsync Px -> /opt/openqa-trigger-from-obs/script/rsync.sh//rsync,
   /usr/bin/sort ix,
+  /usr/bin/tail ix,
   /usr/bin/tee ix,
   /usr/share/openqa/script/client rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_client,
   /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
