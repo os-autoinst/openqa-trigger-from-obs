@@ -136,6 +136,7 @@ openqa_call_legacy_builds=''' BUILD_HA=$build1 \\\\
  BUILD_SLE=$build1 \\\\'''
 
 openqa_call_start_iso = ''' ISO=${destiso} \\\\
+ CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
  ASSET_ISO_SHA256=${destiso}.sha256 \\\\"'''
 
 # if MIRROREPO is set - expressions for FLAVORASREPOORS will elaluate to false 

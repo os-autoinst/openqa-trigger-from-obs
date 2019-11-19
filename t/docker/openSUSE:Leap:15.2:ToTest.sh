@@ -80,6 +80,7 @@ test ! -d /var/lib/openqa/factory/repo/openSUSE-15.2-non-oss-i586-x86_64-Build51
 
 test -f /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:ToTest/.run_last/openqa.cmd.log
 grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:ToTest/.run_last/openqa.cmd.log
+grep -q 'CHECKSUM_ISO=4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865' /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:ToTest/.run_last/openqa.cmd.log
 
 state=$(echo "select state from minion_jobs where task='obs_rsync_run';" | su postgres -c "psql -t $dbname")
 test "$(echo $state)" == finished

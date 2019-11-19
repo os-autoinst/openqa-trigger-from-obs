@@ -16,7 +16,10 @@ RUN chown -R "$dbuser":users /usr/share/openqa
 # mock OBS backend folder
 RUN mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64 && \
   echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-NET-x86_64-Build519.3-Media.iso && \
-  echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-NET-x86_64-Build519.3-Media.iso.sha256 && \
+  echo "-----BEGIN PGP SIGNED MESSAGE-----" > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-NET-x86_64-Build519.3-Media.iso.sha256 && \
+  echo "Hash: SHA256"                      >> /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-NET-x86_64-Build519.3-Media.iso.sha256 && \
+  echo ""                                  >> /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-NET-x86_64-Build519.3-Media.iso.sha256 && \
+  echo 1 | sha256sum                       >> /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-NET-x86_64-Build519.3-Media.iso.sha256 && \
   mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-dvd5-dvd-x86_64 && \
   echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-DVD-x86_64-Build519.3-Media.iso && \
   echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-DVD-x86_64-Build519.3-Media.iso.sha256 && \
