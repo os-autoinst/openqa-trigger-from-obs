@@ -15,10 +15,10 @@
  REPO_OSS=openSUSE-15.2-oss-i586-x86_64-Build497.4 \
  REPO_1=openSUSE-15.2-oss-i586-x86_64-Build497.4-debuginfo \
  REPO_OSS_DEBUGINFO=openSUSE-15.2-oss-i586-x86_64-Build497.4-debuginfo \
- REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,mraa-debug*' \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
  REPO_2=openSUSE-15.2-oss-i586-x86_64-Build497.4-source \
  REPO_OSS_SOURCE=openSUSE-15.2-oss-i586-x86_64-Build497.4-source \
- REPO_OSS_SOURCE_PACKAGES='coreutils*' \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
  REPO_3=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
  REPO_NON_OSS=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
  FLAVOR=NET
@@ -40,10 +40,10 @@
  REPO_OSS=openSUSE-15.2-oss-i586-x86_64-Build497.4 \
  REPO_1=openSUSE-15.2-oss-i586-x86_64-Build497.4-debuginfo \
  REPO_OSS_DEBUGINFO=openSUSE-15.2-oss-i586-x86_64-Build497.4-debuginfo \
- REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,mraa-debug*' \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
  REPO_2=openSUSE-15.2-oss-i586-x86_64-Build497.4-source \
  REPO_OSS_SOURCE=openSUSE-15.2-oss-i586-x86_64-Build497.4-source \
- REPO_OSS_SOURCE_PACKAGES='coreutils*' \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
  REPO_3=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
  REPO_NON_OSS=openSUSE-15.2-non-oss-i586-x86_64-Build497.4 \
  FLAVOR=DVD

@@ -476,7 +476,7 @@ class ActionGenerator:
                     media_filter = "| grep -E '(Media1|Media3)' "
                 else:
                     media_filter = "| grep -E '(Media1|Media2)' "
-            self.p(openqa_call_repot2.format(media_filter), f, "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"DEBUG_PACKAGES",r.attrib.get("debug","").strip('{}'),"SOURCE_PACKAGES",r.attrib.get("source",""))
+            self.p(openqa_call_repot2.format(media_filter), f, "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"DEBUG_PACKAGES",r.attrib.get("debug","").strip('{}'),"SOURCE_PACKAGES",r.attrib.get("source","").strip('{}'))
 
         if self.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
