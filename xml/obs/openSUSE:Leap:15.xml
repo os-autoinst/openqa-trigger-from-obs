@@ -1,6 +1,6 @@
 <openQA 
-	project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?):(?P&lt;tail&gt;ToTest)"
-	dist_path="obspublish::openqa/openSUSE:Leap:15${sp}:${tail}/images/local"
+	project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?)(?P&lt;platform&gt;:(ARM|PowerPC))?:(?P&lt;tail&gt;ToTest)"
+	dist_path="obspublish::openqa/openSUSE:Leap:15${sp}${platform}:${tail}/images/local"
 	iso_path="*product*">
 	<flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
 		<repos>
@@ -9,6 +9,7 @@
 		</repos>
 		<renames>
 			<x86_64 to="i586-x86_64"/>
+			<ppc64le to="ppc64_ppc64le"/>
 			<Leap from="Leap-" to=""/>
 			<Addon-NonOss-FTP to="non-oss"/>
 		</renames>

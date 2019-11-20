@@ -529,7 +529,7 @@ def parse_dir(root, d, files):
 
         myenv = os.environ.copy()
         for k, v in found_match.groupdict().items():
-            if v.find("'") == -1:
+            if v and v.find("'") == -1:
                 myenv[k] = v
         try:
             output = check_output(["echo " + dist_path], shell=True, executable="/bin/bash", env=myenv).decode()
