@@ -1,0 +1,9 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ ASSET_1=openSUSE-Tumbleweed-x64-Build20191128.7.9.appx \
+ ASSET_1_SHA256=openSUSE-Tumbleweed-x64-Build20191128.7.9.appx.sha256 \
+ BUILD=20191128.7.9 \
+ DISTRI=opensuse \
+ FLAVOR=WSL \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1

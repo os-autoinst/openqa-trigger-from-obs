@@ -1,0 +1,6 @@
+<openQA project_pattern="Virtualization:WSL"
+    dist_path="obspublish-other::openqa/Virtualization:WSL/openSUSE_SUBFOLDER/x86_64/wsl-appx">
+    <flavor name="WSL" distri="opensuse" arch=".">
+        <asset filemask='.*\.appx$'/>
+    </flavor>
+</openQA>
