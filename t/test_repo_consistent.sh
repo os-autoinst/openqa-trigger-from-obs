@@ -20,15 +20,15 @@ for dir in "$@" ; do
 	# remove trailing /
 	known_destination_repos=$(echo "$known_destination_repos" | grep -o '.*[^/]')
 
-	regex='REPO_[^=]+=([^[:space:]]*)'
+	regex='REPO_[0-9]+=([^[:space:]]*)'
 	checked=0
 
 	while read -r line; do
 	    if [[ "$line" =~ $regex ]]; then
 	        echo "$known_destination_repos" | grep -q "${BASH_REMATCH[1]}\$" || { >&2 echo "Destination REPO file wasnt found in print_rsync_repo output {${BASH_REMATCH[1]}}   {$known_destination_repos}"; : $((++errs)); continue 2; }
-		checked=1
+            checked=1
 	    fi
-	done < <(bash $dir/print_openqa.sh | grep 'REPO_' | grep -v 'REPO_0' | grep -v PACKAGES )
+	done < <(bash $dir/print_openqa.sh | grep REPO_ | grep -v REPO_0 | grep -v 'REPO_5=' | grep -v PACKAGES )
 
 	[ "$checked" == 1 ] || { >&2 echo "No REPO found in openqa request - is something wrong?";  : $((++errs)); continue; }
 	>&2 echo "PASS $dir"
