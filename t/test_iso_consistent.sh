@@ -21,15 +21,17 @@ for dir in "$@" ; do
 	       	: $((++errs))
 		continue 2;
 	fi
-	regex='ISO=(.*\.iso)'
+	regex='ISO.*=(.*\.iso)'
 	checked=0
 
 	while read -r line; do
 	    if [[ "$line" =~ $regex ]]; then
-        	echo "$known_destination_isos" | grep -q "${BASH_REMATCH[1]}$" || { >&2 echo "FAIL $dir: ISO file wasnt found in print_rsync_iso output {${BASH_REMATCH[1]}}"; : $((++errs)); continue 2; }
+            if [ "$dir" != SUSE:SLE-12-SP5:Update:Products:SLERT ]; then # exception as it uses fixed iso which is not needed to be synced
+              	echo "$known_destination_isos" | grep -q "${BASH_REMATCH[1]}$" || { >&2 echo "FAIL $dir: ISO file wasnt found in print_rsync_iso output {${BASH_REMATCH[1]}}"; : $((++errs)); continue 2; }
+            fi
         	checked=1
 	    fi
-	done < <(bash $dir/print_openqa.sh | grep '\bISO=')
+	done < <(bash $dir/print_openqa.sh | grep '\bISO.*=')
 
 	[ "$checked" == 1 ] || { >&2 echo "FAIL $dir: No ISO found in openqa request - is something wrong?"; : $((++errs)); continue; }
 	>&2 echo "PASS $dir"
