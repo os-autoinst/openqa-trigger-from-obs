@@ -113,13 +113,14 @@ for flavor in {FLAVORALIASLIST,}; do
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
         iso=$(grep "$filter" __envdir/files_iso.lst | grep $arch | head -n 1)
-        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+') || continue
+        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?') || continue
         build1=$build
         destiso=$iso
         version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build 
         ''' + openqa_call_start_staging(brand) + '''
         [ ! -z "$build"  ] || continue
+        [ "$arch" != . ] || arch=x86_64
         
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
 (
@@ -164,7 +165,7 @@ def openqa_call_repot_part3(brand):
 def openqa_call_build_id_from_iso1(build_id_from_iso):
     if not build_id_from_iso:
         return ""
-    return '''build2=$(grep $repot __envdir/files_iso_buildid.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+' | head -n 1)
+    return '''build2=$(grep $repot __envdir/files_iso_buildid.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
                 [ -z "$build2" ] || build1=$build2'''
 
 def openqa_call_build_id_from_iso2(build_id_from_iso):
@@ -235,12 +236,13 @@ done
 '''
 
 class ActionGenerator:
-    def __init__(self, envdir, productpath, version, brand):
+    def __init__(self, envdir, productpath, version, brand, subfolder):
         self.archs = "aarch64 ppc64le s390x x86_64"
         self.flavors = []
         self.flavor_aliases = defaultdict(list)
         self.flavor_aliases_flavor = []
         self.hdds = []
+        self.assets = []
         self.isos = []
         self.iso_5 = ""
         self.fixed_iso = ""
@@ -254,6 +256,7 @@ class ActionGenerator:
         self.envdir = envdir
         self.productpath = productpath
         self.version = version
+        self.subfolder = subfolder
         self.distri = ""
         self.iso_path = ""
         self.repo_path = ""
@@ -274,11 +277,15 @@ class ActionGenerator:
         s=s.replace('PRODUCTISOPATH',self.productisopath())
         s=s.replace('PRODUCTREPOPATH',self.productrepopath())
         s=s.replace('__envdir',self.envdir)
-        s=s.replace('VERSIONVALUE', self.version)
+        if self.subfolder:
+            s=s.replace('VERSIONVALUE', self.subfolder)
+        else:
+            s=s.replace('VERSIONVALUE', self.version)
         s=s.replace("DISTRIVALUE", self.distri)
         s=s.replace("__STAGING", self.staging())
         s=s.replace("ARCHITECTURS", self.archs)
         s=s.replace("ARCHORS", self.archs.replace(" ","|"))
+        s=s.replace("SUBFOLDER", self.subfolder)
 
         if self.flavors:
             s=s.replace("FLAVORLIST",','.join(self.flavors))
@@ -366,6 +373,8 @@ class ActionGenerator:
         for t in node.findall(".//*"):
             if t.tag == "hdd":
                 self.hdds.append(t.attrib["filemask"])
+            if t.tag == "asset":
+                self.assets.append(t.attrib["filemask"])
             if t.tag == "repos" and t.attrib.get("build_id_from_iso",""):
                 self.build_id_from_iso = 1
 
@@ -421,6 +430,8 @@ class ActionGenerator:
                 self.p(read_files_curl, f, "ISOMASK", hdd)
             else:
                 self.p(read_files_hdd, f, "ISOMASK", hdd)
+        for asset in self.assets:
+            self.p(read_files_hdd, f, "ISOMASK", asset)
         if self.isos:
             self.p(read_files_iso, f)
         if self.repos:
@@ -435,10 +446,12 @@ class ActionGenerator:
             self.p(read_files_repo, f, "PRODUCTREPOPATH", self.productpath + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(repodir.attrib["folder"]) )
 
     def gen_print_array_flavor_filter(self,f):
-        if len(self.hdds) or len(self.flavor_aliases):
+        if len(self.hdds) or len(self.assets) or len(self.flavor_aliases):
             self.p('declare -A flavor_filter',f)
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
+            self.p("flavor_filter[{}]='{}'".format(fl, h), f)
+        for fl, h in zip(self.flavors, self.assets):
             self.p("flavor_filter[{}]='{}'".format(fl, h), f)
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
@@ -446,7 +459,7 @@ class ActionGenerator:
 
     def gen_print_rsync_iso(self,f):
         print(header, file=f)
-        if self.isos or (self.hdds and not self.productpath.startswith('http')):
+        if self.isos or (self.hdds and not self.productpath.startswith('http')) or self.assets:
             self.gen_print_array_flavor_filter(f)
             self.p(rsync_iso(self.brand), f)
 
@@ -491,6 +504,9 @@ class ActionGenerator:
             else:
                 self.p(" HDD_1=$destiso \\\\", f)
                 self.p(" ASSET_HDD_1_SHA256=$destiso.sha256 \\\\\"", f)
+        elif self.assets:
+                self.p(" ASSET_1=$destiso \\\\", f)
+                self.p(" ASSET_1_SHA256=$destiso.sha256 \\\\\"", f)
         else:
             if self.iso_5:
                 if self.fixed_iso:
@@ -605,13 +621,31 @@ def parse_dir(root, d, files):
 
 def gen_files(project):
     xmlfile=""
-    for root, _, files in os.walk("xml/obs"):
-        (xmlfile, dist_path, version) = parse_dir(root, project, files)
-    if not xmlfile:
-        print('Cannot find xml file for {} ...'.format(project), file=sys.stderr)
+    folder = project
+    subfolder = ""
+
+    folders = project.rstrip('/').split('/')
+
+    # a hack for tests, don't have better solution for now
+    if len(folders)>1 and folders[0] == "t":
+        folders.pop(0)
+
+    if len(folders) > 2:
+        print('Only one level is allowed in path', file=sys.stderr)
         return 1
 
-    a = ActionGenerator(os.getcwd() +"/"+ project, dist_path, version, 'obs')
+    if len(folders)>0:
+        folder = folders[0]
+    if len(folders)>1:
+        subfolder = folders[1]
+    
+    for root, _, files in os.walk("xml/obs"):
+        (xmlfile, dist_path, version) = parse_dir(root, folder, files)
+    if not xmlfile:
+        print('Cannot find xml file for {} ...'.format(folder), file=sys.stderr)
+        return 1
+
+    a = ActionGenerator(os.getcwd() +"/"+ project, dist_path, version, 'obs', subfolder)
     if a is None:
         print('Couldnt initialize', file=sys.stderr)
         sys.exit(1)

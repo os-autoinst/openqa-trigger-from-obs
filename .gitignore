@@ -1,7 +1,8 @@
 /openSUSE*
-/t/*/*.after
-/t/*/*.diff
-/t/*/read_files.sh
-/t/*/print_rsync_iso.sh
-/t/*/print_rsync_repo.sh
-/t/*/print_openqa.sh
+/Virtualization*
+/t/**/*.after
+/t/**/*.diff
+/t/**/read_files.sh
+/t/**/print_rsync_iso.sh
+/t/**/print_rsync_repo.sh
+/t/**/print_openqa.sh

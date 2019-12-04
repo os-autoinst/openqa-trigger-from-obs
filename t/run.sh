@@ -6,17 +6,25 @@ fail=0
 for dir in *; do
     [ -d "$dir" ] || continue
     [ "$dir" != docker ] || continue
-    # run general checks
-    for file in test*.sh; do
-        [ -f "$file" ] || continue
-        out=$(bash -e "$file" "$dir" 2>&1)
-        if [ $? -eq 0 ] ; then
-            : $((pass++))
-            echo "P:$dir $file"
-        else
-            : $((fail++))
-            echo "F-$dir $file:$out"
-        fi
+
+    for subdir in $dir/*/; do
+        # if no subdir - execute body only once
+        [ -d "$subdir" ] || subdir=$dir
+
+        # run general checks
+        for file in test*.sh; do
+            [ -f "$file" ] || continue
+           out=$(bash -e "$file" "$subdir" 2>&1)
+            if [ $? -eq 0 ] ; then
+                : $((pass++))
+                echo "P:$subdir $file"
+            else
+                : $((fail++))
+                echo "F-$subdir $file:$out"
+            fi
+        done
+        # if no subdir - execute body only once
+        [ "$subdir" != "$dir" ] || break
     done
 
     # run product specific checks
