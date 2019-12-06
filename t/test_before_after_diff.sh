@@ -16,7 +16,7 @@ for dir in "$@" ; do
         [ -d "$subdir" ] || subdir=$dir
 
     	d=$subdir
-	    if [ $update_before == 1 ] ; then 
+	    if [ $update_before == 1 ] ; then
 		    for sh in {print_rsync_iso,print_rsync_repo,print_openqa}; do
 			    bash $d/${sh}.sh > $d/$sh.before
 		    done
@@ -31,4 +31,4 @@ for dir in "$@" ; do
     done
 done
 
-(exit $errs)	
+(exit $errs)

@@ -8,7 +8,7 @@ from contextlib import suppress
 from xml.etree import ElementTree
 from collections import defaultdict
 
-header = '''# GENERATED FILE - DO NOT EDIT 
+header = '''# GENERATED FILE - DO NOT EDIT
 set -e
 '''
 
@@ -22,10 +22,10 @@ read_files_curl = '''curl -s PRODUCTPATH/ | grep -o 'ISOMASK' | head -n 1 >> __e
 read_files_hdd = '''rsync --list-only PRODUCTPATH/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envdir/files_iso.lst'''
 
 read_files_iso = '''rsync --list-only PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envdir/files_iso.lst
-( exit ${PIPESTATUS[0]} )'''
+'''
 
 read_files_repo = '''rsync --list-only PRODUCTREPOPATH/ | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envdir/files_repo.lst
-( exit ${PIPESTATUS[0]} )'''
+'''
 
 def rsync_iso_staging(brand):
     if brand == 'obs': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
@@ -69,7 +69,7 @@ rsync_repo2 = '''
         destPrefix=$dest
         repoDest=$destPrefix-$buildid$destSuffix
         repoCur=$destPrefix-CURRENT$destSuffix
-        [ -z "__STAGING" ] || repoCur=$destPrefix-__STAGING-CURRENT$destSuffix 
+        [ -z "__STAGING" ] || repoCur=$destPrefix-__STAGING-CURRENT$destSuffix
         echo "rsync --timeout=3600 -r PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/$repoCur"
         echo "rsync --timeout=3600 -r --link-dest /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
     done < <(grep $repo-POOL __envdir/files_repo.lst)
@@ -89,7 +89,7 @@ for arch in "${archs[@]}"; do
         mid=''
         dest=$destPrefix$mid$destSuffix'''
 
-def rsync_repodir2(brand): 
+def rsync_repodir2(brand):
     if brand == 'obs': return '''
         dest=${dest//-Media2/}
         echo rsync --timeout=3600 -r RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
@@ -117,11 +117,11 @@ for flavor in {FLAVORALIASLIST,}; do
         build1=$build
         destiso=$iso
         version=VERSIONVALUE
-        [ -z "__STAGING" ] || build1=__STAGING.$build 
+        [ -z "__STAGING" ] || build1=__STAGING.$build
         ''' + openqa_call_start_staging(brand) + '''
         [ ! -z "$build"  ] || continue
         [ "$arch" != . ] || arch=x86_64
-        
+
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
 (
  echo \" _OBSOLETE=1
@@ -139,7 +139,7 @@ openqa_call_start_iso = ''' ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
  ASSET_ISO_SHA256=${destiso}.sha256 \\\\"'''
 
-# if MIRROREPO is set - expressions for FLAVORASREPOORS will elaluate to false 
+# if MIRROREPO is set - expressions for FLAVORASREPOORS will elaluate to false
 def openqa_call_repo0(brand):
     if brand == 'obs': return ''' [ -z "FLAVORASREPOORSMIRRORREPO" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) == 0"MIRRORREPO" ] || {
     echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
@@ -298,7 +298,7 @@ class ActionGenerator:
         if self.repos:
             s=s.replace("REPOLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in self.repos]))
             s=s.replace("REPOORS",   '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in self.repos]))
-        s=s.replace("MIRRORREPO", self.mirror_repo)   
+        s=s.replace("MIRRORREPO", self.mirror_repo)
         if self.domain:
             s=s.replace("opensuse.org",self.domain)
         print(s, file=f)
@@ -423,7 +423,7 @@ class ActionGenerator:
             return 'source'
 
     def gen_read_files(self,f):
-        print(header, file=f)
+        self.p(header, f, "set -e", "set -eo pipefail")
         self.p(clear_lst, f)
         for hdd in self.hdds:
             if self.productpath.startswith('http'):
@@ -459,9 +459,12 @@ class ActionGenerator:
 
     def gen_print_rsync_iso(self,f):
         print(header, file=f)
-        if self.isos or (self.hdds and not self.productpath.startswith('http')) or self.assets:
+        if self.isos or (self.hdds and not self.productpath.startswith('http')):
             self.gen_print_array_flavor_filter(f)
             self.p(rsync_iso(self.brand), f)
+        if self.assets:
+            self.gen_print_array_flavor_filter(f)
+            self.p(rsync_iso(self.brand), f, "factory/iso", "factory/other")
 
     def gen_print_rsync_repo(self,f):
         print(header, file=f)
@@ -533,7 +536,7 @@ class ActionGenerator:
         if self.repos:
             self.p(" i=9", f) # temporary to simplify diff with old rsync scripts, may be removed later
             self.p(openqa_call_repot(self.brand, self.build_id_from_iso), f, "REPOTYPE", "''", "REPOPREFIX", "SLE_")
-        
+
         for r in self.repodirs:
             self.p(openqa_call_repot1(self.brand), f, "REPOKEY", r.attrib.get("rename",r.tag),"mid=''", "mid='{}'".format(r.attrib.get("mid","")))
             for ren in self.renames:
@@ -559,7 +562,7 @@ def parse_dir(root, d, files):
     for f in files:
         if not f.endswith(".xml"):
             continue
-        
+
         rootXml = ElementTree.parse(root + "/" + f).getroot()
         if not rootXml:
             print("Ignoring [" + f + "]: Cannot parse xml", file=sys.stderr)
@@ -581,7 +584,7 @@ def parse_dir(root, d, files):
             # if found_match and found_match.group(0):
             #    print("OBS: no match [" + found_match.group(0) , file=sys.stderr)
             # print("OBS: no match [" + d + "] for " + r.pattern,file=sys.stderr)
-            continue 
+            continue
         version = found_match.groupdict().get("version","")
         if version.find("'") != -1:
             print("OBS: Ignoring [" + d + "]: Version cannot contain quote characters; got: " + version, file=sys.stderr)
@@ -638,7 +641,7 @@ def gen_files(project):
         folder = folders[0]
     if len(folders)>1:
         subfolder = folders[1]
-    
+
     for root, _, files in os.walk("xml/obs"):
         (xmlfile, dist_path, version) = parse_dir(root, folder, files)
     if not xmlfile:

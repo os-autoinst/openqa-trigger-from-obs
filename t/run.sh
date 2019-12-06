@@ -42,7 +42,7 @@ for dir in *; do
 done
 
 (
-dockerfail=0 
+dockerfail=0
 cd docker
 for t in *.sh; do
     [ -x "$t" ] || continue

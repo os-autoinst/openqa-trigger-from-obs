@@ -7,13 +7,12 @@ cd /opt/openqa-trigger-from-obs
 mkdir -p openSUSE:Leap:15.2:Staging:A
 python3 script/scriptgen.py openSUSE:Leap:15.2:Staging:A
 [ ! -e openSUSE:Leap:15.2:Staging:A/.run_last ] || rm openSUSE:Leap:15.2:Staging:A/.run_last
-sed -i "s/openqa.opensuse.org/127.0.0.1/g" openSUSE:Leap:15.2:Staging:A/print_openqa.sh
 echo geekotest > rsync.secret'
 
 echo '127.0.0.1 obspublish-stage' >> /etc/hosts
 systemctl enable --now postgresql
 
-su postgres -c "createuser -D $dbuser" 
+su postgres -c "createuser -D $dbuser"
 su postgres -c "createdb -O $dbuser $dbname"
 
 
@@ -57,7 +56,7 @@ mkdir -p /var/lib/openqa/.config/openqa/
 cp /etc/openqa/client.conf /var/lib/openqa/.config/openqa/
 chown "$dbuser" /var/lib/openqa/.config/openqa/client.conf
 
-systemctl enable --now rsyncd 
+systemctl enable --now rsyncd
 openqa-client --host localhost /api/v1/obs_rsync/openSUSE:Leap:15.2:Staging:A/runs put || :
 
 sleep 10

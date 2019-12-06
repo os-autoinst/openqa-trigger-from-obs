@@ -15,7 +15,7 @@ RUN chown -R "$dbuser":users /usr/share/openqa
 
 # mock OBS backend folder
 RUN mkdir -p /mockOBS/openSUSE:Leap:15.2:Staging:A/images/x86_64/product/
-# create just empty files as at this point we are not interested about proper binaries 
+# create just empty files as at this point we are not interested about proper binaries
 RUN touch /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso
 RUN touch /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso.sha256
 RUN chown -R "$dbuser" /mockOBS

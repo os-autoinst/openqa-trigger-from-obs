@@ -35,7 +35,7 @@ RUN mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openS
   mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media3 && \
   echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media3/sourcefile
 
-# create just empty files as at this point we are not interested about proper binaries 
+# create just empty files as at this point we are not interested about proper binaries
 RUN chown -R "$dbuser" /mockOBS
 
 # mock OBS backend host and rsync modules

@@ -43,7 +43,7 @@ else
 fi
 
 # let's use `docker build` here to utilize docker cache
-( 
+(
 # shellcheck disable=SC2046 disable=SC2005
 echo "FROM opensuse/leap:15.1
 ENV container docker
@@ -93,7 +93,7 @@ docker run --privileged --security-opt=seccomp:unconfined --security-opt=apparmo
 in_cleanup=0
 
 function cleanup {
-    [ "$in_cleanup" != 1 ] || return 
+    [ "$in_cleanup" != 1 ] || return
     in_cleanup=1
     if [ "$ret" != 0 ] && [ -n "$PAUSE_ON_FAILURE" ]; then
         read -rsn1 -p"Test failed, press any key to finish";echo

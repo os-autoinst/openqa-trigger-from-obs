@@ -4,17 +4,16 @@ set -ex
 
 su $dbuser -c 'set -ex
 cd /opt/openqa-trigger-from-obs
-mkdir -p openSUSE:Leap:15.2:Staging:A
-python3 script/scriptgen.py openSUSE:Leap:15.2:Staging:A
-[ ! -e openSUSE:Leap:15.2:Staging:A/.run_last ] || rm openSUSE:Leap:15.2:Staging:A/.run_last
+mkdir -p Virtualization:WSL/Tumbleweed
+python3 script/scriptgen.py Virtualization:WSL/Tumbleweed
+[ ! -e Virtualization:WSL/Tumbleweed/.run_last ] || rm Virtualization:WSL/Tumbleweed/.run_last
 echo geekotest > rsync.secret'
 
-echo '127.0.0.1 obspublish-stage' >> /etc/hosts
+echo '127.0.0.1 obspublish-other' >> /etc/hosts
 systemctl enable --now postgresql
 
 su postgres -c "createuser -D $dbuser"
 su postgres -c "createdb -O $dbuser $dbname"
-
 
 systemctl enable --now apache2.service
 systemctl enable --now openqa-webui.service
@@ -50,19 +49,22 @@ key = ${API_KEY}
 secret = ${API_SECRET}
 EOF
 
+mkdir -p /root/.config/openqa
+cp /etc/openqa/client.conf /root/.config/openqa/
 mkdir -p /var/lib/openqa/.config/openqa/
 cp /etc/openqa/client.conf /var/lib/openqa/.config/openqa/
 chown "$dbuser" /var/lib/openqa/.config/openqa/client.conf
 
 systemctl enable --now rsyncd
-
-su "$dbuser" -c '/opt/openqa-trigger-from-obs/script/rsync.sh openSUSE:Leap:15.2:Staging:A'
+openqa-client --host localhost /api/v1/obs_rsync/Virtualization:WSL/runs put || :
 
 sleep 10
 set -x
 # make sure run did happen
-test -f /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso
-test -f /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run_last/openqa.cmd.log
-grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run_last/openqa.cmd.log
+test -f /var/lib/openqa/factory/other/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx
+test -f /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/openqa.cmd.log
+grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/openqa.cmd.log
 
+state=$(echo "select state from minion_jobs where task='obs_rsync_run';" | su postgres -c "psql -t $dbname")
+test "$(echo $state)" == finished
 echo PASS ${BASH_SOURCE[0]}
