@@ -278,7 +278,7 @@ class ActionGenerator:
         s=s.replace('PRODUCTREPOPATH',self.productrepopath())
         s=s.replace('__envdir',self.envdir)
         if self.subfolder:
-            s=s.replace('VERSIONVALUE', self.subfolder)
+            s=s.replace('VERSIONVALUE', self.subfolder.lstrip('Leap_'))
         else:
             s=s.replace('VERSIONVALUE', self.version)
         s=s.replace("DISTRIVALUE", self.distri)

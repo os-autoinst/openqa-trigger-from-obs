@@ -1,0 +1,2 @@
+rsync --timeout=3600 obspublish-other::openqa/Virtualization:WSL/openSUSE_Leap_15.2/x86_64/wsl-appx/*openSUSE-Leap-15.2-Alpha-x64-Build7.11.appx /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Alpha-x64-Build7.11.appx
+rsync --timeout=3600 obspublish-other::openqa/Virtualization:WSL/openSUSE_Leap_15.2/x86_64/wsl-appx/*openSUSE-Leap-15.2-Alpha-x64-Build7.11.appx.sha256 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Alpha-x64-Build7.11.appx.sha256
