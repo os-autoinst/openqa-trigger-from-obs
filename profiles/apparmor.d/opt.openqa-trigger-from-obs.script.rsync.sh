@@ -10,11 +10,15 @@
   # and log files
   # so rules below are quire pedantic
   /opt/openqa-trigger-from-obs/** r,
-  /opt/openqa-trigger-from-obs/openSUSE*/.run*/ rw,
-  /opt/openqa-trigger-from-obs/openSUSE*/.run*/* rw,
-  /opt/openqa-trigger-from-obs/openSUSE*/.run_last rw,
-  /opt/openqa-trigger-from-obs/openSUSE*/files*.lst rw,
-  /opt/openqa-trigger-from-obs/openSUSE*/rsync.lock rw,
+  /opt/openqa-trigger-from-obs/*:*/.run*/ rw,
+  /opt/openqa-trigger-from-obs/*:*/.run*/* rw,
+  /opt/openqa-trigger-from-obs/*:*/.run_last rw,
+  /opt/openqa-trigger-from-obs/*:*/files*.lst rw,
+  /opt/openqa-trigger-from-obs/*:*/*/.run*/ rw,
+  /opt/openqa-trigger-from-obs/*:*/*/.run*/* rw,
+  /opt/openqa-trigger-from-obs/*:*/*/.run_last rw,
+  /opt/openqa-trigger-from-obs/*:*/*/files*.lst rw,
+  /opt/openqa-trigger-from-obs/*:*/rsync.lock rw,
   /usr/bin/awk ix,
   /usr/bin/bsdtar ix,
   /usr/bin/cat ix,
@@ -50,7 +54,8 @@
     network tcp,
 
     /etc/openqa/client.conf r,
-    /opt/openqa-trigger-from-obs/openSUSE*/.run*/openqa*.log w,
+    /opt/openqa-trigger-from-obs/*:*/.run*/openqa*.log w,
+    /opt/openqa-trigger-from-obs/*:*/*/.run*/openqa*.log w,
     /usr/share/openqa/lib/** r,
     /usr/share/openqa/script/client rix,
     /var/lib/openqa/.config/openqa/client.conf r,
@@ -69,7 +74,8 @@
     link subset /var/lib/openqa/share/factory/iso/** -> /var/lib/openqa/share/factory/iso/**,
     link subset /var/lib/openqa/share/factory/repo/** -> /var/lib/openqa/share/factory/repo/**,
 
-    /opt/openqa-trigger-from-obs/openSUSE*/.run*/rsync*.log w,
+    /opt/openqa-trigger-from-obs/*:*/.run*/rsync*.log w,
+    /opt/openqa-trigger-from-obs/*:*/*/.run*/rsync*.log w,
     /usr/bin/rsync mrix,
     /var/lib/openqa/share/factory/{iso,repo,other}/** rw,
 

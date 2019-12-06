@@ -14,10 +14,10 @@ RUN chown "$dbuser":users /etc/openqa/database.ini
 RUN chown -R "$dbuser":users /usr/share/openqa
 
 # mock OBS backend folder
-RUN mkdir -p /mockOBS/openSUSE:Leap:15.2:Staging:A/images/x86_64/product/
+RUN mkdir -p /mockOBS/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/
 # create just empty files as at this point we are not interested about proper binaries
-RUN touch /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso
-RUN touch /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso.sha256
+RUN touch /mockOBS/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx
+RUN touch /mockOBS/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx.sha256
 RUN chown -R "$dbuser" /mockOBS
 
 # mock OBS backend host and rsync modules
