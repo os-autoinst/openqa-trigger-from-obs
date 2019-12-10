@@ -15,9 +15,12 @@ RUN chown -R "$dbuser":users /usr/share/openqa
 
 # mock OBS backend folder
 RUN mkdir -p /mockOBS/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/
+RUN mkdir -p /mockOBS/Virtualization:WSL/openSUSE_Leap_15.2/x86_64/wsl-appx/
 # create just empty files as at this point we are not interested about proper binaries
 RUN touch /mockOBS/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx
 RUN touch /mockOBS/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx.sha256
+RUN touch /mockOBS/Virtualization:WSL/openSUSE_Leap_15.2/x86_64/wsl-appx/openSUSE-x64-Build20191128.7.9.appx
+RUN touch /mockOBS/Virtualization:WSL/openSUSE_Leap_15.2/x86_64/wsl-appx/openSUSE-x64-Build20191128.7.9.appx.sha256
 RUN chown -R "$dbuser" /mockOBS
 
 # mock OBS backend host and rsync modules

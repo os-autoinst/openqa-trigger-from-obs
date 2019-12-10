@@ -6,3 +6,4 @@
  HDD_URL_1=http://download.opensuse.org/repositories/OBS:/Server:/2.9:/Staging/images/obs-server.x86_64-2.9.6-Build1.66.qcow2 \
  VERSION=2.9:Staging \
  _OBSOLETE=1
+
