@@ -5,7 +5,7 @@ set -ex
 su $dbuser -c 'set -ex
 cd /opt/openqa-trigger-from-obs
 mkdir -p Virtualization:WSL/Tumbleweed
-python3 script/scriptgen.py Virtualization:WSL/Tumbleweed
+python3 script/scriptgen.py Virtualization:WSL
 [ ! -e Virtualization:WSL/Tumbleweed/.run_last ] || rm Virtualization:WSL/Tumbleweed/.run_last
 echo geekotest > rsync.secret
 chmod 600 rsync.secret'

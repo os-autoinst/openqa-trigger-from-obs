@@ -19,8 +19,14 @@ echo $$ > $environ/rsync.lock
 
 [ ! -f rsync.secret ] || export RSYNC_PASSWORD="$(cat rsync.secret)"
 
+failures_count=0
+
 for subfolder in $environ/*/ ; do
     [ -d "$subfolder" ] || subfolder="$environ"
+
+set +e
+(
+    set -e
     [ -e "$subfolder/read_files.sh" ] || { >&2 echo "No file found: {$subfolder/read_files.sh}"; exit 1; }
     if [ ! -e "$subfolder/print_rsync_iso.sh" ] && [ ! -e "$subfolder/print_rsync_repo.sh" ]; then
         >&2 echo "Neither of files found: {$subfolder/print_rsync_iso.sh} nor {$subfolder/print_rsync_repo.sh}"
@@ -29,6 +35,7 @@ for subfolder in $environ/*/ ; do
 
     [ -e "$subfolder/print_openqa.sh" ] || { >&2 echo "No file found: {$subfolder/print_openqa.sh}"; exit 1; }
 
+    # nowhere to log yet as we haven't created $logfolder
     bash -e "$subfolder/read_files.sh"
 
     [ ! -e $subfolder/.run_last ] || [ ! -z "$(diff --brief $subfolder $subfolder/.run_last | grep '.lst')" ] || { >&2 echo "No changes found since last run, skipping {$subfolder}"; exit 0; }
@@ -53,7 +60,13 @@ for subfolder in $environ/*/ ; do
     for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
         bash -x "$subfolder/.run_last/$f" > "$logdir/$f".log 2>&1
     done
+)
+    res=$?
     [ "$subfolder" != "$environ" ] || break
+    [ "$res" -eq 0 ] || {
+        >&2 echo "$subfolder exit code: $res ($((++failure_count)) failures total so far)"
+    }
+
 done
 
-:
+( exit $failure_count )

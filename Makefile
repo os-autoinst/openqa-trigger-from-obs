@@ -18,7 +18,7 @@ test:
 	(cd t && bash run.sh)
 
 test_regen_all:
-	(bash t/regen_all.sh t/* )
+	(bash t/regen_all.sh)
 
 test_update_before_files: test_regen_all
 	( cd t && bash test_before_after_diff.sh --update-before * )

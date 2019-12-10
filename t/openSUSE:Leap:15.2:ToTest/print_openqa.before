@@ -23,6 +23,7 @@
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
  VERSION=15.2 \
  _OBSOLETE=1
+
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
  ASSET_ISO_SHA256=openSUSE-Leap-15.2-DVD-x86_64-Build497.4-Media.iso.sha256 \
@@ -48,3 +49,4 @@
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-i586-x86_64-Build497.4 \
  VERSION=15.2 \
  _OBSOLETE=1
+
