@@ -1,4 +1,3 @@
-# Last Modified: Sat Nov 16 13:01:27 2019
 #include <tunables/global>
 
 /opt/openqa-trigger-from-obs/script/rsync.sh flags=(attach_disconnected) {
@@ -73,6 +72,8 @@
 
     link subset /var/lib/openqa/share/factory/iso/** -> /var/lib/openqa/share/factory/iso/**,
     link subset /var/lib/openqa/share/factory/repo/** -> /var/lib/openqa/share/factory/repo/**,
+
+    /opt/openqa-trigger-from-obs/rsync.secret r,
 
     /opt/openqa-trigger-from-obs/*:*/.run*/rsync*.log w,
     /opt/openqa-trigger-from-obs/*:*/*/.run*/rsync*.log w,
