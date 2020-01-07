@@ -7,7 +7,8 @@ cd /opt/openqa-trigger-from-obs
 mkdir -p openSUSE:Leap:15.2:Staging:A
 python3 script/scriptgen.py openSUSE:Leap:15.2:Staging:A
 [ ! -e openSUSE:Leap:15.2:Staging:A/.run_last ] || rm openSUSE:Leap:15.2:Staging:A/.run_last
-echo geekotest > rsync.secret'
+echo geekotest > rsync.secret
+chmod 600 rsync.secret'
 
 echo '127.0.0.1 obspublish-stage' >> /etc/hosts
 systemctl enable --now postgresql

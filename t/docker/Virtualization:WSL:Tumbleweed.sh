@@ -7,7 +7,8 @@ cd /opt/openqa-trigger-from-obs
 mkdir -p Virtualization:WSL/Tumbleweed
 python3 script/scriptgen.py Virtualization:WSL/Tumbleweed
 [ ! -e Virtualization:WSL/Tumbleweed/.run_last ] || rm Virtualization:WSL/Tumbleweed/.run_last
-echo geekotest > rsync.secret'
+echo geekotest > rsync.secret
+chmod 600 rsync.secret'
 
 echo '127.0.0.1 obspublish-other' >> /etc/hosts
 systemctl enable --now postgresql

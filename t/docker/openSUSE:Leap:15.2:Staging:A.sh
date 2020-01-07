@@ -7,7 +7,8 @@ cd /opt/openqa-trigger-from-obs
 mkdir -p openSUSE:Leap:15.2:Staging:A
 python3 script/scriptgen.py openSUSE:Leap:15.2:Staging:A
 [ ! -e openSUSE:Leap:15.2:Staging:A/.run_last ] || rm openSUSE:Leap:15.2:Staging:A/.run_last
-echo geekotest > rsync.secret'
+echo geekotest > rsync.secret
+chmod 600 rsync.secret'
 
 echo '127.0.0.1 obspublish-stage' >> /etc/hosts
 systemctl enable --now postgresql
@@ -76,6 +77,14 @@ echo "delete from minion_jobs where task='obs_rsync_run';" | su postgres -c "psq
 
 mv /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-Leap-15.2-DVD-x86_64-Build{248.1,248.2}-Media.iso
 mv /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-Leap-15.2-DVD-x86_64-Build{248.1,248.2}-Media.iso.sha256
+
+# this shouldn't fail and files.iso must be different from .run_last
+su $dbuser -c 'bash /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/read_files.sh'
+(
+set +e
+diff -q /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/files_iso.lst /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run_last/files_iso.lst
+test $? -eq 1
+)
 
 openqa-client --host localhost /api/v1/obs_rsync/openSUSE:Leap:15.2:Staging:A/runs put || :
 sleep 10

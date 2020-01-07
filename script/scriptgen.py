@@ -15,16 +15,18 @@ set -e
 clear_lst = '''for f in __envdir/files_*.lst; do
     [ ! -f "$f" ] ||  : > "$f"
 done
+
+[ ! -f __envdir/../rsync.secret ] || rsync_pwd_option=--password-file=__envdir/../rsync.secret
 '''
 
 read_files_curl = '''curl -s PRODUCTPATH/ | grep -o 'ISOMASK' | head -n 1 >> __envdir/files_iso.lst'''
 
-read_files_hdd = '''rsync --list-only PRODUCTPATH/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envdir/files_iso.lst'''
+read_files_hdd = '''rsync --list-only $rsync_pwd_option PRODUCTPATH/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envdir/files_iso.lst'''
 
-read_files_iso = '''rsync --list-only PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envdir/files_iso.lst
+read_files_iso = '''rsync --list-only $rsync_pwd_option PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envdir/files_iso.lst
 '''
 
-read_files_repo = '''rsync --list-only PRODUCTREPOPATH/ | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envdir/files_repo.lst
+read_files_repo = '''rsync --list-only $rsync_pwd_option PRODUCTREPOPATH/ | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envdir/files_repo.lst
 '''
 
 def rsync_iso_staging(brand):
