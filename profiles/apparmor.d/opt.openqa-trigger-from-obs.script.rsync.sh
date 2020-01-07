@@ -2,21 +2,23 @@
 
 /opt/openqa-trigger-from-obs/script/rsync.sh flags=(attach_disconnected) {
   #include <abstractions/base>
+  #include <local/opt.openqa-trigger-from-obs.script.rsync.sh>
 
+  /dev/tty rw,
   # we don't want rsync.sh to overwrite project-specific files like
   # read_files.sh print_rsync*.sh print_openqa.sh
   # which are generated during deplyment
   # and log files
   # so rules below are quire pedantic
   /opt/openqa-trigger-from-obs/** r,
-  /opt/openqa-trigger-from-obs/*:*/.run*/ rw,
-  /opt/openqa-trigger-from-obs/*:*/.run*/* rw,
-  /opt/openqa-trigger-from-obs/*:*/.run_last rw,
-  /opt/openqa-trigger-from-obs/*:*/files*.lst rw,
   /opt/openqa-trigger-from-obs/*:*/*/.run*/ rw,
   /opt/openqa-trigger-from-obs/*:*/*/.run*/* rw,
   /opt/openqa-trigger-from-obs/*:*/*/.run_last rw,
   /opt/openqa-trigger-from-obs/*:*/*/files*.lst rw,
+  /opt/openqa-trigger-from-obs/*:*/.run*/ rw,
+  /opt/openqa-trigger-from-obs/*:*/.run*/* rw,
+  /opt/openqa-trigger-from-obs/*:*/.run_last rw,
+  /opt/openqa-trigger-from-obs/*:*/files*.lst rw,
   /opt/openqa-trigger-from-obs/*:*/rsync.lock rw,
   /usr/bin/awk ix,
   /usr/bin/bsdtar ix,
@@ -40,6 +42,8 @@
   /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
   /var/lib/openqa/share/factory/{iso,other}/** r,
   /{usr/bin,bin}/bash mrix,
+  owner /proc/*/fd/* w,
+
 
   profile openqa_client {
     #include <abstractions/base>
@@ -53,8 +57,8 @@
     network tcp,
 
     /etc/openqa/client.conf r,
-    /opt/openqa-trigger-from-obs/*:*/.run*/openqa*.log w,
     /opt/openqa-trigger-from-obs/*:*/*/.run*/openqa*.log w,
+    /opt/openqa-trigger-from-obs/*:*/.run*/openqa*.log w,
     /usr/share/openqa/lib/** r,
     /usr/share/openqa/script/client rix,
     /var/lib/openqa/.config/openqa/client.conf r,
@@ -75,13 +79,10 @@
 
     /opt/openqa-trigger-from-obs/rsync.secret r,
 
-    /opt/openqa-trigger-from-obs/*:*/.run*/rsync*.log w,
     /opt/openqa-trigger-from-obs/*:*/*/.run*/rsync*.log w,
+    /opt/openqa-trigger-from-obs/*:*/.run*/rsync*.log w,
     /usr/bin/rsync mrix,
     /var/lib/openqa/share/factory/{iso,repo,other}/** rw,
 
   }
-
-  # Site-specific additions and overrides. See local/README for details.
-  #include <local/opt.openqa-trigger-from-obs.script.rsync.sh>
 }
