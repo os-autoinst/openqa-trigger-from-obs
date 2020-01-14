@@ -3,6 +3,7 @@
  ASSET_1=openSUSE-Leap-15.2-Alpha-x64-Build7.11.appx \
  ASSET_1_SHA256=openSUSE-Leap-15.2-Alpha-x64-Build7.11.appx.sha256 \
  BUILD=7.11 \
+ CHECKSUM_ASSET_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Alpha-x64-Build7.11.appx.sha256 | tail -c 64) \
  DISTRI=opensuse \
  FLAVOR=WSL \
  VERSION=15.2 \

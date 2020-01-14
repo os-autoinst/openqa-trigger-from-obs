@@ -1,0 +1,44 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_1=openSUSE-Leap-15.2-ARM-JeOS-efi.aarch64-2019.11.27-Snapshot1.42.raw.xz \
+ ASSET_1_SHA256=openSUSE-Leap-15.2-ARM-JeOS-efi.aarch64-2019.11.27-Snapshot1.42.raw.xz.sha256 \
+ BUILD=1.42 \
+ CHECKSUM_ASSET_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-ARM-JeOS-efi.aarch64-2019.11.27-Snapshot1.42.raw.xz.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=JeOS-for-AArch64 \
+ VERSION=15.2 \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Leap-15.2-GNOME-Live-aarch64-Snapshot1.42-Media.iso.sha256 \
+ BUILD=1.42 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-GNOME-Live-aarch64-Snapshot1.42-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=GNOME-Live \
+ ISO=openSUSE-Leap-15.2-GNOME-Live-aarch64-Snapshot1.42-Media.iso \
+ VERSION=15.2 \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Leap-15.2-KDE-Live-aarch64-Snapshot1.42-Media.iso.sha256 \
+ BUILD=1.42 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-KDE-Live-aarch64-Snapshot1.42-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=KDE-Live \
+ ISO=openSUSE-Leap-15.2-KDE-Live-aarch64-Snapshot1.42-Media.iso \
+ VERSION=15.2 \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Leap-15.2-Rescue-CD-aarch64-Snapshot1.42-Media.iso.sha256 \
+ BUILD=1.42 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Rescue-CD-aarch64-Snapshot1.42-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=Rescue-CD \
+ ISO=openSUSE-Leap-15.2-Rescue-CD-aarch64-Snapshot1.42-Media.iso \
+ VERSION=15.2 \
+ _OBSOLETE=1
+
