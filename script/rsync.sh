@@ -50,8 +50,12 @@ set +e
     # store state of files for eventual troubleshooting and avoid indefinite openqa retry
     cp $subfolder/*.lst $logdir/
     cp $subfolder/*.sh $logdir/
+    # copy eventual status files
+    for f in $environ/.* ; do
+        [ ! -f "$f" ] || cp $f $logdir/
+    done
 
-    # remove symbolic link if exists
+    # remove symbolic link if exists, because ln -f needs additional permissions for apparmor
     [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
     ln -s -T "$(pwd)/$logdir" $subfolder/.run_last
 

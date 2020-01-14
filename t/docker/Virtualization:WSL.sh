@@ -7,6 +7,7 @@ cd /opt/openqa-trigger-from-obs
 mkdir -p Virtualization:WSL/Tumbleweed
 python3 script/scriptgen.py Virtualization:WSL
 [ ! -e Virtualization:WSL/Tumbleweed/.run_last ] || rm Virtualization:WSL/Tumbleweed/.run_last
+[ ! -e Virtualization:WSL/Leap_15.2/.run_last ] || rm Virtualization:WSL/Leap_15.2/.run_last
 echo geekotest > rsync.secret
 chmod 600 rsync.secret'
 
@@ -64,7 +65,7 @@ set -x
 # make sure run did happen
 test -f /var/lib/openqa/factory/other/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx
 test -f /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/openqa.cmd.log
-grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/openqa.cmd.log
+grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/Virtualization:WSL/{Tumbleweed,Leap_15.2}/.run_last/openqa.cmd.log
 
 state=$(echo "select state from minion_jobs where task='obs_rsync_run';" | su postgres -c "psql -t $dbname")
 test "$(echo $state)" == finished

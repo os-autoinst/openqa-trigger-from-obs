@@ -7,6 +7,7 @@ cd /opt/openqa-trigger-from-obs
 mkdir -p Virtualization:WSL/Tumbleweed
 python3 script/scriptgen.py Virtualization:WSL
 [ ! -e Virtualization:WSL/Tumbleweed/.run_last ] || rm Virtualization:WSL/Tumbleweed/.run_last
+[ ! -e Virtualization:WSL/Leap_15.2/.run_last ] || rm Virtualization:WSL/Leap_15.2/.run_last
 echo geekotest > rsync.secret
 chmod 600 rsync.secret'
 
@@ -56,6 +57,8 @@ chown "$dbuser" /var/lib/openqa/.config/openqa/client.conf
 
 systemctl enable --now rsyncd
 
+echo 111 > /opt/openqa-trigger-from-obs/Virtualization:WSL/.job_id
+
 su "$dbuser" -c '/opt/openqa-trigger-from-obs/script/rsync.sh Virtualization:WSL'
 
 sleep 10
@@ -63,6 +66,8 @@ set -x
 # make sure run did happen
 test -f /var/lib/openqa/factory/other/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx
 test -f /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/openqa.cmd.log
-grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/openqa.cmd.log
+test -f /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/.job_id
+test 111 == "$(cat /opt/openqa-trigger-from-obs/Virtualization:WSL/Tumbleweed/.run_last/.job_id)"
+grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/Virtualization:WSL/{Tumbleweed,Leap_15.2}/.run_last/openqa.cmd.log
 
 echo PASS ${BASH_SOURCE[0]}
