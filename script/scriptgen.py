@@ -21,9 +21,13 @@ done
 
 read_files_curl = '''curl -s PRODUCTPATH/ | grep -o 'ISOMASK' | head -n 1 >> __envsub/files_iso.lst'''
 
-read_files_hdd = '''rsync --list-only $rsync_pwd_option PRODUCTPATH/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envsub/files_iso.lst'''
+read_files_hdd = '''rsync --list-only $rsync_pwd_option PRODUCTPATH/FOLDER/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envsub/files_iso.lst
+'''
 
-read_files_iso = '''rsync --list-only $rsync_pwd_option PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
+read_files_iso = '''rsync --list-only $rsync_pwd_option PRODUCTISOPATH/FOLDER/*SRCISO* | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envsub/files_iso.lst
+'''
+
+read_files_isos = '''rsync --list-only $rsync_pwd_option PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
 '''
 
 read_files_repo = '''rsync --list-only $rsync_pwd_option PRODUCTREPOPATH/ | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envsub/files_repo.lst
@@ -49,8 +53,8 @@ for flavor in {FLAVORLIST,}; do
         [ ! -z "$src" ] || continue
         dest=$src
         ''' + rsync_iso_staging(brand) + '''
-        echo "rsync --timeout=3600 PRODUCTISOPATH/*$src /var/lib/openqa/factory/iso/$dest"
-        echo "rsync --timeout=3600 PRODUCTISOPATH/*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
+        echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/iso/$dest"
+        echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
 
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/${dest%.iso} ] || {
     mkdir /var/lib/openqa/factory/repo/${dest%.iso}
@@ -149,6 +153,21 @@ openqa_call_legacy_builds=''' echo \" BUILD_HA=$build1 \\\\
 openqa_call_start_iso = ''' echo \" ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
  ASSET_ISO_SHA256=${destiso}.sha256 \\\\\"'''
+
+openqa_call_start_ex = ''' if [[ $destiso =~ \.iso$ ]]; then
+   echo \" ISO=${destiso} \\\\
+ CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
+ ASSET_ISO_SHA256=${destiso}.sha256 \\\\\"
+ elif [[ $destiso =~ \.hdd$ ]]; then
+   echo \" HDD_1=${destiso} \\\\
+ CHECKSUM_HDD_1=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
+ ASSET_HDD_1_SHA256=${destiso}.sha256 \\\\\"
+ else
+   echo \" ASSET_1=${destiso} \\\\
+ CHECKSUM_ASSET_1=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
+ ASSET_1_SHA256=${destiso}.sha256 \\\\\"
+ fi
+'''
 
 # if MIRROREPO is set - expressions for FLAVORASREPOORS will elaluate to false
 def openqa_call_repo0(brand):
@@ -252,6 +271,7 @@ class ActionGenerator:
         self.brand = brand
         self.envdir = envdir
         self.productpath = productpath
+        self.distri = ""
         self.version = version
         self.batches = []
 
@@ -281,6 +301,8 @@ class ActionGenerator:
         self.iso_path = root.attrib.get("iso_path","")
         self.repo_path = root.attrib.get("repo_path","")
         self.domain = root.attrib.get("domain","")
+        if root.attrib.get("distri", ""):
+            self.distri = root.attrib["distri"]
 
         for t in root.findall(".//batch"):
             batch = self.doBatch(t)
@@ -327,6 +349,7 @@ class ActionBatch:
         self.hdds = []
         self.assets = []
         self.isos = []
+        self.iso_folder = {}
         self.iso_5 = ""
         self.fixed_iso = ""
         self.iso_extract_as_repo = {}
@@ -336,7 +359,7 @@ class ActionBatch:
         self.build_id_from_iso = 0
         self.repodirs = []
         self.renames = []
-        self.distri = ""
+        self.distri = actionGenerator.distri
         self.iso_path = ""
         self.repo_path = ""
         self.legacy_builds = 0
@@ -406,10 +429,17 @@ class ActionBatch:
         if node.attrib.get("iso","") and node.attrib.get("name",""):
             for iso in node.attrib["name"].split("|"):
                 self.isos.append(iso)
+                if node.attrib.get("folder",""):
+                    self.iso_folder[iso] = node.attrib["folder"]
                 if node.attrib["iso"] == "extract_as_repo":
                     self.iso_extract_as_repo[iso] = 1
+
+        hdd_folder = ""
+        if node.attrib.get("name","") and node.attrib.get("folder",""):
+            self.iso_folder[node.attrib["name"]] = node.attrib["folder"]
+
         for t in node.findall(".//isos/*"):
-            self.isos.append(t)
+            self.isos.append(t.tag)
 
         if node.attrib.get("distri",""):
             self.distri = node.attrib["distri"]
@@ -441,6 +471,8 @@ class ActionBatch:
         for t in node.findall(".//*"):
             if t.tag == "hdd":
                 self.hdds.append(t.attrib["filemask"])
+                if node.attrib.get("folder",""):
+                    self.iso_folder[t.attrib["filemask"]] = node.attrib["folder"]
             if t.tag == "asset":
                 self.assets.append(t.attrib["filemask"])
             if t.tag == "repos" and t.attrib.get("build_id_from_iso",""):
@@ -488,11 +520,17 @@ class ActionBatch:
             if self.ag.productpath.startswith('http'):
                 self.p(read_files_curl, f, "ISOMASK", hdd)
             else:
-                self.p(read_files_hdd, f, "ISOMASK", hdd)
+                self.p(read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd)
         for asset in self.assets:
-            self.p(read_files_hdd, f, "ISOMASK", asset)
+            self.p(read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
         if self.isos:
-            self.p(read_files_iso, f)
+            # if isos don't belong to custom folder - just read them all with single command
+            if not self.iso_folder:
+                self.p(read_files_isos, f)
+            else:
+                for iso in self.isos:
+                    self.p(read_files_iso, f, "FOLDER", self.iso_folder.get(iso,""), "SRCISO", iso)
+
         if self.repolink:
             self.p(read_files_repo_link, f)
         if self.repolink and not self.isos:
@@ -520,10 +558,17 @@ class ActionBatch:
             for alias in alias_list:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
 
+    def gen_print_array_iso_folder(self,f):
+        if len(self.iso_folder):
+            self.p('declare -A iso_folder',f)
+        for k, v in self.iso_folder.items():
+            self.p("iso_folder[{}]='{}/'".format(k, v), f)
+
     def gen_print_rsync_iso(self,f):
         print(header, file=f)
         if self.isos or (self.hdds and not self.ag.productpath.startswith('http')):
             self.gen_print_array_flavor_filter(f)
+            self.gen_print_array_iso_folder(f)
             self.p(rsync_iso(self.ag.brand), f)
         if self.assets:
             self.gen_print_array_flavor_filter(f)
@@ -568,15 +613,11 @@ class ActionBatch:
             self.p(openqa_call_legacy_builds, f)
 
         i=0
-        if self.hdds:
-            if self.ag.productpath.startswith('http'):
+        if self.hdds or self.assets:
+            if self.hdds and self.ag.productpath.startswith('http'):
                 self.p(" echo \" HDD_URL_1=PRODUCTPATH/$destiso \\\\\"", f)
             else:
-                self.p(" echo \" HDD_1=$destiso \\\\", f)
-                self.p(" ASSET_HDD_1_SHA256=$destiso.sha256 \\\\\"", f)
-        elif self.assets:
-                self.p(" echo \" ASSET_1=$destiso \\\\", f)
-                self.p(" ASSET_1_SHA256=$destiso.sha256 \\\\\"", f)
+                self.p(openqa_call_start_ex, f)
         else:
             if self.iso_5:
                 if self.fixed_iso:
