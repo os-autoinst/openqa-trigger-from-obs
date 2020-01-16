@@ -39,10 +39,11 @@ read_files_repo_link = '''cp __envdir/REPOLINK/files_repo*.lst __envsub/
 read_files_repo_link2 = '''cp __envdir/REPOLINK/files_iso*.lst __envsub/
 '''
 
-def rsync_iso_staging(brand):
-    if brand == 'obs': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
+def rsync_iso_staging(brand, version):
+    if brand == 'obs' and version != 'Factory' '': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
+    if brand == 'obs': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-$flavor}'''
 
-rsync_iso = lambda brand : '''
+rsync_iso = lambda brand, version : '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -52,7 +53,7 @@ for flavor in {FLAVORLIST,}; do
         src=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
         [ ! -z "$src" ] || continue
         dest=$src
-        ''' + rsync_iso_staging(brand) + '''
+        ''' + rsync_iso_staging(brand, version) + '''
         echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/iso/$dest"
         echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
 
@@ -120,13 +121,16 @@ for arch in "${archs[@]}"; do
         dest=''' + dest
 
 
-def openqa_call_start_staging(brand):
+def openqa_call_start_staging(brand, version):
+    if brand == 'obs' and version == 'Factory': return '''[ -z "__STAGING" ] || version=${version}
+        [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-$flavor}
+        [ -z "__STAGING" ] || flavor=Staging-$flavor'''
     if brand == 'obs': return '''[ -z "__STAGING" ] || version=${version}:S:__STAGING
         [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
         [ -z "__STAGING" ] || flavor=Staging-$flavor'''
 
 
-openqa_call_start = lambda brand: '''
+openqa_call_start = lambda brand, version: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORALIASLIST,}; do
@@ -141,7 +145,7 @@ for flavor in {FLAVORALIASLIST,}; do
         destiso=$iso
         version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build
-        ''' + openqa_call_start_staging(brand) + '''
+        ''' + openqa_call_start_staging(brand, version) + '''
         [ ! -z "$build"  ] || continue
         [ "$arch" != . ] || arch=x86_64
 
@@ -280,7 +284,7 @@ openqa_call_repot1_dest = lambda brand, dest: '''
 def openqa_call_end(brand, version):
     if version == 'Factory': return '''
         [ $flavor != MicroOS-DVD ] || flavor=DVD
-        echo " FLAVOR=${flavor#Tumbleweed-} \\\\"
+        echo " FLAVOR=${flavor//Tumbleweed-/} \\\\"
 ) | LC_COLLATE=C sort
         echo ""
     done
@@ -427,6 +431,8 @@ class ActionBatch:
         s=s.replace('__envdir', self.ag.envdir)
         if self.subfolder and self.subfolder != 'default' and not self.ag.version:
             s=s.replace('VERSIONVALUE', self.subfolder.lstrip('Leap_'))
+        elif self.ag.staging() and self.ag.version == 'Factory':
+            s=s.replace('VERSIONVALUE', 'Staging:' + self.ag.staging())
         else:
             s=s.replace('VERSIONVALUE', self.ag.version.replace('Factory','Tumbleweed'))
         s=s.replace("DISTRIVALUE", self.distri)
@@ -620,12 +626,12 @@ class ActionBatch:
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
-                self.p(rsync_iso(self.ag.brand), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+                self.p(rsync_iso(self.ag.brand, self.ag.version), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
             else:
-                self.p(rsync_iso(self.ag.brand), f)
+                self.p(rsync_iso(self.ag.brand, self.ag.version), f)
         if self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(rsync_iso(self.ag.brand), f, "factory/iso", "factory/other")
+            self.p(rsync_iso(self.ag.brand, self.ag.version), f, "factory/iso", "factory/other")
 
     def gen_print_rsync_repo(self,f):
         print(header, file=f)
@@ -673,9 +679,9 @@ class ActionBatch:
         print(header, file=f)
         self.gen_print_array_flavor_filter(f)
         if self.mask:
-            self.p(openqa_call_start(self.ag.brand), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(openqa_call_start(self.ag.brand, self.ag.version), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(openqa_call_start(self.ag.brand), f)
+            self.p(openqa_call_start(self.ag.brand, self.ag.version), f)
         if self.repolink:
             self.p(openqa_call_legacy_builds_link, f)
         if self.legacy_builds:
