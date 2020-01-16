@@ -1,0 +1,42 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ ASSET_HDD_1_SHA256=openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20200115.qcow2.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20200115.qcow2.sha256 | tail -c 64) \
+ DISTRI=microos \
+ FLAVOR=MicroOS-Image-ContainerHost \
+ HDD_1=openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20200115.qcow2 \
+ REPO_0=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_1=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-debuginfo \
+ REPO_2=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-source \
+ REPO_3=openSUSE-non-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_NON_OSS=openSUSE-non-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_OSS=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ ASSET_HDD_1_SHA256=openSUSE-MicroOS.x86_64-16.0.0-Kubic-kubeadm-kvm-and-xen-Snapshot20200115.qcow2.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-MicroOS.x86_64-16.0.0-Kubic-kubeadm-kvm-and-xen-Snapshot20200115.qcow2.sha256 | tail -c 64) \
+ DISTRI=microos \
+ FLAVOR=MicroOS-Image-Kubic-kubeadm \
+ HDD_1=openSUSE-MicroOS.x86_64-16.0.0-Kubic-kubeadm-kvm-and-xen-Snapshot20200115.qcow2 \
+ REPO_0=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_1=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-debuginfo \
+ REPO_2=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-source \
+ REPO_3=openSUSE-non-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_NON_OSS=openSUSE-non-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_OSS=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-i586-x86_64-Snapshot20200115.qcow2-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+

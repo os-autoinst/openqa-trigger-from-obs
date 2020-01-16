@@ -1,7 +1,7 @@
 <openQA project_pattern="Virtualization:WSL"
     dist_path="obspublish-other::openqa/Virtualization:WSL/openSUSE_SUBFOLDER/x86_64/wsl-appx"
     batches="Tumbleweed|Leap_15.2">
-    <flavor name="WSL" distri="opensuse" arch=".">
+    <flavor name="WSL" distri="opensuse" archs=".">
         <asset filemask='.*\.appx$'/>
     </flavor>
 </openQA>

@@ -15,7 +15,7 @@ for dir in "$@" ; do
     known_destination_isos="$(bash $dir/print_rsync_iso.sh | grep -oE '[^/]+\.(iso|appx)$')" || :
     if [ -z "$known_destination_isos" ] ; then
         # if openqa request has HDD_URL, then skip this test
-        ! (bash $dir/print_openqa.sh | grep -q "HDD_URL_1") || { >&2 echo "SKIP $dir" && continue; }
+        ! (bash $dir/print_openqa.sh | grep -q "HDD_") || { >&2 echo "SKIP $dir" && continue; }
 
         >&2 echo "FAIL $dir: Cannot parse destination ISO - is print_rsync_iso.sh correct?"
                : $((++errs))
