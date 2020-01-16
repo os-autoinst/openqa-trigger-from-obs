@@ -1,0 +1,8 @@
+<openQA
+	project_pattern="openSUSE:(?P&lt;version&gt;Factory):Staging:(?P&lt;staging&gt;[A-Z])"
+	dist_path="obspublish-stage::openqa/openSUSE:Factory:Staging:${staging}/images/x86_64"
+	iso_path="*product*"
+    archs="x86_64">
+	<flavor name="Tumbleweed-DVD" distri="opensuse" iso="1"/>
+	<flavor name="MicroOS-DVD|Kubic-DVD" distri="microos" iso="1"/>
+</openQA>
