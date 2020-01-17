@@ -1,0 +1,48 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Tumbleweed-NET-aarch64-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=NET \
+ FULLURL=1 \
+ ISO=openSUSE-Tumbleweed-NET-aarch64-Snapshot20200115-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-oss-aarch64-Snapshot20200115 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-oss-aarch64-Snapshot20200115 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_1=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_2=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-oss-aarch64-Snapshot20200115 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=DVD \
+ FULLURL=1 \
+ ISO=openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-oss-aarch64-Snapshot20200115 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-oss-aarch64-Snapshot20200115 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_1=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_2=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-oss-aarch64-Snapshot20200115 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+

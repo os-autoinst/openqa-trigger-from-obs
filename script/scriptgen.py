@@ -43,7 +43,12 @@ def rsync_iso_staging(brand, version):
     if brand == 'obs' and version != 'Factory' '': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
     if brand == 'obs': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-$flavor}'''
 
-rsync_iso = lambda brand, version : '''
+def rsync_iso_fix_src(brand, archs):
+    if 'armv7hl' in archs and not 'armv7l' in archs:
+        return '[ -n "$src" ] || [ "$arch" != armv7hl ] || src=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
+    return ''
+
+rsync_iso = lambda brand, version, archs : '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -51,6 +56,7 @@ for flavor in {FLAVORLIST,}; do
         filter=$flavor
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         src=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
+        ''' + rsync_iso_fix_src(brand, archs) + '''
         [ ! -z "$src" ] || continue
         dest=$src
         ''' + rsync_iso_staging(brand, version) + '''
@@ -129,8 +135,12 @@ def openqa_call_start_staging(brand, version):
         [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
         [ -z "__STAGING" ] || flavor=Staging-$flavor'''
 
+def openqa_call_start_fix_iso(brand, archs):
+    if 'armv7hl' in archs and not 'armv7l' in archs:
+        return '[ -n "$iso" ] || [ "$arch" != armv7hl ] || iso=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
+    return ''
 
-openqa_call_start = lambda brand, version: '''
+openqa_call_start = lambda brand, version, archs: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORALIASLIST,}; do
@@ -139,6 +149,7 @@ for flavor in {FLAVORALIASLIST,}; do
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
         iso=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
+        ''' + openqa_call_start_fix_iso(brand, archs) + '''
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?') || continue
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*')
         build1=$build
@@ -173,7 +184,7 @@ openqa_call_start_ex = ''' if [[ $destiso =~ \.iso$ ]]; then
    echo \" ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
  ASSET_ISO_SHA256=${destiso}.sha256 \\\\\"
- elif [[ $destiso =~ \.(hdd|qcow2)$ ]]; then
+ elif [[ $destiso =~ \.(hdd|qcow2|raw\.xz|raw\.gz)$ ]]; then
    echo \" HDD_1=${destiso} \\\\
  CHECKSUM_HDD_1=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
  ASSET_HDD_1_SHA256=${destiso}.sha256 \\\\\"
@@ -576,7 +587,10 @@ class ActionBatch:
             if self.ag.productpath.startswith('http'):
                 self.p(read_files_curl, f, "ISOMASK", hdd)
             else:
-                self.p(read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd)
+                if ' ' in self.archs:
+                    self.p(read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, '| head -n 1', '')
+                else:
+                    self.p(read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd)
         for asset in self.assets:
             self.p(read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
         if self.isos:
@@ -626,12 +640,12 @@ class ActionBatch:
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
-                self.p(rsync_iso(self.ag.brand, self.ag.version), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
             else:
-                self.p(rsync_iso(self.ag.brand, self.ag.version), f)
+                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs), f)
         if self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(rsync_iso(self.ag.brand, self.ag.version), f, "factory/iso", "factory/other")
+            self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs), f, "factory/iso", "factory/other")
 
     def gen_print_rsync_repo(self,f):
         print(header, file=f)
@@ -679,9 +693,9 @@ class ActionBatch:
         print(header, file=f)
         self.gen_print_array_flavor_filter(f)
         if self.mask:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version), f)
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs), f)
         if self.repolink:
             self.p(openqa_call_legacy_builds_link, f)
         if self.legacy_builds:

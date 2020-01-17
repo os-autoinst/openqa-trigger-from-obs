@@ -1,0 +1,23 @@
+<openQA
+    project_pattern="openSUSE:(?P&lt;version&gt;Factory):ARM:ToTest"
+    dist_path="obspublish::openqa/openSUSE:Factory:ARM:ToTest"
+    distri="opensuse">
+    <batch name="base" folder="images/local" archs="aarch64 armv7hl">
+        <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="*product*" iso="1">
+            <repos>
+                <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-oss-$arch"/>
+            </repos>
+        </flavor>
+    </batch>
+    <batch name="microos" folder="images/local/*product*" archs="aarch64" repos="base" distri="microos">
+        <flavor name="MicroOS-DVD|Kubic-DVD" iso="1"/>
+    </batch>
+    <batch name="live" folder="images/*/live*" archs="aarch64" repos="base">
+        <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
+    </batch>
+    <batch name="jeos" folder="images/a*" archs="aarch64 armv7hl" repos="base">
+        <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi*">
+            <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
+        </flavor>
+    </batch>
+</openQA>
