@@ -1,0 +1,10 @@
+<openQA
+    project_pattern="openSUSE:(?P&lt;version&gt;Factory):zSystems:ToTest"
+    dist_path="obspublish::openqa/openSUSE:Factory:zSystems:ToTest/images/local"
+    distri="opensuse">
+    <flavor name="Tumbleweed-DVD" folder="*product*" iso="1" archs="s390x">
+        <repos>
+            <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-oss-$arch"/>
+        </repos>
+    </flavor>
+</openQA>
