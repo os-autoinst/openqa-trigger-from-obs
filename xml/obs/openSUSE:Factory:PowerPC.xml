@@ -1,0 +1,10 @@
+<openQA
+    project_pattern="openSUSE:(?P&lt;version&gt;Factory):PowerPC:ToTest"
+    dist_path="obspublish::openqa/openSUSE:Factory:PowerPC:ToTest/images/local"
+    distri="opensuse">
+    <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="*product*" iso="1" archs="ppc64 ppc64le">
+        <repos archs="ppc64le">
+            <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-oss-ppc64_ppc64le"/>
+        </repos>
+    </flavor>
+</openQA>
