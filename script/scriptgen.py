@@ -39,16 +39,17 @@ read_files_repo_link = '''cp __envdir/REPOLINK/files_repo*.lst __envsub/
 read_files_repo_link2 = '''cp __envdir/REPOLINK/files_iso*.lst __envsub/
 '''
 
-def rsync_iso_staging(brand, version):
-    if brand == 'obs' and version != 'Factory' '': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
-    if brand == 'obs': return '''[ -z "__STAGING" ] || dest=${dest//$flavor/Staging:__STAGING-$flavor}'''
+def rsync_iso_staging(brand, version, staging):
+    if not staging: return ''
+    if brand == 'obs' and version != 'Factory' and len(staging) == 1: return '''dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
+    if brand == 'obs': return '''dest=${dest//$flavor/Staging:__STAGING-$flavor}'''
 
 def rsync_iso_fix_src(brand, archs):
     if 'armv7hl' in archs and not 'armv7l' in archs:
         return '[ -n "$src" ] || [ "$arch" != armv7hl ] || src=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
     return ''
 
-rsync_iso = lambda brand, version, archs : '''
+rsync_iso = lambda brand, version, archs, staging : '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -59,7 +60,7 @@ for flavor in {FLAVORLIST,}; do
         ''' + rsync_iso_fix_src(brand, archs) + '''
         [ ! -z "$src" ] || continue
         dest=$src
-        ''' + rsync_iso_staging(brand, version) + '''
+        ''' + rsync_iso_staging(brand, version, staging) + '''
         echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/iso/$dest"
         echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
 
@@ -127,20 +128,21 @@ for arch in "${archs[@]}"; do
         dest=''' + dest
 
 
-def openqa_call_start_staging(brand, version):
-    if brand == 'obs' and version == 'Factory': return '''[ -z "__STAGING" ] || version=${version}
-        [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-$flavor}
-        [ -z "__STAGING" ] || flavor=Staging-$flavor'''
-    if brand == 'obs': return '''[ -z "__STAGING" ] || version=${version}:S:__STAGING
-        [ -z "__STAGING" ] || destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
-        [ -z "__STAGING" ] || flavor=Staging-$flavor'''
+def openqa_call_start_staging(brand, version, staging):
+    if not staging:
+        return ''
+    if brand == 'obs' and (version == 'Factory' or len(staging)>1): return '''destiso=${iso//$flavor/Staging:__STAGING-$flavor}
+        flavor=Staging-$flavor'''
+    if brand == 'obs': return '''version=${version}:S:__STAGING
+        destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
+        flavor=Staging-$flavor'''
 
 def openqa_call_start_fix_iso(brand, archs):
     if 'armv7hl' in archs and not 'armv7l' in archs:
         return '[ -n "$iso" ] || [ "$arch" != armv7hl ] || iso=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
     return ''
 
-openqa_call_start = lambda brand, version, archs: '''
+openqa_call_start = lambda brand, version, archs, staging: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORALIASLIST,}; do
@@ -156,7 +158,7 @@ for flavor in {FLAVORALIASLIST,}; do
         destiso=$iso
         version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build
-        ''' + openqa_call_start_staging(brand, version) + '''
+        ''' + openqa_call_start_staging(brand, version, staging) + '''
         [ ! -z "$build"  ] || continue
         [ "$arch" != . ] || arch=x86_64
 
@@ -320,9 +322,12 @@ class ActionGenerator:
 
     def staging(self):
         m = re.match(r'.*Staging:(?P<staging>[A-Z]).*', self.envdir)
-        if not m:
-            return ""
-        return m.groupdict().get("staging","")
+        if m:
+            return m.groupdict().get("staging","")
+        m = re.match(r'.*Rings:(?P<ring>[0-9]).*', self.envdir)
+        if m:
+            return "Core"
+        return ""
 
     def productisopath(self):
         if self.iso_path and self.productpath:
@@ -440,7 +445,9 @@ class ActionBatch:
         else:
             s=s.replace('__envsub', self.ag.envdir)
         s=s.replace('__envdir', self.ag.envdir)
-        if self.subfolder and self.subfolder != 'default' and not self.ag.version:
+        if self.ag.version.startswith("15.") and self.ag.staging() == 'Core':
+            s=s.replace('VERSIONVALUE', self.ag.version + ":Core")
+        elif self.subfolder and self.subfolder != 'default' and not self.ag.version:
             s=s.replace('VERSIONVALUE', self.subfolder.lstrip('Leap_'))
         elif self.ag.staging() and self.ag.version == 'Factory':
             s=s.replace('VERSIONVALUE', 'Staging:' + self.ag.staging())
@@ -640,12 +647,12 @@ class ActionBatch:
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
-                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
             else:
-                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs), f)
+                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f)
         if self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs), f, "factory/iso", "factory/other")
+            self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, "factory/iso", "factory/other")
 
     def gen_print_rsync_repo(self,f):
         print(header, file=f)
@@ -693,9 +700,9 @@ class ActionBatch:
         print(header, file=f)
         self.gen_print_array_flavor_filter(f)
         if self.mask:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs), f)
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f)
         if self.repolink:
             self.p(openqa_call_legacy_builds_link, f)
         if self.legacy_builds:
