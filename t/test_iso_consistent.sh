@@ -12,16 +12,16 @@ for dir in "$@" ; do
     # exactly matches ISO value in print_openqa.sh
 
     # this must capture all destination iso filenames
-    known_destination_isos="$(bash $dir/print_rsync_iso.sh | grep -oE '[^/]+\.(iso|appx)$')" || :
+    known_destination_isos="$(bash $dir/print_rsync_iso.sh | grep -oE '[^/]+\.(iso|appx|raw.(x|g)z|qcow2)$')" || :
     if [ -z "$known_destination_isos" ] ; then
         # if openqa request has HDD_URL, then skip this test
-        ! (bash $dir/print_openqa.sh | grep -q "HDD_") || { >&2 echo "SKIP $dir" && continue; }
+        ! (bash $dir/print_openqa.sh | grep -q "HDD_URL_1") || { >&2 echo "SKIP $dir" && continue; }
 
         >&2 echo "FAIL $dir: Cannot parse destination ISO - is print_rsync_iso.sh correct?"
                : $((++errs))
         continue 2;
     fi
-    regex='ISO.*=(.*\.iso)|ASSET.*=(.*\.appx)'
+    regex='ISO.*=(.*\.iso)|ASSET[^(SHA)]*=(.*\.appx)|HDD.*=(.*\.(raw.(x|g)z|qcow2))'
     checked=0
 
     while read -r line; do
@@ -31,7 +31,7 @@ for dir in "$@" ; do
             fi
             checked=1
         fi
-    done < <(bash $dir/print_openqa.sh | grep -E '\b(ISO|ASSET).*=')
+    done < <(bash $dir/print_openqa.sh | grep -E '\b(ISO|ASSET|HDD)[^(SHA)]*=')
 
     [ "$checked" == 1 ] || { >&2 echo "FAIL $dir: No ISO found in openqa request - is something wrong?"; : $((++errs)); continue; }
     >&2 echo "PASS $dir"
