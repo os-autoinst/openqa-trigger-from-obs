@@ -1,0 +1,4 @@
+rsync --timeout=3600 obspublish::openqa/openSUSE:Factory:ARM:ToTest/images/local/*product*/*openSUSE-MicroOS-DVD-aarch64-Snapshot20200115-Media.iso /var/lib/openqa/factory/iso/openSUSE-MicroOS-DVD-aarch64-Snapshot20200115-Media.iso
+rsync --timeout=3600 obspublish::openqa/openSUSE:Factory:ARM:ToTest/images/local/*product*/*openSUSE-MicroOS-DVD-aarch64-Snapshot20200115-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-MicroOS-DVD-aarch64-Snapshot20200115-Media.iso.sha256
+rsync --timeout=3600 obspublish::openqa/openSUSE:Factory:ARM:ToTest/images/local/*product*/*openSUSE-Kubic-DVD-aarch64-Snapshot20200115-Media.iso /var/lib/openqa/factory/iso/openSUSE-Kubic-DVD-aarch64-Snapshot20200115-Media.iso
+rsync --timeout=3600 obspublish::openqa/openSUSE:Factory:ARM:ToTest/images/local/*product*/*openSUSE-Kubic-DVD-aarch64-Snapshot20200115-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Kubic-DVD-aarch64-Snapshot20200115-Media.iso.sha256

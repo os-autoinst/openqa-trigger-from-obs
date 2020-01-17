@@ -1,0 +1,76 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=Rescue-CD \
+ ISO=openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso \
+ REPO_0=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_1=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_2=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=GNOME-Live \
+ ISO=openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso \
+ REPO_0=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_1=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_2=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=KDE-Live \
+ ISO=openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso \
+ REPO_0=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_1=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_2=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
+ ASSET_ISO_SHA256=openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=XFCE-Live \
+ ISO=openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso \
+ REPO_0=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_1=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_2=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS=openSUSE-oss-aarch64-Snapshot20200115 \
+ REPO_OSS_DEBUGINFO=openSUSE-oss-aarch64-Snapshot20200115-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-oss-aarch64-Snapshot20200115-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
