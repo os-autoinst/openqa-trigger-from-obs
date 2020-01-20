@@ -13,4 +13,5 @@
 			<Addon-NonOss-FTP to="non-oss"/>
 		</renames>
 	</flavor>
+	<news iso="DVD" archs="x86_64"/>
 </openQA>

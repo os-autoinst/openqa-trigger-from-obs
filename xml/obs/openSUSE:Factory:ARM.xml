@@ -8,6 +8,7 @@
                 <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-oss-$arch"/>
             </repos>
         </flavor>
+        <news iso="Tumbleweed-DVD" archs="aarch64"/>
     </batch>
     <batch name="microos" folder="images/local/*product*" archs="aarch64" repos="base" distri="microos">
         <flavor name="MicroOS-DVD|Kubic-DVD" iso="1"/>
