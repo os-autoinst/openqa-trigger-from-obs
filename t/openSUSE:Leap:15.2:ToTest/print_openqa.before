@@ -50,3 +50,4 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse/15.2 --snapshot 497.4 /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-DVD-x86_64-Build497.4-Media.iso

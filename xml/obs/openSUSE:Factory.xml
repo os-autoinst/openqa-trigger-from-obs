@@ -9,6 +9,7 @@
                 <non-oss folder="openSUSE-Addon-NonOss-ftp-ftp" dest="openSUSE-non-oss-i586-x86_64"/>
             </repos>
         </flavor>
+        <news iso="Tumbleweed-DVD" archs="x86_64"/>
     </batch>
     <batch name="microos" folder="images/local/*product*" archs="x86_64" repos="base" distri="microos">
         <flavor name="MicroOS-DVD|Kubic-DVD" iso="1"/>

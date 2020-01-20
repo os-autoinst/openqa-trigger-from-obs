@@ -142,7 +142,14 @@ def openqa_call_start_fix_iso(brand, archs):
         return '[ -n "$iso" ] || [ "$arch" != armv7hl ] || iso=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
     return ''
 
-openqa_call_start = lambda brand, version, archs, staging: '''
+def openqa_call_news(news, news_archs):
+    if news and news_archs:
+        return '''[ "$flavor" != ''' + news + ''' ] || [ "$arch" != ''' + news_archs + ''' ] || newsiso="$destiso"'''
+    if news:
+        return '''[ "$flavor" != ''' + news + ''' ] || newsiso="$destiso"'''
+    return ''
+
+openqa_call_start = lambda brand, version, archs, staging, news, news_archs: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORALIASLIST,}; do
@@ -161,7 +168,7 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_start_staging(brand, version, staging) + '''
         [ ! -z "$build"  ] || continue
         [ "$arch" != . ] || arch=x86_64
-
+        ''' + openqa_call_news(news, news_archs) + '''
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
 (
  echo \" _OBSOLETE=1
@@ -355,6 +362,11 @@ class ActionGenerator:
         for t in root.findall(".//batch"):
             batch = self.doBatch(t)
             if batch:
+                for news in t.findall(".//news"):
+                    if news.attrib.get("iso",""):
+                        batch.news = news.attrib["iso"]
+                    if news.attrib.get("archs",""):
+                        batch.news_archs = news.attrib["archs"]
                 for flavor in t.findall(".//flavor"):
                     batch.doFlavor(flavor)
 
@@ -363,6 +375,11 @@ class ActionGenerator:
             for b in batches_string.split('|'):
                 batch = self.doBatch(root, b)
                 if batch:
+                    for news in root.findall(".//news"):
+                        if news.attrib.get("iso",""):
+                            batch.news = news.attrib["iso"]
+                        if news.attrib.get("archs",""):
+                            batch.news_archs = news.attrib["archs"]
                     for flavor in root.findall(".//flavor"):
                         batch.doFlavor(flavor)
  
@@ -399,6 +416,8 @@ class ActionBatch:
         self.subfolder = name
         self.ag = actionGenerator
         self.archs = "aarch64 ppc64le s390x x86_64"
+        self.news = ""
+        self.news_archs = ""
         self.archs_repo = ""
         self.flavors = []
         self.flavor_aliases = defaultdict(list)
@@ -700,9 +719,9 @@ class ActionBatch:
         print(header, file=f)
         self.gen_print_array_flavor_filter(f)
         if self.mask:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f)
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs), f)
         if self.repolink:
             self.p(openqa_call_legacy_builds_link, f)
         if self.legacy_builds:
@@ -769,6 +788,11 @@ class ActionBatch:
             self.p("echo ' STAGING=__STAGING \\'", f)
 
         self.p(openqa_call_end(self.ag.brand, self.ag.version), f)
+        if self.news:
+            news_archs = '-' + self.news_archs
+            if news_archs == '-x86_64':
+                news_archs = ''
+            self.p('[ -z "$newsiso" ] || [ -z "$build1" ] || echo  /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse' + news_archs + '/VERSIONVALUE --snapshot $build1 /var/lib/openqa/factory/iso/$newsiso', f)
 
 def parse_dir(root, d, files):
     for f in files:
