@@ -369,6 +369,8 @@ class ActionGenerator:
                         batch.news_archs = news.attrib["archs"]
                 for flavor in t.findall(".//flavor"):
                     batch.doFlavor(flavor)
+                if not batch.flavors:
+                    batch.doFlavor(t)
 
         if not len(self.batches):
             batches_string = root.attrib.get("batches","default")
@@ -383,7 +385,7 @@ class ActionGenerator:
                     for flavor in root.findall(".//flavor"):
                         batch.doFlavor(flavor)
  
-    def doBatch(self, node, name=None):
+    def doBatch(self, node, name=None, root=None):
         if not name:
             name = node.attrib.get("name","")
         if not name:
@@ -396,6 +398,9 @@ class ActionGenerator:
             batch.folder = node.attrib["folder"]
         if node.attrib.get("archs",""):
             batch.archs = node.attrib["archs"]
+        elif root:
+            batch.archs = root.attrib.get("archs", batch.archs)
+            
         if node.attrib.get("mask",""):
             batch.mask = node.attrib["mask"]
         if node.attrib.get("distri",""):
@@ -643,7 +648,7 @@ class ActionBatch:
             self.p(read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(repodir.attrib["folder"]) )
 
     def gen_print_array_flavor_filter(self,f):
-        if len(self.hdds) or len(self.assets) or len(self.flavor_aliases):
+        if self.hdds or self.assets or self.flavor_aliases:
             self.p('declare -A flavor_filter',f)
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
@@ -655,7 +660,7 @@ class ActionBatch:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
 
     def gen_print_array_iso_folder(self,f):
-        if len(self.iso_folder):
+        if self.iso_folder:
             self.p('declare -A iso_folder',f)
         for k, v in self.iso_folder.items():
             self.p("iso_folder[{}]='{}/'".format(k, v), f)
