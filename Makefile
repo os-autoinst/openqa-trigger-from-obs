@@ -14,6 +14,13 @@ install_apparmor:
 	install -m 644 profiles/apparmor.d/local/opt.openqa-trigger-from-obs.script.rsync.sh "$(DESTDIR)"/etc/apparmor.d/local/
 	install -m 644 profiles/apparmor.d/local/usr.share.openqa.script.openqa "$(DESTDIR)"/etc/apparmor.d/local/
 
+update_files.lst:
+	(cd t && bash update_read_files.sh *)
+
+revert_update_files.lst:
+	git checkout -- t/*/*.lst
+	git checkout -- t/*/*/*.lst
+
 test:
 	(cd t && bash run.sh)
 
