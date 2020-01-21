@@ -1,5 +1,5 @@
 <openQA
-	project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?):Rings:1-MinimalX"
-	dist_path="obspublish-stage::openqa/openSUSE:Leap:15${sp}:Rings:1-MinimalX/images/x86_64/*product*">
-	<flavor name="DVD" distri="opensuse" iso="1"/>
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?):Rings:1-MinimalX"
+    dist_path="images/x86_64/*product*">
+    <flavor name="DVD" distri="opensuse" iso="1"/>
 </openQA>

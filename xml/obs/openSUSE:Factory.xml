@@ -1,6 +1,5 @@
 <openQA
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):ToTest"
-    dist_path="obspublish::openqa/openSUSE:Factory:ToTest"
     distri="opensuse">
     <batch name="base" folder="images/local" archs="i586 x86_64">
         <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="*product*" iso="1">
