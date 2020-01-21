@@ -1,6 +1,6 @@
 <openQA
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?):ARM:Images:ToTest"
-    dist_path="obspublish::openqa/openSUSE:Leap:${version}:ARM:Images:ToTest/images/aarch64"
+    dist_path="images/aarch64"
     distri="opensuse" 
     archs="aarch64">
     <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi.aarch64">

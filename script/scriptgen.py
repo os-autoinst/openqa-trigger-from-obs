@@ -319,14 +319,22 @@ done
 '''
 
 class ActionGenerator:
-    def __init__(self, envdir, productpath, version, brand):
+    def __init__(self, envdir, project, productpath, version, brand):
         self.brand = brand
-        self.envdir = envdir
-        self.productpath = productpath
+        self.envdir = os.path.join(envdir, project)
         self.distri = ""
         self.version = version
         self.batches = []
-
+        pp = productpath
+        if not pp or ('::' not in pp and '//' not in pp):
+            if self.staging():
+                pp = os.path.join("obspublish-stage::openqa", os.path.basename(project))
+            else:
+                pp = os.path.join("obspublish::openqa", os.path.basename(project))
+            if productpath and '::' not in productpath and '//' not in productpath:
+                pp = os.path.join(pp, productpath)
+        self.productpath = pp
+  
     def staging(self):
         m = re.match(r'.*Staging:(?P<staging>[A-Z]).*', self.envdir)
         if m:
@@ -842,22 +850,24 @@ def parse_dir(root, d, files):
             print("OBS: Ignoring [" + d + "]: dist_path cannot contain '$(' characters; got: " + dist_path, file=sys.stderr)
             continue
 
-        myenv = os.environ.copy()
-        for k, v in found_match.groupdict().items():
-            if v and v.find("'") == -1:
-                myenv[k] = v
-        try:
-            output = check_output(["echo " + dist_path], shell=True, executable="/bin/bash", env=myenv).decode()
-            success = True
-        except CalledProcessError as e:
-            output = e.output.decode()
-            success = False
+        # make substitutions of common variables if needed
+        if dist_path:
+            myenv = os.environ.copy()
+            for k, v in found_match.groupdict().items():
+                if v and v.find("'") == -1:
+                    myenv[k] = v
+            try:
+                output = check_output(["echo " + dist_path], shell=True, executable="/bin/bash", env=myenv).decode()
+                success = True
+            except CalledProcessError as e:
+                output = e.output.decode()
+                success = False
 
-        if not success:
-            print("OBS: Ignoring [" + d + "]: Error trying to determine dist_path")
-            continue
+            if not success:
+                print("OBS: Ignoring [" + d + "]: Error trying to determine dist_path")
+                continue
 
-        dist_path = output.rstrip("\r\n")
+            dist_path = output.rstrip("\r\n")
 
         return (root + "/" + f, dist_path, version)
 
@@ -873,8 +883,8 @@ def gen_files(project):
     if not xmlfile:
         print('Cannot find xml file for {} ...'.format(project), file=sys.stderr)
         return 1
-
-    a = ActionGenerator(os.getcwd() +"/"+ project, dist_path, version, 'obs')
+   
+    a = ActionGenerator(os.getcwd(), project, dist_path, version, 'obs')
     if a is None:
         print('Couldnt initialize', file=sys.stderr)
         sys.exit(1)

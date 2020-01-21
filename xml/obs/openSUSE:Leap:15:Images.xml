@@ -1,6 +1,6 @@
 <openQA
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?):Images:ToTest"
-    dist_path="obspublish::openqa/openSUSE:Leap:${version}:Images:ToTest/images/x86_64"
+    dist_path="images/x86_64"
     distri="opensuse" 
     archs="x86_64">
     <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-JeOS:kvm-and-xen">
