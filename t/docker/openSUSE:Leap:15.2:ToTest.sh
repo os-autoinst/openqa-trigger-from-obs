@@ -10,6 +10,11 @@ python3 script/scriptgen.py openSUSE:Leap:15.2:ToTest
 echo geekotest > rsync.secret
 chmod 600 rsync.secret'
 
+mkdir -p /var/lib/openqa/osc-plugin-factory/factory-package-news/
+touch /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
+chmod +x /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
+
 echo '127.0.0.1 obspublish' >> /etc/hosts
 systemctl enable --now postgresql
 
