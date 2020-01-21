@@ -66,9 +66,10 @@ set +e
     done
 )
     res=$?
+    [ "$res" -eq 0 ] || : $((++failure_count))
     [ "$subfolder" != "$environ" ] || break
     [ "$res" -eq 0 ] || {
-        >&2 echo "$subfolder exit code: $res ($((++failure_count)) failures total so far)"
+        >&2 echo "$subfolder exit code: $res ($failure_count failures total so far)"
     }
 
 done
