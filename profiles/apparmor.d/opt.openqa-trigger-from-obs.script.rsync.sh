@@ -29,7 +29,7 @@
   /usr/bin/dirname ix,
   /usr/bin/gawk ix,
   /usr/bin/grep ix,
-  /usr/bin/head ix,
+  /usr/bin/head rix,
   /usr/bin/ln ix,
   /usr/bin/ls ix,
   /usr/bin/mkdir ix,
