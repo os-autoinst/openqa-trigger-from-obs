@@ -1,0 +1,2 @@
+rsync --timeout=3600 obspublish-stage::openqa/openSUSE:Factory:Rings:1-MinimalX/images/x86_64/*product*/*openSUSE-Tumbleweed-DVD-x86_64-Build207.1-Media.iso /var/lib/openqa/factory/iso/openSUSE-Staging:Core-Tumbleweed-DVD-x86_64-Build207.1-Media.iso
+rsync --timeout=3600 obspublish-stage::openqa/openSUSE:Factory:Rings:1-MinimalX/images/x86_64/*product*/*openSUSE-Tumbleweed-DVD-x86_64-Build207.1-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Staging:Core-Tumbleweed-DVD-x86_64-Build207.1-Media.iso.sha256
