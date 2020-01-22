@@ -803,7 +803,7 @@ class ActionBatch:
         self.p(openqa_call_end(self.ag.brand, self.ag.version), f)
         if self.news:
             news_archs = '-' + self.news_archs
-            if news_archs == '-x86_64':
+            if news_archs == '-x86_64' or not self.news_archs:
                 news_archs = ''
             self.p('[ -z "$newsiso" ] || [ -z "$build1" ] || echo  /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse' + news_archs + '/VERSIONVALUE --snapshot $build1 /var/lib/openqa/factory/iso/$newsiso', f)
 
