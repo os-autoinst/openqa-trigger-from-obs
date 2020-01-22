@@ -304,6 +304,7 @@ openqa_call_repot1_dest = lambda brand, dest: '''
 def openqa_call_end(brand, version):
     if version == 'Factory': return '''
         [ $flavor != MicroOS-DVD ] || flavor=DVD
+        [ $flavor != Staging-MicroOS-DVD ] || flavor=Staging-DVD
         echo " FLAVOR=${flavor//Tumbleweed-/} \\\\"
 ) | LC_COLLATE=C sort
         echo ""

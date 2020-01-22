@@ -4,7 +4,7 @@
  BUILD=Core.207.1 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Staging:Core-MicroOS-DVD-x86_64-Build207.1-Media.iso.sha256 | tail -c 64) \
  DISTRI=microos \
- FLAVOR=Staging-MicroOS-DVD \
+ FLAVOR=Staging-DVD \
  ISO=openSUSE-Staging:Core-MicroOS-DVD-x86_64-Build207.1-Media.iso \
  STAGING=Core \
  VERSION=Staging:Core \

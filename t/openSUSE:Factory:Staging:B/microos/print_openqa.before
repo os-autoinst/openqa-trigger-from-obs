@@ -4,7 +4,7 @@
  BUILD=B.253.1 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Staging:B-MicroOS-DVD-x86_64-Build253.1-Media.iso.sha256 | tail -c 64) \
  DISTRI=microos \
- FLAVOR=Staging-MicroOS-DVD \
+ FLAVOR=Staging-DVD \
  ISO=openSUSE-Staging:B-MicroOS-DVD-x86_64-Build253.1-Media.iso \
  STAGING=B \
  VERSION=Staging:B \
