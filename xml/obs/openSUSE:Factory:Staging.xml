@@ -1,5 +1,5 @@
 <openQA
-    project_pattern="openSUSE:(?P&lt;version&gt;Factory):Staging:(?P&lt;staging&gt;[A-Z])"
+    project_pattern="openSUSE:(?P&lt;version&gt;Factory):(Staging:[A-Z]|Rings:1-MinimalX)"
     dist_path="images/x86_64"
     iso_path="*product*"
     archs="x86_64">
