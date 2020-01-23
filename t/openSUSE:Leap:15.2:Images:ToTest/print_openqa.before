@@ -1,11 +1,11 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
- ASSET_HDD_1_SHA256=openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Build7.19.qcow2.sha256 \
- BUILD=7.19 \
- CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Build7.19.qcow2.sha256 | tail -c 64) \
+ ASSET_HDD_1_SHA256=openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Snapshot20.3.qcow2.sha256 \
+ BUILD=20.3 \
+ CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Snapshot20.3.qcow2.sha256 | tail -c 64) \
  DISTRI=opensuse \
  FLAVOR=JeOS-for-kvm-and-xen \
- HDD_1=openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Build7.19.qcow2 \
+ HDD_1=openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Snapshot20.3.qcow2 \
  VERSION=15.2 \
  _OBSOLETE=1
 
