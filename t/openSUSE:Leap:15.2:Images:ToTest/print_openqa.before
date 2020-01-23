@@ -1,6 +1,6 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
- ASSET_HDD_1_SHA256=openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Snapshot20.3.qcow2.sha256 \
+ ASSET_256=openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Snapshot20.3.qcow2.sha256 \
  BUILD=20.3 \
  CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-JeOS.x86_64-15.2-kvm-and-xen-Snapshot20.3.qcow2.sha256 | tail -c 64) \
  DISTRI=opensuse \
@@ -11,7 +11,7 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
- ASSET_ISO_SHA256=openSUSE-Leap-15.2-GNOME-Live-x86_64-Snapshot20.3-Media.iso.sha256 \
+ ASSET_256=openSUSE-Leap-15.2-GNOME-Live-x86_64-Snapshot20.3-Media.iso.sha256 \
  BUILD=20.3 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-GNOME-Live-x86_64-Snapshot20.3-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
@@ -22,7 +22,7 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
- ASSET_ISO_SHA256=openSUSE-Leap-15.2-KDE-Live-x86_64-Snapshot20.3-Media.iso.sha256 \
+ ASSET_256=openSUSE-Leap-15.2-KDE-Live-x86_64-Snapshot20.3-Media.iso.sha256 \
  BUILD=20.3 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-KDE-Live-x86_64-Snapshot20.3-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
@@ -33,7 +33,7 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
- ASSET_ISO_SHA256=openSUSE-Leap-15.2-Rescue-CD-x86_64-Snapshot20.3-Media.iso.sha256 \
+ ASSET_256=openSUSE-Leap-15.2-Rescue-CD-x86_64-Snapshot20.3-Media.iso.sha256 \
  BUILD=20.3 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Rescue-CD-x86_64-Snapshot20.3-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
