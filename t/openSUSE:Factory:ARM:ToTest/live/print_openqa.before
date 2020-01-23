@@ -1,6 +1,6 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
- ASSET_ISO_SHA256=openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
@@ -19,7 +19,7 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
- ASSET_ISO_SHA256=openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
@@ -38,7 +38,7 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
- ASSET_ISO_SHA256=openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
@@ -57,7 +57,7 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
- ASSET_ISO_SHA256=openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \

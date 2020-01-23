@@ -194,20 +194,20 @@ openqa_call_legacy_builds=''' echo \" BUILD_HA=$build1 \\\\
 
 openqa_call_start_iso = ''' echo \" ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
- ASSET_ISO_SHA256=${destiso}.sha256 \\\\\"'''
+ ASSET_256=${destiso}.sha256 \\\\\"'''
 
 openqa_call_start_ex = ''' if [[ $destiso =~ \.iso$ ]]; then
    echo \" ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
- ASSET_ISO_SHA256=${destiso}.sha256 \\\\\"
+ ASSET_256=${destiso}.sha256 \\\\\"
  elif [[ $destiso =~ \.(hdd|qcow2|raw\.xz|raw\.gz)$ ]]; then
    echo \" HDD_1=${destiso} \\\\
  CHECKSUM_HDD_1=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
- ASSET_HDD_1_SHA256=${destiso}.sha256 \\\\\"
+ ASSET_256=${destiso}.sha256 \\\\\"
  else
    echo \" ASSET_1=${destiso} \\\\
  CHECKSUM_ASSET_1=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
- ASSET_1_SHA256=${destiso}.sha256 \\\\\"
+ ASSET_256=${destiso}.sha256 \\\\\"
  fi
 '''
 

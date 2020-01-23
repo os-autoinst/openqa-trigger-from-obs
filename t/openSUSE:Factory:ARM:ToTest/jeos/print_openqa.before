@@ -1,6 +1,6 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
- ASSET_HDD_1_SHA256=openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 \
  BUILD=20200115 \
  CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 | tail -c 64) \
  DISTRI=opensuse \
@@ -19,7 +19,7 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=armv7hl \
- ASSET_HDD_1_SHA256=openSUSE-Tumbleweed-ARM-JeOS-efi.armv7l-2020.01.08-Snapshot20200115.raw.xz.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-ARM-JeOS-efi.armv7l-2020.01.08-Snapshot20200115.raw.xz.sha256 \
  BUILD=20200115 \
  CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-efi.armv7l-2020.01.08-Snapshot20200115.raw.xz.sha256 | tail -c 64) \
  DISTRI=opensuse \

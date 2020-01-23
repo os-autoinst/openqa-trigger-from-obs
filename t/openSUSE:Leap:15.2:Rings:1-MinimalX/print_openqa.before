@@ -1,6 +1,6 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
- ASSET_ISO_SHA256=openSUSE-Leap-15.2-Staging:Core-DVD-x86_64-Build336.1-Media.iso.sha256 \
+ ASSET_256=openSUSE-Leap-15.2-Staging:Core-DVD-x86_64-Build336.1-Media.iso.sha256 \
  BUILD=Core.336.1 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Staging:Core-DVD-x86_64-Build336.1-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \

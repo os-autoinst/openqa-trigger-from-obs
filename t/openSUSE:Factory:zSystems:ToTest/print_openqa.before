@@ -1,6 +1,6 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=s390x \
- ASSET_ISO_SHA256=openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
