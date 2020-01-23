@@ -3,8 +3,6 @@
     dist_path="images/x86_64"
     iso_path="*product*"
     archs="x86_64">
-    <batch name="Tumbleweed-DVD" distri="opensuse" iso="1"/>
-    <batch name="microos" distri="microos">
-        <flavor name='MicroOS-DVD|Kubic-DVD' iso="1"/>
-    </batch>
+    <flavor name="Tumbleweed-DVD" distri="opensuse" iso="1"/>
+    <flavor name='MicroOS-DVD|Kubic-DVD' distri="microos" iso="1"/>
 </openQA>

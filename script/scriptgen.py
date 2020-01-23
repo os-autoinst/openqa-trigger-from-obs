@@ -149,12 +149,19 @@ def openqa_call_news(news, news_archs):
         return '''[ "$flavor" != ''' + news + ''' ] || newsiso="$destiso"'''
     return ''
 
-openqa_call_start = lambda brand, version, archs, staging, news, news_archs: '''
+def openqa_call_start_distri(brand, flavor_distri):
+    if flavor_distri:
+        return '''distri=DISTRIVALUE
+        [ -z "${flavor_distri[$flavor]}" ] || distri=${flavor_distri[$flavor]}'''
+    return 'distri=DISTRIVALUE'
+
+openqa_call_start = lambda brand, version, archs, staging, news, news_archs, flavor_distri: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
+        ''' + openqa_call_start_distri(brand, flavor_distri) + '''
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
         iso=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
@@ -172,7 +179,7 @@ for flavor in {FLAVORALIASLIST,}; do
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
 (
  echo \" _OBSOLETE=1
- DISTRI=DISTRIVALUE \\\\
+ DISTRI=$distri \\\\
  ARCH=$arch \\\\
  VERSION=$version \\\\
  BUILD=$build1 \\\\\"'''
@@ -436,6 +443,7 @@ class ActionBatch:
         self.flavors = []
         self.flavor_aliases = defaultdict(list)
         self.flavor_aliases_flavor = []
+        self.flavor_distri = defaultdict(list)
         self.hdds = []
         self.assets = []
         self.isos = []
@@ -523,6 +531,8 @@ class ActionBatch:
         if node.attrib.get("name",""):
             for f in node.attrib["name"].split("|"):
                 self.flavors.append(f)
+                if node.attrib.get("distri",""):
+                    self.flavor_distri[f] = node.attrib["distri"]
                 if node.attrib.get("iso_5",""):
                     self.flavor_aliases[node.attrib.get("iso_5")].append(f)
                     self.iso_5 = node.attrib.get("iso_5")
@@ -667,6 +677,13 @@ class ActionBatch:
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
+    
+    def gen_print_array_flavor_distri(self,f):
+        if not self.flavor_distri:
+            return
+        self.p('declare -A flavor_distri',f)
+        for fl, distri in self.flavor_distri.items():
+            self.p("flavor_distri[{}]='{}'".format(fl, distri), f)
 
     def gen_print_array_iso_folder(self,f):
         if self.iso_folder:
@@ -732,10 +749,11 @@ class ActionBatch:
     def gen_print_openqa(self,f):
         print(header, file=f)
         self.gen_print_array_flavor_filter(f)
+        self.gen_print_array_flavor_distri(f)
         if self.mask:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs), f)
+            self.p(openqa_call_start(self.ag.brand, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri), f)
         if self.repolink:
             self.p(openqa_call_legacy_builds_link, f)
         if self.legacy_builds:
