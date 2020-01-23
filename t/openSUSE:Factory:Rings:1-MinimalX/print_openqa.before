@@ -1,5 +1,17 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
+ ASSET_ISO_SHA256=openSUSE-Staging:Core-Tumbleweed-DVD-x86_64-Build207.1-Media.iso.sha256 \
+ BUILD=Core.207.1 \
+ CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Staging:Core-Tumbleweed-DVD-x86_64-Build207.1-Media.iso.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=Staging-DVD \
+ ISO=openSUSE-Staging:Core-Tumbleweed-DVD-x86_64-Build207.1-Media.iso \
+ STAGING=Core \
+ VERSION=Staging:Core \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
  ASSET_ISO_SHA256=openSUSE-Staging:Core-MicroOS-DVD-x86_64-Build207.1-Media.iso.sha256 \
  BUILD=Core.207.1 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Staging:Core-MicroOS-DVD-x86_64-Build207.1-Media.iso.sha256 | tail -c 64) \
