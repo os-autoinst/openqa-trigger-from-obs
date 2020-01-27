@@ -61,7 +61,10 @@ for flavor in {FLAVORLIST,}; do
         [ ! -z "$src" ] || continue
         dest=$src
         ''' + rsync_iso_staging(brand, version, staging) + '''
-        echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/iso/$dest"
+        asset_folder=hdd
+        [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
+        [[ ! $dest =~ \.appx$  ]] || asset_folder=other
+        echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"
         echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
 
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/${dest%.iso} ] || {
@@ -698,13 +701,11 @@ class ActionBatch:
             self.gen_print_array_iso_folder(f)
             if self.mask:
                 self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
-            elif self.hdds:
-                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, "factory/iso", "factory/hdd")
             else:
                 self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f)
         if self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, "factory/iso", "factory/other")
+            self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f)
 
     def gen_print_rsync_repo(self,f):
         print(header, file=f)
