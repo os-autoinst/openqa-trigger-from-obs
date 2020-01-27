@@ -698,6 +698,8 @@ class ActionBatch:
             self.gen_print_array_iso_folder(f)
             if self.mask:
                 self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+            elif self.hdds:
+                self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f, "factory/iso", "factory/hdd")
             else:
                 self.p(rsync_iso(self.ag.brand, self.ag.version, self.archs, self.ag.staging()), f)
         if self.assets:
