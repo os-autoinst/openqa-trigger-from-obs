@@ -41,7 +41,7 @@
   /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py rUx,
   /usr/share/openqa/script/client rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_client,
   /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
-  /var/lib/openqa/share/factory/{iso,other}/** r,
+  /var/lib/openqa/share/factory/{iso,hdd,other}/** r,
   /{usr/bin,bin}/bash mrix,
   owner /proc/*/fd/* w,
 
@@ -63,7 +63,7 @@
     /usr/share/openqa/lib/** r,
     /usr/share/openqa/script/client rix,
     /var/lib/openqa/.config/openqa/client.conf r,
-    /var/lib/openqa/share/factory/{iso,repo,other}/** r,
+    /var/lib/openqa/share/factory/{iso,hdd,repo,other}/** r,
 
   }
 
@@ -83,7 +83,7 @@
     /opt/openqa-trigger-from-obs/*:*/*/.run*/rsync*.log w,
     /opt/openqa-trigger-from-obs/*:*/.run*/rsync*.log w,
     /usr/bin/rsync mrix,
-    /var/lib/openqa/share/factory/{iso,repo,other}/** rw,
+    /var/lib/openqa/share/factory/{iso,hdd,repo,other}/** rw,
 
   }
 }
