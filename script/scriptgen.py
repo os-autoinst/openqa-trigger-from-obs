@@ -21,16 +21,16 @@ done
 
 read_files_curl = '''curl -s PRODUCTPATH/ | grep -o 'ISOMASK' | head -n 1 >> __envsub/files_iso.lst'''
 
-read_files_hdd = '''rsync --list-only $rsync_pwd_option PRODUCTPATH/FOLDER/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envsub/files_iso.lst
+read_files_hdd = '''rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/FOLDER/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | head -n 1 >> __envsub/files_iso.lst
 '''
 
-read_files_iso = '''rsync --list-only $rsync_pwd_option PRODUCTISOPATH/FOLDER/*SRCISO* | grep -P 'Media1?.iso$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
+read_files_iso = '''rsync -4 --list-only $rsync_pwd_option PRODUCTISOPATH/FOLDER/*SRCISO* | grep -P 'Media1?.iso$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
 '''
 
-read_files_isos = '''rsync --list-only $rsync_pwd_option PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
+read_files_isos = '''rsync -4 --list-only $rsync_pwd_option PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
 '''
 
-read_files_repo = '''rsync --list-only $rsync_pwd_option PRODUCTREPOPATH/ | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envsub/files_repo.lst
+read_files_repo = '''rsync -4 --list-only $rsync_pwd_option PRODUCTREPOPATH/ | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envsub/files_repo.lst
 '''
 
 read_files_repo_link = '''cp __envdir/REPOLINK/files_repo*.lst __envsub/
@@ -64,8 +64,8 @@ for flavor in {FLAVORLIST,}; do
         asset_folder=hdd
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.appx$  ]] || asset_folder=other
-        echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"
-        echo "rsync --timeout=3600 PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
+        echo "rsync --timeout=3600 -tdlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"
+        echo "rsync --timeout=3600 -tdlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
 
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/${dest%.iso} ] || {
     mkdir /var/lib/openqa/factory/repo/${dest%.iso}
@@ -93,8 +93,8 @@ rsync_repo2 = '''
         repoDest=$destPrefix-$buildid$destSuffix
         repoCur=$destPrefix-CURRENT$destSuffix
         [ -z "__STAGING" ] || repoCur=$destPrefix-__STAGING-CURRENT$destSuffix
-        echo "rsync --timeout=3600 -r PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/$repoCur"
-        echo "rsync --timeout=3600 -r --link-dest /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
+        echo "rsync --timeout=3600 -rtdlp4 --specials PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/$repoCur"
+        echo "rsync --timeout=3600 -rtdlp4 --specials --link-dest /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
     done < <(grep $repo-POOL __envsub/files_repo.lst)
 done
 '''
@@ -115,8 +115,8 @@ for arch in "${archs[@]}"; do
 def rsync_repodir2(brand):
     if brand == 'obs': return '''
         dest=${dest//-Media2/}
-        echo rsync --timeout=3600 -r RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
-        echo rsync --timeout=3600 -r --link-dest /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
+        echo rsync --timeout=3600 -rtdlp4 --specials RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
+        echo rsync --timeout=3600 -rtdlp4 --specials --link-dest /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
     done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep Media2)
 done
 '''
