@@ -1,0 +1,19 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=armv7hl \
+ ASSET_256=openSUSE-Tumbleweed-ARM-JeOS-efi.armv7l-2020.01.08-Snapshot20200115.raw.xz.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-efi.armv7l-2020.01.08-Snapshot20200115.raw.xz.sha256 | tail -c 64) \
+ DISTRI=opensuse \
+ FLAVOR=JeOS-for-AArch64 \
+ HDD_1=openSUSE-Tumbleweed-ARM-JeOS-efi.armv7l-2020.01.08-Snapshot20200115.raw.xz \
+ REPO_0=openSUSE-Tumbleweed-oss-armv7hl-Snapshot20200115.raw.xz \
+ REPO_1=openSUSE-Tumbleweed-oss-armv7hl-Snapshot20200115.raw.xz-debuginfo \
+ REPO_2=openSUSE-Tumbleweed-oss-armv7hl-Snapshot20200115.raw.xz-source \
+ REPO_OSS=openSUSE-Tumbleweed-oss-armv7hl-Snapshot20200115.raw.xz \
+ REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-armv7hl-Snapshot20200115.raw.xz-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-armv7hl-Snapshot20200115.raw.xz-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
