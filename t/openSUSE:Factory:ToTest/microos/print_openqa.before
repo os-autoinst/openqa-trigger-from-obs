@@ -40,3 +40,5 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/microos/Tumbleweed --snapshot 20200115 /var/lib/openqa/factory/iso/openSUSE-MicroOS-DVD-x86_64-Snapshot20200115-Media.iso
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/kubic/Tumbleweed --snapshot 20200115 /var/lib/openqa/factory/iso/openSUSE-Kubic-DVD-x86_64-Snapshot20200115-Media.iso

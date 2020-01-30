@@ -11,7 +11,7 @@
         <news iso="Tumbleweed-DVD" archs="x86_64"/>
     </batch>
     <batch name="microos" folder="images/local/*product*" archs="x86_64" repos="base" distri="microos">
-        <flavor name="MicroOS-DVD|Kubic-DVD" iso="1"/>
+        <flavor name="MicroOS-DVD|Kubic-DVD" iso="1" news="1"/>
     </batch>
     <batch name="live" folder="images/*/live*" archs="i686 x86_64" repos="base">
         <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
