@@ -147,9 +147,9 @@ def openqa_call_start_fix_iso(brand, archs):
 
 def openqa_call_news(news, news_archs):
     if news and news_archs:
-        return '''[ "$flavor" != ''' + news + ''' ] || [ "$arch" != ''' + news_archs + ''' ] || newsiso="$destiso"'''
+        return '''[[ ! "$flavor" =~ ''' + news + ''' ]] || [ "$arch" != ''' + news_archs + ''' ] || news["$flavor"]="$destiso"'''
     if news:
-        return '''[ "$flavor" != ''' + news + ''' ] || newsiso="$destiso"'''
+        return '''[[ ! "$flavor" =~ ''' + news + ''' ]] || news["$flavor"]="$destiso"'''
     return ''
 
 def openqa_call_start_distri(brand, flavor_distri):
@@ -310,6 +310,21 @@ openqa_call_repot1_dest = lambda brand, dest: '''
             repoKey=${repoKey^^}
             repoKey=${repoKey//-/_}
 '''
+
+def openqa_call_news_end(brand, distri, news, news_arch):
+    if not news:
+        return ''
+    suff = ''
+    if news_arch and news_arch != 'x86_64':
+        suff = '-' + news_arch
+    folder='${n,,}'
+    if distri != 'microos':
+        folder = 'opensuse'
+    return '''for n in "${!news[@]}"; do
+    folder=''' + folder + '''
+    folder=${folder%-dvd}''' + suff + '''
+    echo  /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/$folder/VERSIONVALUE --snapshot $build1 /var/lib/openqa/factory/iso/${news[$n]}
+done'''
 
 def openqa_call_end(brand, version):
     if version == 'Factory': return '''
@@ -532,6 +547,10 @@ class ActionBatch:
         if node.attrib.get("archs",""):
             self.archs = node.attrib["archs"]
         if node.attrib.get("name",""):
+            if node.attrib.get("news"):
+                self.news=node.attrib["name"]
+                if node.attrib["news"] != "1":
+                    self.news_archs = node.attrib["news"]
             for f in node.attrib["name"].split("|"):
                 self.flavors.append(f)
                 if node.attrib.get("distri",""):
@@ -682,6 +701,8 @@ class ActionBatch:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
     
     def gen_print_array_flavor_distri(self,f):
+        if self.news:
+            self.p('declare -A news',f)
         if not self.flavor_distri:
             return
         self.p('declare -A flavor_distri',f)
@@ -823,11 +844,7 @@ class ActionBatch:
             self.p("echo ' STAGING=__STAGING \\'", f)
 
         self.p(openqa_call_end(self.ag.brand, self.ag.version), f)
-        if self.news:
-            news_archs = '-' + self.news_archs
-            if news_archs == '-x86_64' or not self.news_archs:
-                news_archs = ''
-            self.p('[ -z "$newsiso" ] || [ -z "$build1" ] || echo  /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse' + news_archs + '/VERSIONVALUE --snapshot $build1 /var/lib/openqa/factory/iso/$newsiso', f)
+        self.p(openqa_call_news_end(self.ag.brand, self.distri, self.news, self.news_archs), f)
 
 def parse_dir(root, d, files):
     for f in files:
