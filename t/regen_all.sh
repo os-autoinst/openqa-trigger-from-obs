@@ -5,9 +5,8 @@ cd "${thisdir}"/..
 
 set -e
 
-for dir in "${thisdir}"/*; do
+for dir in "${thisdir}"/*bs/*; do
     [ -d "$dir" ] || continue
-    [ "$dir" != t/docker ] || continue
 
     # this checks whether files must be generated
     dir1="$thisdir/../$(basename $dir)"

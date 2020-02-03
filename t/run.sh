@@ -3,9 +3,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 pass=0
 fail=0
 
-for dir in *; do
+for dir in *bs/*; do
     [ -d "$dir" ] || continue
-    [ "$dir" != docker ] || continue
 
     for subdir in $dir/*/; do
         # if no subdir - execute body only once
