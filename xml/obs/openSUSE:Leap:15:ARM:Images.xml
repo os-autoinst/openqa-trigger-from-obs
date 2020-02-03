@@ -1,5 +1,5 @@
 <openQA
-    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15(?P&lt;sp&gt;.[0-9]+)?):ARM:Images:ToTest"
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.2):ARM:Images:ToTest"
     dist_path="images/aarch64"
     distri="opensuse" 
     archs="aarch64">
