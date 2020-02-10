@@ -43,11 +43,13 @@ set +e
         continue
     fi
 
-    snapshots="$(grep -o -E 'Snapshot[1-9][0-9]+' $subfolder/*.lst 2>/dev/null)" || :
+    if [[ "$environ" == *ToTest* ]]; then
+        builds="$(grep -h -o -E '(Build|Snapshot)[1-9](\.|[0-9]+)*[0-9]+' $subfolder/*.lst 2>/dev/null)" || :
 
-    if [ -n "$snapshots" ] && [ $(echo "$snapshots" | wc -l) -gt 1 ]; then
-        >&2 echo "Conflicting snapshots found {$snapshots}, skipping {$subfolder}"
-        continue
+        if [ -n "$builds" ] && [ $(echo "$builds" | wc -l) -gt 1 ]; then
+            >&2 echo "Conflicting builds found {$builds}, skipping {$subfolder}"
+            continue
+        fi
     fi
 
     logdir=$subfolder/.run_$(date +%y%m%d_%H%M%S)
