@@ -42,7 +42,14 @@ def rsync_iso_fix_src(archs):
         return '[ -n "$src" ] || [ "$arch" != armv7hl ] || src=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
     return ''
 
-rsync_iso = lambda version, archs, staging : '''
+def rsync_commands(checksum):
+    res = '''echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"'''
+    if checksum:
+        res = res + '''
+        echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
+    return res
+
+rsync_iso = lambda version, archs, staging, checksum : '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -57,8 +64,7 @@ for flavor in {FLAVORLIST,}; do
         asset_folder=hdd
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.appx$  ]] || asset_folder=other
-        echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"
-        echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"
+        ''' + rsync_commands(checksum) + '''
 
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/${dest%.iso} ] || {
     mkdir /var/lib/openqa/factory/repo/${dest%.iso}
@@ -189,22 +195,30 @@ openqa_call_legacy_builds=''' echo \" BUILD_HA=$build1 \\\\
  BUILD_SES=$build1 \\\\
  BUILD_SLE=$build1 \\\\\"'''
 
-openqa_call_start_iso = ''' echo \" ISO=${destiso} \\\\
+def openqa_call_start_iso(checksum):
+    if checksum:
+        return ''' echo \" ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
+    return ''' echo \" ISO=${destiso} \\\\
+ ASSET_256=${destiso}.sha256 \\\\\"'''
 
-openqa_call_start_ex = ''' if [[ $destiso =~ \.iso$ ]]; then
-   echo \" ISO=${destiso} \\\\
- CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
- ASSET_256=${destiso}.sha256 \\\\\"
+def openqa_call_start_ex1(checksum, tag):
+    res = tag + '=${destiso} \\\\'
+    if checksum:
+        res = res + '''
+ CHECKSUM_''' + tag + '''=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
+ ASSET_256=${destiso}.sha256 \\\\'''
+    return res
+
+
+def openqa_call_start_ex(checksum):
+    return ''' if [[ $destiso =~ \.iso$ ]]; then
+   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
  elif [[ $destiso =~ \.(hdd|qcow2|raw\.xz|raw\.gz|vhdx\.xz)$ ]]; then
-   echo \" HDD_1=${destiso} \\\\
- CHECKSUM_HDD_1=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
- ASSET_256=${destiso}.sha256 \\\\\"
+   echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + '''\"
  else
-   echo \" ASSET_1=${destiso} \\\\
- CHECKSUM_ASSET_1=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
- ASSET_256=${destiso}.sha256 \\\\\"
+   echo \" ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + '''\"
  fi
 '''
 

@@ -107,6 +107,8 @@ class ActionGenerator:
             batch.mask = node.attrib["mask"]
         if node.attrib.get("distri",""):
             batch.distri = node.attrib["distri"]
+        if node.attrib.get("checksum","") == "0":
+            batch.checksum = 0
         self.batches.append(batch)
         return batch
 
@@ -150,6 +152,7 @@ class ActionBatch:
         self.distri = actionGenerator.distri
         self.folder = ""
         self.legacy_builds = 0
+        self.checksum = 1
 
     def productpath(self):
         if self.dist_path:
@@ -417,12 +420,12 @@ class ActionBatch:
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
-                self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging()), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+                self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
             else:
-                self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging()), f)
+                self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
         if self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging()), f)
+            self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
 
     def gen_print_rsync_repo(self,f):
         print(cfg.header, file=f)
@@ -486,14 +489,14 @@ class ActionBatch:
             if self.hdds and self.productpath().startswith('http'):
                 self.p(" echo \" HDD_URL_1=PRODUCTPATH/$destiso \\\\\"", f)
             else:
-                self.p(cfg.openqa_call_start_ex, f)
+                self.p(cfg.openqa_call_start_ex(self.checksum), f)
         else:
             if self.iso_5:
                 if self.fixed_iso:
                     self.p(" echo \" ISO={} \\\\\"".format(self.fixed_iso), f)
-                self.p(cfg.openqa_call_start_iso, f, "ISO", "ISO_5")
+                self.p(cfg.openqa_call_start_iso(self.checksum), f, "ISO", "ISO_5")
             else:
-                self.p(cfg.openqa_call_start_iso, f)
+                self.p(cfg.openqa_call_start_iso(self.checksum), f)
 
             for iso in self.isos:
                 if self.iso_extract_as_repo.get(iso,0):
