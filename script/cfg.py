@@ -74,11 +74,11 @@ for flavor in {FLAVORLIST,}; do
 done'''
 
 rsync_repo1 = '''
-echo '# REPOLIST'
+echo '# REPOOWNLIST'
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ -z "__STAGING" ] || buildid=${buildid//Build/Build__STAGING.}
 
-for repo in {REPOLIST,}; do
+for repo in {REPOOWNLIST,}; do
     while read src; do
         [ ! -z "$src" ] || continue
         dest=$src
@@ -187,13 +187,9 @@ for flavor in {FLAVORALIASLIST,}; do
  VERSION=$version \\\\
  BUILD=$build1 \\\\\"'''
 
-openqa_call_legacy_builds_link=''' build1=$(grep -o -E '(Build|Snapshot)[^-]*' __envdir/REPOLINK/files_iso.lst | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n1)
-'''
+openqa_call_legacy_builds_link=''
 
-openqa_call_legacy_builds=''' echo \" BUILD_HA=$build1 \\\\
- BUILD_SDK=$build1 \\\\
- BUILD_SES=$build1 \\\\
- BUILD_SLE=$build1 \\\\\"'''
+openqa_call_legacy_builds=''
 
 def openqa_call_start_iso(checksum):
     if checksum:
@@ -232,7 +228,17 @@ def openqa_call_repo0():
  FULLURL=1 \\\\"
     }'''
 
-openqa_call_repo0a = ''' [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo " REPO_0=REPO0_ISO \\\\"'''
+openqa_call_repo0a = ' [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || '
+
+openqa_call_repo0b = ' echo " REPO_0=REPO0_ISO \\\\"'
+
+openqa_call_repo5 = '''    destRepo=${destiso%.iso}
+  filter1=${filter//-DVD/-POOL}
+  destRepo=${destRepo//$filter/$filter1}
+  echo " REPO_5=$destRepo \\\\
+ REPO_6=$destRepo.license \\\\
+ REPO_REPOALIAS=$destRepo \\\\"
+'''
 
 def openqa_call_repot_part1():
     return '''[ -z "__STAGING" ] || repo=${repo//Module/Staging:__STAGING-Module}
@@ -270,8 +276,8 @@ openqa_call_repot = lambda build_id_from_iso: '''
                 repoKey=${repoKey//-/_}
                 echo " REPO_$i=$repoDest \\\\"
                 ''' + openqa_call_repot_part3() + '''
-                [[ $repo =~ license ]] || echo " REPO_REPOPREFIX$repoKey=$repoDest \\\\"
                 ''' + openqa_call_build_id_from_iso2(build_id_from_iso) + '''
+                [[ $repo =~ license ]] || echo " REPO_REPOPREFIX$repoKey=$repoDest \\\\"
                 : $((i++))
             done < <(grep $repot-POOL __envsub/files_repo.lst | grep REPOTYPE | grep $arch | sort)
         done'''

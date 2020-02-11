@@ -362,7 +362,9 @@ class ActionBatch:
                     self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd)
         for asset in self.assets:
             self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
-        if self.isos:
+        if self.iso_5:
+            self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(self.iso_5,""), "SRCISO", self.iso_5)
+        elif self.isos:
             # if isos don't belong to custom folder - just read them all with single command
             if not self.iso_folder:
                 self.p(cfg.read_files_isos, f)
@@ -481,7 +483,7 @@ class ActionBatch:
             self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri), f)
         if self.repolink and not self.iso_5:
             self.p(cfg.openqa_call_legacy_builds_link, f)
-        if self.legacy_builds:
+        if self.legacy_builds or (self.repolink and not self.iso_5):
             self.p(cfg.openqa_call_legacy_builds, f)
 
         i=0
@@ -498,19 +500,26 @@ class ActionBatch:
             else:
                 self.p(cfg.openqa_call_start_iso(self.checksum), f)
 
-            for iso in self.isos:
-                if self.iso_extract_as_repo.get(iso,0):
+            isos = self.isos.copy()
+            if not isos and self.iso_5:
+                isos = [self.iso_5]
+            for iso in isos:
+                if self.iso_extract_as_repo.get(iso,0) or self.iso_5:
                     destiso = "${destiso%.iso}"
                     i += 1
+                    s = ""
                     if not self.fixed_iso:
                         self.p(cfg.openqa_call_repo0(), f, "REPO0_ISO", destiso, f)
+                        s = cfg.openqa_call_repo0a + cfg.openqa_call_repo0b
                     else:
+                        s = cfg.openqa_call_repo0b
                         destiso = self.fixed_iso[:-4]
-                    self.p(cfg.openqa_call_repo0a, f, "REPO0_ISO", destiso, f)
+                    self.p(s, f, "REPO0_ISO", destiso)
                     if self.iso_5:
-                        self.p(cfg.openqa_call_repo0a, f, "REPO0_ISO", "${destiso%.iso}", "REPO_0=", "REPO_5=", f)
-                        self.p(cfg.openqa_call_repo0a, f, "REPO0_ISO", "${destiso%.iso}", "REPO_0=", "REPO_{}=".format(self.iso_5.replace("-","_"), f))
+                        pref = self.iso_5.replace("-","_").rstrip('_DVD')
+                        self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
                     break # for now only REPO_0
+
         self.p(" i={}".format(i), f)
 
         if self.repos or self.repolink:
