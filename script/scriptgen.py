@@ -58,6 +58,7 @@ class ActionGenerator:
         self.repo_path = root.attrib.get("repo_path", "repo")
         self.domain = root.attrib.get("domain","")
         self.archs = root.attrib.get("archs", self.archs)
+        self.version = root.attrib.get("version", self.version)
         if root.attrib.get("distri", ""):
             self.distri = root.attrib["distri"]
 
