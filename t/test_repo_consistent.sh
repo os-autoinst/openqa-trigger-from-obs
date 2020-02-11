@@ -7,6 +7,7 @@ for dir in "$@" ; do
 	# check if functions are implemented
 	[ -e "$dir"/print_rsync_repo.sh ] || continue
 	[ -e "$dir"/print_openqa.sh ] || continue
+	[ "(bash $dir/print_openqa.sh | wc -l)" -gt 1 ] || { >&2 echo "SKIP $dir" && continue; }
 
 	lines=$(grep -v '^#' "$dir"/print_rsync_repo.sh | grep -v 'set -e' | grep -v '^[[:space:]]*$' | wc -l)
        	[ "$lines" != "0" ] || { >&2 echo "SKIP $dir"; continue; }
