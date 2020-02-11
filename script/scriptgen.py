@@ -110,6 +110,8 @@ class ActionGenerator:
             batch.distri = node.attrib["distri"]
         if node.attrib.get("checksum","") == "0":
             batch.checksum = 0
+        if node.attrib.get("variable",""):
+            batch.variable = node.attrib["variable"]
         self.batches.append(batch)
         return batch
 
@@ -154,6 +156,7 @@ class ActionBatch:
         self.folder = ""
         self.legacy_builds = 0
         self.checksum = 1
+        self.variable = ""
 
     def productpath(self):
         if self.dist_path:
@@ -554,6 +557,8 @@ class ActionBatch:
 
         if self.ag.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
+        if self.variable:
+            self.p("echo ' {} \\'".format(self.variable), f)
 
         self.p(cfg.openqa_call_end(self.ag.version), f)
         self.p(cfg.openqa_call_news_end(self.distri, self.news, self.news_archs), f)
