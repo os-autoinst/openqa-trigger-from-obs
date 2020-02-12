@@ -558,7 +558,7 @@ class ActionBatch:
         if self.ag.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
         if self.variable:
-            self.p("echo ' {} \\'".format(self.variable), f)
+            self.p('echo \" {} \\\\\"'.format(self.variable), f)
 
         self.p(cfg.openqa_call_end(self.ag.version), f)
         self.p(cfg.openqa_call_news_end(self.distri, self.news, self.news_archs), f)
