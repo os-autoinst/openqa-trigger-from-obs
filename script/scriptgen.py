@@ -112,6 +112,9 @@ class ActionGenerator:
             batch.checksum = 0
         if node.attrib.get("variable",""):
             batch.variable = node.attrib["variable"]
+        if node.tag != 'openQA':
+            batch.iso_path = node.attrib.get("iso_path", "")
+
         self.batches.append(batch)
         return batch
 
@@ -170,7 +173,10 @@ class ActionBatch:
             return self.iso_path
         if self.dist_path:
             return self.dist_path
-        return self.ag.productisopath()
+        ret = self.ag.productisopath()
+        if self.iso_path:
+            return ret + '/' + self.iso_path
+        return ret
 
     def productrepopath(self):
         if self.repo_path and self.dist_path:
