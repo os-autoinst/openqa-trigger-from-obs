@@ -18,13 +18,14 @@ su postgres -c "createdb -O $dbuser $dbname"
 
 systemctl enable --now rsyncd
 
-runs_before="$(ls -la /opt/openqa-trigger-from-obs/openSUSE:Factory:ToTest/base/.run_* | wc -l)"
+runs_before="$(ls -lda /opt/openqa-trigger-from-obs/openSUSE:Factory:ToTest/base/.run_*/ 2>/dev/null | wc -l)"
 
-su "$dbuser" -c 'bash -x /opt/openqa-trigger-from-obs/script/rsync.sh openSUSE:Factory:ToTest' || :
+out=$(su "$dbuser" -c 'bash -x /opt/openqa-trigger-from-obs/script/rsync.sh openSUSE:Factory:ToTest' 2>&1) || :
 
-runs_after="$(ls -la /opt/openqa-trigger-from-obs/openSUSE:Factory:ToTest/base/.run_* | wc -l)"
+runs_after="$(ls -lda /opt/openqa-trigger-from-obs/openSUSE:Factory:ToTest/base/.run_*/ 2>/dev/null | wc -l)"
 
 # no runs should happend because inconsistent snapshots
 test "$runs_before" -eq "$runs_after"
+[[ "$out" == *Conflicting* ]]
 
 echo PASS ${BASH_SOURCE[0]}

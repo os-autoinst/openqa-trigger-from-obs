@@ -44,9 +44,9 @@ set +e
     fi
 
     if [[ "$environ" == *ToTest* ]]; then
-        builds="$(grep -h -o -E '(Build|Snapshot)[1-9](\.|[0-9]+)*[0-9]+' $subfolder/*.lst 2>/dev/null)" || :
+        builds="$(grep -h -o -E '(Build|Snapshot)[0-9](\.|[0-9]+)*[0-9]+' $subfolder/*.lst 2>/dev/null)" || :
 
-        if [ -n "$builds" ] && [ $(echo "$builds" | wc -l) -gt 1 ]; then
+        if [ -n "$builds" ] && [ $(echo "$builds" | sort | uniq | wc -l) -gt 1 ]; then
             >&2 echo "Conflicting builds found {$builds}, skipping {$subfolder}"
             continue
         fi
