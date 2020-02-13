@@ -50,6 +50,8 @@ set +e
             >&2 echo "Conflicting builds found {$builds}, skipping {$subfolder}"
             continue
         fi
+        # ToTest projects must experience small delay, because they are not waiting for 'published' state at obs
+        sleep 60
     fi
 
     logdir=$subfolder/.run_$(date +%y%m%d_%H%M%S)
