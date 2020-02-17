@@ -171,6 +171,9 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_start_fix_iso(archs) + '''
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?') || continue
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*')
+        buildex=${buildex/.iso/}
+        buildex=${buildex/.raw.xz/}
+        buildex=${buildex/.qcow2/}
         build1=$build
         destiso=$iso
         version=VERSIONVALUE
