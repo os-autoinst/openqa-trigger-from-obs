@@ -65,7 +65,7 @@ chown "$dbuser" /var/lib/openqa/.config/openqa/client.conf
 systemctl enable --now rsyncd
 openqa-client --host localhost /api/v1/obs_rsync/openSUSE:Leap:15.2:ToTest/runs put || :
 
-sleep 10
+sleep 70
 set -x
 # make sure run did happen
 test -f /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-DVD-x86_64-Build519.3-Media.iso

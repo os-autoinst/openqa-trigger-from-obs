@@ -35,9 +35,12 @@
   /usr/bin/mkdir ix,
   /usr/bin/rm ix,
   /usr/bin/rsync Px -> /opt/openqa-trigger-from-obs/script/rsync.sh//rsync,
+  /usr/bin/sleep ix,
   /usr/bin/sort ix,
   /usr/bin/tail ix,
   /usr/bin/tee ix,
+  /usr/bin/uniq ix,
+  /usr/bin/wc ix,
   /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py rUx,
   /usr/share/openqa/script/client rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_client,
   /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
