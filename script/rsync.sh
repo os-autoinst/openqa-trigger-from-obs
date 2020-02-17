@@ -76,8 +76,11 @@ set +e
     [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
     for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
-        bash -x "$subfolder/.run_last/$f" > "$logdir/$f".log 2>&1
+        fail=0
+        bash -xe "$subfolder/.run_last/$f" > "$logdir/$f".log 2>&1 || fail=1
+        [ "$fail" -eq 0 ] || break 
     done
+    (exit "$fail")
 )
     res=$?
     [ "$res" -eq 0 ] || : $((++failure_count))
