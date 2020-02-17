@@ -246,6 +246,9 @@ class ActionBatch:
             else:
                 s=s.replace("REPOLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
             s=s.replace("REPOORS",   '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
+        mirror_repo = self.mirror_repo
+        if not mirror_repo and self.repolink:
+            self.mirror_repo = self.ag.batch_by_name(self.repolink).mirror_repo
         s=s.replace("MIRRORREPO", self.mirror_repo)
         if self.ag.domain:
             s=s.replace("opensuse.org",self.ag.domain)
