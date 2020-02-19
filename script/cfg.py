@@ -23,6 +23,9 @@ read_files_isos = '''rsync -4 --list-only $rsync_pwd_option PRODUCTISOPATH/ | gr
 read_files_repo = '''rsync -4 --list-only $rsync_pwd_option PRODUCTREPOPATH/ | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envsub/files_repo.lst
 '''
 
+read_files_repo_media = '''rsync -4 $rsync_pwd_option PRODUCTREPOPATH/*Media1/media.1/media __envsub/Media1.lst'''
+read_files_repo_media_convert = '''echo "Snapshot$(grep -oP '[\d]{8}' __envsub/products)" > __envsub/Media1.lst'''
+
 read_files_repo_link = '''cp __envdir/REPOLINK/files_repo*.lst __envsub/
 '''
 

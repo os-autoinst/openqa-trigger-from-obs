@@ -13,16 +13,18 @@ echo 1 | sha256sum                       >> /mockOBS/openSUSE\:Leap\:15.2\:ToTes
 mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-dvd5-dvd-x86_64
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-DVD-x86_64-Build519.3-Media.iso
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Leap-15.2-DVD-x86_64-Build519.3-Media.iso.sha256
-mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media1
+mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media1/media.1
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media1/repo
+echo Build519.3 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media1/media.1/media
 mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media2/x86_64
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media2/x86_64/mraa-debug
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media2/x86_64/other
 mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media3/src
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media3/src/coreutils
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-15.2-x86_64-Media3/src/other
-mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media1
+mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media1/media.1
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media1/repo
+echo Build519.3 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media1/media.1/media
 mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media2
 echo 1 > /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media2/debugfile
 mkdir -p /mockOBS/openSUSE\:Leap\:15.2\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Leap-15.2-Addon-NonOss-FTP-x86_64-Media3

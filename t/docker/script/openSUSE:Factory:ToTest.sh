@@ -4,21 +4,23 @@ set -ex
 source lib/common.sh
 
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-NET-x86_64-Snapshot200210-Media.iso
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-NET-x86_64-Snapshot200210-Media.iso.sha256
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-NET-x86_64-Snapshot20200210-Media.iso
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-NET-x86_64-Snapshot20200210-Media.iso.sha256
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-dvd5-dvd-x86_64
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-DVD-x86_64-Snapshot200209-Media.iso
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-DVD-x86_64-Snapshot200209-Media.iso.sha256
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media1
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200209-Media.iso
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200209-Media.iso.sha256
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media1/media.1
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media1/repo
+echo Snapshot20200209 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media1/media.1/products
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media2/x86_64
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media2/x86_64/mraa-debug
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media2/x86_64/other
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media3/src
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media3/src/coreutils
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media3/src/other
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media1
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media1/media.1
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media1/repo
+echo Snapshot20200209 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media1/media.1/media
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media2
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media2/debugfile
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media3

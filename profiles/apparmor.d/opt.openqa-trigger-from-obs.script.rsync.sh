@@ -19,6 +19,10 @@
   /opt/openqa-trigger-from-obs/*:*/.run*/* rw,
   /opt/openqa-trigger-from-obs/*:*/.run_last rw,
   /opt/openqa-trigger-from-obs/*:*/files*.lst rw,
+  /opt/openqa-trigger-from-obs/*:*/Media*.lst rw,
+  /opt/openqa-trigger-from-obs/*:*/.Media*.lst* rw,
+  /opt/openqa-trigger-from-obs/*:*/products* rw,
+  /opt/openqa-trigger-from-obs/*:*/.products* rw,
   /opt/openqa-trigger-from-obs/*:*/rsync.lock rw,
   /usr/bin/awk ix,
   /usr/bin/bsdtar ix,
@@ -85,6 +89,12 @@
 
     /opt/openqa-trigger-from-obs/*:*/*/.run*/rsync*.log w,
     /opt/openqa-trigger-from-obs/*:*/.run*/rsync*.log w,
+
+    /opt/openqa-trigger-from-obs/*:*/Media*.lst rw,
+    /opt/openqa-trigger-from-obs/*:*/.Media*.lst* rw,
+    /opt/openqa-trigger-from-obs/*:*/products* rw,
+    /opt/openqa-trigger-from-obs/*:*/.products* rw,
+
     /usr/bin/rsync mrix,
     /var/lib/openqa/share/factory/{iso,hdd,repo,other}/** rw,
 
