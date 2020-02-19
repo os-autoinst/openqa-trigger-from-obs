@@ -1,4 +1,5 @@
   /opt/openqa-trigger-from-obs/ r,
   /opt/openqa-trigger-from-obs/** r,
+  /opt/openqa-trigger-from-obs/*:*/.*job_id rw,
 
   /opt/openqa-trigger-from-obs/script/rsync.sh px -> /opt/openqa-trigger-from-obs/script/rsync.sh,

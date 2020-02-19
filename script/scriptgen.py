@@ -402,6 +402,16 @@ class ActionBatch:
         for repodir in self.repodirs:
             self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(repodir.attrib["folder"]) )
 
+        # let's sync media.1/media to be able verify build_id
+        if 'ToTest' in self.ag.envdir:
+            if 'Leap' in self.ag.envdir:
+                for repodir in self.repodirs:
+                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", 'Media1.lst', 'Media1_{}.lst'.format(repodir.attrib["folder"]))
+            elif 'Factory' in self.ag.envdir:
+                for repodir in self.repodirs:
+                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", 'Media1.lst', 'products_{}'.format(repodir.attrib["folder"]), 'media.1/media', 'media.1/products')
+                    self.p(cfg.read_files_repo_media_convert, f, 'products', 'products_{}'.format(repodir.attrib["folder"]), 'Media1.lst', 'Media1_{}.lst'.format(repodir.attrib["folder"]))
+
     def gen_print_array_flavor_filter(self,f):
         if self.hdds or self.assets or self.flavor_aliases:
             self.p('declare -A flavor_filter',f)
