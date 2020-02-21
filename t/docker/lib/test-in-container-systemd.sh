@@ -37,8 +37,7 @@ PLAN 1
 
 map_port=""
 [ -z "$EXPOSE_PORT" ] || map_port="-p $EXPOSE_PORT:80"
-# docker run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs --env METHOD=$METHOD --rm --name "$containername" -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -- registry.opensuse.org/devel/openqa/ci/containers/serviced &
-docker run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs --env METHOD=$METHOD --rm --name "$containername" -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -- 5467a81e9e28 &
+docker run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs --env METHOD=$METHOD --rm --name "$containername" -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -- registry.opensuse.org/devel/openqa/ci/containers/serviced &
 
 in_cleanup=0
 
@@ -48,6 +47,7 @@ function cleanup {
     if [ "$ret" != 0 ] && [ -n "$PAUSE_ON_FAILURE" ]; then
         read -rsn1 -p"Test failed, press any key to finish";echo
     fi
+    [ "$ret" == 0 ] || echo FAIL $basename
     docker stop -t 0 "$containername" >&/dev/null || :
     _osht_cleanup >&/dev/null
 }
@@ -66,8 +66,9 @@ docker exec "$containername" pwd >& /dev/null || (echo Cannot start container; e
 
 echo 'bash /opt/init-trigger-from-obs.sh' | docker exec -i "$containername" bash -x
 
+[ -z "$CIRCLE_JOB" ] || echo 'aa-complain /usr/share/openqa/script/openqa' | docker exec -i "$containername" bash -x
 set +e
 docker cp lib/common.sh "$containername":/lib
-docker exec -i "$containername" bash < "$testcase"
+docker exec -e TESTCASE="$testcase"  -i "$containername" bash < "$testcase"
 ret=$?
 IS $ret == 0 # test execution

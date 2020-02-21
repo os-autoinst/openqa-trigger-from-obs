@@ -1,5 +1,3 @@
-#!lib/test-in-container-systemd.sh
-
 METHOD=${METHOD:-rsync}
 
 prepare_project() {
@@ -25,7 +23,7 @@ touch /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-ne
 chmod +x /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
 /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
 
-
+systemctl restart openqa-webui.service
 systemctl restart openqa-websockets.service
 
 [ "$METHOD" != rest ] || systemctl restart openqa-gru.service

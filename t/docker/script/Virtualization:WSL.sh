@@ -24,4 +24,4 @@ grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/Virtualization:
     state=$(echo "select state from minion_jobs where task='obs_rsync_run';" | su postgres -c "psql -t $dbname")
     test "$(echo $state)" == finished
 }
-echo PASS ${BASH_SOURCE[0]} $@ $METHOD
+echo PASS ${BASH_SOURCE[0]} $TESTCASE $METHOD

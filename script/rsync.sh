@@ -9,7 +9,7 @@ cd "$DIR/.."
 [ -d "$environ" ] || { >&2 echo "No directory found: {$environ}"; exit 1; }
 
 # if lock file exists
-if [ -e "$environ/rsync.lock" ] && kill -0 $(cat "$environ/rsync.lock"); then
+if [ -e "$environ/rsync.lock" ] && kill -0 $(cat "$environ/rsync.lock") 2>/dev/null; then
     >&2 echo "Lock file already exists: {$environ/rsync.lock}"
     (exit 1)
 fi
@@ -50,8 +50,6 @@ set +e
             >&2 echo "Conflicting builds found {$builds}, skipping {$subfolder}"
             continue
         fi
-        # ToTest projects must experience small delay, because they are not waiting for 'published' state at obs
-        sleep 60
     fi
 
     logdir=$subfolder/.run_$(date +%y%m%d_%H%M%S)

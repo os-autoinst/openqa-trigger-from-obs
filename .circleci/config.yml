@@ -1,7 +1,7 @@
-version: 2.0
+version: 2.1
 
 jobs:
-  build:
+  unit:
     docker:
       - image: registry.opensuse.org/opensuse/tumbleweed
     steps:
@@ -12,3 +12,24 @@ jobs:
       - checkout
       - run: make test_regen_all
       - run: make test
+
+  integration:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - checkout
+      - run: 
+          command: |
+            pyenv versions
+            pyenv global 3.7.0
+            git clone https://github.com/coryb/osht ../osht
+            docker pull registry.opensuse.org/devel/openqa/ci/containers/serviced
+            sudo chown -R 1000:1000 .
+            make test_docker PRIVILEGED_TESTS=1 OSHT_LOCATION=$(pwd)/../osht/osht.sh
+
+workflows:
+  version: 2.1
+  test:
+    jobs:
+      - unit
+      - integration
