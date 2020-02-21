@@ -49,4 +49,4 @@ runs_after="$(ls -lda /opt/openqa-trigger-from-obs/openSUSE:Factory:ToTest/base/
 test "$runs_before" -eq "$runs_after"
 [[ "$out" == *Conflicting* ]]
 
-echo PASS ${BASH_SOURCE[0]} $@ $METHOD
+echo PASS ${BASH_SOURCE[0]} $TESTCASE $METHOD

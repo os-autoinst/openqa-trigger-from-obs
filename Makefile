@@ -24,6 +24,9 @@ revert_update_files.lst:
 test:
 	(cd t && bash run.sh)
 
+test_docker:
+	(cd t && bash run_docker.sh)
+
 test_regen_all:
 	(bash t/regen_all.sh)
 

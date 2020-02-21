@@ -47,4 +47,4 @@ grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/openSUSE:Leap:1
 
     test "$(ls -1q /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run* | wc -l)" -ge 3
 }
-echo PASS ${BASH_SOURCE[0]} $@ $METHOD
+echo PASS ${BASH_SOURCE[0]} $TESTCASE $METHOD

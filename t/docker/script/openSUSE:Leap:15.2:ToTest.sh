@@ -32,11 +32,6 @@ chown -R "$dbuser" /mockOBS
 
 prepare_project openSUSE:Leap:15.2:ToTest
 
-mkdir -p /var/lib/openqa/osc-plugin-factory/factory-package-news/
-touch /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
-chmod +x /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
-/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
-
 set -x
 # make sure run did happen
 test -f /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-DVD-x86_64-Build519.3-Media.iso
@@ -63,4 +58,4 @@ grep -q 'CHECKSUM_ISO=4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a2746
     test "$(echo $state)" == finished
 }
 
-echo PASS ${BASH_SOURCE[0]} $@ $METHOD
+echo PASS ${BASH_SOURCE[0]} $TESTCASE $METHOD
