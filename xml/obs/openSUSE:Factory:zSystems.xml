@@ -4,7 +4,7 @@
     distri="opensuse">
     <flavor name="Tumbleweed-DVD" folder="*product*" iso="1" archs="s390x">
         <repos>
-            <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-$arch"/>
+            <oss folder="openSUSE-ftp-ftp-s390x" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-$arch"/>
         </repos>
     </flavor>
 </openQA>

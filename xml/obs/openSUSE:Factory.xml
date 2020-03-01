@@ -4,8 +4,8 @@
     <batch name="base" folder="images/local" archs="i586 x86_64">
         <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="*product*" iso="1">
             <repos archs="x86_64">
-                <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-i586-x86_64"/>
-                <non-oss folder="openSUSE-Addon-NonOss-ftp-ftp" dest="openSUSE-Tumbleweed-non-oss-i586-x86_64"/>
+                <oss folder="openSUSE-ftp-ftp-i586_x86_64" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-i586-x86_64"/>
+                <non-oss folder="openSUSE-Addon-NonOss-ftp-ftp-i586_x86_64" dest="openSUSE-Tumbleweed-non-oss-i586-x86_64"/>
             </repos>
         </flavor>
         <news iso="Tumbleweed-DVD" archs="x86_64"/>
