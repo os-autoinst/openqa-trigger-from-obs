@@ -2,7 +2,7 @@ header = '''# GENERATED FILE - DO NOT EDIT
 set -e
 '''
 
-clear_lst = '''for f in __envsub/files_*.lst; do
+clear_lst = '''for f in __envsub/{files_,Media}*.lst; do
     [ ! -f "$f" ] ||  : > "$f"
 done
 
@@ -24,7 +24,7 @@ read_files_repo = '''rsync -4 --list-only $rsync_pwd_option PRODUCTREPOPATH/ | g
 '''
 
 read_files_repo_media = '''rsync -4 $rsync_pwd_option PRODUCTREPOPATH/*Media1/media.1/media __envsub/Media1.lst'''
-read_files_repo_media_convert = '''echo "Snapshot$(grep -oP '[\d]{8}' __envsub/products)" > __envsub/Media1.lst'''
+read_files_repo_media_convert = ''' && echo "Snapshot$(grep -oP '[\d]{8}' __envsub/products)" >> __envsub/destlst'''
 
 read_files_repo_link = '''cp __envdir/REPOLINK/files_repo*.lst __envsub/
 '''
