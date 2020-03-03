@@ -404,13 +404,27 @@ class ActionBatch:
 
         # let's sync media.1/media to be able verify build_id
         if 'ToTest' in self.ag.envdir:
+            archs = self.archs
+            if not archs:
+                archs = self.ag.archs
+            wild = '*'
+            done = ''
+            if archs: 
+                wild = '*'+archs+'*'
+            if ' ' in archs:
+                self.p("for arch in {} do".format(archs), f)
+                wild = '*$arch*'
+                done = 'done'
+
             if 'Leap' in self.ag.envdir:
                 for repodir in self.repodirs:
-                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", 'Media1.lst', 'Media1_{}.lst'.format(repodir.attrib["folder"]))
+                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(repodir.attrib["folder"]))
             elif 'Factory' in self.ag.envdir:
                 for repodir in self.repodirs:
-                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", 'Media1.lst', 'products_{}'.format(repodir.attrib["folder"]), 'media.1/media', 'media.1/products')
-                    self.p(cfg.read_files_repo_media_convert, f, 'products', 'products_{}'.format(repodir.attrib["folder"]), 'Media1.lst', 'Media1_{}.lst'.format(repodir.attrib["folder"]))
+                    self.p(cfg.read_files_repo_media + cfg.read_files_repo_media_convert, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', '', 'media.1/media', 'media.1/products', 'products', 'products_{}'.format(repodir.attrib["folder"]), 'destlst', 'Media1_{}.lst'.format(repodir.attrib["folder"]))
+ 
+            if done:
+                self.p(done, f)
 
     def gen_print_array_flavor_filter(self,f):
         if self.hdds or self.assets or self.flavor_aliases:

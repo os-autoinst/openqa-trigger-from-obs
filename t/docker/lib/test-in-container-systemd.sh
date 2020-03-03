@@ -37,7 +37,7 @@ PLAN 1
 
 map_port=""
 [ -z "$EXPOSE_PORT" ] || map_port="-p $EXPOSE_PORT:80"
-docker run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs --env METHOD=$METHOD --rm --name "$containername" -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -- registry.opensuse.org/devel/openqa/ci/containers/serviced &
+docker run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs --env METHOD=$METHOD --rm --name "$containername" -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -- registry.opensuse.org/devel/openqa/ci/containers/serviced
 
 in_cleanup=0
 
