@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/Virtualization:WSL/openSUSE_Leap_15.2/x86_64/wsl-appx/*openSUSE-Leap-15.2-Beta-x64-Build20.21.appx /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Beta-x64-Build20.21.appx
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/Virtualization:WSL/openSUSE_Leap_15.2/x86_64/wsl-appx/*openSUSE-Leap-15.2-Beta-x64-Build20.21.appx.sha256 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Beta-x64-Build20.21.appx.sha256

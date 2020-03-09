@@ -172,7 +172,7 @@ for flavor in {FLAVORALIASLIST,}; do
         [ $filter != Appliance ] || filter="qcow2"
         iso=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
         ''' + openqa_call_start_fix_iso(archs) + '''
-        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?') || continue
+        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*') || continue
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*')
         buildex=${buildex/.iso/}
         buildex=${buildex/.raw.xz/}

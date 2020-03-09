@@ -1,2 +1,0 @@
-rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/*openSUSE-Tumbleweed-x64-Build20191128.7.9.appx /var/lib/openqa/factory/other/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx
-rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/Virtualization:WSL/openSUSE_Tumbleweed/x86_64/wsl-appx/*openSUSE-Tumbleweed-x64-Build20191128.7.9.appx.sha256 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-x64-Build20191128.7.9.appx.sha256
