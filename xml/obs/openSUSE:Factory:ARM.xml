@@ -1,11 +1,14 @@
 <openQA
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):ARM:ToTest"
     distri="opensuse">
-    <batch name="base" folder="images/local" archs="aarch64 armv7hl">
-        <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="*product*" iso="1">
+    <batch name="base" archs="aarch64 armv7hl">
+        <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="images/local/*product*" iso="1">
             <repos>
-                <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-$arch"/>
+                <oss folder="images/local/*openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-$arch"/>
             </repos>
+            <assets archs="aarch64" flavor="DVD">
+                <libvirt folder="appliances/aarch64/*vagrant*" filemask="libvirt.box"/>
+            </assets>
         </flavor>
         <news iso="Tumbleweed-DVD" archs="aarch64"/>
     </batch>

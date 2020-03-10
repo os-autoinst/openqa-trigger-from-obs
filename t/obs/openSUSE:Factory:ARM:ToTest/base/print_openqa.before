@@ -24,7 +24,9 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
+ ASSET_1=Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200226.vagrant.libvirt.box \
  ASSET_256=openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso.sha256 \
+ ASSET_LIBVIRT=Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200226.vagrant.libvirt.box \
  BUILD=20200115 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
  DISTRI=opensuse \
