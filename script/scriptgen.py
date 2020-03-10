@@ -143,6 +143,9 @@ class ActionBatch:
         self.flavor_distri = defaultdict(list)
         self.hdds = []
         self.assets = []
+        self.assets_flavor = ""
+        self.assets_archs = ""
+        self.asset_folders = {}
         self.isos = []
         self.iso_folder = {}
         self.iso_5 = ""
@@ -282,6 +285,7 @@ class ActionBatch:
             for iso in node.attrib["name"].split("|"):
                 self.isos.append(iso)
                 if node.attrib.get("folder",""):
+                    # self.iso_path = node.attrib["folder"]
                     self.iso_folder[iso] = node.attrib["folder"]
                 if node.attrib["iso"] == "extract_as_repo":
                     self.iso_extract_as_repo[iso] = 1
@@ -331,6 +335,13 @@ class ActionBatch:
                     self.iso_folder[t.attrib["filemask"]] = node.attrib["folder"]
             if t.tag == "asset":
                 self.assets.append(t.attrib["filemask"])
+                if t.attrib.get("flavor"):
+                    self.assets_flavor = t.attrib["flavor"]
+                if t.attrib.get("archs"):
+                    self.assets_archs = t.attrib["archs"]
+                
+                if t.attrib.get("filemask") and t.attrib.get("folder"):
+                    self.asset_folders[t.attrib["filemask"]] = t.attrib["folder"]
             if t.tag == "repos" and t.attrib.get("build_id_from_iso",""):
                 self.build_id_from_iso = 1
 
@@ -373,13 +384,15 @@ class ActionBatch:
                     self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, '| head -n 1', '')
                 else:
                     self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd)
-        for asset in self.assets:
-            self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
+        if not self.isos:
+            for asset in self.assets:
+                self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
         if self.iso_5:
             self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(self.iso_5,""), "SRCISO", self.iso_5)
         elif self.isos:
             # if isos don't belong to custom folder - just read them all with single command
             if not self.iso_folder:
+                # self.p(cfg.read_files_isos, f, "FOLDER", self.folder)
                 self.p(cfg.read_files_isos, f)
             else:
                 for iso in self.isos:
@@ -400,7 +413,7 @@ class ActionBatch:
             if any(repo.attrib.get(cfg.media3_name(),"") for repo in self.repos):
                 self.p(cfg.read_files_repo, f, "Media1", "Media3", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get(cfg.media3_name(),""), self.repos)]))
         for repodir in self.repodirs:
-            self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(repodir.attrib["folder"]) )
+            self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')) )
 
         # let's sync media.1/media to be able verify build_id
         if 'ToTest' in self.ag.envdir:
@@ -418,13 +431,17 @@ class ActionBatch:
 
             if 'Leap' in self.ag.envdir:
                 for repodir in self.repodirs:
-                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(repodir.attrib["folder"]))
+                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*')))
             elif 'Factory' in self.ag.envdir:
                 for repodir in self.repodirs:
-                    self.p(cfg.read_files_repo_media + cfg.read_files_repo_media_convert, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', '', 'destlst', 'Media1_{}.lst'.format(repodir.attrib["folder"]), 'media.1/media', 'media.1/products')
+                    self.p(cfg.read_files_repo_media + cfg.read_files_repo_media_convert, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', '', 'destlst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), 'media.1/media', 'media.1/products')
  
             if done:
                 self.p(done, f)
+
+        if self.assets and self.isos:
+            for k, v in self.asset_folders.items():
+                self.p("rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} >> __envsub/files_asset.lst".format(k, v), f)
 
     def gen_print_array_flavor_filter(self,f):
         if self.hdds or self.assets or self.flavor_aliases:
@@ -432,8 +449,9 @@ class ActionBatch:
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
             self.p("flavor_filter[{}]='{}'".format(fl, h), f)
-        for fl, h in zip(self.flavors, self.assets):
-            self.p("flavor_filter[{}]='{}'".format(fl, h), f)
+        if not self.isos:
+            for fl, h in zip(self.flavors, self.assets):
+                self.p("flavor_filter[{}]='{}'".format(fl, h), f)
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
@@ -453,6 +471,22 @@ class ActionBatch:
         for k, v in self.iso_folder.items():
             self.p("iso_folder[{}]='{}/'".format(k, v), f)
 
+    def gen_print_rsync_assets(self,f):
+        self.p('''echo ""
+echo "# Syncing assets"
+declare -A asset_folders''', f)
+        for k, v in self.asset_folders.items():
+            self.p("asset_folders[{}]='{}'".format(k, v), f)
+        self.p('''while read src; do
+    folder=""
+    for mask in "${!asset_folders[@]}"; do
+        [[ $src =~ $mask ]] || continue
+        folder=${asset_folders[$mask]}
+        break
+    done
+    echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/$src /var/lib/openqa/factory/"
+done < <(sort __envsub/files_asset.lst)''', f)
+
     def gen_print_rsync_iso(self,f):
         print(cfg.header, file=f)
         if self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith('http')):
@@ -462,9 +496,13 @@ class ActionBatch:
                 self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
             else:
                 self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
-        if self.assets:
+        elif self.assets:
             self.gen_print_array_flavor_filter(f)
             self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
+
+        if self.assets and self.isos:
+            self.gen_print_rsync_assets(f)
+
 
     def gen_print_rsync_repo(self,f):
         print(cfg.header, file=f)
@@ -478,9 +516,9 @@ class ActionBatch:
 
             self.p(cfg.rsync_repo2, f)
 
-        xtrapath = ""
+        xtrapath = "/*"
         if self.folder:
-            xtrapath = "/" + self.folder
+            xtrapath = "/" + self.folder + "/*"
         for r in self.repodirs:
             if not r.attrib.get("dest", ""):
                 self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
@@ -489,7 +527,7 @@ class ActionBatch:
 
             for ren in self.renames:
                 self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-            self.p(cfg.rsync_repodir2(), f,"PRODUCTREPOPATH", self.productpath() + xtrapath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"Media2","Media1","-debuginfo","","RSYNCFILTER","")
+            self.p(cfg.rsync_repodir2(), f,"PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"Media2","Media1","-debuginfo","","RSYNCFILTER","")
             if r.attrib.get("debug",""):
                 if not r.attrib.get("dest", ""):
                     self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
@@ -497,7 +535,7 @@ class ActionBatch:
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
                     self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
+                self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
             if r.attrib.get("source",""):
                 if not r.attrib.get("dest", ""):
                     self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
@@ -506,7 +544,7 @@ class ActionBatch:
                 for ren in self.renames:
                     self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
                 if self.ag.brand == 'obs':
-                    self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + "/*" + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
+                    self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,i586,i686,noarch,nosrc,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
 
     def gen_print_openqa(self,f):
         print(cfg.header, file=f)
@@ -556,6 +594,12 @@ class ActionBatch:
                         pref = self.iso_5.replace("-","_").rstrip('_DVD')
                         self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
                     break # for now only REPO_0
+        if self.assets and self.isos and self.assets_flavor and self.assets_archs:
+            self.p('''       i=1
+        [[ ! "$flavor" =~ ''' + self.assets_flavor + ''' ]] || [ "$arch" != ''' + self.assets_archs + ''' ] || while read src; do
+            echo " ASSET_$i=$src \\\\"
+            : $((i++))
+        done < <(grep ${arch} __envsub/files_asset.lst | sort)''', f)
 
         self.p(" i={}".format(i), f)
 
@@ -586,7 +630,7 @@ class ActionBatch:
                     media_filter = "| grep -E '(Media1|Media3)' "
                 else:
                     media_filter = "| grep -E '(Media1|Media2)' "
-            self.p(cfg.openqa_call_repot2.format(media_filter), f, "files_repo.lst", "files_repo_{}.lst".format(r.attrib["folder"]),"DEBUG_PACKAGES",r.attrib.get("debug","").strip('{}'),"SOURCE_PACKAGES",r.attrib.get("source","").strip('{}'))
+            self.p(cfg.openqa_call_repot2.format(media_filter), f, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"DEBUG_PACKAGES",r.attrib.get("debug","").strip('{}'),"SOURCE_PACKAGES",r.attrib.get("source","").strip('{}'))
 
         if self.ag.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
