@@ -146,6 +146,7 @@ class ActionBatch:
         self.assets_flavor = ""
         self.assets_archs = ""
         self.asset_folders = {}
+        self.asset_tags = {}
         self.isos = []
         self.iso_folder = {}
         self.iso_5 = ""
@@ -328,12 +329,29 @@ class ActionBatch:
             if "to" in t.attrib:
                 self.renames.append([t.attrib.get("from",t.tag), t.attrib["to"]])
 
+        assets_folder = "";
+        for t in node.findall(".//assets"):
+            if t.attrib.get("flavor"):
+                self.assets_flavor = t.attrib["flavor"]
+            if t.attrib.get("archs"):
+                self.assets_archs = t.attrib["archs"]
+            if t.attrib.get("folder"):
+                assets_folder = t.attrib["folder"]
+
+        for t in node.findall(".//assets/*"):
+            self.assets.append(t.attrib["filemask"])
+            self.asset_tags[t.attrib["filemask"]] = t.tag
+            if t.attrib.get("filemask") and t.attrib.get("folder"):
+                self.asset_folders[t.attrib["filemask"]] = t.attrib["folder"]
+            elif t.attrib.get("filemask") and assets_folder:
+                self.asset_folders[t.attrib["filemask"]] = assets_folder
+        
         for t in node.findall(".//*"):
             if t.tag == "hdd":
                 self.hdds.append(t.attrib["filemask"])
                 if node.attrib.get("folder",""):
                     self.iso_folder[t.attrib["filemask"]] = node.attrib["folder"]
-            if t.tag == "asset":
+            if t.tag == "asset" and not self.asset_tags:
                 self.assets.append(t.attrib["filemask"])
                 if t.attrib.get("flavor"):
                     self.assets_flavor = t.attrib["flavor"]
@@ -441,7 +459,7 @@ class ActionBatch:
 
         if self.assets and self.isos:
             for k, v in self.asset_folders.items():
-                self.p("rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} >> __envsub/files_asset.lst".format(k, v), f)
+                self.p("rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} >> __envsub/files_asset.lst".format(v, k), f)
 
     def gen_print_array_flavor_filter(self,f):
         if self.hdds or self.assets or self.flavor_aliases:
@@ -550,6 +568,11 @@ done < <(sort __envsub/files_asset.lst)''', f)
         print(cfg.header, file=f)
         self.gen_print_array_flavor_filter(f)
         self.gen_print_array_flavor_distri(f)
+        if self.assets and self.isos and self.assets_flavor and self.assets_archs:
+            self.p('declare -A asset_tags', f)
+            for k, v in self.asset_tags.items():
+                self.p("asset_tags[{}]='{}'".format(k, v), f)
+
         if not self.flavors and not self.flavor_aliases:
             return
         if self.mask:
@@ -562,7 +585,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
             self.p(cfg.openqa_call_legacy_builds, f)
 
         i=0
-        if self.hdds or self.assets:
+        if self.hdds or (self.assets and not self.isos):
             if self.hdds and self.productpath().startswith('http'):
                 self.p(" echo \" HDD_URL_1=PRODUCTPATH/$destiso \\\\\"", f)
             else:
@@ -595,11 +618,18 @@ done < <(sort __envsub/files_asset.lst)''', f)
                         self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
                     break # for now only REPO_0
         if self.assets and self.isos and self.assets_flavor and self.assets_archs:
-            self.p('''       i=1
-        [[ ! "$flavor" =~ ''' + self.assets_flavor + ''' ]] || [ "$arch" != ''' + self.assets_archs + ''' ] || while read src; do
-            echo " ASSET_$i=$src \\\\"
-            : $((i++))
-        done < <(grep ${arch} __envsub/files_asset.lst | sort)''', f)
+            self.p(''' i=1
+ [[ ! "$flavor" =~ ''' + self.assets_flavor + ''' ]] || [ "$arch" != ''' + self.assets_archs + ''' ] || while read src; do
+     echo " ASSET_$i=$src \\\\"
+     asset_tag=""
+     for mask in "${!asset_tags[@]}"; do
+         [[ $src =~ $mask ]] || continue
+         asset_tag=${asset_tags[$mask]}
+         break
+      done
+      [ -z "$asset_tag" ] || echo " ASSET_${asset_tag^^}=$src \\\\"
+      : $((i++))
+  done < <(grep ${arch} __envsub/files_asset.lst | sort)''', f)
 
         self.p(" i={}".format(i), f)
 
