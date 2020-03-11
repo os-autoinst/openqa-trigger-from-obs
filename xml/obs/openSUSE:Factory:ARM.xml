@@ -7,7 +7,7 @@
                 <oss folder="images/local/*openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-$arch"/>
             </repos>
             <assets archs="aarch64" flavor="DVD">
-                <libvirt folder="appliances/aarch64/*vagrant*" filemask="libvirt.box"/>
+                <libvirt folder="appliances/aarch64/*vagrant*libvirt*" filemask="libvirt.box"/>
             </assets>
         </flavor>
         <news iso="Tumbleweed-DVD" archs="aarch64"/>

@@ -459,7 +459,7 @@ class ActionBatch:
 
         if self.assets and self.isos:
             for k, v in self.asset_folders.items():
-                self.p("rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} >> __envsub/files_asset.lst".format(v, k), f)
+                self.p("rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst".format(v, k), f)
 
     def gen_print_array_flavor_filter(self,f):
         if self.hdds or self.assets or self.flavor_aliases:
@@ -502,7 +502,7 @@ declare -A asset_folders''', f)
         folder=${asset_folders[$mask]}
         break
     done
-    echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/$src /var/lib/openqa/factory/"
+    echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/$src /var/lib/openqa/factory/other/"
 done < <(sort __envsub/files_asset.lst)''', f)
 
     def gen_print_rsync_iso(self,f):

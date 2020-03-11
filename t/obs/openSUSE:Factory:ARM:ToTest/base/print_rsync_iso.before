@@ -4,4 +4,4 @@ rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:To
 rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:ToTest/images/local/*product*/*openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso.sha256
 
 # Syncing assets
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:ToTest/appliances/aarch64/*vagrant*/Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200226.vagrant.libvirt.box /var/lib/openqa/factory/
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:ToTest/appliances/aarch64/*vagrant*libvirt*/Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200226.vagrant.libvirt.box /var/lib/openqa/factory/other/
