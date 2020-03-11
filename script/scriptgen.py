@@ -164,6 +164,9 @@ class ActionBatch:
         self.legacy_builds = 0
         self.checksum = 1
         self.variable = ""
+        self.meta_variables = "_OBSOLETE=1"
+        if self.ag.brand != 'obs' and not self.ag.staging():
+            self.meta_variables = "_DEPRIORITIZEBUILD=1"
 
     def productpath(self):
         if self.dist_path:
@@ -576,9 +579,9 @@ done < <(sort __envsub/files_asset.lst)''', f)
         if not self.flavors and not self.flavor_aliases:
             return
         if self.mask:
-            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri), f)
+            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables), f)
         if self.repolink and not self.iso_5:
             self.p(cfg.openqa_call_legacy_builds_link, f)
         if self.legacy_builds or (self.repolink and not self.iso_5):
