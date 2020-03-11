@@ -5,5 +5,5 @@
  FLAVOR=Appliance \
  HDD_URL_1=http://download.opensuse.org/repositories/OBS:/Server:/Unstable/images/obs-server.x86_64-2.10.51-qcow2-Build1.490.qcow2 \
  VERSION=Unstable \
- _OBSOLETE=1
+ _DEPRIORITIZEBUILD=1
 

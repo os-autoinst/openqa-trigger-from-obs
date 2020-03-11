@@ -161,7 +161,14 @@ def openqa_call_start_distri(flavor_distri):
         [ -z "${flavor_distri[$flavor]}" ] || distri=${flavor_distri[$flavor]}'''
     return 'distri=DISTRIVALUE'
 
-openqa_call_start = lambda version, archs, staging, news, news_archs, flavor_distri: '''
+def openqa_call_start_meta_variables(meta_variables):
+    if not meta_variables:
+        return 'VERSION=$version\"'
+
+    return '''VERSION=$version \\\\
+ ''' + meta_variables + '\"'
+
+openqa_call_start = lambda version, archs, staging, news, news_archs, flavor_distri, meta_variables: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORALIASLIST,}; do
@@ -187,11 +194,10 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_news(news, news_archs) + '''
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
 (
- echo \" _OBSOLETE=1
- DISTRI=$distri \\\\
+ echo \" DISTRI=$distri \\\\
  ARCH=$arch \\\\
- VERSION=$version \\\\
- BUILD=$build1 \\\\\"'''
+ BUILD=$build1 \\\\
+ ''' + openqa_call_start_meta_variables(meta_variables)
 
 openqa_call_legacy_builds_link=''
 
