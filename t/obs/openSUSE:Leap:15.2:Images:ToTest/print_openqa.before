@@ -11,6 +11,18 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
+ ASSET_1=Leap-15.2.x86_64-15.2-libvirt-Build27.4.vagrant.libvirt.box \
+ ASSET_2=Leap-15.2.x86_64-15.2-virtualbox-Build27.4.vagrant.virtualbox.box \
+ ASSET_LIBVIRT=Leap-15.2.x86_64-15.2-libvirt-Build27.4.vagrant.libvirt.box \
+ ASSET_VIRTUALBOX=Leap-15.2.x86_64-15.2-virtualbox-Build27.4.vagrant.virtualbox.box \
+ BUILD=27.4 \
+ DISTRI=opensuse \
+ FLAVOR=Vagrant \
+ VERSION=15.2 \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.2-GNOME-Live-x86_64-Snapshot20.3-Media.iso.sha256 \
  BUILD=20.3 \
  CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-GNOME-Live-x86_64-Snapshot20.3-Media.iso.sha256 | tail -c 64) \

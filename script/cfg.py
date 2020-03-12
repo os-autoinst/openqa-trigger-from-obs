@@ -168,7 +168,7 @@ def openqa_call_start_meta_variables(meta_variables):
     return '''VERSION=$version \\\\
  ''' + meta_variables + '\"'
 
-openqa_call_start = lambda version, archs, staging, news, news_archs, flavor_distri, meta_variables: '''
+openqa_call_start = lambda version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORALIASLIST,}; do
@@ -179,8 +179,11 @@ for flavor in {FLAVORALIASLIST,}; do
         [ $filter != Appliance ] || filter="qcow2"
         iso=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
         ''' + openqa_call_start_fix_iso(archs) + '''
-        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*') || continue
-        buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*')
+        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*') || :
+        buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*') || :
+        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
+        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
+        [ -n "$build"  ] || continue
         buildex=${buildex/.iso/}
         buildex=${buildex/.raw.xz/}
         buildex=${buildex/.qcow2/}
@@ -189,7 +192,6 @@ for flavor in {FLAVORALIASLIST,}; do
         version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build
         ''' + openqa_call_start_staging(version, staging) + '''
-        [ ! -z "$build"  ] || continue
         [ "$arch" != . ] || arch=x86_64
         ''' + openqa_call_news(news, news_archs) + '''
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
@@ -225,7 +227,7 @@ def openqa_call_start_ex(checksum):
    echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
  elif [[ $destiso =~ \.(hdd|qcow2|raw\.xz|raw\.gz|vhdx\.xz)$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + '''\"
- else
+ elif [ -n "$destiso" ]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + '''\"
  fi
 '''
