@@ -6,6 +6,12 @@
     <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-JeOS:kvm-and-xen">
         <hdd filemask=".*kvm-and-xen.*\.qcow2"/>
     </flavor>
+    <flavor name="Vagrant">
+        <assets>
+            <libvirt folder="*vagrant*libvirt*" filemask="libvirt.box"/>
+            <virtualbox folder="*vagrant*virtualbox*" filemask="virtualbox.box"/>
+        </assets>
+    </flavor>
     <flavor name="GNOME-Live" folder="livecd-leap-gnome" iso="1"/>
     <flavor name="KDE-Live" folder="livecd-leap-kde" iso="1"/>
     <flavor name="Rescue-CD" folder="livecd-leap-x11" iso="1"/>

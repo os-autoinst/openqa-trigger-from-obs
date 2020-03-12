@@ -336,6 +336,9 @@ class ActionBatch:
         for t in node.findall(".//assets"):
             if t.attrib.get("flavor"):
                 self.assets_flavor = t.attrib["flavor"]
+            else:
+                self.assets_flavor = node.attrib.get("name","")
+                
             if t.attrib.get("archs"):
                 self.assets_archs = t.attrib["archs"]
             if t.attrib.get("folder"):
@@ -460,7 +463,7 @@ class ActionBatch:
             if done:
                 self.p(done, f)
 
-        if self.assets and self.isos:
+        if self.assets and self.assets_flavor:
             for k, v in self.asset_folders.items():
                 self.p('''rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst'''.format(v, k), f)
 
@@ -571,7 +574,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
         print(cfg.header, file=f)
         self.gen_print_array_flavor_filter(f)
         self.gen_print_array_flavor_distri(f)
-        if self.assets and self.isos and self.assets_flavor and self.assets_archs:
+        if self.assets and self.assets_flavor:
             self.p('declare -A asset_tags', f)
             for k, v in self.asset_tags.items():
                 self.p("asset_tags[{}]='{}'".format(k, v), f)
@@ -579,9 +582,9 @@ done < <(sort __envsub/files_asset.lst)''', f)
         if not self.flavors and not self.flavor_aliases:
             return
         if self.mask:
-            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables), f)
+            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f)
         if self.repolink and not self.iso_5:
             self.p(cfg.openqa_call_legacy_builds_link, f)
         if self.legacy_builds or (self.repolink and not self.iso_5):
@@ -620,9 +623,12 @@ done < <(sort __envsub/files_asset.lst)''', f)
                         pref = self.iso_5.replace("-","_").rstrip('_DVD')
                         self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
                     break # for now only REPO_0
-        if self.assets and self.isos and self.assets_flavor and self.assets_archs:
+        arch_expression = ''
+        if self.assets_archs:
+            arch_expression = '|| [ "$arch" != ' + self.assets_archs + ' ]'
+        if self.assets and self.assets_flavor:
             self.p(''' i=1
- [[ ! "$flavor" =~ ''' + self.assets_flavor + ''' ]] || [ "$arch" != ''' + self.assets_archs + ''' ] || while read src; do
+ [[ ! "$flavor" =~ ''' + self.assets_flavor + ''' ]] '''+ arch_expression +''' || while read src; do
      echo " ASSET_$i=$src \\\\"
      asset_tag=""
      for mask in "${!asset_tags[@]}"; do
