@@ -6,6 +6,11 @@
     <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi.aarch64">
         <hdd filemask=".*ARM-JeOS-efi.*\.raw\.xz"/>
     </flavor>
+    <flavor name="Vagrant">
+        <assets>
+            <libvirt folder="*vagrant*libvirt*" filemask="libvirt.box"/>
+        </assets>
+    </flavor>
     <flavor name="GNOME-Live" folder="livecd-leap-gnome" iso="1"/>
     <flavor name="KDE-Live" folder="livecd-leap-kde" iso="1"/>
     <flavor name="Rescue-CD" folder="livecd-leap-x11" iso="1"/>
