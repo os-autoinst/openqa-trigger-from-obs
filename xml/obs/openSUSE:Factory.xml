@@ -20,17 +20,4 @@
     <batch name="live" folder="images/*/live*" archs="i686 x86_64" repos="base">
         <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
     </batch>
-    <batch name="jeos" folder="appliances/x86_64" archs="x86_64" repos="base">
-        <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-JeOS:kvm-and-xen">
-            <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
-        </flavor>
-    </batch>
-    <batch name="microos-qcow" folder="appliances/x86_64" archs="x86_64" repos="base" distri="microos">
-        <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen">
-            <hdd filemask=".*ContainerHost-kvm-and-xen.*\.qcow2$"/>
-        </flavor>
-        <flavor name="MicroOS-Image-Kubic-kubeadm" folder="openSUSE-MicroOS:Kubic-kubeadm-kvm-and-xen">
-            <hdd filemask=".*Kubic-kubeadm-kvm-and-xen.*\.qcow2$"/>
-        </flavor>
-    </batch>
 </openQA>
