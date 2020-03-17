@@ -17,6 +17,7 @@ class ActionGenerator:
         self.distri = ""
         self.version = version
         self.batches = []
+        project = project.split("::")[0]
         pp = productpath
         if not pp or ('::' not in pp and '//' not in pp):
             if self.staging():
@@ -243,7 +244,7 @@ class ActionBatch:
             s=s.replace("FLAVORASREPOORS", '|'.join([f for f in self.flavors if self.iso_extract_as_repo.get(f,0)]))
 
 
-        if self.repos or self.repolink:
+        if self.repos or (self.repolink and not '/' in self.repolink):
             repos = self.repos.copy()
             s=s.replace("REPOOWNLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos.copy()]))
             if self.repolink:
@@ -254,7 +255,7 @@ class ActionBatch:
                 s=s.replace("REPOLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
             s=s.replace("REPOORS",   '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
         mirror_repo = self.mirror_repo
-        if not mirror_repo and self.repolink:
+        if not mirror_repo and self.repolink and not '/' in self.repolink:
             self.mirror_repo = self.ag.batch_by_name(self.repolink).mirror_repo
         s=s.replace("MIRRORREPO", self.mirror_repo)
         if self.ag.domain:
@@ -396,7 +397,18 @@ class ActionBatch:
             elif fname == "print_openqa.sh":
                 self.gen_print_openqa(f)
 
-
+    def gen_repo(self, repodir, gen, f):
+        if '$build' in gen:
+            self.p('''build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_iso.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)''', f)
+        body = gen
+        if repodir.attrib.get('source',""):
+            body = body + '''
+''' + gen.replace('Media1', 'Media2')
+        if repodir.attrib.get('debug',""):
+            body = body + '''
+''' + gen.replace('Media1', 'Media3')
+        self.p('echo "' + body + '" > __envsub/files_repo_' + repodir.attrib['folder'] + '.lst', f)
+        
     def gen_read_files(self,f):
         self.p(cfg.header, f, "set -e", "set -eo pipefail")
         self.p(cfg.clear_lst, f)
@@ -437,7 +449,11 @@ class ActionBatch:
             if any(repo.attrib.get(cfg.media3_name(),"") for repo in self.repos):
                 self.p(cfg.read_files_repo, f, "Media1", "Media3", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get(cfg.media3_name(),""), self.repos)]))
         for repodir in self.repodirs:
-            self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')) )
+            gen = repodir.attrib.get("gen", "");
+            if gen:
+                self.gen_repo(repodir, gen, f)
+            else:
+                self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')) )
 
         # let's sync media.1/media to be able verify build_id
         if 'ToTest' in self.ag.envdir:
@@ -458,7 +474,8 @@ class ActionBatch:
                     self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*')))
             elif 'Factory' in self.ag.envdir:
                 for repodir in self.repodirs:
-                    self.p(cfg.read_files_repo_media + cfg.read_files_repo_media_convert, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', '', 'destlst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), 'media.1/media', 'media.1/products')
+                    if not repodir.attrib.get('gen', ''):
+                        self.p(cfg.read_files_repo_media + cfg.read_files_repo_media_convert, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', '', 'destlst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), 'media.1/media', 'media.1/products')
  
             if done:
                 self.p(done, f)
@@ -544,9 +561,11 @@ done < <(sort __envsub/files_asset.lst)''', f)
         if self.folder:
             xtrapath = "/" + self.folder + "/*"
         for r in self.repodirs:
+            if r.attrib.get("gen", ""):
+                continue
             if not r.attrib.get("dest", ""):
                 self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
-            else:
+            elif not r.attrib.get("gen", ""):
                 self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
 
             for ren in self.renames:
