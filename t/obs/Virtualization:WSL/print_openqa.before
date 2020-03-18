@@ -3,7 +3,7 @@
  ASSET_1=openSUSE-Leap-15.2-Beta-x64-Build20.21.appx \
  ASSET_256=openSUSE-Leap-15.2-Beta-x64-Build20.21.appx.sha256 \
  BUILD=20.21 \
- CHECKSUM_ASSET_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Beta-x64-Build20.21.appx.sha256 | tail -c 64) \
+ CHECKSUM_ASSET_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-Beta-x64-Build20.21.appx.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=WSL \
  VERSION=15.2 \

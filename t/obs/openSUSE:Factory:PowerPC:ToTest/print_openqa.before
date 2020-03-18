@@ -2,7 +2,7 @@
  ARCH=ppc64 \
  ASSET_256=openSUSE-Tumbleweed-NET-ppc64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-ppc64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-ppc64-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=NET \
  FULLURL=1 \
@@ -26,7 +26,7 @@
  ARCH=ppc64le \
  ASSET_256=openSUSE-Tumbleweed-NET-ppc64le-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-ppc64le-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-ppc64le-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=NET \
  FULLURL=1 \
@@ -50,7 +50,7 @@
  ARCH=ppc64 \
  ASSET_256=openSUSE-Tumbleweed-DVD-ppc64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-ppc64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-ppc64-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=DVD \
  FULLURL=1 \
@@ -74,7 +74,7 @@
  ARCH=ppc64le \
  ASSET_256=openSUSE-Tumbleweed-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=DVD \
  FULLURL=1 \

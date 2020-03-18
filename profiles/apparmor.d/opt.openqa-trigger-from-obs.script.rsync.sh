@@ -27,6 +27,7 @@
   /usr/bin/awk ix,
   /usr/bin/bsdtar ix,
   /usr/bin/cat ix,
+  /usr/bin/cut ix,
   /usr/bin/cp ix,
   /usr/bin/date ix,
   /usr/bin/diff ix,

@@ -3,7 +3,7 @@
  ASSET_1=openSUSE-Tumbleweed-x64-Snapshot20200127.4.13.13.appx \
  ASSET_256=openSUSE-Tumbleweed-x64-Snapshot20200127.4.13.13.appx.sha256 \
  BUILD=20200127.4.13.13 \
- CHECKSUM_ASSET_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-x64-Snapshot20200127.4.13.13.appx.sha256 | tail -c 64) \
+ CHECKSUM_ASSET_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-x64-Snapshot20200127.4.13.13.appx.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=WSL \
  VERSION=Tumbleweed \

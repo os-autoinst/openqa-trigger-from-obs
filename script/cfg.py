@@ -208,7 +208,7 @@ openqa_call_legacy_builds=''
 def openqa_call_start_iso(checksum):
     if checksum:
         return ''' echo \" ISO=${destiso} \\\\
- CHECKSUM_ISO=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
+ CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
     return ''' echo \" ISO=${destiso} \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
@@ -217,7 +217,7 @@ def openqa_call_start_ex1(checksum, tag):
     res = tag + '=${destiso} \\\\'
     if checksum:
         res = res + '''
- CHECKSUM_''' + tag + '''=\$(head -c 113 /var/lib/openqa/factory/other/${destiso}.sha256 | tail -c 64) \\\\
+ CHECKSUM_''' + tag + '''=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
  ASSET_256=${destiso}.sha256 \\\\'''
     return res
 
