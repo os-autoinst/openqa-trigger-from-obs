@@ -2,7 +2,7 @@
  ARCH=s390x \
  ASSET_256=openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=DVD \
  FULLURL=1 \

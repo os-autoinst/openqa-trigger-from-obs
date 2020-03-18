@@ -2,7 +2,7 @@
  ARCH=x86_64 \
  ASSET_256=openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20200115.qcow2.sha256 \
  BUILD=20200115 \
- CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20200115.qcow2.sha256 | tail -c 64) \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20200115.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=microos \
  FLAVOR=MicroOS-Image-ContainerHost \
  FULLURL=1 \
@@ -28,7 +28,7 @@
  ARCH=x86_64 \
  ASSET_256=openSUSE-MicroOS.x86_64-16.0.0-Kubic-kubeadm-kvm-and-xen-Snapshot20200115.qcow2.sha256 \
  BUILD=20200115 \
- CHECKSUM_HDD_1=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-MicroOS.x86_64-16.0.0-Kubic-kubeadm-kvm-and-xen-Snapshot20200115.qcow2.sha256 | tail -c 64) \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS.x86_64-16.0.0-Kubic-kubeadm-kvm-and-xen-Snapshot20200115.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=microos \
  FLAVOR=MicroOS-Image-Kubic-kubeadm \
  FULLURL=1 \

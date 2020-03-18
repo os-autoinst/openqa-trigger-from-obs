@@ -2,7 +2,7 @@
  ARCH=i686 \
  ASSET_256=openSUSE-Tumbleweed-Rescue-CD-i686-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Rescue-CD-i686-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Rescue-CD-i686-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=Rescue-CD \
  FULLURL=1 \
@@ -28,7 +28,7 @@
  ARCH=x86_64 \
  ASSET_256=openSUSE-Tumbleweed-Rescue-CD-x86_64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Rescue-CD-x86_64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Rescue-CD-x86_64-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=Rescue-CD \
  FULLURL=1 \
@@ -54,7 +54,7 @@
  ARCH=i686 \
  ASSET_256=openSUSE-Tumbleweed-GNOME-Live-i686-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-GNOME-Live-i686-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-GNOME-Live-i686-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=GNOME-Live \
  FULLURL=1 \
@@ -80,7 +80,7 @@
  ARCH=x86_64 \
  ASSET_256=openSUSE-Tumbleweed-GNOME-Live-x86_64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-GNOME-Live-x86_64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-GNOME-Live-x86_64-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=GNOME-Live \
  FULLURL=1 \
@@ -106,7 +106,7 @@
  ARCH=i686 \
  ASSET_256=openSUSE-Tumbleweed-KDE-Live-i686-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-KDE-Live-i686-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-KDE-Live-i686-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=KDE-Live \
  FULLURL=1 \
@@ -132,7 +132,7 @@
  ARCH=x86_64 \
  ASSET_256=openSUSE-Tumbleweed-KDE-Live-x86_64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-KDE-Live-x86_64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-KDE-Live-x86_64-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=KDE-Live \
  FULLURL=1 \
@@ -158,7 +158,7 @@
  ARCH=i686 \
  ASSET_256=openSUSE-Tumbleweed-XFCE-Live-i686-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-XFCE-Live-i686-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-XFCE-Live-i686-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=XFCE-Live \
  FULLURL=1 \
@@ -184,7 +184,7 @@
  ARCH=x86_64 \
  ASSET_256=openSUSE-Tumbleweed-XFCE-Live-x86_64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
- CHECKSUM_ISO=$(head -c 113 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-XFCE-Live-x86_64-Snapshot20200115-Media.iso.sha256 | tail -c 64) \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-XFCE-Live-x86_64-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=XFCE-Live \
  FULLURL=1 \
