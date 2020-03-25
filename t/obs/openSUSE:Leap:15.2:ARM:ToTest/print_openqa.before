@@ -46,3 +46,4 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse-aarch64/15.2 --snapshot 43.1 /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-DVD-aarch64-Build43.1-Media.iso
