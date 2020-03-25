@@ -7,4 +7,5 @@
             <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-15.2-oss-aarch64"/>
         </repos>
     </flavor>
+    <news iso="DVD" archs="aarch64"/>
 </openQA>
