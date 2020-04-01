@@ -10,6 +10,7 @@ jobs:
           command: |
             zypper -n in --no-recommends make python3 tar git-core || :
       - checkout
+      - run: git clean -df
       - run: make test_regen_all
       - run: make test
 
