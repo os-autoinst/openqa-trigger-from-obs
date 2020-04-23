@@ -416,10 +416,15 @@ class ActionBatch:
             if self.ag.productpath.startswith('http'):
                 self.p(cfg.read_files_curl, f, "ISOMASK", hdd)
             else:
+                awkpartfrom = ''' awk '{ $1=$2=$3=$4=""; print substr($0,5); }' |'''
+                awkpartto = awkpartfrom
+                if not hdd.startswith('.*'):
+                    awkpartto = ''
+
                 if ' ' in self.archs:
-                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, '| head -n 1', '')
+                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, '| head -n 1', '', awkpartfrom, awkpartto)
                 else:
-                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd)
+                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, awkpartfrom, awkpartto)
         if not self.isos:
             for asset in self.assets:
                 self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
