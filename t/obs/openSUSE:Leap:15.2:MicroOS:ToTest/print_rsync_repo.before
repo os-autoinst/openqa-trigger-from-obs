@@ -1,0 +1,2 @@
+rsync --timeout=3600 -rtlp4 --delete --specials obspublish::openqa/openSUSE:Leap:15.2:MicroOS:ToTest/*images/x86_64/000product:MicroOS-ftp-ftp*x86_64*/*Media1/* /var/lib/openqa/factory/repo/openSUSE-MicroOS-15.2-oss-i586-x86_64-CURRENT/
+rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/openSUSE-MicroOS-15.2-oss-i586-x86_64-CURRENT/ /var/lib/openqa/factory/repo/openSUSE-MicroOS-15.2-oss-i586-x86_64-CURRENT/ /var/lib/openqa/factory/repo/openSUSE-MicroOS-15.2-oss-i586-x86_64-Build1.5.qcow2
