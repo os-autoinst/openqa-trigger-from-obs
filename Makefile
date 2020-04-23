@@ -4,7 +4,7 @@
 openSUSE%: FORCE
 	mkdir -p $@ && python3 script/scriptgen.py $@
 
-.PONY: FORCE
+.PHONY: FORCE
 FORCE:
 
 install_apparmor:
