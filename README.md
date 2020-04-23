@@ -53,7 +53,33 @@ the changes.
 
 ## Adding new projects
 
-TBD
+The goal here is to add new project to test framework, so it will be possible
+to preview exact commands and limit chance that occasional commit affects
+them in the future.
+
+1. Find project with similar settings, create a copy of it's xml file and 
+tweak changes as needed.
+2. Create folder t/obs/ProjectName and generate scripts using
+`make test_regen_all`
+3. Examine script for the first phase (read `Testability` section above)
+t/obs/ProjectName/read_files.sh
+4. Use generated commands `rsync --list-only` to create files 
+t/obs/ProjectName/*.lst
+the same way they are created in read_files.sh
+5. Generate rsync and openqa commands based on these new *.lst files
+`make test_update_before_after`
+6. Run consistency test `make test`
+7. Review and test bash commands generated in, which will be executed in production:
+t/obs/ProjectName/print_rsync_iso.before
+t/obs/ProjectName/print_rsync_repo.before
+t/obs/ProjectName/print_openqa.before
+8. Add to new git commit the xml file and t/obs/ProjectName folder
+git checkout -b add_projectname
+git add xml/obs/ProjectName.xml t/obs/ProjectName
+git commit -m 'Add ProjectName'
+git push origin add_projectname
+9. Create pull request from add_projectname branch and make sure CI shows green 
+outcome
 
 ## Deploy scripts, Rsync binaries from OBS, start OpenQA tests
 
