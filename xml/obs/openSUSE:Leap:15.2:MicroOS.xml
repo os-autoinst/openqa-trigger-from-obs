@@ -2,7 +2,7 @@
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.2):MicroOS:ToTest"
     distri="microos">
     <flavor name="kvm" folder="images/x86_64/openSUSE-MicroOS:kvm" archs="x86_64">
-        <hdd filemask="openSUSE-MicroOS.*kvm-Build.*\.qcow2"/>
+        <hdd filemask="openSUSE-MicroOS.*kvm-Snapshot.*\.qcow2"/>
     </flavor>
     <flavor name="DVD" folder="images/x86_64/000product:MicroOS-dvd*" iso="1">
         <repos archs="x86_64">
