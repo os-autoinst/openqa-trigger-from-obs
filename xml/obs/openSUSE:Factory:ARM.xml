@@ -19,13 +19,15 @@
         <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
     </batch>
     <batch name="jeos-aarch64" folder="images/aarch64" archs="aarch64" repos="base">
-        <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi.aarch64">
-            <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
+        <flavor name="JeOS-for-AArch64">
+            <hdd filemask=".*JeOS-efi.*\.raw.xz$" folder="JeOS:JeOS-efi.aarch64"/>
+            <hdd filemask=".*raspberrypi3.*\.raw.xz$" folder="JeOS:JeOS-raspberrypi3.aarch64"/>
         </flavor>
     </batch>
     <batch name="jeos-armv7hl" folder="images/armv7l" archs="armv7hl" repos="base">
-        <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi-pxe">
-            <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
+        <flavor name="JeOS-for-AArch64">
+            <hdd filemask=".*JeOS-efi.*\.raw.xz$" folder="JeOS:JeOS-efi-pxe"/>
+            <hdd filemask=".*raspberrypi2.*\.raw.xz$" folder="JeOS:JeOS-raspberrypi2"/>
         </flavor>
     </batch>
     <batch name="microos-qcow" folder="appliances/aarch64" archs="aarch64" repos="base" distri="microos">

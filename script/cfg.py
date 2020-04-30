@@ -76,6 +76,27 @@ for flavor in {FLAVORLIST,}; do
     done
 done'''
 
+rsync_hdds = '''
+archs=(ARCHITECTURS)
+
+for flavor in {FLAVORLIST,}; do
+    for arch in "${archs[@]}"; do
+        while read src; do
+            folder=""
+            for i in "${!hdd_folder[@]}"; do
+                if [[ $src =~ $i ]]; then
+                    folder="${hdd_folder[$i]}"
+                    break
+                fi
+            done
+            [ -n "$folder" ] || continue
+            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/hdd/"
+            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src.sha256 /var/lib/openqa/factory/other/"
+            echo ""
+        done < <(grep ${arch} __envsub/files_iso.lst | sort)
+    done
+done'''
+
 rsync_repo1 = '''
 echo '# REPOOWNLIST'
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
@@ -230,6 +251,24 @@ def openqa_call_start_ex(checksum):
  elif [ -n "$destiso" ]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + '''\"
  fi
+'''
+
+openqa_call_start_hdds='''
+ i=1
+ while read src; do
+     folder=""
+     for mask in "${!hdd_folder[@]}"; do
+         if [[ $src =~ $mask ]]; then
+             folder="${hdd_folder[$mask]}"
+             break
+         fi
+     done
+     [ -n "$folder" ] || continue
+     n=$((i++))
+     echo " ASSET_$((n+255))=$src.sha256 \\\\"
+     echo " HDD_$n=$src \\\\"
+     echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+ done < <(grep ${arch} __envsub/files_iso.lst | sort)
 '''
 
 # if MIRROREPO is set - expressions for FLAVORASREPOORS will evaluate to false

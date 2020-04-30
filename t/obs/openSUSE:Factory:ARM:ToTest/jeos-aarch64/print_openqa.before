@@ -1,12 +1,15 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 \
+ ASSET_257=openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 \
  BUILD=20200115 \
  CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ CHECKSUM_HDD_2=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=JeOS-for-AArch64 \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2020.01.08-Snapshot20200115.raw.xz \
+ HDD_2=openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-aarch64-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-aarch64-Snapshot20200115 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \

@@ -143,6 +143,7 @@ class ActionBatch:
         self.flavor_aliases_flavor = []
         self.flavor_distri = defaultdict(list)
         self.hdds = []
+        self.hdd_folder = {}
         self.assets = []
         self.assets_flavor = ""
         self.assets_archs = ""
@@ -358,6 +359,10 @@ class ActionBatch:
                 self.hdds.append(t.attrib["filemask"])
                 if node.attrib.get("folder",""):
                     self.iso_folder[t.attrib["filemask"]] = node.attrib["folder"]
+                    if not t.attrib.get("folder",""):
+                        self.hdd_folder[t.attrib["filemask"]] = node.attrib["folder"]
+                if t.attrib.get("folder",""):
+                    self.hdd_folder[t.attrib["filemask"]] = t.attrib["folder"]
             if t.tag == "asset" and not self.asset_tags:
                 self.assets.append(t.attrib["filemask"])
                 if t.attrib.get("flavor"):
@@ -424,7 +429,7 @@ class ActionBatch:
                 if ' ' in self.archs:
                     self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, '| head -n 1', '', awkpartfrom, awkpartto)
                 else:
-                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, awkpartfrom, awkpartto)
+                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,self.hdd_folder.get(hdd,"")), "ISOMASK", hdd, awkpartfrom, awkpartto)
         if not self.isos:
             for asset in self.assets:
                 self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
@@ -517,6 +522,12 @@ class ActionBatch:
         for k, v in self.iso_folder.items():
             self.p("iso_folder[{}]='{}/'".format(k, v), f)
 
+    def gen_print_array_hdd_folder(self,f):
+        if len(self.hdd_folder) > 1 and not self.isos and len(self.flavors) == 1:
+            self.p('declare -A hdd_folder',f)
+            for k, v in self.hdd_folder.items():
+                self.p("hdd_folder[{}]='{}'".format(k, v), f)
+
     def gen_print_rsync_assets(self,f):
         self.p('''echo ""
 echo "# Syncing assets"
@@ -535,7 +546,13 @@ done < <(sort __envsub/files_asset.lst)''', f)
 
     def gen_print_rsync_iso(self,f):
         print(cfg.header, file=f)
-        if self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith('http')):
+        if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
+            self.gen_print_array_hdd_folder(f)
+            if self.archs == 'armv7hl':
+                self.p(cfg.rsync_hdds, f, 'grep ${arch}', 'grep ${arch//armv7hl/armv7l}')
+            else:
+                self.p(cfg.rsync_hdds, f)
+        elif self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith('http')):
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
@@ -598,6 +615,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
         print(cfg.header, file=f)
         self.gen_print_array_flavor_filter(f)
         self.gen_print_array_flavor_distri(f)
+        self.gen_print_array_hdd_folder(f)
         if self.assets and self.assets_flavor:
             self.p('declare -A asset_tags', f)
             for k, v in self.asset_tags.items():
@@ -615,7 +633,12 @@ done < <(sort __envsub/files_asset.lst)''', f)
             self.p(cfg.openqa_call_legacy_builds, f)
 
         i=0
-        if self.hdds or (self.assets and not self.isos):
+        if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
+            if self.archs == 'armv7hl':
+                self.p(cfg.openqa_call_start_hdds, f, 'grep ${arch}', 'grep ${arch//armv7hl/armv7l}')
+            else:
+                self.p(cfg.openqa_call_start_hdds, f)
+        elif self.hdds or (self.assets and not self.isos):
             if self.hdds and self.productpath().startswith('http'):
                 self.p(" echo \" HDD_URL_1=PRODUCTPATH/$destiso \\\\\"", f)
             else:
