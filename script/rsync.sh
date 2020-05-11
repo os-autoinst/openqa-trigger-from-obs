@@ -44,9 +44,11 @@ set +e
     fi
 
     if [[ "$environ" == *ToTest* ]]; then
-        [[ "$environ" == *Factory* ]] || builds="$(grep -h -o -E 'Build[0-9](\.|[0-9]+)*[0-9]+' $subfolder/*.lst 2>/dev/null)" || :
-        [[ "$environ" != *Factory* ]] || builds="$(grep -h -o -E '20[0-9]{6}' $subfolder/*.lst 2>/dev/null)" || :
-
+        if [[ "$environ" != *Factory* ]] && [[ "$environ" != *MicroOS* ]]; then
+            builds="$(grep -h -o -E 'Build[0-9](\.|[0-9]+)*[0-9]+' $subfolder/*.lst 2>/dev/null)" || :
+        else
+            builds="$(grep -h -o -E '20[0-9]{6}' $subfolder/*.lst 2>/dev/null)" || :
+        fi
 
         if [ -n "$builds" ] && [ $(echo "$builds" | sort | uniq | wc -l) -gt 1 ]; then
             >&2 echo "Conflicting builds found {$builds}, skipping {$subfolder}"
@@ -54,7 +56,10 @@ set +e
         fi
     fi
 
+    [ ! -f $subfolder/files_iso.lst ] || version=$(tail -n1 $subfolder/files_iso.lst | grep -h -o -E '[0-9](\.|[0-9]+)*[0-9a-f]+' | tail -n1)
     logdir=$subfolder/.run_$(date +%y%m%d_%H%M%S)
+    [ -z $version ] || logdir="$logdir"_"$version"
+
     mkdir $logdir
 
     [ ! -e "$subfolder/print_rsync_iso.sh" ] || bash -e "$subfolder/print_rsync_iso.sh" > $logdir/rsync_iso.cmd 2> >(tee $logdir/generate_rsync_iso.err)
