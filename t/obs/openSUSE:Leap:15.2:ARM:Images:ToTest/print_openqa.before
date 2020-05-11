@@ -11,6 +11,17 @@
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.2-ARM-JeOS-raspberrypi3.aarch64-2020.11.27-Build1.42.raw.xz.sha256 \
+ BUILD=1.42 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.2-ARM-JeOS-raspberrypi3.aarch64-2020.11.27-Build1.42.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=JeOS-for-RPi \
+ HDD_1=openSUSE-Leap-15.2-ARM-JeOS-raspberrypi3.aarch64-2020.11.27-Build1.42.raw.xz \
+ VERSION=15.2 \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=aarch64 \
  ASSET_1=Leap-15.2.aarch64-15.2-libvirt_aarch64-Build1.20.vagrant.libvirt.box \
  ASSET_LIBVIRT=Leap-15.2.aarch64-15.2-libvirt_aarch64-Build1.20.vagrant.libvirt.box \
  BUILD=1.20 \
