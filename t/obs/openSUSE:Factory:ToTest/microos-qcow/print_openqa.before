@@ -19,7 +19,7 @@
  REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-debuginfo \
  REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
  REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-source \
- REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*,yast2-http-server*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
@@ -45,7 +45,7 @@
  REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-debuginfo \
  REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
  REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-source \
- REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*,yast2-http-server*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
@@ -71,7 +71,7 @@
  REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-debuginfo \
  REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
  REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-source \
- REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*,yast2-http-server*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
