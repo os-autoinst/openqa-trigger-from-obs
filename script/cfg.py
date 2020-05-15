@@ -151,6 +151,7 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
 for arch in "${archs[@]}"; do
     while read src; do
         [ ! -z "$src" ] || continue
+        [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || break
         dest=''' + dest
 
 
@@ -371,6 +372,7 @@ openqa_call_repot2 = '''
 
 openqa_call_repot1_dest = lambda dest: '''
         while read src; do
+            [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || break
             dest=''' + dest + '''-$buildex
             repoKey=REPOKEY
             ''' + openqa_call_repot1_debugsource() + '''
