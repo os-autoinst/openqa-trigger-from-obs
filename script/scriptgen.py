@@ -421,7 +421,7 @@ class ActionBatch:
             if self.ag.productpath.startswith('http'):
                 self.p(cfg.read_files_curl, f, "ISOMASK", hdd)
             else:
-                awkpartfrom = ''' awk '{ $1=$2=$3=$4=""; print substr($0,5); }' |'''
+                awkpartfrom = '''| awk '{ $1=$2=$3=$4=""; print substr($0,5); }' '''
                 awkpartto = awkpartfrom
                 if not hdd.startswith('.*'):
                     awkpartto = ''
@@ -459,11 +459,12 @@ class ActionBatch:
             if any(repo.attrib.get(cfg.media3_name(),"") for repo in self.repos):
                 self.p(cfg.read_files_repo, f, "Media1", "Media3", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get(cfg.media3_name(),""), self.repos)]))
         for repodir in self.repodirs:
-            gen = repodir.attrib.get("gen", "");
+            gen = repodir.attrib.get("gen", "")
             if gen:
                 self.gen_repo(repodir, gen, f)
             else:
-                self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')) )
+                archs = repodir.attrib.get("archs", "ARCHORS")
+                self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), "ARCHORS", archs.replace(' ','|'))
 
         # let's sync media.1/media to be able verify build_id
         if 'ToTest' in self.ag.envdir:
@@ -481,7 +482,7 @@ class ActionBatch:
 
             if 'Leap' in self.ag.envdir:
                 for repodir in self.repodirs:
-                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*')))
+                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*') + repodir.get('archs','')))
             elif 'Factory' in self.ag.envdir:
                 for repodir in self.repodirs:
                     if not repodir.attrib.get('gen', ''):

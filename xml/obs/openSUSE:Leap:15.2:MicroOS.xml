@@ -1,16 +1,22 @@
 <openQA
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.2):MicroOS:ToTest"
-    distri="microos">
-    <flavor name="MicroOS-Image" folder="images/x86_64/openSUSE-MicroOS:kvm-and-xen" archs="x86_64">
-        <hdd filemask="openSUSE-MicroOS.*[0-9]-kvm-and-xen-Snapshot.*\.qcow2"/>
+    distri="microos"
+    dist_path="images/*"
+    archs="x86_64 aarch64">
+    <flavor name="MicroOS-Image" folder="openSUSE-MicroOS:kvm-and-xen">
+        <hdd filemask="openSUSE-MicroOS.*[0-9]-kvm-and-xen-Snapshot.*\.qcow2$"/>
     </flavor>
-    <flavor name="MicroOS-Image-ContainerHost" folder="images/x86_64/openSUSE-MicroOS:ContainerHost-kvm-and-xen" archs="x86_64">
-        <hdd filemask="openSUSE-MicroOS.*ContainerHost-kvm-and-xen-Snapshot.*\.qcow2"/>
+    <flavor name="MicroOS-Image-RT" folder="openSUSE-MicroOS:kvm-and-xen-rt">
+        <hdd filemask="openSUSE-MicroOS.*[0-9]-kvm-and-xen-rt-Snapshot.*\.qcow2$"/>
     </flavor>
-    <flavor name="DVD" folder="images/x86_64/000product:MicroOS-dvd*" iso="1">
-        <repos archs="x86_64">
-            <oss folder="images/x86_64/000product:MicroOS-ftp-ftp" mirror="1" dest="openSUSE-MicroOS-15.2-oss-i586-x86_64"/>
-	</repos>
+    <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen">
+        <hdd filemask="openSUSE-MicroOS.*ContainerHost-kvm-and-xen-Snapshot.*\.qcow2$"/>
+    </flavor>
+    <flavor name="DVD" folder="000product:MicroOS-dvd*" iso="1">
+        <repos>
+            <oss folder="000product:MicroOS-ftp-ftp" mirror="1" dest="openSUSE-MicroOS-15.2-oss-i586-x86_64" archs="x86_64"/>
+            <oss folder="000product:MicroOS-ftp-ftp" mirror="1" dest="openSUSE-MicroOS-15.2-oss-aarch64" archs="aarch64"/>
+        </repos>
     </flavor>
 </openQA>
 
