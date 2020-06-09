@@ -98,3 +98,7 @@ python3 script/scriptgen.pl Leap:15.2:ToTest
 ```
 bash script/rsync.sh Leap:15.2:ToTest
 ```
+
+## License
+
+This project is licensed under the MIT license, see LICENSE file for details.
