@@ -68,7 +68,7 @@ commit affects them in the future.
 t/obs/ProjectName/*.lst
 the same way they are created in read_files.sh
 5. Generate rsync and openqa commands based on these new *.lst files
-`make test_update_before_after`
+`make test_update_before_files`
 6. Run consistency test `make test`
 7. Review and test bash commands generated in, which will be executed in
    production:
