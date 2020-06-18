@@ -1,7 +1,7 @@
 # openqa-trigger-from-obs
 
 This project is aiming to simplify the integration between the Open
-Build Service (OBS) and openqa.opensuse.de (o3).
+Build Service (OBS) and openqa.opensuse.org (o3).
 
 ## Concepts
 
