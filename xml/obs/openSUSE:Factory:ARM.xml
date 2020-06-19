@@ -35,6 +35,9 @@
         </flavor>
     </batch>
     <batch name="microos-qcow" folder="appliances/aarch64" archs="aarch64" repos="base" distri="microos">
+        <flavor name="MicroOS-Image" folder="openSUSE-MicroOS:kvm-and-xen">
+            <hdd filemask=".*[0-9]-kvm-and-xen.*\.qcow2$"/>
+        </flavor>
         <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen">
             <hdd filemask=".*ContainerHost-kvm-and-xen.*\.qcow2$"/>
         </flavor>
