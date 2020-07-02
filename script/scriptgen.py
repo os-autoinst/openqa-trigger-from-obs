@@ -571,6 +571,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
     def gen_print_rsync_repo(self,f):
         print(cfg.header, file=f)
         if self.repos:
+            self.p(cfg.pre_rsync_repo(self.repos), f)
             self.p(cfg.rsync_repo1, f)
             for ren in self.renames:
                 self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
@@ -614,6 +615,8 @@ done < <(sort __envsub/files_asset.lst)''', f)
 
     def gen_print_openqa(self,f):
         print(cfg.header, file=f)
+        self.p(cfg.pre_openqa_call_start(self.repos), f)
+
         self.gen_print_array_flavor_filter(f)
         self.gen_print_array_flavor_distri(f)
         self.gen_print_array_hdd_folder(f)
@@ -693,7 +696,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
         if self.repos or self.repolink:
             if self.ag.brand == 'ibs':
                 self.p(" i=9", f) # temporary to simplify diff with old rsync scripts, may be removed later
-            self.p(cfg.openqa_call_repot(self.build_id_from_iso), f, "REPOTYPE", "''", "REPOPREFIX", "SLE_")
+            self.p(cfg.openqa_call_repot(self.build_id_from_iso, self.repos), f, "REPOTYPE", "''", "REPOPREFIX", "SLE_")
 
         repodirs = self.repodirs
         if not repodirs and self.repolink:

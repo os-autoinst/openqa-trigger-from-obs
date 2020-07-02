@@ -97,6 +97,9 @@ for flavor in {FLAVORLIST,}; do
     done
 done'''
 
+def pre_rsync_repo(repos):
+    return ''
+
 rsync_repo1 = '''
 echo '# REPOOWNLIST'
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
@@ -189,6 +192,9 @@ def openqa_call_start_meta_variables(meta_variables):
 
     return '''VERSION=$version \\\\
  ''' + meta_variables + '\"'
+
+def pre_openqa_call_start(repos):
+    return ''
 
 openqa_call_start = lambda version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor: '''
 archs=(ARCHITECTURS)
@@ -317,7 +323,10 @@ def openqa_call_build_id_from_iso2(build_id_from_iso):
     return '''[ "$repoKey" != LIVE_PATCHING ] || repoKey=LIVE
                 [[ $repoDest != *Media1* ]] || [[ $repo =~ license ]] || [ -z "$build2" ] || echo " BUILD_$repoKey=$build2 \\\\"'''
 
-openqa_call_repot = lambda build_id_from_iso: '''
+def openqa_call_extra(repos):
+    return ''
+
+openqa_call_repot = lambda build_id_from_iso, repos: '''
         for repot in {REPOLIST,}; do
             while read repo; do
                 ''' + openqa_call_repot_part1() + '''
@@ -332,6 +341,7 @@ openqa_call_repot = lambda build_id_from_iso: '''
                 ''' + openqa_call_repot_part3() + '''
                 ''' + openqa_call_build_id_from_iso2(build_id_from_iso) + '''
                 [[ $repo =~ license ]] || echo " REPO_REPOPREFIX$repoKey=$repoDest \\\\"
+                ''' + openqa_call_extra(repos) + '''
                 : $((i++))
             done < <(grep $repot-POOL __envsub/files_repo.lst | grep REPOTYPE | grep $arch | sort)
         done'''
