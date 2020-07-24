@@ -220,6 +220,8 @@ class ActionBatch:
         s=s.replace('__envdir', self.ag.envdir)
         if self.ag.version.startswith("15.") and self.ag.staging() == 'Core':
             s=s.replace('VERSIONVALUE', self.ag.version + ":Core")
+        elif self.ag.version.startswith("15.") and 'Jump' in self.ag.envdir:
+            s=s.replace('VERSIONVALUE', "Jump:" + self.ag.version)
         elif self.subfolder and self.subfolder != 'default' and not self.ag.version:
             s=s.replace('VERSIONVALUE', self.subfolder.lstrip('Leap_'))
         elif self.ag.staging() and self.ag.version == 'Factory':
@@ -480,7 +482,7 @@ class ActionBatch:
                 wild = '*$arch*'
                 done = 'done'
 
-            if 'Leap' in self.ag.envdir:
+            if 'Leap' in self.ag.envdir or 'Jump' in self.ag.envdir:
                 for repodir in self.repodirs:
                     self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*') + repodir.get('archs','')))
             elif 'Factory' in self.ag.envdir:
