@@ -1,0 +1,4 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:ToTest/images/local/*product*/*openSUSE-Jump-15.2-NET-x86_64-Build20.1-Media.iso /var/lib/openqa/factory/iso/openSUSE-Jump-15.2-NET-x86_64-Build20.1-Media.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:ToTest/images/local/*product*/*openSUSE-Jump-15.2-NET-x86_64-Build20.1-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Jump-15.2-NET-x86_64-Build20.1-Media.iso.sha256
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:ToTest/images/local/*product*/*openSUSE-Jump-15.2-DVD-x86_64-Build20.1-Media.iso /var/lib/openqa/factory/iso/openSUSE-Jump-15.2-DVD-x86_64-Build20.1-Media.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:ToTest/images/local/*product*/*openSUSE-Jump-15.2-DVD-x86_64-Build20.1-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Jump-15.2-DVD-x86_64-Build20.1-Media.iso.sha256

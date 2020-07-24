@@ -1,0 +1,12 @@
+<openQA
+    project_pattern="openSUSE:Jump:(?P&lt;version&gt;15.2):ToTest"
+    dist_path="images/local"
+    archs="x86_64">
+    <flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
+        <repos>
+            <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Jump-15.2-oss-i586-x86_64"/>
+            <non-oss folder="openSUSE-Addon-NonOss-ftp-ftp"  dest="openSUSE-Jump-15.2-non-oss-i586-x86_64"/>
+        </repos>
+    </flavor>
+    <news iso="DVD"/>
+</openQA>
