@@ -4,13 +4,13 @@
     dist_path="images/*"
     archs="x86_64 aarch64">
     <flavor name="MicroOS-Image" folder="openSUSE-MicroOS:kvm-and-xen">
-        <hdd filemask="openSUSE-MicroOS.*[0-9]-kvm-and-xen-Snapshot.*\.qcow2$"/>
+        <hdd filemask="openSUSE-MicroOS.*[0-9]-kvm-and-xen-Build.*\.qcow2$"/>
     </flavor>
     <flavor name="MicroOS-Image-RT" folder="openSUSE-MicroOS:kvm-and-xen-rt">
-        <hdd filemask="openSUSE-MicroOS.*[0-9]-kvm-and-xen-rt-Snapshot.*\.qcow2$"/>
+        <hdd filemask="openSUSE-MicroOS.*[0-9]-kvm-and-xen-rt-Build.*\.qcow2$"/>
     </flavor>
     <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen">
-        <hdd filemask="openSUSE-MicroOS.*ContainerHost-kvm-and-xen-Snapshot.*\.qcow2$"/>
+        <hdd filemask="openSUSE-MicroOS.*ContainerHost-kvm-and-xen-Build.*\.qcow2$"/>
     </flavor>
     <flavor name="DVD" folder="000product:MicroOS-dvd*" iso="1">
         <repos>
