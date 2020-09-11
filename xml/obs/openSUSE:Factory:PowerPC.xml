@@ -9,4 +9,7 @@
         </flavor>
         <news iso="Tumbleweed-DVD" archs="ppc64le"/>
     </batch>
+    <batch name="microos" folder="images/local/*product*" archs="ppc64le" repos="base" distri="microos">
+        <flavor name="MicroOS-DVD|Kubic-DVD" iso="1" news="ppc64le"/>
+    </batch>
 </openQA>
