@@ -94,3 +94,4 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse-ppc64le/Tumbleweed --snapshot 20200115 /var/lib/openqa/factory/iso/openSUSE-Tumbleweed-DVD-ppc64le-Snapshot20200115-Media.iso

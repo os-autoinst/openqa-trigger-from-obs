@@ -1,0 +1,24 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=ppc64le \
+ ASSET_256=openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=microos \
+ FLAVOR=DVD \
+ ISO=openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=ppc64le \
+ ASSET_256=openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 \
+ BUILD=20200115 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=microos \
+ FLAVOR=Kubic-DVD \
+ ISO=openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/microos-ppc64le/Tumbleweed --snapshot 20200115 /var/lib/openqa/factory/iso/openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/kubic-ppc64le/Tumbleweed --snapshot 20200115 /var/lib/openqa/factory/iso/openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso
