@@ -14,5 +14,5 @@ rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:Imag
 rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:Images:ToTest/images/*/livecd-leap-x11/*openSUSE-Jump-15.2.1-Rescue-CD-x86_64-Build2.1-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Jump-15.2.1-Rescue-CD-x86_64-Build2.1-Media.iso.sha256
 
 # Syncing assets
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:Images:ToTest/images/*/*vagrant*libvirt*/Leap-15.2.aarch64-15.2-libvirt_aarch64-Build2.1.vagrant.libvirt.box /var/lib/openqa/factory/other/
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:Images:ToTest/images/*/*vagrant*libvirt*/Leap-15.2.x86_64-15.2-libvirt-Build2.1.vagrant.libvirt.box /var/lib/openqa/factory/other/
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:Images:ToTest/images/aarch64*/*vagrant*libvirt*/Leap-15.2.aarch64-15.2-libvirt_aarch64-Build2.1.vagrant.libvirt.box /var/lib/openqa/factory/other/
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Jump:15.2:Images:ToTest/images/x86_64*/*vagrant*libvirt*/Leap-15.2.x86_64-15.2-libvirt-Build2.1.vagrant.libvirt.box /var/lib/openqa/factory/other/

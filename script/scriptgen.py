@@ -537,15 +537,20 @@ echo "# Syncing assets"
 declare -A asset_folders''', f)
         for k, v in self.asset_folders.items():
             self.p("asset_folders[{}]='{}'".format(k, v), f)
-        self.p('''while read src; do
+        self.p('''
+for arch in "${archs[@]}"; do
+  while read src; do
     folder=""
     for mask in "${!asset_folders[@]}"; do
         [[ $src =~ $mask ]] || continue
         folder=${asset_folders[$mask]}
         break
     done
+    [[ $folder =~ $arch ]] || [[ PRODUCTPATH =~ $arch ]] || [[ $folder =~ appliances ]] || folder=$arch$folder
     echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/$src /var/lib/openqa/factory/other/"
-done < <(sort __envsub/files_asset.lst)''', f)
+  done < <(grep $arch __envsub/files_asset.lst | sort)
+done
+''', f)
 
     def gen_print_rsync_iso(self,f):
         print(cfg.header, file=f)
