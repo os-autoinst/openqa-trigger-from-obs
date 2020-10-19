@@ -432,7 +432,7 @@ class ActionBatch:
                     self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, '| head -n 1', '', awkpartfrom, awkpartto)
                 else:
                     self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,self.hdd_folder.get(hdd,"")), "ISOMASK", hdd, awkpartfrom, awkpartto)
-        if not self.isos:
+        if not self.isos and not self.hdds:
             for asset in self.assets:
                 self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
         if self.iso_5:
@@ -503,7 +503,7 @@ class ActionBatch:
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
             self.p("flavor_filter[{}]='{}'".format(fl, h), f)
-        if not self.isos:
+        if not self.isos and not self.hdds:
             for fl, h in zip(self.flavors, self.assets):
                 self.p("flavor_filter[{}]='{}'".format(fl, h), f)
         for fl, alias_list in self.flavor_aliases.items():
@@ -566,7 +566,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
             self.gen_print_array_flavor_filter(f)
             self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
 
-        if self.assets and self.isos:
+        if self.assets and ( self.isos or self.hdds ):
             self.gen_print_rsync_assets(f)
 
 
