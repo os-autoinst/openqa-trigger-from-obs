@@ -253,7 +253,7 @@ def openqa_call_start_ex1(checksum, tag):
 def openqa_call_start_ex(checksum):
     return ''' if [[ $destiso =~ \.iso$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
- elif [[ $destiso =~ \.(hdd|qcow2|raw\.xz|raw\.gz|vhdx\.xz)$ ]]; then
+ elif [[ $destiso =~ \.(hdd|qcow2|raw\.xz|raw\.gz|vhdx\.xz|vmdk\.xz)$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + '''\"
  elif [ -n "$destiso" ]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + '''\"
