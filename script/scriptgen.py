@@ -572,6 +572,8 @@ done < <(sort __envsub/files_asset.lst)''', f)
 
     def gen_print_rsync_repo(self,f):
         print(cfg.header, file=f)
+        if self.ag.version:
+            print("version=" + self.ag.version, file=f)
         if self.repos:
             self.p(cfg.pre_rsync_repo(self.repos), f)
             self.p(cfg.rsync_repo1, f)
