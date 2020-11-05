@@ -111,6 +111,8 @@ class ActionGenerator:
             batch.distri = node.attrib["distri"]
         if node.attrib.get("checksum","") == "0":
             batch.checksum = 0
+        if node.attrib.get("openqa_post","") == "0":
+            batch.openqa_post = 0
         if node.attrib.get("variable",""):
             batch.variable = node.attrib["variable"]
         if node.tag != 'openQA':
@@ -165,6 +167,7 @@ class ActionBatch:
         self.folder = ""
         self.legacy_builds = 0
         self.checksum = 1
+        self.openqa_post = 1
         self.variable = ""
         self.meta_variables = "_OBSOLETE=1"
         if self.ag.brand != 'obs' and not self.ag.staging():
@@ -308,6 +311,8 @@ class ActionBatch:
             self.distri = node.attrib["distri"]
         if node.attrib.get("legacy_builds",""):
             self.legacy_builds = node.attrib["legacy_builds"]
+        if node.attrib.get("openqa_post",""):
+            self.openqa_post = node.attrib["openqa_post"]
 
 
         for t in node.findall(".//repos"):
@@ -401,7 +406,7 @@ class ActionBatch:
                 self.gen_print_rsync_iso(f)
             elif fname == "print_rsync_repo.sh":
                 self.gen_print_rsync_repo(f)
-            elif fname == "print_openqa.sh":
+            elif fname == "print_openqa.sh" and self.openqa_post:
                 self.gen_print_openqa(f)
 
     def gen_repo(self, repodir, gen, f):
