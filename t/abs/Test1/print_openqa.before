@@ -1,0 +1,11 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ ASSET_256=my-iso.x86_64-1.1.1-Build1.111.iso.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/my-iso.x86_64-1.1.1-Build1.111.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=FLAVOR \
+ ISO=my-iso.x86_64-1.1.1-Build1.111.iso \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+

@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/Test1/test1/*my-iso.x86_64-1.1.1-Build1.111.iso /var/lib/openqa/factory/iso/my-iso.x86_64-1.1.1-Build1.111.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/Test1/test1/*my-iso.x86_64-1.1.1-Build1.111.iso.sha256 /var/lib/openqa/factory/other/my-iso.x86_64-1.1.1-Build1.111.iso.sha256

@@ -291,12 +291,17 @@ class ActionBatch:
 
         if node.attrib.get("iso","") and node.attrib.get("name",""):
             for iso in node.attrib["name"].split("|"):
-                self.isos.append(iso)
                 if node.attrib.get("folder",""):
                     # self.iso_path = node.attrib["folder"]
                     self.iso_folder[iso] = node.attrib["folder"]
-                if node.attrib["iso"] == "extract_as_repo":
+                iso_attrib = node.attrib["iso"]
+                if iso_attrib == "extract_as_repo":
                     self.iso_extract_as_repo[iso] = 1
+                elif iso_attrib != "1":
+                    if node.attrib.get("extract_as_repo",""):
+                        self.iso_extract_as_repo[iso] = 1
+                    iso = iso_attrib
+                self.isos.append(iso)
 
         if node.attrib.get("name","") and node.attrib.get("folder",""):
             self.iso_folder[node.attrib["name"]] = node.attrib["folder"]
@@ -498,14 +503,23 @@ class ActionBatch:
                 self.p('''rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst'''.format(v, k), f)
 
     def gen_print_array_flavor_filter(self,f):
+        added_declare_flavor_filter = 0
         if self.hdds or self.assets or self.flavor_aliases:
             self.p('declare -A flavor_filter',f)
+            added_declare_flavor_filter = 1
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
             self.p("flavor_filter[{}]='{}'".format(fl, h), f)
         if not self.isos and not self.hdds:
             for fl, h in zip(self.flavors, self.assets):
                 self.p("flavor_filter[{}]='{}'".format(fl, h), f)
+        if not self.assets and not self.hdds:
+            for fl, iso in zip(self.flavors, self.isos):
+                if iso != "1" and iso != "0" and iso != "extract_as_repo":
+                    if not added_declare_flavor_filter:
+                        self.p('declare -A flavor_filter',f)
+                        added_declare_flavor_filter = 1
+                    self.p("flavor_filter[{}]='{}'".format(fl, iso), f)
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
