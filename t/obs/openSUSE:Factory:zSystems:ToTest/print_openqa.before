@@ -7,18 +7,18 @@
  FLAVOR=DVD \
  FULLURL=1 \
  ISO=openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-s390x-Snapshot20200115 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-s390x-Snapshot20200115 \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Tumbleweed-oss-s390x-Snapshot20200115 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Tumbleweed-oss-s390x-Snapshot20200115 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=openSUSE-Tumbleweed-oss-s390x-Snapshot20200115 \
- REPO_1=openSUSE-Tumbleweed-oss-s390x-Snapshot20200115-debuginfo \
- REPO_2=openSUSE-Tumbleweed-oss-s390x-Snapshot20200115-source \
- REPO_OSS=openSUSE-Tumbleweed-oss-s390x-Snapshot20200115 \
- REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-s390x-Snapshot20200115-debuginfo \
+ REPO_0=Tumbleweed-oss-s390x-Snapshot20200115 \
+ REPO_1=Tumbleweed-oss-s390x-Snapshot20200115-debuginfo \
+ REPO_2=Tumbleweed-oss-s390x-Snapshot20200115-source \
+ REPO_OSS=Tumbleweed-oss-s390x-Snapshot20200115 \
+ REPO_OSS_DEBUGINFO=Tumbleweed-oss-s390x-Snapshot20200115-debuginfo \
  REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
- REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-s390x-Snapshot20200115-source \
+ REPO_OSS_SOURCE=Tumbleweed-oss-s390x-Snapshot20200115-source \
  REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-s390x-Snapshot20200115 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Tumbleweed-oss-s390x-Snapshot20200115 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
