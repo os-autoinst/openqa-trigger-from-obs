@@ -52,6 +52,14 @@ def rsync_commands(checksum):
         echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
     return res
 
+def rsync_iso_rename_suse_microos(version):
+    if '5.0' in version:
+        return '''dest=${dest/DVD/POOL}
+                  dest=${dest/Media/Media1}
+                  dest=${dest/MicroOS-5.0/5.0-MicroOS}'''
+    else:
+        return ''
+
 rsync_iso = lambda version, archs, staging, checksum : '''
 archs=(ARCHITECTURS)
 
@@ -65,6 +73,7 @@ for flavor in {FLAVORLIST,}; do
         dest=$src
         ''' + rsync_iso_staging(version, staging) + '''
         asset_folder=hdd
+        ''' + rsync_iso_rename_suse_microos(version) + ''' 
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.appx$  ]] || asset_folder=other
         ''' + rsync_commands(checksum) + '''
