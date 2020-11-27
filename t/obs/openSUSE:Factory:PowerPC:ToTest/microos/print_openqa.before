@@ -1,24 +1,50 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=ppc64le \
- ASSET_256=openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 \
- BUILD=20200115 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=openSUSE-MicroOS-DVD-ppc64le-Snapshot20201126-Media.iso.sha256 \
+ BUILD=20201126 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS-DVD-ppc64le-Snapshot20201126-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=microos \
  FLAVOR=DVD \
- ISO=openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso \
+ FULLURL=1 \
+ ISO=openSUSE-MicroOS-DVD-ppc64le-Snapshot20201126-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ REPO_1=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-debuginfo \
+ REPO_2=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-source \
+ REPO_OSS=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=ppc64le \
- ASSET_256=openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 \
- BUILD=20200115 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=openSUSE-Kubic-DVD-ppc64le-Snapshot20201126-Media.iso.sha256 \
+ BUILD=20201126 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Kubic-DVD-ppc64le-Snapshot20201126-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=microos \
  FLAVOR=Kubic-DVD \
- ISO=openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso \
+ FULLURL=1 \
+ ISO=openSUSE-Kubic-DVD-ppc64le-Snapshot20201126-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ REPO_1=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-debuginfo \
+ REPO_2=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-source \
+ REPO_OSS=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
+ REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20201126 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/microos-ppc64le/Tumbleweed --snapshot 20200115 /var/lib/openqa/factory/iso/openSUSE-MicroOS-DVD-ppc64le-Snapshot20200115-Media.iso
-/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/kubic-ppc64le/Tumbleweed --snapshot 20200115 /var/lib/openqa/factory/iso/openSUSE-Kubic-DVD-ppc64le-Snapshot20200115-Media.iso
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/microos-ppc64le/Tumbleweed --snapshot 20201126 /var/lib/openqa/factory/iso/openSUSE-MicroOS-DVD-ppc64le-Snapshot20201126-Media.iso
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/kubic-ppc64le/Tumbleweed --snapshot 20201126 /var/lib/openqa/factory/iso/openSUSE-Kubic-DVD-ppc64le-Snapshot20201126-Media.iso
