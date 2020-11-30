@@ -301,6 +301,7 @@ class ActionBatch:
                     if node.attrib.get("extract_as_repo",""):
                         self.iso_extract_as_repo[iso] = 1
                     iso = iso_attrib
+                    self.iso_extract_as_repo[iso_attrib] = 1
                 self.isos.append(iso)
 
         if node.attrib.get("name","") and node.attrib.get("folder",""):
