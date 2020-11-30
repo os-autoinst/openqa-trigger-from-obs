@@ -105,6 +105,7 @@ echo '# REPOOWNLIST'
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ ! -f __envsub/files_iso.lst ] || test -n "$buildid" || buildid=$(cat __envsub/files_iso.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ -z "__STAGING" ] || buildid=${buildid//Build/Build__STAGING.}
+[ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
 for repo in {REPOOWNLIST,}; do
     while read src; do
@@ -122,7 +123,7 @@ rsync_repo2 = '''
         [ -z "__STAGING" ] || repoCur=$destPrefix-__STAGING-CURRENT$destSuffix
         echo "rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/$repoCur"
         echo "rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
-    done < <(grep $repo-POOL __envsub/files_repo.lst)
+    done < <(grep $repo$additional_repo_suffix __envsub/files_repo.lst)
 done
 '''
 
@@ -199,6 +200,7 @@ def pre_openqa_call_start(repos):
 
 openqa_call_start = lambda version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor: '''
 archs=(ARCHITECTURS)
+[ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
 for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
@@ -344,7 +346,7 @@ openqa_call_repot = lambda build_id_from_iso, repos: '''
                 [[ $repo =~ license ]] || echo " REPO_REPOPREFIX$repoKey=$repoDest \\\\"
                 ''' + openqa_call_extra(repos) + '''
                 : $((i++))
-            done < <(grep $repot-POOL __envsub/files_repo.lst | grep REPOTYPE | grep $arch | sort)
+            done < <(grep $repot$additional_repo_suffix __envsub/files_repo.lst | grep REPOTYPE | grep $arch | sort)
         done'''
 
 def openqa_call_repot1_debugsource():

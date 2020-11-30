@@ -656,6 +656,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
             self.p(cfg.openqa_call_legacy_builds, f)
 
         i=0
+        isos = self.isos.copy()
         if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
             if self.archs == 'armv7hl':
                 self.p(cfg.openqa_call_start_hdds, f, 'grep ${arch}', 'grep ${arch//armv7hl/armv7l}')
@@ -673,26 +674,26 @@ done < <(sort __envsub/files_asset.lst)''', f)
                 self.p(cfg.openqa_call_start_iso(self.checksum), f, "ISO", "ISO_5")
             else:
                 self.p(cfg.openqa_call_start_iso(self.checksum), f)
-
-            isos = self.isos.copy()
             if not isos and self.iso_5:
                 isos = [self.iso_5]
-            for iso in isos:
-                if self.iso_extract_as_repo.get(iso,0) or self.iso_5:
-                    destiso = "${destiso%.iso}"
-                    i += 1
-                    s = ""
-                    if not self.fixed_iso:
-                        self.p(cfg.openqa_call_repo0(), f, "REPO0_ISO", destiso, f)
-                        s = cfg.openqa_call_repo0a + cfg.openqa_call_repo0b
-                    else:
-                        s = cfg.openqa_call_repo0b
-                        destiso = self.fixed_iso[:-4]
-                    self.p(s, f, "REPO0_ISO", destiso)
-                    if self.iso_5:
-                        pref = self.iso_5.replace("-","_").rstrip('_DVD')
-                        self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
-                    break # for now only REPO_0
+
+        for iso in isos:
+            if self.iso_extract_as_repo.get(iso,0) or self.iso_5:
+                destiso = "${destiso%.iso}"
+                i += 1
+                s = ""
+                if not self.fixed_iso:
+                    self.p(cfg.openqa_call_repo0(), f, "REPO0_ISO", destiso, f)
+                    s = cfg.openqa_call_repo0a + cfg.openqa_call_repo0b
+                else:
+                    s = cfg.openqa_call_repo0b
+                    destiso = self.fixed_iso[:-4]
+                self.p(s, f, "REPO0_ISO", destiso)
+                if self.iso_5:
+                    pref = self.iso_5.replace("-","_").rstrip('_DVD')
+                    self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
+                break # for now only REPO_0
+
         arch_expression = ''
         if self.assets_archs:
             arch_expression = '|| [ "$arch" != ' + self.assets_archs + ' ]'

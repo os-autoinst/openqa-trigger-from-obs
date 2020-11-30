@@ -1,0 +1,8 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestExtractAsRepo1/test/*my-Test.x86_64-1.1.1-Build1.111.raw.xz /var/lib/openqa/factory/hdd/my-Test.x86_64-1.1.1-Build1.111.raw.xz
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestExtractAsRepo1/test/*my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestExtractAsRepo1/test/*my-DVD.x86_64-1.1.1-Build1.111.iso /var/lib/openqa/factory/iso/my-DVD.x86_64-1.1.1-Build1.111.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestExtractAsRepo1/test/*my-DVD.x86_64-1.1.1-Build1.111.iso.sha256 /var/lib/openqa/factory/other/my-DVD.x86_64-1.1.1-Build1.111.iso.sha256
+[ -d /var/lib/openqa/factory/repo/my-DVD.x86_64-1.1.1-Build1.111 ] || {
+    mkdir /var/lib/openqa/factory/repo/my-DVD.x86_64-1.1.1-Build1.111
+    bsdtar xf /var/lib/openqa/factory/iso/my-DVD.x86_64-1.1.1-Build1.111.iso -C /var/lib/openqa/factory/repo/my-DVD.x86_64-1.1.1-Build1.111
+}
