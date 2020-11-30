@@ -573,12 +573,12 @@ done < <(sort __envsub/files_asset.lst)''', f)
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
-                self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
             else:
-                self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
+                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
         elif self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(cfg.rsync_iso(self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
+            self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
 
         if self.assets and ( self.isos or self.hdds ):
             self.gen_print_rsync_assets(f)

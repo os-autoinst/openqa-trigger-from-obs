@@ -35,7 +35,7 @@ read_files_repo_link2 = '''cp __envdir/REPOLINK/files_iso_buildid.lst __envsub/
 read_files_repo_link3 = '''cp __envdir/REPOLINK/files_iso*.lst __envsub/
 '''
 
-def rsync_iso_staging(version, staging):
+def rsync_fix_dest(distri, version, staging):
     if not staging: return ''
     if version != 'Factory' and len(staging) == 1: return '''dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
     return '''dest=${dest//$flavor/Staging:__STAGING-$flavor}'''
@@ -52,7 +52,7 @@ def rsync_commands(checksum):
         echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
     return res
 
-rsync_iso = lambda version, archs, staging, checksum : '''
+rsync_iso = lambda distri, version, archs, staging, checksum : '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -63,7 +63,7 @@ for flavor in {FLAVORLIST,}; do
         ''' + rsync_iso_fix_src(archs) + '''
         [ ! -z "$src" ] || continue
         dest=$src
-        ''' + rsync_iso_staging(version, staging) + '''
+        ''' + rsync_fix_dest(distri, version, staging) + '''
         asset_folder=hdd
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.appx$  ]] || asset_folder=other
