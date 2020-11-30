@@ -1,0 +1,28 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ ASSET_256=my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=HDD \
+ HDD_1=my-Test.x86_64-1.1.1-Build1.111.raw.xz \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ ASSET_256=my-DVD.x86_64-1.1.1-Build1.111.iso.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/my-DVD.x86_64-1.1.1-Build1.111.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=DVD \
+ FULLURL=1 \
+ ISO=my-DVD.x86_64-1.1.1-Build1.111.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/my-DVD.x86_64-1.1.1-Build1.111 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/my-DVD.x86_64-1.1.1-Build1.111 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=my-DVD.x86_64-1.1.1-Build1.111 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/my-DVD.x86_64-1.1.1-Build1.111 \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
