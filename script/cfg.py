@@ -52,6 +52,9 @@ def rsync_commands(checksum):
         echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
     return res
 
+def rsync_iso_fix_dest(distri, version):
+    return ''
+
 rsync_iso = lambda version, archs, staging, checksum : '''
 archs=(ARCHITECTURS)
 
@@ -68,6 +71,7 @@ for flavor in {FLAVORLIST,}; do
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.appx$  ]] || asset_folder=other
         ''' + rsync_commands(checksum) + '''
+        ''' + rsync_iso_fix_dest(distri, version) + '''
 
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/${dest%.iso} ] || {
     mkdir /var/lib/openqa/factory/repo/${dest%.iso}
@@ -162,7 +166,7 @@ for arch in "${archs[@]}"; do
 def openqa_call_start_staging(version, staging):
     if not staging:
         return ''
-    if (version == 'Factory' or len(staging)>1): 
+    if (version == 'Factory' or len(staging)>1):
         return '''destiso=${iso//$flavor/Staging:__STAGING-$flavor}
         flavor=Staging-$flavor'''
     return '''version=${version}:S:__STAGING
