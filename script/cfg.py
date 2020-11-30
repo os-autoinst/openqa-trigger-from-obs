@@ -160,7 +160,7 @@ for arch in "${archs[@]}"; do
         dest=''' + dest
 
 
-def openqa_call_start_staging(version, staging):
+def openqa_call_fix_destiso(distri, version, staging):
     if not staging:
         return ''
     if (version == 'Factory' or len(staging)>1): 
@@ -198,7 +198,7 @@ def openqa_call_start_meta_variables(meta_variables):
 def pre_openqa_call_start(repos):
     return ''
 
-openqa_call_start = lambda version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor: '''
+openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor: '''
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
@@ -222,7 +222,7 @@ for flavor in {FLAVORALIASLIST,}; do
         destiso=$iso
         version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build
-        ''' + openqa_call_start_staging(version, staging) + '''
+        ''' + openqa_call_fix_destiso(distri, version, staging) + '''
         [ "$arch" != . ] || arch=x86_64
         ''' + openqa_call_news(news, news_archs) + '''
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
