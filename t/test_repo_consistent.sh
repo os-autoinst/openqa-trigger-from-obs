@@ -3,6 +3,13 @@ scriptdir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 errs=0
 
+repos_from_batches() (
+    for d in $@; do
+        test -f $d || continue
+        bash $d | grep -E 'REPO_[0-9]+='
+    done
+)
+
 for dir in "$@" ; do
 	# check if functions are implemented
 	[ -e "$dir"/print_rsync_repo.sh ] || continue
@@ -20,16 +27,21 @@ for dir in "$@" ; do
 
 	# this must capture all destination file filenames
 	known_destination_repos="$(bash $dir/print_rsync_repo.sh | grep -oE '[^/]+(-Media.?(.license)?/?|-(Snapshot|Build)[0-9]+(.[0-9]+)?)(-debuginfo|-source)?$')"  || :
-    [ -n "$known_destination_repos" ] || [ -z  "$repos_from_iso" ] || { >&2 echo 'print_openqa.sh must have {REPO_0='$(echo "$repos_from_iso"| head -n 1)'}'; : $((++errs)); continue; }
-    [ -n "$known_destination_repos" ] || { >&2 echo "Cannot parse destination REPOs - is print_rsync_repo.sh correct?"; : $((++errs)); continue; }
+    [ -n "$known_destination_repos" ] || [ -n "$repos_from_iso" ] || { >&2 echo "Cannot parse destination REPOs - is print_rsync_repo.sh correct?"; : $((++errs)); continue; }
 
 	# remove trailing /
-	known_destination_repos=$(echo "$known_destination_repos" | grep -o '.*[^/]')
+	known_destination_repos=$(echo "$known_destination_repos" | grep -o '.*[^/]') || :
 
 	regex='REPO_[0-9]+=([^[:space:]]+)'
 	checked=0
 
-    isos_post_repos="$(bash $dir/print_openqa.sh | grep REPO_ )"
+    isos_post_repos="$(repos_from_batches $dir/print_openqa.sh | sort | uniq)"
+    [ -n "$isos_post_repos" ] || [ -z  "$repos_from_iso" ] || { >&2 echo 'print_openqa.sh must have {REPO_0='$(echo "$repos_from_iso"| head -n 1)'}'; : $((++errs)); continue; }
+
+    if [ base == $(basename $dir) ] ; then
+        # repos of 'base' batch may be referenced from other batches as well
+        isos_post_repos_other_batches="$(repos_from_batches $dir/../*/print_openqa.sh | sort | uniq)"
+    fi
 
 	while read -r line; do
 	    if [[ "$line" =~ $regex ]]; then
@@ -40,13 +52,15 @@ for dir in "$@" ; do
                 [[ "$problem_repo" =~ GM-DVD1 ]] || \
                 echo "$repos_from_iso" | grep -q "$line" || \
                 ( [[ $dir =~ Update.*RT ]] && [[ ! "$problem_repo" =~ RT  ]] ) || \
-                { >&2 echo "Destination REPO file wasnt found in print_rsync_repo output {$problem_repo}   {$known_destination_repos}"; : $((++errs)); continue 2; }
+                { >&2 echo "Referenced REPO file wasnt found in print_rsync_repo output {$problem_repo}   {$known_destination_repos}"; : $((++errs)); continue 2; }
             fi
             checked=1
 	    fi
 	done < <(echo "$isos_post_repos" | grep -v 'REPO_5=' | grep -v PACKAGES )
 
 	[ "$checked" == 1 ] || { >&2 echo "No REPO found in openqa request - is something wrong?";  : $((++errs)); continue; }
+
+    [ -z "$isos_post_repos_other_batches" ] || isos_post_repos="$isos_post_repos_other_batches"
 
     for created_repo in $repos_from_iso $known_destination_repos; do
         [[ ! $created_repo =~ CURRENT ]] || continue
