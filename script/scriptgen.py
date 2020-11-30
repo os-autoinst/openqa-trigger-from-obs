@@ -647,9 +647,9 @@ done < <(sort __envsub/files_asset.lst)''', f)
         if not self.flavors and not self.flavor_aliases:
             return
         if self.mask:
-            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(cfg.openqa_call_start(self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f)
+            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f)
         if self.repolink and not self.iso_5:
             self.p(cfg.openqa_call_legacy_builds_link, f)
         if self.legacy_builds or (self.repolink and not self.iso_5):
