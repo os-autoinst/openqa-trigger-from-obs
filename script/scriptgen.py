@@ -111,6 +111,8 @@ class ActionGenerator:
             batch.distri = node.attrib["distri"]
         if node.attrib.get("checksum","") == "0":
             batch.checksum = 0
+        if node.attrib.get("repo0folder",""):
+            batch.repo0folder = node.attrib["repo0folder"]
         if node.attrib.get("variable",""):
             batch.variable = node.attrib["variable"]
         if node.tag != 'openQA':
@@ -165,6 +167,7 @@ class ActionBatch:
         self.folder = ""
         self.legacy_builds = 0
         self.checksum = 1
+        self.repo0folder = ""
         self.variable = ""
         self.meta_variables = "_OBSOLETE=1"
         if self.ag.brand != 'obs' and not self.ag.staging():
@@ -302,6 +305,10 @@ class ActionBatch:
                         self.iso_extract_as_repo[iso] = 1
                     iso = iso_attrib
                     self.iso_extract_as_repo[iso_attrib] = 1
+                else:
+                    if node.attrib.get("extract_as_repo",""):
+                        self.iso_extract_as_repo[iso] = 1
+                        self.repo0folder=node.attrib["extract_as_repo"]
                 self.isos.append(iso)
 
         if node.attrib.get("name","") and node.attrib.get("folder",""):
@@ -574,12 +581,12 @@ done < <(sort __envsub/files_asset.lst)''', f)
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
-                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
             else:
-                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
+                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder), f)
         elif self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum), f)
+            self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder), f)
 
         if self.assets and ( self.isos or self.hdds ):
             self.gen_print_rsync_assets(f)
@@ -647,9 +654,9 @@ done < <(sort __envsub/files_asset.lst)''', f)
         if not self.flavors and not self.flavor_aliases:
             return
         if self.mask:
-            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor, self.repo0folder), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
         else:
-            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor), f)
+            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor, self.repo0folder), f)
         if self.repolink and not self.iso_5:
             self.p(cfg.openqa_call_legacy_builds_link, f)
         if self.legacy_builds or (self.repolink and not self.iso_5):
@@ -679,7 +686,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
 
         for iso in isos:
             if self.iso_extract_as_repo.get(iso,0) or self.iso_5:
-                destiso = "${destiso%.iso}"
+                destiso = "${repo0folder}"
                 i += 1
                 s = ""
                 if not self.fixed_iso:
