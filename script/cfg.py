@@ -52,7 +52,7 @@ def rsync_commands(checksum):
         echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
     return res
 
-rsync_iso = lambda distri, version, archs, staging, checksum : '''
+rsync_iso = lambda distri, version, archs, staging, checksum, repo0folder: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -68,10 +68,11 @@ for flavor in {FLAVORLIST,}; do
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.appx$  ]] || asset_folder=other
         ''' + rsync_commands(checksum) + '''
-
-        [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/${dest%.iso} ] || {
-    mkdir /var/lib/openqa/factory/repo/${dest%.iso}
-    bsdtar xf /var/lib/openqa/factory/iso/$dest -C /var/lib/openqa/factory/repo/${dest%.iso}
+        repo0folder=${dest%.iso}
+        ''' + (repo0folder if repo0folder else "") + '''
+        [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/$repo0folder ] || {
+    mkdir /var/lib/openqa/factory/repo/$repo0folder
+    bsdtar xf /var/lib/openqa/factory/iso/$dest -C /var/lib/openqa/factory/repo/$repo0folder
 }"
     done
 done'''
@@ -198,7 +199,7 @@ def openqa_call_start_meta_variables(meta_variables):
 def pre_openqa_call_start(repos):
     return ''
 
-openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor: '''
+openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, repo0folder: '''
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
@@ -223,6 +224,8 @@ for flavor in {FLAVORALIASLIST,}; do
         version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build
         ''' + openqa_call_fix_destiso(distri, version, staging) + '''
+        repo0folder=${destiso%.iso}
+        ''' + (repo0folder if repo0folder else "") + '''
         [ "$arch" != . ] || arch=x86_64
         ''' + openqa_call_news(news, news_archs) + '''
         echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
