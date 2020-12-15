@@ -4,4 +4,4 @@ rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:To
 rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:ToTest/appliances/aarch64/JeOS:JeOS-raspberrypi3.aarch64/*openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256
 
 # Syncing assets
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:ToTest/appliances/aarch64/*vagrant*libvirt*/Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200115.vagrant.libvirt.box /var/lib/openqa/factory/other/
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ARM:ToTest/appliances/aarch64/*vagrant*libvirt*/*Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200115.vagrant.libvirt.box /var/lib/openqa/factory/other/
