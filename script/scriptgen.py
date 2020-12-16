@@ -566,7 +566,7 @@ declare -A asset_folders''', f)
         folder=${asset_folders[$mask]}
         break
     done
-    echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/$src /var/lib/openqa/factory/other/"
+    echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/*$src /var/lib/openqa/factory/other/"
 done < <(sort __envsub/files_asset.lst)''', f)
 
     def gen_print_rsync_iso(self,f):
