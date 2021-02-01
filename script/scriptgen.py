@@ -238,7 +238,7 @@ class ActionBatch:
             s=s.replace("ARCHITECTURREPO", self.archs_repo)
         else:
             s=s.replace("ARCHITECTURREPO", self.archs)
-        s=s.replace("ARCHORS", self.archs.replace(" ","|"))
+        s=s.replace("ARCHORS", self.archs.replace(" ","|").replace('armv7hl','armv7hl|armv7l'))
         s=s.replace("SUBFOLDER", self.subfolder)
 
         if self.flavors or self.flavor_aliases_flavor:
@@ -479,7 +479,7 @@ class ActionBatch:
                 self.gen_repo(repodir, gen, f)
             else:
                 archs = repodir.attrib.get("archs", "ARCHORS")
-                self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), "ARCHORS", archs.replace(' ','|'))
+                self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), "ARCHORS", archs.replace(' ','|').replace('armv7hl','armv7hl|armv7l'))
 
         # let's sync media.1/media to be able verify build_id
         if 'ToTest' in self.ag.envdir:
