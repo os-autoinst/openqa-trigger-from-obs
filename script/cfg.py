@@ -65,9 +65,9 @@ for flavor in {FLAVORLIST,}; do
         [ ! -z "$src" ] || continue
         dest=$src
         ''' + rsync_fix_dest(distri, version, staging) + '''
-        asset_folder=hdd
+        asset_folder=other
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
-        [[ ! $dest =~ \.appx$  ]] || asset_folder=other
+        [[ ! $dest =~ \.(qcow2|raw|vhd|vhdx|xz)$ ]] || asset_folder=hdd
         ''' + rsync_commands(checksum) + '''
         repo0folder=${dest%.iso}
         ''' + (repo0folder if repo0folder else "") + '''
@@ -165,7 +165,7 @@ for arch in "${archs[@]}"; do
 def openqa_call_fix_destiso(distri, version, staging):
     if not staging:
         return ''
-    if (version == 'Factory' or len(staging)>1): 
+    if (version == 'Factory' or len(staging)>1):
         return '''destiso=${iso//$flavor/Staging:__STAGING-$flavor}
         flavor=Staging-$flavor'''
     return '''version=${version}:S:__STAGING
