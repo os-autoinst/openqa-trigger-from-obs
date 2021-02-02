@@ -59,6 +59,7 @@ for flavor in {FLAVORLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
+        [[ ${norsync_filter[$filter]} != 1 ]] || continue
         src=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
         ''' + rsync_iso_fix_src(archs) + '''
         [ ! -z "$src" ] || continue
@@ -257,7 +258,9 @@ def openqa_call_start_ex1(checksum, tag):
 
 
 def openqa_call_start_ex(checksum):
-    return ''' if [[ $destiso =~ \.iso$ ]]; then
+    return ''' if [[ ${norsync_filter[$filter]} == 1 ]]; then
+   :
+ elif [[ $destiso =~ \.iso$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
  elif [[ $destiso =~ \.(hdd|qcow2|raw\.xz|raw\.gz|vhdx\.xz|vmdk\.xz)$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + '''\"
