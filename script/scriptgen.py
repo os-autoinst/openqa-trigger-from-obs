@@ -151,6 +151,7 @@ class ActionBatch:
         self.assets_archs = ""
         self.asset_folders = {}
         self.asset_tags = {}
+        self.asset_rsync = {}
         self.isos = []
         self.iso_folder = {}
         self.iso_5 = ""
@@ -385,6 +386,8 @@ class ActionBatch:
                 if t.attrib.get("archs"):
                     self.assets_archs = t.attrib["archs"]
                 
+                if t.attrib.get("filemask") and t.attrib.get("rsync"):
+                    self.asset_rsync[t.attrib["filemask"]] = t.attrib["rsync"]
                 if t.attrib.get("filemask") and t.attrib.get("folder"):
                     self.asset_folders[t.attrib["filemask"]] = t.attrib["folder"]
             if t.tag == "repos" and t.attrib.get("build_id_from_iso",""):
@@ -510,6 +513,12 @@ class ActionBatch:
             for k, v in self.asset_folders.items():
                 self.p('''rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst'''.format(v, k), f)
 
+    def gen_print_array_no_rsync(self,f):
+        self.p('declare -A norsync_filter',f)
+        for fl, h in zip(self.flavors, self.assets):
+            if self.asset_rsync.get(h,1) == "0":
+                self.p("norsync_filter[{}]='{}'".format(h, 1), f)
+
     def gen_print_array_flavor_filter(self,f):
         added_declare_flavor_filter = 0
         if self.hdds or self.assets or self.flavor_aliases:
@@ -571,6 +580,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
 
     def gen_print_rsync_iso(self,f):
         print(cfg.header, file=f)
+        self.gen_print_array_no_rsync(f)
         if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
             self.gen_print_array_hdd_folder(f)
             if self.archs == 'armv7hl':
@@ -642,7 +652,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
     def gen_print_openqa(self,f):
         print(cfg.header, file=f)
         self.p(cfg.pre_openqa_call_start(self.repos), f)
-
+        self.gen_print_array_no_rsync(f)
         self.gen_print_array_flavor_filter(f)
         self.gen_print_array_flavor_distri(f)
         self.gen_print_array_hdd_folder(f)

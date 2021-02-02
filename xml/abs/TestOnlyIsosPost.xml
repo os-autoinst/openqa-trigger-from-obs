@@ -1,0 +1,6 @@
+<!-- Example which will not generate rsync command and have no ASSET in isos post -->
+<openQA project_pattern="Test(?P&lt;version&gt;OnlyIsosPost)" dist_path="test">
+    <flavor name="FLAVOR" distri="distri">
+        <asset filemask="iso" rsync="0"/>
+    </flavor>
+</openQA>
