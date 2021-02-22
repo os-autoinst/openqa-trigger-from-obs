@@ -25,14 +25,14 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=aarch64 \
  ASSET_1=Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200115.vagrant.libvirt.box \
- ASSET_256=openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 \
+ ASSET_256=openSUSE-Tumbleweed-ARM-JeOS-raspberrypi.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 \
  ASSET_LIBVIRT=Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200115.vagrant.libvirt.box \
  BUILD=20200115 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-raspberrypi.aarch64-2020.01.08-Snapshot20200115.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=JeOS-for-RPi \
  FULLURL=1 \
- HDD_1=openSUSE-Tumbleweed-ARM-JeOS-raspberrypi3.aarch64-2020.01.08-Snapshot20200115.raw.xz \
+ HDD_1=openSUSE-Tumbleweed-ARM-JeOS-raspberrypi.aarch64-2020.01.08-Snapshot20200115.raw.xz \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-aarch64-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-aarch64-Snapshot20200115 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
