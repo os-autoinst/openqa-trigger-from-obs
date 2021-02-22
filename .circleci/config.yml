@@ -3,12 +3,12 @@ version: 2.1
 jobs:
   unit:
     docker:
-      - image: registry.opensuse.org/opensuse/tumbleweed
+      - image: registry.opensuse.org/opensuse/leap
     steps:
       - checkout
       - run:
           command: |
-            zypper -n in --no-recommends diffutils make python3 tar git-core || :
+            zypper -n in --no-recommends diffutils make python3 tar git-core
       - checkout
       - run: git clean -df
       - run: make test_regen_all
