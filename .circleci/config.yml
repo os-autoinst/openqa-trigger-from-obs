@@ -8,9 +8,8 @@ jobs:
       - checkout
       - run:
           command: |
-            zypper -n in --no-recommends diffutils make python3 tar git-core || :
+            zypper -n in --no-recommends diffutils make python3 tar
       - checkout
-      - run: git clean -df
       - run: make test_regen_all
       - run: make test
 
