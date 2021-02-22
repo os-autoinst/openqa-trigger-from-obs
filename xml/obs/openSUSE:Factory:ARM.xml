@@ -22,8 +22,8 @@
         <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi.aarch64">
             <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
         </flavor>
-        <flavor name="JeOS-for-RPi" folder="JeOS:JeOS-raspberrypi3.aarch64">
-            <hdd filemask=".*raspberrypi3.*\.raw.xz$"/>
+        <flavor name="JeOS-for-RPi" folder="JeOS:JeOS-raspberrypi.aarch64">
+            <hdd filemask=".*raspberrypi.*\.raw.xz$"/>
             <assets archs="aarch64">
                 <libvirt folder="*vagrant*libvirt*" filemask="libvirt.box"/>
             </assets>
