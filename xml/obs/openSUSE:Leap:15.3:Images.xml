@@ -8,6 +8,12 @@
         <!-- Due to there being multiple archs, it omits "head -n1". So don't match .sha256(.asc). -->
         <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
     </flavor>
+    <flavor name="JeOS-for-AArch64" folder="*/JeOS:JeOS-efi.aarch64">
+        <hdd filemask=".*ARM-JeOS-efi.*\.raw\.xz$"/>
+    </flavor>
+    <flavor name="JeOS-for-RPi" folder="*/JeOS:JeOS-raspberrypi.aarch64">
+        <hdd filemask=".*raspberrypi.*\.raw.xz$"/>
+    </flavor>
     <flavor name="Vagrant">
         <assets>
             <!-- Matches both -libvirt- and -libvirt_aarch64- -->
