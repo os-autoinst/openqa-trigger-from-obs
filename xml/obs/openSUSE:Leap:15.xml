@@ -1,11 +1,12 @@
 <openQA
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.[3-9]):ToTest"
     dist_path="images/local"
-    archs="x86_64 aarch64 ppc64le s390x">
-    <flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
+    distri="opensuse"
+    archs="x86_64 aarch64 ppc64le">
+    <flavor name="NET|DVD" folder="*product*" iso="1">
         <repos archs="x86_64">
-            <oss folder="Leap-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Leap-${version}-oss-i586-x86_64-aarch64-ppc64le-s390x"/>
-            <non-oss folder="Leap-Addon-NonOss-ftp-ftp"  dest="openSUSE-Leap-${version}-non-oss-i586-x86_64-aarch64-ppc64le-s390x"/>
+            <oss folder="Leap-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Leap-${version}-oss-i586-x86_64-aarch64-ppc64le"/>
+            <non-oss folder="Leap-Addon-NonOss-ftp-ftp"  dest="openSUSE-Leap-${version}-non-oss-i586-x86_64-aarch64-ppc64le"/>
         </repos>
     </flavor>
     <news iso="DVD" archs="x86_64"/>

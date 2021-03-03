@@ -1,0 +1,16 @@
+<openQA
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.[3-9]):ToTest"
+    dist_path="images/local"
+    distri="opensuse">
+    <flavor name="DVD" folder="*product*" iso="1" archs="s390x">
+        <repos>
+            <oss folder="Leap-ftp-ftp"
+                debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}"
+                source="{coreutils*,yast2-network*}"
+                mirror="1"
+                dest="Leap-${version}-oss-$arch"/>
+            <non-oss folder="Leap-Addon-NonOss-ftp-ftp"
+                dest="Leap-${version}-non-oss-$arch"/>
+        </repos>
+    </flavor>
+</openQA>
