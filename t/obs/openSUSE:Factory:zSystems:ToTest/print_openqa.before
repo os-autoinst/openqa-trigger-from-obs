@@ -13,6 +13,8 @@
  REPO_0=Tumbleweed-oss-s390x-Snapshot20200115 \
  REPO_1=Tumbleweed-oss-s390x-Snapshot20200115-debuginfo \
  REPO_2=Tumbleweed-oss-s390x-Snapshot20200115-source \
+ REPO_3=Tumbleweed-non-oss-s390x-Snapshot20200115 \
+ REPO_NON_OSS=Tumbleweed-non-oss-s390x-Snapshot20200115 \
  REPO_OSS=Tumbleweed-oss-s390x-Snapshot20200115 \
  REPO_OSS_DEBUGINFO=Tumbleweed-oss-s390x-Snapshot20200115-debuginfo \
  REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
