@@ -630,7 +630,10 @@ done < <(sort __envsub/files_asset.lst)''', f)
 
             for ren in self.renames:
                 self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-            self.p(cfg.rsync_repodir2(), f,"PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"Media2","Media1","-debuginfo","","RSYNCFILTER","")
+            suffix = "*$arch*"
+            if self.archs_repo == ".":
+                suffix = "*"
+            self.p(cfg.rsync_repodir2(), f,"PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + suffix, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"Media2","Media1","-debuginfo","","RSYNCFILTER","")
             if r.attrib.get("debug",""):
                 if not r.attrib.get("dest", ""):
                     self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
@@ -638,7 +641,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
                     self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
+                self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + suffix, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
             if r.attrib.get("source",""):
                 if not r.attrib.get("dest", ""):
                     self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
@@ -647,7 +650,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
                 for ren in self.renames:
                     self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
                 if self.ag.brand == 'obs':
-                    self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + "*$arch*", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
+                    self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + suffix, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
 
     def gen_print_openqa(self,f):
         print(cfg.header, file=f)
