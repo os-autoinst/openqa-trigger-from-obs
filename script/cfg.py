@@ -212,7 +212,7 @@ for flavor in {FLAVORALIASLIST,}; do
         [ $filter != Appliance ] || filter="qcow2"
         iso=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
         ''' + openqa_call_start_fix_iso(archs) + '''
-        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*') || :
+        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | tail -n 1) || :
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*') || :
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
