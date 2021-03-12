@@ -1,20 +1,12 @@
 <openQA
-    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.2):ARM:Images:ToTest"
-    dist_path="images/aarch64"
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.3):ARM:Images:ToTest"
+    dist_path="images/armv7l"
     distri="opensuse" 
-    archs="aarch64">
-    <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi.aarch64">
-        <hdd filemask=".*ARM-JeOS-efi.*\.raw\.xz"/>
+    archs="armv7hl">
+    <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi-pxe">
+      <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
     </flavor>
-    <flavor name="JeOS-for-RPi" folder="JeOS:JeOS-raspberrypi3.aarch64">
-        <hdd filemask=".*raspberrypi3.*\.raw.xz$"/>
-    </flavor>
-    <flavor name="Vagrant">
-        <assets>
-            <libvirt folder="*vagrant*libvirt*" filemask="libvirt.box"/>
-        </assets>
-    </flavor>
-    <flavor name="GNOME-Live" folder="livecd-leap-gnome" iso="1"/>
-    <flavor name="KDE-Live" folder="livecd-leap-kde" iso="1"/>
-    <flavor name="Rescue-CD" folder="livecd-leap-x11" iso="1"/>
+    <flavor name="JeOS-for-RPi" folder="JeOS:JeOS-raspberrypi2">
+      <hdd filemask=".*raspberrypi2.*\.raw.xz$" folder="JeOS:JeOS-raspberrypi2"/>
+     </flavor>
 </openQA>

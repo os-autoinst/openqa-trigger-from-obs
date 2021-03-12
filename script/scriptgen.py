@@ -27,7 +27,7 @@ class ActionGenerator:
             if productpath and '::' not in productpath and '//' not in productpath:
                 pp = os.path.join(pp, productpath)
         self.productpath = pp
-        self.archs = "aarch64 ppc64le s390x x86_64"
+        self.archs = "aarch64 armv7l armv7hl ppc64le s390x x86_64"
   
     def staging(self):
         m = re.match(r'.*Staging:(?P<staging>[A-Z]).*', self.envdir)
