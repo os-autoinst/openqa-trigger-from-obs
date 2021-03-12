@@ -1,0 +1,11 @@
+<openQA
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.2):ARM:ToTest"
+    dist_path="images/local"
+    archs="aarch64">
+    <flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
+        <repos>
+            <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-15.2-oss-aarch64"/>
+        </repos>
+    </flavor>
+    <news iso="DVD" archs="aarch64"/>
+</openQA>
