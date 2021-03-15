@@ -25,4 +25,5 @@
     <flavor name="GNOME-Live" folder="*/livecd-leap-gnome" iso="1"/>
     <flavor name="KDE-Live" folder="*/livecd-leap-kde" iso="1"/>
     <flavor name="Rescue-CD" folder="*/livecd-leap-x11" iso="1"/>
+    <flavor name="XFCE-Live" folder="*/livecd-leap-xfce" iso="1"/>
 </openQA>
