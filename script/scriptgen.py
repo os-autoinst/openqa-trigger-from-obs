@@ -10,6 +10,7 @@ from collections import defaultdict
 
 import cfg
 
+
 class ActionGenerator:
     def __init__(self, envdir, project, productpath, version, brand):
         self.brand = brand
@@ -19,21 +20,21 @@ class ActionGenerator:
         self.batches = []
         project = project.split("::")[0]
         pp = productpath
-        if not pp or ('::' not in pp and '//' not in pp):
+        if not pp or ("::" not in pp and "//" not in pp):
             if self.staging():
                 pp = os.path.join("obspublish-stage::openqa", os.path.basename(project))
             else:
                 pp = os.path.join("obspublish::openqa", os.path.basename(project))
-            if productpath and '::' not in productpath and '//' not in productpath:
+            if productpath and "::" not in productpath and "//" not in productpath:
                 pp = os.path.join(pp, productpath)
         self.productpath = pp
         self.archs = "aarch64 armv7l armv7hl ppc64le s390x x86_64"
-  
+
     def staging(self):
-        m = re.match(r'.*Staging:(?P<staging>[A-Z]).*', self.envdir)
+        m = re.match(r".*Staging:(?P<staging>[A-Z]).*", self.envdir)
         if m:
-            return m.groupdict().get("staging","")
-        m = re.match(r'.*Rings:(?P<ring>[0-9]).*', self.envdir)
+            return m.groupdict().get("staging", "")
+        m = re.match(r".*Rings:(?P<ring>[0-9]).*", self.envdir)
         if m:
             return "Core"
         return ""
@@ -57,7 +58,7 @@ class ActionGenerator:
         root = tree.getroot()
         self.iso_path = root.attrib.get("iso_path", "")
         self.repo_path = root.attrib.get("repo_path", "repo")
-        self.domain = root.attrib.get("domain","")
+        self.domain = root.attrib.get("domain", "")
         self.archs = root.attrib.get("archs", self.archs)
         self.version = root.attrib.get("version", self.version)
         if root.attrib.get("distri", ""):
@@ -67,9 +68,9 @@ class ActionGenerator:
             batch = self.doBatch(t)
             if batch:
                 for news in t.findall(".//news"):
-                    if news.attrib.get("iso",""):
+                    if news.attrib.get("iso", ""):
                         batch.news = news.attrib["iso"]
-                    if news.attrib.get("archs",""):
+                    if news.attrib.get("archs", ""):
                         batch.news_archs = news.attrib["archs"]
                 for flavor in t.findall(".//flavor"):
                     batch.doFlavor(flavor)
@@ -77,45 +78,45 @@ class ActionGenerator:
                     batch.doFlavor(t)
 
         if not len(self.batches):
-            batches_string = root.attrib.get("batches","default")
-            for b in batches_string.split('|'):
+            batches_string = root.attrib.get("batches", "default")
+            for b in batches_string.split("|"):
                 batch = self.doBatch(root, b)
                 if batch:
                     for news in root.findall(".//news"):
-                        if news.attrib.get("iso",""):
+                        if news.attrib.get("iso", ""):
                             batch.news = news.attrib["iso"]
-                        if news.attrib.get("archs",""):
+                        if news.attrib.get("archs", ""):
                             batch.news_archs = news.attrib["archs"]
                     for flavor in root.findall(".//flavor"):
                         batch.doFlavor(flavor)
- 
+
     def doBatch(self, node, name=None, root=None):
         if not name:
-            name = node.attrib.get("name","")
+            name = node.attrib.get("name", "")
         if not name:
-            print('Batch node has no name attribute', file=sys.stderr)
+            print("Batch node has no name attribute", file=sys.stderr)
             return
         batch = ActionBatch(name, self)
-        if node.attrib.get("repos",""):
+        if node.attrib.get("repos", ""):
             batch.repolink = node.attrib["repos"]
-        if node.attrib.get("folder",""):
+        if node.attrib.get("folder", ""):
             batch.folder = node.attrib["folder"]
-        if node.attrib.get("archs",""):
+        if node.attrib.get("archs", ""):
             batch.archs = node.attrib["archs"]
         elif root:
             batch.archs = root.attrib.get("archs", batch.archs)
-            
-        if node.attrib.get("mask",""):
+
+        if node.attrib.get("mask", ""):
             batch.mask = node.attrib["mask"]
-        if node.attrib.get("distri",""):
+        if node.attrib.get("distri", ""):
             batch.distri = node.attrib["distri"]
-        if node.attrib.get("checksum","") == "0":
+        if node.attrib.get("checksum", "") == "0":
             batch.checksum = 0
-        if node.attrib.get("repo0folder",""):
+        if node.attrib.get("repo0folder", ""):
             batch.repo0folder = node.attrib["repo0folder"]
-        if node.attrib.get("variable",""):
+        if node.attrib.get("variable", ""):
             batch.variable = node.attrib["variable"]
-        if node.tag != 'openQA':
+        if node.tag != "openQA":
             batch.iso_path = node.attrib.get("iso_path", "")
 
         self.batches.append(batch)
@@ -128,6 +129,7 @@ class ActionGenerator:
 
     def batch_by_name(self, name):
         return next((x for x in self.batches if x.subfolder == name), None)
+
 
 class ActionBatch:
     def __init__(self, name, actionGenerator):
@@ -171,7 +173,7 @@ class ActionBatch:
         self.repo0folder = ""
         self.variable = ""
         self.meta_variables = "_OBSOLETE=1"
-        if self.ag.brand != 'obs' and not self.ag.staging():
+        if self.ag.brand != "obs" and not self.ag.staging():
             self.meta_variables = "_DEPRIORITIZEBUILD=1"
 
     def productpath(self):
@@ -188,7 +190,7 @@ class ActionBatch:
             return self.dist_path
         ret = self.ag.productisopath()
         if self.iso_path:
-            return ret + '/' + self.iso_path
+            return ret + "/" + self.iso_path
         return ret
 
     def productrepopath(self):
@@ -200,132 +202,154 @@ class ActionBatch:
             return self.dist_path
         return self.ag.productrepopath()
 
-    def p(self,s, f, extra1=None, extra2=None, extra3=None, extra4=None, extra5=None, extra6=None, extra7=None, extra8=None, extra9=None, extra10=None):
+    def p(
+        self,
+        s,
+        f,
+        extra1=None,
+        extra2=None,
+        extra3=None,
+        extra4=None,
+        extra5=None,
+        extra6=None,
+        extra7=None,
+        extra8=None,
+        extra9=None,
+        extra10=None,
+    ):
         if extra1 != None and extra2 != None:
-            s=s.replace(extra1,extra2)
+            s = s.replace(extra1, extra2)
             if extra3 != None and extra4 != None:
-                s=s.replace(extra3,extra4)
+                s = s.replace(extra3, extra4)
                 if extra5 != None and extra6 != None:
-                    s=s.replace(extra5,extra6)
+                    s = s.replace(extra5, extra6)
                     if extra7 != None and extra8 != None:
-                        s=s.replace(extra7,extra8)
+                        s = s.replace(extra7, extra8)
                         if extra9 != None and extra10 != None:
-                            s=s.replace(extra9,extra10)
-        xtrapath = "";
+                            s = s.replace(extra9, extra10)
+        xtrapath = ""
         if self.folder:
             xtrapath = "/" + self.folder
-        s=s.replace('PRODUCTPATH', self.productpath() + xtrapath)
-        s=s.replace('PRODUCTISOPATH', self.productisopath() + xtrapath)
-        s=s.replace('PRODUCTREPOPATH', self.productrepopath() + xtrapath)
-        if self.subfolder and self.subfolder != 'default':
-            s=s.replace('__envsub', self.ag.envdir +'/'+ self.subfolder)
+        s = s.replace("PRODUCTPATH", self.productpath() + xtrapath)
+        s = s.replace("PRODUCTISOPATH", self.productisopath() + xtrapath)
+        s = s.replace("PRODUCTREPOPATH", self.productrepopath() + xtrapath)
+        if self.subfolder and self.subfolder != "default":
+            s = s.replace("__envsub", self.ag.envdir + "/" + self.subfolder)
         else:
-            s=s.replace('__envsub', self.ag.envdir)
-        s=s.replace('__envdir', self.ag.envdir)
-        if self.ag.version.startswith("15.") and self.ag.staging() == 'Core':
-            s=s.replace('VERSIONVALUE', self.ag.version + ":Core")
-        elif self.ag.version.startswith("15.") and 'Jump' in self.ag.envdir:
-            s=s.replace('VERSIONVALUE', "Jump:" + self.ag.version)
-        elif self.subfolder and self.subfolder != 'default' and not self.ag.version:
-            s=s.replace('VERSIONVALUE', self.subfolder.lstrip('Leap_'))
-        elif self.ag.staging() and self.ag.version == 'Factory':
-            s=s.replace('VERSIONVALUE', 'Staging:' + self.ag.staging())
+            s = s.replace("__envsub", self.ag.envdir)
+        s = s.replace("__envdir", self.ag.envdir)
+        if self.ag.version.startswith("15.") and self.ag.staging() == "Core":
+            s = s.replace("VERSIONVALUE", self.ag.version + ":Core")
+        elif self.ag.version.startswith("15.") and "Jump" in self.ag.envdir:
+            s = s.replace("VERSIONVALUE", "Jump:" + self.ag.version)
+        elif self.subfolder and self.subfolder != "default" and not self.ag.version:
+            s = s.replace("VERSIONVALUE", self.subfolder.lstrip("Leap_"))
+        elif self.ag.staging() and self.ag.version == "Factory":
+            s = s.replace("VERSIONVALUE", "Staging:" + self.ag.staging())
         else:
-            s=s.replace('VERSIONVALUE', self.ag.version.replace('Factory','Tumbleweed'))
-        s=s.replace("DISTRIVALUE", self.distri)
-        s=s.replace("__STAGING", self.ag.staging())
-        s=s.replace("ARCHITECTURS", self.archs)
+            s = s.replace("VERSIONVALUE", self.ag.version.replace("Factory", "Tumbleweed"))
+        s = s.replace("DISTRIVALUE", self.distri)
+        s = s.replace("__STAGING", self.ag.staging())
+        s = s.replace("ARCHITECTURS", self.archs)
         if self.archs_repo:
-            s=s.replace("ARCHITECTURREPO", self.archs_repo)
+            s = s.replace("ARCHITECTURREPO", self.archs_repo)
         else:
-            s=s.replace("ARCHITECTURREPO", self.archs)
-        s=s.replace("ARCHORS", self.archs.replace(" ","|").replace('armv7hl','armv7hl|armv7l'))
-        s=s.replace("SUBFOLDER", self.subfolder)
+            s = s.replace("ARCHITECTURREPO", self.archs)
+        s = s.replace("ARCHORS", self.archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l"))
+        s = s.replace("SUBFOLDER", self.subfolder)
 
         if self.flavors or self.flavor_aliases_flavor:
-            s=s.replace("FLAVORLIST",','.join(self.flavors))
+            s = s.replace("FLAVORLIST", ",".join(self.flavors))
             aliases = copy.deepcopy(self.flavors)
             aliases.extend(self.flavor_aliases_flavor)
-            s=s.replace("FLAVORORS", '|'.join(self.flavors))
-            s=s.replace("FLAVORALIASLIST",','.join(aliases))
-            s=s.replace("FLAVORASREPOORS", '|'.join([f for f in self.flavors if self.iso_extract_as_repo.get(f,0)]))
+            s = s.replace("FLAVORORS", "|".join(self.flavors))
+            s = s.replace("FLAVORALIASLIST", ",".join(aliases))
+            s = s.replace("FLAVORASREPOORS", "|".join([f for f in self.flavors if self.iso_extract_as_repo.get(f, 0)]))
 
-
-        if self.repos or (self.repolink and not '/' in self.repolink):
+        if self.repos or (self.repolink and not "/" in self.repolink):
             repos = self.repos.copy()
-            s=s.replace("REPOOWNLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos.copy()]))
+            s = s.replace(
+                "REPOOWNLIST", ",".join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos.copy()])
+            )
             if self.repolink:
                 repos.extend(self.ag.batch_by_name(self.repolink).repos)
             if self.iso_5:
-                s=s.replace("REPOLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in self.ag.batch_by_name(self.repolink).repos]))
+                s = s.replace(
+                    "REPOLIST",
+                    ",".join(
+                        [
+                            m.attrib["name"] if "name" in m.attrib else m.tag
+                            for m in self.ag.batch_by_name(self.repolink).repos
+                        ]
+                    ),
+                )
             else:
-                s=s.replace("REPOLIST",  ','.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
-            s=s.replace("REPOORS",   '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
+                s = s.replace("REPOLIST", ",".join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
+            s = s.replace("REPOORS", "|".join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
         mirror_repo = self.mirror_repo
-        if not mirror_repo and self.repolink and not '/' in self.repolink:
+        if not mirror_repo and self.repolink and not "/" in self.repolink:
             self.mirror_repo = self.ag.batch_by_name(self.repolink).mirror_repo
-        s=s.replace("MIRRORREPO", self.mirror_repo)
+        s = s.replace("MIRRORREPO", self.mirror_repo)
         if self.ag.domain:
-            s=s.replace("opensuse.org",self.ag.domain)
-        s=s.replace("REPOLINK", self.repolink)
+            s = s.replace("opensuse.org", self.ag.domain)
+        s = s.replace("REPOLINK", self.repolink)
         print(s, file=f)
 
     def doFlavor(self, node):
-        if node.attrib.get("archs",""):
+        if node.attrib.get("archs", ""):
             self.archs = node.attrib["archs"]
 
-        if node.attrib.get("dist_path",""):
+        if node.attrib.get("dist_path", ""):
             self.dist_path = node.attrib["dist_path"]
 
-        if node.attrib.get("name",""):
+        if node.attrib.get("name", ""):
             if node.attrib.get("news"):
-                self.news=node.attrib["name"]
+                self.news = node.attrib["name"]
                 if node.attrib["news"] != "1":
                     self.news_archs = node.attrib["news"]
             for f in node.attrib["name"].split("|"):
                 if node.attrib.get("flavor", "") != "0":
                     self.flavors.append(f)
-                if node.attrib.get("distri",""):
+                if node.attrib.get("distri", ""):
                     self.flavor_distri[f] = node.attrib["distri"]
-                if node.attrib.get("iso_5",""):
+                if node.attrib.get("iso_5", ""):
                     self.flavor_aliases[node.attrib.get("iso_5")].append(f)
                     self.iso_5 = node.attrib.get("iso_5")
-                if node.attrib.get("fixed_iso",""):
+                if node.attrib.get("fixed_iso", ""):
                     self.fixed_iso = node.attrib["fixed_iso"]
 
-        if node.attrib.get("iso","") and node.attrib.get("name",""):
+        if node.attrib.get("iso", "") and node.attrib.get("name", ""):
             for iso in node.attrib["name"].split("|"):
-                if node.attrib.get("folder",""):
+                if node.attrib.get("folder", ""):
                     # self.iso_path = node.attrib["folder"]
                     self.iso_folder[iso] = node.attrib["folder"]
                 iso_attrib = node.attrib["iso"]
                 if iso_attrib == "extract_as_repo":
                     self.iso_extract_as_repo[iso] = 1
                 elif iso_attrib != "1":
-                    if node.attrib.get("extract_as_repo",""):
+                    if node.attrib.get("extract_as_repo", ""):
                         self.iso_extract_as_repo[iso] = 1
                     iso = iso_attrib
                     self.iso_extract_as_repo[iso_attrib] = 1
                 else:
-                    if node.attrib.get("extract_as_repo",""):
+                    if node.attrib.get("extract_as_repo", ""):
                         self.iso_extract_as_repo[iso] = 1
-                        self.repo0folder=node.attrib["extract_as_repo"]
+                        self.repo0folder = node.attrib["extract_as_repo"]
                 self.isos.append(iso)
 
-        if node.attrib.get("name","") and node.attrib.get("folder",""):
+        if node.attrib.get("name", "") and node.attrib.get("folder", ""):
             self.iso_folder[node.attrib["name"]] = node.attrib["folder"]
 
         for t in node.findall(".//isos/*"):
             self.isos.append(t.tag)
 
-        if node.attrib.get("distri",""):
+        if node.attrib.get("distri", ""):
             self.distri = node.attrib["distri"]
-        if node.attrib.get("legacy_builds",""):
+        if node.attrib.get("legacy_builds", ""):
             self.legacy_builds = node.attrib["legacy_builds"]
 
-
         for t in node.findall(".//repos"):
-            if t.attrib.get("archs",""):
+            if t.attrib.get("archs", ""):
                 self.archs_repo = t.attrib["archs"]
 
         for t in node.findall(".//repos/*"):
@@ -333,30 +357,30 @@ class ActionBatch:
                 self.repodirs.append(t)
             else:
                 self.repos.append(t)
-            if t.attrib.get("mirror",""):
+            if t.attrib.get("mirror", ""):
                 self.mirror_repo = t.tag
         for t in node.findall("./alias"):
-            prefix=t.attrib.get("prefix","")
-            suffix=t.attrib.get("suffix","")
-            suffix=suffix.replace("${version}", self.ag.version)
-            name=t.attrib.get("name","")
+            prefix = t.attrib.get("prefix", "")
+            suffix = t.attrib.get("suffix", "")
+            suffix = suffix.replace("${version}", self.ag.version)
+            name = t.attrib.get("name", "")
             for p in prefix.split("|"):
                 for n in name.split("|"):
                     for s in suffix.split("|"):
-                        self.flavor_aliases[t.attrib.get("alias","")].append(p + n + s)
+                        self.flavor_aliases[t.attrib.get("alias", "")].append(p + n + s)
                         self.flavor_aliases_flavor.append(p + n + s)
 
         for t in node.findall(".//renames/*"):
             if "to" in t.attrib:
-                self.renames.append([t.attrib.get("from",t.tag), t.attrib["to"]])
+                self.renames.append([t.attrib.get("from", t.tag), t.attrib["to"]])
 
-        assets_folder = "";
+        assets_folder = ""
         for t in node.findall(".//assets"):
             if t.attrib.get("flavor"):
                 self.assets_flavor = t.attrib["flavor"]
             else:
-                self.assets_flavor = node.attrib.get("name","")
-                
+                self.assets_flavor = node.attrib.get("name", "")
+
             if t.attrib.get("archs"):
                 self.assets_archs = t.attrib["archs"]
             if t.attrib.get("folder"):
@@ -369,15 +393,15 @@ class ActionBatch:
                 self.asset_folders[t.attrib["filemask"]] = t.attrib["folder"]
             elif t.attrib.get("filemask") and assets_folder:
                 self.asset_folders[t.attrib["filemask"]] = assets_folder
-        
+
         for t in node.findall(".//*"):
             if t.tag == "hdd":
                 self.hdds.append(t.attrib["filemask"])
-                if node.attrib.get("folder",""):
+                if node.attrib.get("folder", ""):
                     self.iso_folder[t.attrib["filemask"]] = node.attrib["folder"]
-                    if not t.attrib.get("folder",""):
+                    if not t.attrib.get("folder", ""):
                         self.hdd_folder[t.attrib["filemask"]] = node.attrib["folder"]
-                if t.attrib.get("folder",""):
+                if t.attrib.get("folder", ""):
                     self.hdd_folder[t.attrib["filemask"]] = t.attrib["folder"]
             if t.tag == "asset" and not self.asset_tags:
                 self.assets.append(t.attrib["filemask"])
@@ -385,32 +409,32 @@ class ActionBatch:
                     self.assets_flavor = t.attrib["flavor"]
                 if t.attrib.get("archs"):
                     self.assets_archs = t.attrib["archs"]
-                
+
                 if t.attrib.get("filemask") and t.attrib.get("rsync"):
                     self.asset_rsync[t.attrib["filemask"]] = t.attrib["rsync"]
                 if t.attrib.get("filemask") and t.attrib.get("folder"):
                     self.asset_folders[t.attrib["filemask"]] = t.attrib["folder"]
-            if t.tag == "repos" and t.attrib.get("build_id_from_iso",""):
+            if t.tag == "repos" and t.attrib.get("build_id_from_iso", ""):
                 self.build_id_from_iso = 1
 
     def gen_if_not_customized(self, folder, fname):
         filename = folder + "/" + fname
-        line1=""
-        line2=""
-        custom=0
+        line1 = ""
+        line2 = ""
+        custom = 0
         if os.path.exists(filename):
-            with open(filename, 'r') as f:
-                line1=f.readline()
-                line2=f.readline()
+            with open(filename, "r") as f:
+                line1 = f.readline()
+                line2 = f.readline()
                 if line1 and not "GENERATED" in line1:
                     if not line1.lstrip().startswith("#"):
-                        custom=1
+                        custom = 1
                     elif line2 and not "GENERATED" in line2:
-                            custom=1
+                        custom = 1
         if custom:
-            print('Will not overwrite custom file: ' + filename, file=sys.stderr)
+            print("Will not overwrite custom file: " + filename, file=sys.stderr)
             return
-        with open(filename, 'w') as f:
+        with open(filename, "w") as f:
             if fname == "read_files.sh":
                 self.gen_read_files(f)
             elif fname == "print_rsync_iso.sh":
@@ -421,38 +445,69 @@ class ActionBatch:
                 self.gen_print_openqa(f)
 
     def gen_repo(self, repodir, gen, f):
-        if '$build' in gen:
-            self.p('''build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_iso.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)''', f)
+        if "$build" in gen:
+            self.p(
+                """build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_iso.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)""",
+                f,
+            )
         body = gen
-        if repodir.attrib.get('source',""):
-            body = body + '''
-''' + gen.replace('Media1', 'Media2')
-        if repodir.attrib.get('debug',""):
-            body = body + '''
-''' + gen.replace('Media1', 'Media3')
-        self.p('echo "' + body + '" > __envsub/files_repo_' + repodir.attrib['folder'] + '.lst', f)
-        
-    def gen_read_files(self,f):
+        if repodir.attrib.get("source", ""):
+            body = (
+                body
+                + """
+"""
+                + gen.replace("Media1", "Media2")
+            )
+        if repodir.attrib.get("debug", ""):
+            body = (
+                body
+                + """
+"""
+                + gen.replace("Media1", "Media3")
+            )
+        self.p('echo "' + body + '" > __envsub/files_repo_' + repodir.attrib["folder"] + ".lst", f)
+
+    def gen_read_files(self, f):
         self.p(cfg.header, f, "set -e", "set -eo pipefail")
         self.p(cfg.clear_lst, f)
         for hdd in self.hdds:
-            if self.ag.productpath.startswith('http'):
+            if self.ag.productpath.startswith("http"):
                 self.p(cfg.read_files_curl, f, "ISOMASK", hdd)
             else:
-                awkpartfrom = '''| awk '{ $1=$2=$3=$4=""; print substr($0,5); }' '''
+                awkpartfrom = """| awk '{ $1=$2=$3=$4=""; print substr($0,5); }' """
                 awkpartto = awkpartfrom
-                if not hdd.startswith('.*'):
-                    awkpartto = ''
+                if not hdd.startswith(".*"):
+                    awkpartto = ""
 
-                if ' ' in self.archs:
-                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,""), "ISOMASK", hdd, '| head -n 1', '', awkpartfrom, awkpartto)
+                if " " in self.archs:
+                    self.p(
+                        cfg.read_files_hdd,
+                        f,
+                        "FOLDER",
+                        self.iso_folder.get(hdd, ""),
+                        "ISOMASK",
+                        hdd,
+                        "| head -n 1",
+                        "",
+                        awkpartfrom,
+                        awkpartto,
+                    )
                 else:
-                    self.p(cfg.read_files_hdd, f, "FOLDER", self.iso_folder.get(hdd,self.hdd_folder.get(hdd,"")), "ISOMASK", hdd, awkpartfrom, awkpartto)
+                    self.p(
+                        cfg.read_files_hdd,
+                        f,
+                        "FOLDER",
+                        self.iso_folder.get(hdd, self.hdd_folder.get(hdd, "")),
+                        "ISOMASK",
+                        hdd,
+                        awkpartfrom,
+                        awkpartto,
+                    )
         if not self.isos and not self.hdds:
             for asset in self.assets:
                 self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
         if self.iso_5:
-            self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(self.iso_5,""), "SRCISO", self.iso_5)
+            self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(self.iso_5, ""), "SRCISO", self.iso_5)
         elif self.isos:
             # if isos don't belong to custom folder - just read them all with single command
             if not self.iso_folder:
@@ -460,7 +515,7 @@ class ActionBatch:
                 self.p(cfg.read_files_isos, f)
             else:
                 for iso in self.isos:
-                    self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(iso,""), "SRCISO", iso)
+                    self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(iso, ""), "SRCISO", iso)
 
         if self.repolink:
             self.p(cfg.read_files_repo_link, f)
@@ -471,58 +526,127 @@ class ActionBatch:
         if self.repos:
             self.p(cfg.read_files_repo, f)
             if self.build_id_from_iso:
-                self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH/", "PRODUCTREPOPATH/../iso/", "files_repo.lst", "files_iso_buildid.lst","Media1(.license)?$","Media1?.iso$")
-            if any(repo.attrib.get(cfg.media2_name(),"") for repo in self.repos):
-                self.p(cfg.read_files_repo, f, "Media1", "Media2", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get(cfg.media2_name(),""), self.repos)]))
-            if any(repo.attrib.get(cfg.media3_name(),"") for repo in self.repos):
-                self.p(cfg.read_files_repo, f, "Media1", "Media3", "REPOORS", '|'.join([m.attrib["name"] if "name" in m.attrib else m.tag for m in filter(lambda x: x.attrib.get(cfg.media3_name(),""), self.repos)]))
+                self.p(
+                    cfg.read_files_repo,
+                    f,
+                    "PRODUCTREPOPATH/",
+                    "PRODUCTREPOPATH/../iso/",
+                    "files_repo.lst",
+                    "files_iso_buildid.lst",
+                    "Media1(.license)?$",
+                    "Media1?.iso$",
+                )
+            if any(repo.attrib.get(cfg.media2_name(), "") for repo in self.repos):
+                self.p(
+                    cfg.read_files_repo,
+                    f,
+                    "Media1",
+                    "Media2",
+                    "REPOORS",
+                    "|".join(
+                        [
+                            m.attrib["name"] if "name" in m.attrib else m.tag
+                            for m in filter(lambda x: x.attrib.get(cfg.media2_name(), ""), self.repos)
+                        ]
+                    ),
+                )
+            if any(repo.attrib.get(cfg.media3_name(), "") for repo in self.repos):
+                self.p(
+                    cfg.read_files_repo,
+                    f,
+                    "Media1",
+                    "Media3",
+                    "REPOORS",
+                    "|".join(
+                        [
+                            m.attrib["name"] if "name" in m.attrib else m.tag
+                            for m in filter(lambda x: x.attrib.get(cfg.media3_name(), ""), self.repos)
+                        ]
+                    ),
+                )
         for repodir in self.repodirs:
             gen = repodir.attrib.get("gen", "")
             if gen:
                 self.gen_repo(repodir, gen, f)
             else:
                 archs = repodir.attrib.get("archs", "ARCHORS")
-                self.p(cfg.read_files_repo, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*", "REPOORS", "", "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), "ARCHORS", archs.replace(' ','|').replace('armv7hl','armv7hl|armv7l'))
+                self.p(
+                    cfg.read_files_repo,
+                    f,
+                    "PRODUCTREPOPATH",
+                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*",
+                    "REPOORS",
+                    "",
+                    "files_repo.lst",
+                    "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip("*")),
+                    "ARCHORS",
+                    archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l"),
+                )
 
         # let's sync media.1/media to be able verify build_id
-        if 'ToTest' in self.ag.envdir:
+        if "ToTest" in self.ag.envdir:
             archs = self.archs
             if not archs:
                 archs = self.ag.archs
-            wild = '*'
-            done = ''
-            if archs: 
-                wild = '*'+archs+'*'
-            if ' ' in archs and self.repodirs:
+            wild = "*"
+            done = ""
+            if archs:
+                wild = "*" + archs + "*"
+            if " " in archs and self.repodirs:
                 self.p("for arch in {}; do".format(archs), f)
-                wild = '*$arch*'
-                done = 'done'
+                wild = "*$arch*"
+                done = "done"
 
-            if 'Leap' in self.ag.envdir or 'Jump' in self.ag.envdir:
+            if "Leap" in self.ag.envdir or "Jump" in self.ag.envdir:
                 for repodir in self.repodirs:
-                    self.p(cfg.read_files_repo_media, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*') + repodir.get('archs','')))
-            elif 'Factory' in self.ag.envdir:
+                    self.p(
+                        cfg.read_files_repo_media,
+                        f,
+                        "PRODUCTREPOPATH",
+                        self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild,
+                        "Media1.lst",
+                        "Media1_{}.lst".format(
+                            os.path.basename(repodir.attrib["folder"]).lstrip("*") + repodir.get("archs", "")
+                        ),
+                    )
+            elif "Factory" in self.ag.envdir:
                 for repodir in self.repodirs:
-                    if not repodir.attrib.get('gen', ''):
-                        self.p(cfg.read_files_repo_media + cfg.read_files_repo_media_convert, f, "PRODUCTREPOPATH", self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild, 'Media1.lst', '', 'destlst', 'Media1_{}.lst'.format(os.path.basename(repodir.attrib["folder"]).lstrip('*')), 'media.1/media', 'media.1/products')
- 
+                    if not repodir.attrib.get("gen", ""):
+                        self.p(
+                            cfg.read_files_repo_media + cfg.read_files_repo_media_convert,
+                            f,
+                            "PRODUCTREPOPATH",
+                            self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild,
+                            "Media1.lst",
+                            "",
+                            "destlst",
+                            "Media1_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip("*")),
+                            "media.1/media",
+                            "media.1/products",
+                        )
+
             if done:
                 self.p(done, f)
 
         if self.assets and self.assets_flavor:
             for k, v in self.asset_folders.items():
-                self.p('''rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst'''.format(v, k), f)
+                self.p(
+                    """rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst""".format(
+                        v, k
+                    ),
+                    f,
+                )
 
-    def gen_print_array_no_rsync(self,f):
-        self.p('declare -A norsync_filter',f)
+    def gen_print_array_no_rsync(self, f):
+        self.p("declare -A norsync_filter", f)
         for fl, h in zip(self.flavors, self.assets):
-            if self.asset_rsync.get(h,1) == "0":
+            if self.asset_rsync.get(h, 1) == "0":
                 self.p("norsync_filter[{}]='{}'".format(h, 1), f)
 
-    def gen_print_array_flavor_filter(self,f):
+    def gen_print_array_flavor_filter(self, f):
         added_declare_flavor_filter = 0
         if self.hdds or self.assets or self.flavor_aliases:
-            self.p('declare -A flavor_filter',f)
+            self.p("declare -A flavor_filter", f)
             added_declare_flavor_filter = 1
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
@@ -534,41 +658,45 @@ class ActionBatch:
             for fl, iso in zip(self.flavors, self.isos):
                 if iso != "1" and iso != "0" and iso != "extract_as_repo":
                     if not added_declare_flavor_filter:
-                        self.p('declare -A flavor_filter',f)
+                        self.p("declare -A flavor_filter", f)
                         added_declare_flavor_filter = 1
                     self.p("flavor_filter[{}]='{}'".format(fl, iso), f)
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
-    
-    def gen_print_array_flavor_distri(self,f):
+
+    def gen_print_array_flavor_distri(self, f):
         if self.news:
-            self.p('declare -A news',f)
+            self.p("declare -A news", f)
         if not self.flavor_distri:
             return
-        self.p('declare -A flavor_distri',f)
+        self.p("declare -A flavor_distri", f)
         for fl, distri in self.flavor_distri.items():
             self.p("flavor_distri[{}]='{}'".format(fl, distri), f)
 
-    def gen_print_array_iso_folder(self,f):
+    def gen_print_array_iso_folder(self, f):
         if self.iso_folder:
-            self.p('declare -A iso_folder',f)
+            self.p("declare -A iso_folder", f)
         for k, v in self.iso_folder.items():
             self.p("iso_folder[{}]='{}/'".format(k, v), f)
 
-    def gen_print_array_hdd_folder(self,f):
+    def gen_print_array_hdd_folder(self, f):
         if len(self.hdd_folder) > 1 and not self.isos and len(self.flavors) == 1:
-            self.p('declare -A hdd_folder',f)
+            self.p("declare -A hdd_folder", f)
             for k, v in self.hdd_folder.items():
                 self.p("hdd_folder[{}]='{}'".format(k, v), f)
 
-    def gen_print_rsync_assets(self,f):
-        self.p('''echo ""
+    def gen_print_rsync_assets(self, f):
+        self.p(
+            """echo ""
 echo "# Syncing assets"
-declare -A asset_folders''', f)
+declare -A asset_folders""",
+            f,
+        )
         for k, v in self.asset_folders.items():
             self.p("asset_folders[{}]='{}'".format(k, v), f)
-        self.p('''while read src; do
+        self.p(
+            """while read src; do
     folder=""
     for mask in "${!asset_folders[@]}"; do
         [[ $src =~ $mask ]] || continue
@@ -576,33 +704,51 @@ declare -A asset_folders''', f)
         break
     done
     echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/*$src /var/lib/openqa/factory/other/"
-done < <(sort __envsub/files_asset.lst)''', f)
+done < <(sort __envsub/files_asset.lst)""",
+            f,
+        )
 
-    def gen_print_rsync_iso(self,f):
+    def gen_print_rsync_iso(self, f):
         print(cfg.header, file=f)
         self.gen_print_array_no_rsync(f)
         if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
             self.gen_print_array_hdd_folder(f)
-            if self.archs == 'armv7hl':
-                self.p(cfg.rsync_hdds, f, 'grep ${arch}', 'grep ${arch//armv7hl/armv7l}')
+            if self.archs == "armv7hl":
+                self.p(cfg.rsync_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
             else:
                 self.p(cfg.rsync_hdds, f)
-        elif self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith('http')):
+        elif self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith("http")):
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
-                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder), f, '| head -n 1', '| grep {} | head -n 1'.format(self.mask))
+                self.p(
+                    cfg.rsync_iso(
+                        self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder
+                    ),
+                    f,
+                    "| head -n 1",
+                    "| grep {} | head -n 1".format(self.mask),
+                )
             else:
-                self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder), f)
+                self.p(
+                    cfg.rsync_iso(
+                        self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder
+                    ),
+                    f,
+                )
         elif self.assets:
             self.gen_print_array_flavor_filter(f)
-            self.p(cfg.rsync_iso(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder), f)
+            self.p(
+                cfg.rsync_iso(
+                    self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder
+                ),
+                f,
+            )
 
-        if self.assets and ( self.isos or self.hdds ):
+        if self.assets and (self.isos or self.hdds):
             self.gen_print_rsync_assets(f)
 
-
-    def gen_print_rsync_repo(self,f):
+    def gen_print_rsync_repo(self, f):
         print(cfg.header, file=f)
         if self.ag.version:
             print("version=" + self.ag.version, file=f)
@@ -610,10 +756,13 @@ done < <(sort __envsub/files_asset.lst)''', f)
             self.p(cfg.pre_rsync_repo(self.repos), f)
             self.p(cfg.rsync_repo1, f)
             for ren in self.renames:
-                self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
+                self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
             if self.build_id_from_iso:
-                self.p('''        buildid1=$(grep $repo __envsub/files_iso_buildid.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
-         [ -z "$buildid1" ] || buildid=$buildid1''', f)
+                self.p(
+                    """        buildid1=$(grep $repo __envsub/files_iso_buildid.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
+         [ -z "$buildid1" ] || buildid=$buildid1""",
+                    f,
+                )
 
             self.p(cfg.rsync_repo2, f)
 
@@ -624,35 +773,74 @@ done < <(sort __envsub/files_asset.lst)''', f)
             if r.attrib.get("gen", ""):
                 continue
             if not r.attrib.get("dest", ""):
-                self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+                self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
             elif not r.attrib.get("gen", ""):
                 self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
 
             for ren in self.renames:
-                self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
+                self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
             suffix = "*$arch*"
             if self.archs_repo == ".":
                 suffix = "*"
-            self.p(cfg.rsync_repodir2(), f,"PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + suffix, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"Media2","Media1","-debuginfo","","RSYNCFILTER","")
-            if r.attrib.get("debug",""):
+            self.p(
+                cfg.rsync_repodir2(),
+                f,
+                "PRODUCTREPOPATH",
+                self.productpath() + xtrapath + r.attrib["folder"] + suffix,
+                "files_repo.lst",
+                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                "Media2",
+                "Media1",
+                "-debuginfo",
+                "",
+                "RSYNCFILTER",
+                "",
+            )
+            if r.attrib.get("debug", ""):
                 if not r.attrib.get("dest", ""):
-                    self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+                    self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
                 else:
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
-                    self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + suffix, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["debug"]))
-            if r.attrib.get("source",""):
+                    self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+                self.p(
+                    cfg.rsync_repodir2(),
+                    f,
+                    "PRODUCTREPOPATH",
+                    self.productpath() + xtrapath + r.attrib["folder"] + suffix,
+                    "files_repo.lst",
+                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                    "RSYNCFILTER",
+                    " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace(
+                        "PACKAGES", r.attrib["debug"]
+                    ),
+                )
+            if r.attrib.get("source", ""):
                 if not r.attrib.get("dest", ""):
-                    self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+                    self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
                 else:
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
-                    self.p("        dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-                if self.ag.brand == 'obs':
-                    self.p(cfg.rsync_repodir2(), f, "PRODUCTREPOPATH", self.productpath() + xtrapath + r.attrib["folder"] + suffix, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"RSYNCFILTER", " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace("PACKAGES",r.attrib["source"]),"Media2","Media3","-debuginfo","-source")
+                    self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+                if self.ag.brand == "obs":
+                    self.p(
+                        cfg.rsync_repodir2(),
+                        f,
+                        "PRODUCTREPOPATH",
+                        self.productpath() + xtrapath + r.attrib["folder"] + suffix,
+                        "files_repo.lst",
+                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                        "RSYNCFILTER",
+                        " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace(
+                            "PACKAGES", r.attrib["source"]
+                        ),
+                        "Media2",
+                        "Media3",
+                        "-debuginfo",
+                        "-source",
+                    )
 
-    def gen_print_openqa(self,f):
+    def gen_print_openqa(self, f):
         print(cfg.header, file=f)
         self.p(cfg.pre_openqa_call_start(self.repos), f)
         self.gen_print_array_no_rsync(f)
@@ -660,37 +848,67 @@ done < <(sort __envsub/files_asset.lst)''', f)
         self.gen_print_array_flavor_distri(f)
         self.gen_print_array_hdd_folder(f)
         if self.assets and self.assets_flavor:
-            self.p('declare -A asset_tags', f)
+            self.p("declare -A asset_tags", f)
             for k, v in self.asset_tags.items():
                 self.p("asset_tags[{}]='{}'".format(k, v), f)
 
         if not self.flavors and not self.flavor_aliases:
             return
         if self.mask:
-            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor, self.repo0folder), f, '| grep $arch | head -n 1', '| grep {} | grep $arch | head -n 1'.format(self.mask))
+            self.p(
+                cfg.openqa_call_start(
+                    self.ag.distri,
+                    self.ag.version,
+                    self.archs,
+                    self.ag.staging(),
+                    self.news,
+                    self.news_archs,
+                    self.flavor_distri,
+                    self.meta_variables,
+                    self.assets_flavor,
+                    self.repo0folder,
+                ),
+                f,
+                "| grep $arch | head -n 1",
+                "| grep {} | grep $arch | head -n 1".format(self.mask),
+            )
         else:
-            self.p(cfg.openqa_call_start(self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.news, self.news_archs, self.flavor_distri, self.meta_variables, self.assets_flavor, self.repo0folder), f)
+            self.p(
+                cfg.openqa_call_start(
+                    self.ag.distri,
+                    self.ag.version,
+                    self.archs,
+                    self.ag.staging(),
+                    self.news,
+                    self.news_archs,
+                    self.flavor_distri,
+                    self.meta_variables,
+                    self.assets_flavor,
+                    self.repo0folder,
+                ),
+                f,
+            )
         if self.repolink and not self.iso_5:
             self.p(cfg.openqa_call_legacy_builds_link, f)
         if self.legacy_builds or (self.repolink and not self.iso_5):
             self.p(cfg.openqa_call_legacy_builds, f)
 
-        i=0
+        i = 0
         isos = self.isos.copy()
         if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
-            if self.archs == 'armv7hl':
-                self.p(cfg.openqa_call_start_hdds, f, 'grep ${arch}', 'grep ${arch//armv7hl/armv7l}')
+            if self.archs == "armv7hl":
+                self.p(cfg.openqa_call_start_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
             else:
                 self.p(cfg.openqa_call_start_hdds, f)
         elif self.hdds or (self.assets and not self.isos):
-            if self.hdds and self.productpath().startswith('http'):
-                self.p(" echo \" HDD_URL_1=PRODUCTPATH/$destiso \\\\\"", f)
+            if self.hdds and self.productpath().startswith("http"):
+                self.p(' echo " HDD_URL_1=PRODUCTPATH/$destiso \\\\"', f)
             else:
                 self.p(cfg.openqa_call_start_ex(self.checksum), f)
         else:
             if self.iso_5:
                 if self.fixed_iso:
-                    self.p(" echo \" ISO={} \\\\\"".format(self.fixed_iso), f)
+                    self.p(' echo " ISO={} \\\\"'.format(self.fixed_iso), f)
                 self.p(cfg.openqa_call_start_iso(self.checksum), f, "ISO", "ISO_5")
             else:
                 self.p(cfg.openqa_call_start_iso(self.checksum), f)
@@ -698,7 +916,7 @@ done < <(sort __envsub/files_asset.lst)''', f)
                 isos = [self.iso_5]
 
         for iso in isos:
-            if self.iso_extract_as_repo.get(iso,0) or self.iso_5:
+            if self.iso_extract_as_repo.get(iso, 0) or self.iso_5:
                 destiso = "${repo0folder}"
                 i += 1
                 s = ""
@@ -710,16 +928,21 @@ done < <(sort __envsub/files_asset.lst)''', f)
                     destiso = self.fixed_iso[:-4]
                 self.p(s, f, "REPO0_ISO", destiso)
                 if self.iso_5:
-                    pref = self.iso_5.replace("-","_").rstrip('_DVD')
+                    pref = self.iso_5.replace("-", "_").rstrip("_DVD")
                     self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
-                break # for now only REPO_0
+                break  # for now only REPO_0
 
-        arch_expression = ''
+        arch_expression = ""
         if self.assets_archs:
-            arch_expression = '|| [ "$arch" != ' + self.assets_archs + ' ]'
+            arch_expression = '|| [ "$arch" != ' + self.assets_archs + " ]"
         if self.assets and self.assets_flavor:
-            self.p(''' i=1
- [[ ! "$flavor" =~ ''' + self.assets_flavor + ''' ]] '''+ arch_expression +''' || while read src; do
+            self.p(
+                """ i=1
+ [[ ! "$flavor" =~ """
+                + self.assets_flavor
+                + """ ]] """
+                + arch_expression
+                + """ || while read src; do
      echo " ASSET_$i=$src \\\\"
      asset_tag=""
      for mask in "${!asset_tags[@]}"; do
@@ -729,13 +952,15 @@ done < <(sort __envsub/files_asset.lst)''', f)
       done
       [ -z "$asset_tag" ] || echo " ASSET_${asset_tag^^}=$src \\\\"
       : $((i++))
-  done < <(grep ${arch} __envsub/files_asset.lst | sort)''', f)
+  done < <(grep ${arch} __envsub/files_asset.lst | sort)""",
+                f,
+            )
 
         self.p(" i={}".format(i), f)
 
         if self.repos or self.repolink:
-            if self.ag.brand == 'ibs':
-                self.p(" i=9", f) # temporary to simplify diff with old rsync scripts, may be removed later
+            if self.ag.brand == "ibs":
+                self.p(" i=9", f)  # temporary to simplify diff with old rsync scripts, may be removed later
             self.p(cfg.openqa_call_repot(self.build_id_from_iso, self.repos), f, "REPOTYPE", "''", "REPOPREFIX", "SLE_")
 
         repodirs = self.repodirs
@@ -743,32 +968,51 @@ done < <(sort __envsub/files_asset.lst)''', f)
             repodirs = self.ag.batch_by_name(self.repolink).repodirs
 
         for r in repodirs:
-            if r.attrib.get("dest","") == "":
-                self.p(cfg.openqa_call_repot1(), f, "REPOKEY", r.attrib.get("rename",r.tag),"mid=''", "mid='{}'".format(r.attrib.get("mid","")))
+            if r.attrib.get("dest", "") == "":
+                self.p(
+                    cfg.openqa_call_repot1(),
+                    f,
+                    "REPOKEY",
+                    r.attrib.get("rename", r.tag),
+                    "mid=''",
+                    "mid='{}'".format(r.attrib.get("mid", "")),
+                )
             else:
-                self.p(cfg.openqa_call_repot1_dest(r.attrib["dest"]), f, "REPOKEY", r.attrib.get("rename",r.tag))
+                self.p(cfg.openqa_call_repot1_dest(r.attrib["dest"]), f, "REPOKEY", r.attrib.get("rename", r.tag))
 
             for ren in self.renames:
-                self.p("            dest=${{dest//{}/{}}}".format(ren[0],ren[1]), f)
-            if i==0:
-                self.p("            [ $i != 0 ] || {{ {};  }}".format(cfg.openqa_call_repo0()), f, "REPO0_ISO", "$dest", f)
+                self.p("            dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+            if i == 0:
+                self.p(
+                    "            [ $i != 0 ] || {{ {};  }}".format(cfg.openqa_call_repo0()), f, "REPO0_ISO", "$dest", f
+                )
             media_filter = ""
-            if r.attrib.get("debug","") == "" or r.attrib.get("source","") == "":
-                if r.attrib.get("debug","") == "" and r.attrib.get("source","") == "":
+            if r.attrib.get("debug", "") == "" or r.attrib.get("source", "") == "":
+                if r.attrib.get("debug", "") == "" and r.attrib.get("source", "") == "":
                     media_filter = "| grep Media1 "
-                elif r.attrib.get("debug","") == "":
+                elif r.attrib.get("debug", "") == "":
                     media_filter = "| grep -E '(Media1|Media3)' "
                 else:
                     media_filter = "| grep -E '(Media1|Media2)' "
-            self.p(cfg.openqa_call_repot2.format(media_filter), f, "files_repo.lst", "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip('*')),"DEBUG_PACKAGES",r.attrib.get("debug","").strip('{}'),"SOURCE_PACKAGES",r.attrib.get("source","").strip('{}'))
+            self.p(
+                cfg.openqa_call_repot2.format(media_filter),
+                f,
+                "files_repo.lst",
+                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                "DEBUG_PACKAGES",
+                r.attrib.get("debug", "").strip("{}"),
+                "SOURCE_PACKAGES",
+                r.attrib.get("source", "").strip("{}"),
+            )
 
         if self.ag.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
         if self.variable:
-            self.p('echo \" {} \\\\\"'.format(self.variable), f)
+            self.p('echo " {} \\\\"'.format(self.variable), f)
 
         self.p(cfg.openqa_call_end(self.ag.version), f)
         self.p(cfg.openqa_call_news_end(self.distri, self.news, self.news_archs), f)
+
 
 def parse_dir(root, d, files):
     for f in files:
@@ -780,7 +1024,7 @@ def parse_dir(root, d, files):
             print("Ignoring [" + f + "]: Cannot parse xml", file=sys.stderr)
             continue
 
-        pattern = rootXml.attrib.get("project_pattern","")
+        pattern = rootXml.attrib.get("project_pattern", "")
         if not pattern:
             print("Ignoring [" + f + "]: Cannot find attribute project_pattern", file=sys.stderr)
             continue
@@ -797,20 +1041,31 @@ def parse_dir(root, d, files):
             #    print("OBS: no match [" + found_match.group(0) , file=sys.stderr)
             # print("OBS: no match [" + d + "] for " + r.pattern,file=sys.stderr)
             continue
-        version = found_match.groupdict().get("version","")
+        version = found_match.groupdict().get("version", "")
         if version.find("'") != -1:
-            print("OBS: Ignoring [" + d + "]: Version cannot contain quote characters; got: " + version, file=sys.stderr)
+            print(
+                "OBS: Ignoring [" + d + "]: Version cannot contain quote characters; got: " + version, file=sys.stderr
+            )
             continue
 
-        dist_path = rootXml.attrib.get("dist_path","")
+        dist_path = rootXml.attrib.get("dist_path", "")
         if dist_path.find('"') != -1:
-            print("OBS: Ignoring [" + d + "]: dist_path cannot contain quote characters; got: " + dist_path, file=sys.stderr)
+            print(
+                "OBS: Ignoring [" + d + "]: dist_path cannot contain quote characters; got: " + dist_path,
+                file=sys.stderr,
+            )
             continue
-        if dist_path.find('`') != -1:
-            print("OBS: Ignoring [" + d + "]: dist_path cannot contain backtick characters; got: " + dist_path, file=sys.stderr)
+        if dist_path.find("`") != -1:
+            print(
+                "OBS: Ignoring [" + d + "]: dist_path cannot contain backtick characters; got: " + dist_path,
+                file=sys.stderr,
+            )
             continue
         if dist_path.find("$(") != -1:
-            print("OBS: Ignoring [" + d + "]: dist_path cannot contain '$(' characters; got: " + dist_path, file=sys.stderr)
+            print(
+                "OBS: Ignoring [" + d + "]: dist_path cannot contain '$(' characters; got: " + dist_path,
+                file=sys.stderr,
+            )
             continue
 
         # make substitutions of common variables if needed
@@ -836,34 +1091,36 @@ def parse_dir(root, d, files):
 
     return ("", "", "")
 
+
 def detect_xml_dir(project):
     # if project has no path
-    if not '/' in project:
+    if not "/" in project:
         return os.getcwd()[-3:]
 
     return os.path.dirname(project)[-3:]
 
+
 def gen_files(project):
-    project = project.rstrip('/')
+    project = project.rstrip("/")
     xmlfile = ""
 
-    xmldir = detect_xml_dir(project);
+    xmldir = detect_xml_dir(project)
 
     for root, _, files in os.walk("xml/" + xmldir):
         (xmlfile, dist_path, version) = parse_dir(root, project, files)
 
     if not xmlfile:
-        print('Cannot find xml file for {} ...'.format(project), file=sys.stderr)
+        print("Cannot find xml file for {} ...".format(project), file=sys.stderr)
         return 1
-    
-    if xmldir == 'abs':
+
+    if xmldir == "abs":
         import abs
-    if xmldir == 'ibs':
+    if xmldir == "ibs":
         import ibs
 
     a = ActionGenerator(os.getcwd(), project, dist_path, version, xmldir)
     if a is None:
-        print('Couldnt initialize', file=sys.stderr)
+        print("Couldnt initialize", file=sys.stderr)
         sys.exit(1)
 
     a.doFile(xmlfile)
@@ -871,7 +1128,7 @@ def gen_files(project):
     for batch in a.batches:
         path = project
         if batch.subfolder != "default":
-            path = project +"/"+ batch.subfolder
+            path = project + "/" + batch.subfolder
             if not os.path.exists(path):
                 os.mkdir(path)
         batch.gen_if_not_customized(path, "read_files.sh")
@@ -881,10 +1138,13 @@ def gen_files(project):
 
     return 0
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # execute only if run as the entry point into the program
-    parser = argparse.ArgumentParser(description='Generate scripts for OBS project synchronization according to XML definition.')
-    parser.add_argument('project', nargs='?', help='Folder matching OBS project')
+    parser = argparse.ArgumentParser(
+        description="Generate scripts for OBS project synchronization according to XML definition."
+    )
+    parser.add_argument("project", nargs="?", help="Folder matching OBS project")
 
     class Args:
         pass
@@ -892,11 +1152,11 @@ if __name__ == '__main__':
     args = Args()
     parser.parse_args(namespace=args)
 
-    ret=1
+    ret = 1
 
     if args.project:
         print("Generating scripts for " + args.project)
-        ret=gen_files(args.project)
+        ret = gen_files(args.project)
         if ret == 0:
             print("OK")
 
