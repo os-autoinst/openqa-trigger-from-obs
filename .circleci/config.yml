@@ -8,9 +8,10 @@ jobs:
       - checkout
       - run:
           command: |
-            zypper -n in --no-recommends diffutils make python3 tar
+            zypper -n in --no-recommends diffutils make python3 tar python3-black
       - checkout
       - run: make test_regen_all
+      - run: make test_python_style
       - run: make test
 
   integration:
