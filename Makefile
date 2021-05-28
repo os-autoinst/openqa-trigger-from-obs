@@ -31,5 +31,7 @@ test_regen_all:
 	(bash t/regen_all.sh)
 
 test_update_before_files: test_regen_all
-	( cd t && bash test_before_after_diff.sh --update-before *bs/* )
+	(cd t && bash test_before_after_diff.sh --update-before *bs/*)
 
+test_python_style:
+	black --check --fast --diff script/scriptgen.py 
