@@ -165,6 +165,7 @@ class ActionBatch:
         self.repolink = ""
         self.build_id_from_iso = 0
         self.repodirs = []
+        self.version_from_media = 0  # works only whith repodirs. Will also sync in read_files.sh PRODUCTDIR*/%repodir.folder%*Media1/media.1/media
         self.renames = []
         self.distri = actionGenerator.distri
         self.folder = ""
@@ -359,6 +360,10 @@ class ActionBatch:
                 self.repos.append(t)
             if t.attrib.get("mirror", ""):
                 self.mirror_repo = t.tag
+
+        if node.attrib.get("version_from_media", ""):
+            self.version_from_media = node.attrib["version_from_media"]
+
         for t in node.findall("./alias"):
             prefix = t.attrib.get("prefix", "")
             suffix = t.attrib.get("suffix", "")
@@ -570,10 +575,13 @@ class ActionBatch:
                 self.gen_repo(repodir, gen, f)
             else:
                 archs = repodir.attrib.get("archs", "ARCHORS")
+                txt = "PRODUCTREPOPATH"
+                if self.version_from_media:
+                    txt = "PRODUCTREPOPATH/"
                 self.p(
                     cfg.read_files_repo,
                     f,
-                    "PRODUCTREPOPATH",
+                    txt,
                     self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*",
                     "REPOORS",
                     "",
@@ -584,7 +592,7 @@ class ActionBatch:
                 )
 
         # let's sync media.1/media to be able verify build_id
-        if "ToTest" in self.ag.envdir:
+        if "ToTest" in self.ag.envdir or self.version_from_media:
             archs = self.archs
             if not archs:
                 archs = self.ag.archs
@@ -597,7 +605,7 @@ class ActionBatch:
                 wild = "*$arch*"
                 done = "done"
 
-            if "Leap" in self.ag.envdir or "Jump" in self.ag.envdir:
+            if "Leap" in self.ag.envdir or "Jump" in self.ag.envdir or self.version_from_media:
                 for repodir in self.repodirs:
                     self.p(
                         cfg.read_files_repo_media,

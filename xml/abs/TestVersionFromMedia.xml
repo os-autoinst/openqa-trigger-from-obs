@@ -1,0 +1,8 @@
+<openQA project_pattern="TestVersionFromMedia(?P&lt;version&gt;[1-9])" dist_path="test" archs="x86_64">
+    <flavor name="TEST" distri="DISTRI" version_from_media="1">
+        <repos>
+            <Module-RT folder="repo/*Module-RT"/>
+        </repos>
+    </flavor>
+</openQA>
+
