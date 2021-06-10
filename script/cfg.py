@@ -108,6 +108,7 @@ echo '# REPOOWNLIST'
 [ ! -f __envsub/files_iso.lst ] || test -n "$buildid" || buildid=$(cat __envsub/files_iso.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ -z "__STAGING" ] || buildid=${buildid//Build/Build__STAGING.}
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
+[ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
 for repo in {REPOOWNLIST,}; do
     while read src; do
@@ -131,7 +132,8 @@ done
 
 rsync_repodir1 = '''
 archs=(ARCHITECTURREPO)
-buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
+[ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
+[ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
 for arch in "${archs[@]}"; do
     while read src; do
@@ -210,12 +212,13 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_start_distri(flavor_distri) + '''
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
-        iso=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
+        iso=$(grep "$filter" __envsub/files_iso.lst 2>/dev/null | grep $arch | head -n 1)
         ''' + openqa_call_start_fix_iso(archs) + '''
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | tail -n 1) || :
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*') || :
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
+        [ -n "$iso$build" ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
         [ -n "$build"  ] || continue
         buildex=${buildex/.iso/}
         buildex=${buildex/.raw.xz/}
@@ -242,10 +245,10 @@ openqa_call_legacy_builds=''
 
 def openqa_call_start_iso(checksum):
     if checksum:
-        return ''' echo \" ISO=${destiso} \\\\
+        return ''' [ -z "$destiso" ] || echo \" ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
-    return ''' echo \" ISO=${destiso} \\\\
+    return ''' [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
 
 def openqa_call_start_ex1(checksum, tag):

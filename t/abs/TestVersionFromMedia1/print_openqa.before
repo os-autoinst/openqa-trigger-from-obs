@@ -1,0 +1,10 @@
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ BUILD=0007 \
+ DISTRI=DISTRI \
+ FLAVOR=TEST \
+ REPO_0=SLE-15-SP3-Module-RT-POOL-x86_64-Build0007 \
+ REPO_MODULE_RT=SLE-15-SP3-Module-RT-POOL-x86_64-Build0007 \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
