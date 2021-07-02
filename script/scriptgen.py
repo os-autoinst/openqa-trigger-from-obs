@@ -727,7 +727,7 @@ done < <(sort __envsub/files_asset.lst)""",
                 self.p(cfg.rsync_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
             else:
                 self.p(cfg.rsync_hdds, f)
-        elif self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith("http")):
+        elif self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith("http")) or self.assets:
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
