@@ -414,11 +414,13 @@ class ActionBatch:
                     self.assets_flavor = t.attrib["flavor"]
                 if t.attrib.get("archs"):
                     self.assets_archs = t.attrib["archs"]
-
-                if t.attrib.get("filemask") and t.attrib.get("rsync"):
-                    self.asset_rsync[t.attrib["filemask"]] = t.attrib["rsync"]
-                if t.attrib.get("filemask") and t.attrib.get("folder"):
-                    self.asset_folders[t.attrib["filemask"]] = t.attrib["folder"]
+                if t.attrib.get("filemask"):
+                    if t.attrib.get("rsync"):
+                        self.asset_rsync[t.attrib["filemask"]] = t.attrib["rsync"]
+                    if t.attrib.get("folder"):
+                        self.asset_folders[t.attrib["filemask"]] = t.attrib["folder"]
+                    elif node.attrib.get("folder"):
+                        self.asset_folders[t.attrib["filemask"]] = node.attrib["folder"]
             if t.tag == "repos" and t.attrib.get("build_id_from_iso", ""):
                 self.build_id_from_iso = 1
 
@@ -510,7 +512,7 @@ class ActionBatch:
                     )
         if not self.isos and not self.hdds:
             for asset in self.assets:
-                self.p(cfg.read_files_hdd, f, "FOLDER", "", "ISOMASK", asset)
+                self.p(cfg.read_files_hdd, f, "FOLDER", self.asset_folders.get(asset, ""), "ISOMASK", asset)
         if self.iso_5:
             self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(self.iso_5, ""), "SRCISO", self.iso_5)
         elif self.isos:
