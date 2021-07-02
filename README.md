@@ -93,7 +93,7 @@ Steps needed during deployment:
 
 ```
 mkdir Leap:15.2:ToTest
-python3 script/scriptgen.pl Leap:15.2:ToTest
+python3 script/scriptgen.py Leap:15.2:ToTest
 ```
 
 3. Call rsync.sh to start the synchronization:
