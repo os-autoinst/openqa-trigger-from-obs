@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ToTest/appliances/x86_64/*openSUSE-Tumbleweed-20210701-WSL.x86_64-21153.2.2.0-Snapshot20210701.appx /var/lib/openqa/factory/other/openSUSE-Tumbleweed-20210701-WSL.x86_64-21153.2.2.0-Snapshot20210701.appx
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ToTest/appliances/x86_64/*openSUSE-Tumbleweed-20210701-WSL.x86_64-21153.2.2.0-Snapshot20210701.appx.sha256 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-20210701-WSL.x86_64-21153.2.2.0-Snapshot20210701.appx.sha256

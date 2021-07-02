@@ -39,4 +39,9 @@
             <hdd filemask=".*Kubic-kubeadm-kvm-and-xen.*\.qcow2$"/>
         </flavor>
     </batch>
+    <batch name="wsl" folder="appliances/x86_64" archs="x86_64" repos="base" distri="opensuse">
+        <flavor name="WSL" folder="kiwi-images-wsl">
+            <asset filemask=".*\.appx$"/>
+        </flavor>
+    </batch>
 </openQA>

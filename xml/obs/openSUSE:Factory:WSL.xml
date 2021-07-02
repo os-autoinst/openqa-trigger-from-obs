@@ -1,6 +1,0 @@
-<openQA project_pattern="openSUSE:(?P&lt;version&gt;Factory):WSL:ToTest"
-    dist_path="obspublish::openqa/openSUSE:Factory:WSL:ToTest/standard/x86_64/wsl-appx">
-    <flavor name="WSL" distri="opensuse" archs=".">
-        <asset filemask='.*\.appx$'/>
-    </flavor>
-</openQA>
