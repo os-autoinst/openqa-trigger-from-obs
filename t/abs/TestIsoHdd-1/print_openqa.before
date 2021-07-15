@@ -1,13 +1,13 @@
 /usr/share/openqa/script/client isos post --host localhost \
  ARCH=x86_64 \
- ASSET_256=test-x86_64-Build1.1.iso.sha256 \
- ASSET_257=test-x86_64-Build1.1.qcow2.sha256 \
+ ASSET_1155=test-x86_64-Build1.1.iso.sha256 \
+ ASSET_1156=test-x86_64-Build1.1.qcow2.sha256 \
  BUILD=1.1 \
- CHECKSUM_HDD_2=$(cut -b-64 /var/lib/openqa/factory/other/test-x86_64-Build1.1.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ CHECKSUM_HDD_901=$(cut -b-64 /var/lib/openqa/factory/other/test-x86_64-Build1.1.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/test-x86_64-Build1.1.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=distri \
  FLAVOR=TEST \
- HDD_2=test-x86_64-Build1.1.qcow2 \
+ HDD_901=test-x86_64-Build1.1.qcow2 \
  ISO=test-x86_64-Build1.1.iso \
  VERSION=1 \
  _DEPRIORITIZEBUILD=1
