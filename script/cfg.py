@@ -91,8 +91,12 @@ for flavor in {FLAVORLIST,}; do
                     break
                 fi
             done
-            [ -n "$folder" ] || continue
-            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/hdd/"
+            # [ -n "$folder" ] || continue
+            if [[ $src =~ .iso$ ]]; then
+                echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/iso/"
+            else
+                echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/hdd/"
+            fi
             echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src.sha256 /var/lib/openqa/factory/other/"
             echo ""
         done < <(grep ${arch} __envsub/files_iso.lst | sort)
@@ -282,11 +286,16 @@ openqa_call_start_hdds='''
              break
          fi
      done
-     [ -n "$folder" ] || continue
+     # [ -n "$folder" ] || continue
      n=$((i++))
      echo " ASSET_$((n+255))=$src.sha256 \\\\"
-     echo " HDD_$n=$src \\\\"
-     echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+     if [[ $src =~ .iso$ ]]; then
+         echo " ISO=$src \\\\"
+         echo " CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+     else
+         echo " HDD_$n=$src \\\\"
+         echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+     fi
  done < <(grep ${arch} __envsub/files_iso.lst | sort)
 '''
 

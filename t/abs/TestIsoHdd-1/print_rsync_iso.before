@@ -1,0 +1,6 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestIsoHdd-1/TestIsoHdd-1:/images/iso/test-x86_64-Build1.1.iso /var/lib/openqa/factory/iso/
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestIsoHdd-1/TestIsoHdd-1:/images/iso/test-x86_64-Build1.1.iso.sha256 /var/lib/openqa/factory/other/
+
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestIsoHdd-1/TestIsoHdd-1:/images//test-x86_64-Build1.1.qcow2 /var/lib/openqa/factory/hdd/
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestIsoHdd-1/TestIsoHdd-1:/images//test-x86_64-Build1.1.qcow2.sha256 /var/lib/openqa/factory/other/
+
