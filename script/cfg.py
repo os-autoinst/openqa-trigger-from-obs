@@ -91,7 +91,6 @@ for flavor in {FLAVORLIST,}; do
                     break
                 fi
             done
-            # [ -n "$folder" ] || continue
             if [[ $src =~ .iso$ ]]; then
                 echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/iso/"
             else
@@ -286,7 +285,6 @@ openqa_call_start_hdds='''
              break
          fi
      done
-     # [ -n "$folder" ] || continue
      n=$((i++))
      echo " ASSET_$((n+255))=$src.sha256 \\\\"
      if [[ $src =~ .iso$ ]]; then

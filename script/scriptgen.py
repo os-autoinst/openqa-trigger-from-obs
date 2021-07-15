@@ -176,6 +176,7 @@ class ActionBatch:
         self.meta_variables = "_OBSOLETE=1"
         if self.ag.brand != "obs" and not self.ag.staging():
             self.meta_variables = "_DEPRIORITIZEBUILD=1"
+        self.offset = 1
 
     def productpath(self):
         if self.dist_path:
@@ -348,6 +349,8 @@ class ActionBatch:
             self.distri = node.attrib["distri"]
         if node.attrib.get("legacy_builds", ""):
             self.legacy_builds = node.attrib["legacy_builds"]
+        if node.attrib.get("offset", ""):
+            self.offset = node.attrib["offset"]
 
         for t in node.findall(".//repos"):
             if t.attrib.get("archs", ""):
@@ -926,7 +929,7 @@ done < <(sort __envsub/files_asset.lst)""",
             if self.archs == "armv7hl":
                 self.p(cfg.openqa_call_start_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
             else:
-                self.p(cfg.openqa_call_start_hdds, f)
+                self.p(cfg.openqa_call_start_hdds, f, "i=1", "i=" + self.offset)
         elif self.hdds or (self.assets and not self.isos):
             if self.hdds and self.productpath().startswith("http"):
                 self.p(' echo " HDD_URL_1=PRODUCTPATH/$destiso \\\\"', f)
