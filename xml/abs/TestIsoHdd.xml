@@ -1,0 +1,7 @@
+<!-- Example of broject having both iso and hdd -->
+<openQA project_pattern="TestIsoHdd-(?P&lt;version&gt;[0-9]+)" dist_path="TestIsoHdd-${version}:/images">
+    <flavor name="TEST" distri="distri">
+        <iso filemask=".*iso$" folder="iso"/>
+        <hdd filemask=".*qcow2$"/>
+    </flavor>
+</openQA>

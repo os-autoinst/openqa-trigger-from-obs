@@ -400,6 +400,11 @@ class ActionBatch:
                 self.asset_folders[t.attrib["filemask"]] = assets_folder
 
         for t in node.findall(".//*"):
+            if t.tag == "iso":
+                self.isos.append(t.attrib["filemask"])
+                if t.attrib.get("folder", ""):
+                    self.iso_folder[t.attrib["filemask"]] = t.attrib["folder"]
+                    self.hdd_folder[t.attrib["filemask"]] = t.attrib["folder"]
             if t.tag == "hdd":
                 self.hdds.append(t.attrib["filemask"])
                 if node.attrib.get("folder", ""):
@@ -522,7 +527,19 @@ class ActionBatch:
                 self.p(cfg.read_files_isos, f)
             else:
                 for iso in self.isos:
-                    self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(iso, ""), "SRCISO", iso)
+                    if "*" in iso:
+                        self.p(
+                            cfg.read_files_iso,
+                            f,
+                            "FOLDER",
+                            self.iso_folder.get(iso, ""),
+                            "SRCISO",
+                            "",
+                            "Media1?.iso$",
+                            iso,
+                        )
+                    else:
+                        self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(iso, ""), "SRCISO", iso)
 
         if self.repolink:
             self.p(cfg.read_files_repo_link, f)
@@ -664,7 +681,7 @@ class ActionBatch:
         if not self.isos and not self.hdds:
             for fl, h in zip(self.flavors, self.assets):
                 self.p("flavor_filter[{}]='{}'".format(fl, h), f)
-        if not self.assets and not self.hdds:
+        if not self.assets and ((not self.hdds) or len(self.flavors) == 1):
             for fl, iso in zip(self.flavors, self.isos):
                 if iso != "1" and iso != "0" and iso != "extract_as_repo":
                     if not added_declare_flavor_filter:
@@ -691,7 +708,7 @@ class ActionBatch:
             self.p("iso_folder[{}]='{}/'".format(k, v), f)
 
     def gen_print_array_hdd_folder(self, f):
-        if len(self.hdd_folder) > 1 and not self.isos and len(self.flavors) == 1:
+        if ((len(self.hdd_folder) > 1) or (self.hdd_folder and self.isos)) and len(self.flavors) == 1:
             self.p("declare -A hdd_folder", f)
             for k, v in self.hdd_folder.items():
                 self.p("hdd_folder[{}]='{}'".format(k, v), f)
@@ -721,7 +738,7 @@ done < <(sort __envsub/files_asset.lst)""",
     def gen_print_rsync_iso(self, f):
         print(cfg.header, file=f)
         self.gen_print_array_no_rsync(f)
-        if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
+        if ((len(self.hdds) > 1 and (not self.isos)) or (self.isos and self.hdds)) and len(self.flavors) < 2:
             self.gen_print_array_hdd_folder(f)
             if self.archs == "armv7hl":
                 self.p(cfg.rsync_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
@@ -905,7 +922,7 @@ done < <(sort __envsub/files_asset.lst)""",
 
         i = 0
         isos = self.isos.copy()
-        if len(self.hdds) > 1 and not self.isos and len(self.flavors) == 1:
+        if ((len(self.hdds) > 1 and not self.isos) or (self.hdds and self.isos)) and len(self.flavors) == 1:
             if self.archs == "armv7hl":
                 self.p(cfg.openqa_call_start_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
             else:
