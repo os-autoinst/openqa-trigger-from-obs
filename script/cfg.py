@@ -91,11 +91,8 @@ for flavor in {FLAVORLIST,}; do
                     break
                 fi
             done
-            if [[ $src =~ .iso$ ]]; then
-                echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/iso/"
-            else
-                echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/hdd/"
-            fi
+            [[ $src =~ .iso$ ]] && asset="iso" || asset="hdd"
+            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/$asset/"
             echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src.sha256 /var/lib/openqa/factory/other/"
             echo ""
         done < <(grep ${arch} __envsub/files_iso.lst | sort)
@@ -183,11 +180,12 @@ def openqa_call_start_fix_iso(archs):
     return ''
 
 def openqa_call_news(news, news_archs):
-    if news and news_archs:
-        return '''[[ ! "$flavor" =~ ''' + news + ''' ]] || [ "$arch" != ''' + news_archs + ''' ] || news["$flavor"]="$destiso"'''
-    if news:
-        return '''[[ ! "$flavor" =~ ''' + news + ''' ]] || news["$flavor"]="$destiso"'''
-    return ''
+    if not news:
+        return ''
+    news_str = '''[[ ! "$flavor" =~ ''' + news + ''' ]]'''
+    if news_archs:
+        news_str += ''' || [ "$arch" != ''' + news_archs + ''' ]'''
+    return news_str + ''' || news["$flavor"]="$destiso"'''
 
 def openqa_call_start_distri(flavor_distri):
     if flavor_distri:
@@ -257,7 +255,7 @@ def openqa_call_start_iso(checksum):
 def openqa_call_start_ex1(checksum, tag):
     res = tag + '=${destiso} \\\\'
     if checksum:
-        res = res + '''
+        res += '''
  CHECKSUM_''' + tag + '''=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
  ASSET_256=${destiso}.sha256 \\\\'''
     return res
