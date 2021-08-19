@@ -150,6 +150,7 @@ class ActionBatch:
         self.hdd_folder = {}
         self.assets = []
         self.assets_flavor = ""
+        self.assets_flavor_in_hdd = 0
         self.assets_archs = ""
         self.asset_folders = {}
         self.asset_tags = {}
@@ -160,6 +161,8 @@ class ActionBatch:
         self.fixed_iso = ""
         self.mask = ""
         self.iso_extract_as_repo = {}
+        self.vagrant_boxes = []
+        self.vagrant_boxes_flavor = ""
         self.mirror_repo = ""
         self.repos = []
         self.repolink = ""
@@ -298,6 +301,7 @@ class ActionBatch:
         print(s, file=f)
 
     def doFlavor(self, node):
+        self.assets_flavor_in_hdd = 0
         if node.attrib.get("archs", ""):
             self.archs = node.attrib["archs"]
 
@@ -344,6 +348,12 @@ class ActionBatch:
 
         for t in node.findall(".//isos/*"):
             self.isos.append(t.tag)
+
+        flavor = node.attrib.get("name", "")
+        for t in node.findall(".//vagrant_boxes/*"):
+            if flavor:
+                self.vagrant_boxes_flavor = flavor
+            self.vagrant_boxes.append(t.tag)
 
         if node.attrib.get("distri", ""):
             self.distri = node.attrib["distri"]
@@ -410,6 +420,7 @@ class ActionBatch:
                     self.hdd_folder[t.attrib["filemask"]] = t.attrib["folder"]
             if t.tag == "hdd":
                 self.hdds.append(t.attrib["filemask"])
+                self.assets_flavor_in_hdd = 1
                 if node.attrib.get("folder", ""):
                     self.iso_folder[t.attrib["filemask"]] = node.attrib["folder"]
                     if not t.attrib.get("folder", ""):
@@ -896,13 +907,18 @@ done < <(sort __envsub/files_asset.lst)""",
                     self.flavor_distri,
                     self.meta_variables,
                     self.assets_flavor,
+                    self.vagrant_boxes_flavor
+                    if self.vagrant_boxes_flavor or self.assets_flavor_in_hdd
+                    else self.assets_flavor,
                     self.repo0folder,
+                    len(self.vagrant_boxes),
                 ),
                 f,
                 "| grep $arch | head -n 1",
                 "| grep {} | grep $arch | head -n 1".format(self.mask),
             )
         else:
+            self.p("# AAAA " + self.vagrant_boxes_flavor, f)
             self.p(
                 cfg.openqa_call_start(
                     self.ag.distri,
@@ -914,7 +930,11 @@ done < <(sort __envsub/files_asset.lst)""",
                     self.flavor_distri,
                     self.meta_variables,
                     self.assets_flavor,
+                    self.vagrant_boxes_flavor
+                    if self.vagrant_boxes_flavor or self.assets_flavor_in_hdd
+                    else self.assets_flavor,
                     self.repo0folder,
+                    len(self.vagrant_boxes),
                 ),
                 f,
             )
@@ -939,9 +959,9 @@ done < <(sort __envsub/files_asset.lst)""",
             if self.iso_5:
                 if self.fixed_iso:
                     self.p(' echo " ISO={} \\\\"'.format(self.fixed_iso), f)
-                self.p(cfg.openqa_call_start_iso(self.checksum), f, "ISO", "ISO_5")
+                self.p(cfg.openqa_call_start_iso(self.checksum, len(self.vagrant_boxes)), f, "ISO", "ISO_5")
             else:
-                self.p(cfg.openqa_call_start_iso(self.checksum), f)
+                self.p(cfg.openqa_call_start_iso(self.checksum, len(self.vagrant_boxes)), f)
             if not isos and self.iso_5:
                 isos = [self.iso_5]
 

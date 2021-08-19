@@ -176,8 +176,8 @@ def openqa_call_fix_destiso(distri, version, staging):
 
 def openqa_call_start_fix_iso(archs):
     if 'armv7hl' in archs and not 'armv7l' in archs:
-        return '[ -n "$iso" ] || [ "$arch" != armv7hl ] || iso=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
-    return ''
+        return "${arch//armv7hl/armv7hl|armv7l}"
+    return '$arch'
 
 def openqa_call_news(news, news_archs):
     if not news:
@@ -203,7 +203,7 @@ def openqa_call_start_meta_variables(meta_variables):
 def pre_openqa_call_start(repos):
     return ''
 
-openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, repo0folder: '''
+openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, additional_flavor, repo0folder, vagrant: '''
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
@@ -213,17 +213,18 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_start_distri(flavor_distri) + '''
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
-        iso=$(grep "$filter" __envsub/files_iso.lst 2>/dev/null | grep $arch | head -n 1)
-        ''' + openqa_call_start_fix_iso(archs) + '''
-        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | tail -n 1) || :
+      for iso in $(grep -h "$filter" __envsub/files_'''+ ( "*" if vagrant else "iso") + '''.lst 2>/dev/null | grep -E "''' + openqa_call_start_fix_iso(archs)+ '''\\b" ''' + ( ''' || grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null ''' if not " " in archs else "") + ("" if (not additional_flavor or vagrant) else ("; echo '" + additional_flavor + "'")) + '''); do
+        build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*') || :
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*') || :
-        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
-        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
-        [ -n "$iso$build" ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
+        ''' + ( "" if not additional_flavor else '''
+        [ "$flavor" != "''' + additional_flavor + '''" ] || build=$(grep -o -E '(Build|Snapshot)[0-9]\.?[0-9]+(\.[0-9]+)*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
+        [ "$flavor" != "''' + additional_flavor + '''" ] || buildex=$(grep -o -E '(Build|Snapshot)[0-9]\.?[0-9]+(\.[0-9]+)*' __envsub/files_asset.lst | head -n 1)
+        ''' ) + ( "" if not additional_flavor or vagrant else '''[ "$flavor" != "''' + additional_flavor + '''" ] || iso="" ''' ) + '''
         [ -n "$build"  ] || continue
         buildex=${buildex/.iso/}
         buildex=${buildex/.raw.xz/}
         buildex=${buildex/.qcow2/}
+        [ Build$build != "$iso" ] || iso=''
         build1=$build
         destiso=$iso
         version=VERSIONVALUE
@@ -244,12 +245,17 @@ openqa_call_legacy_builds_link=''
 
 openqa_call_legacy_builds=''
 
-def openqa_call_start_iso(checksum):
+def openqa_call_start_iso(checksum, vagrant):
+    res = ''
+    if vagrant:
+        res = ''' [ -z "$destiso" ] || [[ ! $destiso =~ .box ]] || echo \" VAGRANT_BOX=/${destiso} \\\\\"
+ [[ $destiso =~ .box ]] ||'''
+
     if checksum:
-        return ''' [ -z "$destiso" ] || echo \" ISO=${destiso} \\\\
+        return res + ''' [ -z "$destiso" ] || echo \" ISO=${destiso} \\\\
  CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
-    return ''' [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
+    return res + ''' [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
 
 def openqa_call_start_ex1(checksum, tag):
@@ -429,6 +435,7 @@ def openqa_call_end(version):
         echo " FLAVOR=${flavor//Tumbleweed-/} \\\\"
 ) | LC_COLLATE=C sort
         echo ""
+      done
     done
 done
 '''
@@ -436,6 +443,7 @@ done
         echo " FLAVOR=$flavor \\\\"
 ) | LC_COLLATE=C sort
         echo ""
+      done
     done
 done
 '''

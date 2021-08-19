@@ -12,6 +12,12 @@
                 <virtualbox folder="appliances/*/*vagrant*virtualbox*" filemask="virtualbox.box"/>
             </assets>
         </flavor>
+        <flavor name="vagrant">
+            <vagrant_boxes>
+                <libvirt/>
+                <virtualbox/>
+            </vagrant_boxes>
+        </flavor>
         <news iso="Tumbleweed-DVD" archs="x86_64"/>
     </batch>
     <batch name="microos" folder="images/local/*product*" archs="x86_64" repos="base" distri="microos">

@@ -106,4 +106,52 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ BUILD=20200114 \
+ DISTRI=opensuse \
+ FLAVOR=vagrant \
+ FULLURL=1 \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ REPO_1=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-debuginfo \
+ REPO_2=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-source \
+ REPO_3=openSUSE-Tumbleweed-non-oss-i586-x86_64-Snapshot20200114 \
+ REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-i586-x86_64-Snapshot20200114 \
+ REPO_OSS=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*,yast2-http-server*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ VAGRANT_BOX=/Tumbleweed.x86_64-1.0-libvirt-Snapshot20200114.vagrant.libvirt.box \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/share/openqa/script/client isos post --host localhost \
+ ARCH=x86_64 \
+ BUILD=20200114 \
+ DISTRI=opensuse \
+ FLAVOR=vagrant \
+ FULLURL=1 \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ REPO_1=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-debuginfo \
+ REPO_2=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-source \
+ REPO_3=openSUSE-Tumbleweed-non-oss-i586-x86_64-Snapshot20200114 \
+ REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-i586-x86_64-Snapshot20200114 \
+ REPO_OSS=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*,yast2-http-server*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200114 \
+ VAGRANT_BOX=/Tumbleweed.x86_64-1.0-virtualbox-Snapshot20200114.vagrant.virtualbox.box \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
 /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse/Tumbleweed --snapshot 20200114 /var/lib/openqa/factory/iso/openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200114-Media.iso
