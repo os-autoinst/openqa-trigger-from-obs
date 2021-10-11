@@ -1,4 +1,4 @@
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=x86_64 \
  ASSET_1=openSUSE-Tumbleweed-20210701-WSL.x86_64-21153.2.2.0-Snapshot20210701.appx \
  ASSET_256=openSUSE-Tumbleweed-20210701-WSL.x86_64-21153.2.2.0-Snapshot20210701.appx.sha256 \

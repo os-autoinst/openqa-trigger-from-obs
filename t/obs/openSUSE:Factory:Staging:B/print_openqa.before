@@ -1,4 +1,4 @@
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Staging:B-Tumbleweed-DVD-x86_64-Build252.1-Media.iso.sha256 \
  BUILD=B.252.1 \
@@ -10,7 +10,7 @@
  VERSION=Staging:B \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Staging:B-MicroOS-DVD-x86_64-Build253.1-Media.iso.sha256 \
  BUILD=B.253.1 \
@@ -22,7 +22,7 @@
  VERSION=Staging:B \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Staging:B-Kubic-DVD-x86_64-Build252.1-Media.iso.sha256 \
  BUILD=B.252.1 \
