@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   unit:
     docker:
-      - image: registry.opensuse.org/opensuse/tumbleweed
+      - image: registry.opensuse.org/opensuse/leap:15.3
     steps:
       - checkout
       - run:
