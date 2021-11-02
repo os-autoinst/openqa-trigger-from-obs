@@ -8,13 +8,24 @@ jobs:
       - checkout
       - run:
           command: |
-            zypper -n ar https://download.opensuse.org/repositories/devel:/languages:/python:/backports/openSUSE_Leap_15.3 py
-            zypper --gpg-auto-import-keys ref py
-            zypper -n in --no-recommends diffutils make python3 tar python3-black python3-importlib-metadata
+            zypper -n in --no-recommends diffutils make python3 tar
       - checkout
       - run: make test_regen_all
-      - run: make test_python_style
       - run: make test
+
+  style:
+    docker:
+      - image: registry.opensuse.org/opensuse/leap:15.3
+    steps:
+      - checkout
+      - run:
+          command: |
+            zypper -n ar https://download.opensuse.org/repositories/devel:/languages:/python:/backports/openSUSE_Leap_15.3 py
+            zypper --gpg-auto-import-keys ref py
+            zypper -n in --no-recommends make python3-black python3-importlib-metadata
+      - checkout
+      - run: make test_python_style
+
 
   integration:
     machine:
@@ -36,3 +47,4 @@ workflows:
     jobs:
       - unit
       - integration
+      - style
