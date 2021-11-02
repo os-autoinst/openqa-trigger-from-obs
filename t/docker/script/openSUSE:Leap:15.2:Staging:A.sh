@@ -15,6 +15,8 @@ set -x
 # make sure run did happen
 test -f /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.1-Media.iso
 test -f /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run_last/openqa.cmd.log
+grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run_last/openqa.cmd.log || cat /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run_last/*.cmd.log
+
 grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/openSUSE:Leap:15.2:Staging:A/.run_last/openqa.cmd.log
 
 [ "$METHOD" != rest ] || {

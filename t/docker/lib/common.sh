@@ -66,7 +66,7 @@ if [ "$METHOD" == rest ]; then
     openqa-client --host localhost /api/v1/obs_rsync/$prj/runs put
 else
     echo 111 > /opt/openqa-trigger-from-obs/$prj/.job_id
-    su "$dbuser" -c "/opt/openqa-trigger-from-obs/script/rsync.sh $prj"
+    su "$dbuser" -c "bash -x /opt/openqa-trigger-from-obs/script/rsync.sh $prj"
 fi
 
 sleep 10
