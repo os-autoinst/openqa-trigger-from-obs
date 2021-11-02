@@ -1,7 +1,7 @@
 <openQA
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.3):Images:ToTest"
     dist_path="images"
-    distri="opensuse" 
+    distri="opensuse"
     archs="aarch64 x86_64">
     <!-- Actually only for x86_64, but adding archs="x86_64" here overwrites the default... -->
     <flavor name="JeOS-for-kvm-and-xen" folder="*/kiwi-templates-JeOS:kvm-and-xen">
@@ -18,8 +18,7 @@
         <assets>
             <!-- Matches both -libvirt- and -libvirt_aarch64- -->
             <libvirt folder="*/*vagrant*libvirt*" filemask="libvirt.box"/>
-<!-- Build broken ATM
-            <virtualbox folder="*/*vagrant*virtualbox*" filemask="virtualbox.box"/>-->
+            <virtualbox folder="*/*vagrant*virtualbox*" filemask="virtualbox.box"/>
         </assets>
     </flavor>
     <flavor name="GNOME-Live" folder="*/livecd-leap-gnome" iso="1"/>
