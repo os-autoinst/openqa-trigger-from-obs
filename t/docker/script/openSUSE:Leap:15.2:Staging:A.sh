@@ -37,7 +37,7 @@ grep -q 'scheduled_product_id => 1' /opt/openqa-trigger-from-obs/openSUSE:Leap:1
     test $? -eq 1
     )
 
-    openqa-client --host localhost /api/v1/obs_rsync/openSUSE:Leap:15.2:Staging:A/runs put || :
+    openqa-cli api -X put obs_rsync/openSUSE:Leap:15.2:Staging:A/runs || :
     sleep 10
 
     test -f /var/lib/openqa/factory/iso/openSUSE-Leap-15.2-Staging:A-Staging-DVD-x86_64-Build248.2-Media.iso

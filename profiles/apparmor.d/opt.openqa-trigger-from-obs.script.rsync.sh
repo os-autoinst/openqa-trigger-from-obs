@@ -47,14 +47,15 @@
   /usr/bin/uniq ix,
   /usr/bin/wc ix,
   /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py rUx,
-  /usr/share/openqa/script/client rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_client,
+  /usr/share/openqa/script/openqa-cli rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_cli,
+  /usr/bin/openqa-cli rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_cli,
   /var/lib/openqa/share/factory/repo/** rw, # need write permission because sometimes bsdtar iso here
   /var/lib/openqa/share/factory/{iso,hdd,other}/** r,
   /{usr/bin,bin}/bash mrix,
   owner /proc/*/fd/* w,
 
 
-  profile openqa_client {
+  profile openqa_cli {
     #include <abstractions/base>
     #include <abstractions/nameservice>
     #include <abstractions/openssl>
@@ -68,8 +69,9 @@
     /etc/openqa/client.conf r,
     /opt/openqa-trigger-from-obs/*:*/*/.run*/openqa*.log w,
     /opt/openqa-trigger-from-obs/*:*/.run*/openqa*.log w,
+    /usr/bin/openqa-cli rix,
     /usr/share/openqa/lib/** r,
-    /usr/share/openqa/script/client rix,
+    /usr/share/openqa/script/openqa-cli rix,
     /var/lib/openqa/.config/openqa/client.conf r,
     /var/lib/openqa/share/factory/{iso,hdd,repo,other}/** r,
 

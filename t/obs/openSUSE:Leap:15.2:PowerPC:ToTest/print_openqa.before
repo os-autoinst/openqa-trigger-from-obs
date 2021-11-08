@@ -1,4 +1,4 @@
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64le \
  ASSET_256=openSUSE-Leap-15.2-NET-ppc64le-Build28.1-Media.iso.sha256 \
  BUILD=28.1 \
@@ -22,7 +22,7 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64le \
  ASSET_256=openSUSE-Leap-15.2-DVD-ppc64le-Build28.1-Media.iso.sha256 \
  BUILD=28.1 \

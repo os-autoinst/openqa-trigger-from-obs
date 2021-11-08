@@ -233,7 +233,7 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + (repo0folder if repo0folder else "") + '''
         [ "$arch" != . ] || arch=x86_64
         ''' + openqa_call_news(news, news_archs) + '''
-        echo "/usr/share/openqa/script/client isos post --host localhost \\\\\"
+        echo "/usr/bin/openqa-cli api -X post isos \\\\\"
 (
  echo \" DISTRI=$distri \\\\
  ARCH=$arch \\\\

@@ -63,7 +63,7 @@ chown "$dbuser" /var/lib/openqa/.config/openqa/client.conf
 systemctl enable --now rsyncd
 
 if [ "$METHOD" == rest ]; then
-    openqa-client --host localhost /api/v1/obs_rsync/$prj/runs put
+    openqa-cli api -X put obs_rsync/$prj/runs
 else
     echo 111 > /opt/openqa-trigger-from-obs/$prj/.job_id
     su "$dbuser" -c "bash -x /opt/openqa-trigger-from-obs/script/rsync.sh $prj"

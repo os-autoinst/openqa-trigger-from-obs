@@ -1,4 +1,4 @@
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64 \
  ASSET_256=openSUSE-Tumbleweed-NET-ppc64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
@@ -22,7 +22,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64le \
  ASSET_256=openSUSE-Tumbleweed-NET-ppc64le-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
@@ -46,7 +46,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64 \
  ASSET_256=openSUSE-Tumbleweed-DVD-ppc64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
@@ -70,7 +70,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64le \
  ASSET_256=openSUSE-Tumbleweed-DVD-ppc64le-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \

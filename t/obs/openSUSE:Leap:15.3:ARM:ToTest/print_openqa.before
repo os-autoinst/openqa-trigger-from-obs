@@ -1,4 +1,4 @@
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=armv7hl \
  ASSET_256=openSUSE-Leap-15.3-NET-armv7hl-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \

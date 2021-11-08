@@ -1,4 +1,4 @@
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.3-NET-x86_64-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
@@ -24,7 +24,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-NET-aarch64-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
@@ -50,7 +50,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64le \
  ASSET_256=openSUSE-Leap-15.3-NET-ppc64le-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
@@ -76,7 +76,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=s390x \
  ASSET_256=openSUSE-Leap-15.3-NET-s390x-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
@@ -102,7 +102,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.3-DVD-x86_64-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
@@ -128,7 +128,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-DVD-aarch64-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
@@ -154,7 +154,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=ppc64le \
  ASSET_256=openSUSE-Leap-15.3-DVD-ppc64le-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
@@ -180,7 +180,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/share/openqa/script/client isos post --host localhost \
+/usr/bin/openqa-cli api -X post isos \
  ARCH=s390x \
  ASSET_256=openSUSE-Leap-15.3-DVD-s390x-Build4.2-Media.iso.sha256 \
  BUILD=4.2 \
