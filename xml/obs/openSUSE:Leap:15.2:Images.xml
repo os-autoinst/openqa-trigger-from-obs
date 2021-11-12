@@ -1,7 +1,7 @@
 <openQA
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.2):Images:ToTest"
     dist_path="images/x86_64"
-    distri="opensuse" 
+    distri="opensuse"
     archs="x86_64">
     <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-JeOS:kvm-and-xen">
         <hdd filemask=".*kvm-and-xen.*\.qcow2"/>
@@ -15,4 +15,7 @@
     <flavor name="GNOME-Live" folder="livecd-leap-gnome" iso="1"/>
     <flavor name="KDE-Live" folder="livecd-leap-kde" iso="1"/>
     <flavor name="Rescue-CD" folder="livecd-leap-x11" iso="1"/>
+    <flavor name="Container-Image">
+        <asset filemask='opensuse-leap-image.*.txt' rsync='0'/>
+    </flavor>
 </openQA>
