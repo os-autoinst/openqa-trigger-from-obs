@@ -213,6 +213,8 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_start_distri(flavor_distri) + '''
         [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
+        version=VERSIONVALUE
+        if [ -z "${norsync_filter[$flavor]}" ] || [ -z $build1 ]; then {
         iso=$(grep "$filter" __envsub/files_iso.lst 2>/dev/null | grep $arch | head -n 1)
         ''' + openqa_call_start_fix_iso(archs) + '''
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | tail -n 1) || :
@@ -226,13 +228,14 @@ for flavor in {FLAVORALIASLIST,}; do
         buildex=${buildex/.qcow2/}
         build1=$build
         destiso=$iso
-        version=VERSIONVALUE
         [ -z "__STAGING" ] || build1=__STAGING.$build
         ''' + openqa_call_fix_destiso(distri, version, staging) + '''
         repo0folder=${destiso%.iso}
         ''' + (repo0folder if repo0folder else "") + '''
         [ "$arch" != . ] || arch=x86_64
         ''' + openqa_call_news(news, news_archs) + '''
+        }
+        fi
         echo "/usr/bin/openqa-cli api -X post isos \\\\\"
 (
  echo \" DISTRI=$distri \\\\

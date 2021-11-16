@@ -154,6 +154,7 @@ class ActionBatch:
         self.asset_folders = {}
         self.asset_tags = {}
         self.asset_rsync = {}
+        self.norsync = {}
         self.isos = []
         self.iso_folder = {}
         self.iso_5 = ""
@@ -319,6 +320,8 @@ class ActionBatch:
                     self.iso_5 = node.attrib.get("iso_5")
                 if node.attrib.get("fixed_iso", ""):
                     self.fixed_iso = node.attrib["fixed_iso"]
+                if node.attrib.get("rsync", "1") == "0":
+                    self.norsync[f] = 1
 
         if node.attrib.get("iso", "") and node.attrib.get("name", ""):
             for iso in node.attrib["name"].split("|"):
@@ -669,6 +672,8 @@ class ActionBatch:
 
     def gen_print_array_no_rsync(self, f):
         self.p("declare -A norsync_filter", f)
+        for fl in self.norsync:
+            self.p("norsync_filter[{}]='{}'".format(fl, 1), f)
         for fl, h in zip(self.flavors, self.assets):
             if self.asset_rsync.get(h, 1) == "0":
                 self.p("norsync_filter[{}]='{}'".format(h, 1), f)
@@ -972,7 +977,7 @@ done < <(sort __envsub/files_asset.lst)""",
                 + self.assets_flavor
                 + """ ]] """
                 + arch_expression
-                + """ || while read src; do
+                + """ || [[ ${norsync_filter[$filter]} == 1 ]] || while read src; do
      echo " ASSET_$i=$src \\\\"
      asset_tag=""
      for mask in "${!asset_tags[@]}"; do

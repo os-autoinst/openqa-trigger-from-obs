@@ -15,7 +15,5 @@
     <flavor name="GNOME-Live" folder="livecd-leap-gnome" iso="1"/>
     <flavor name="KDE-Live" folder="livecd-leap-kde" iso="1"/>
     <flavor name="Rescue-CD" folder="livecd-leap-x11" iso="1"/>
-    <flavor name="Container-Image">
-        <asset filemask='opensuse-leap-image.*.txt' rsync='0'/>
-    </flavor>
+    <flavor name="Container-Image" rsync="0"/>
 </openQA>
