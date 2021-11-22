@@ -141,3 +141,19 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
+/usr/bin/openqa-cli api -X post isos \
+ ARCH=aarch64 \
+ BUILD=9.269 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=15.3 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos \
+ ARCH=x86_64 \
+ BUILD=9.269 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=15.3 \
+ _OBSOLETE=1
+
