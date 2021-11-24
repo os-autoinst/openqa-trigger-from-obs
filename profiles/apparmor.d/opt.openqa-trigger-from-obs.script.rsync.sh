@@ -15,6 +15,11 @@
   /opt/openqa-trigger-from-obs/*:*/*/.run*/* rw,
   /opt/openqa-trigger-from-obs/*:*/*/.run_last rw,
   /opt/openqa-trigger-from-obs/*:*/*/files*.lst rw,
+  /opt/openqa-trigger-from-obs/*:*/*/Media*.lst rw,
+  /opt/openqa-trigger-from-obs/*:*/*/.Media*.lst* rw,
+  /opt/openqa-trigger-from-obs/*:*/*/products* rw,
+  /opt/openqa-trigger-from-obs/*:*/*/.products* rw,
+
   /opt/openqa-trigger-from-obs/*:*/.run*/ rw,
   /opt/openqa-trigger-from-obs/*:*/.run*/* rw,
   /opt/openqa-trigger-from-obs/*:*/.run_last rw,
@@ -97,6 +102,11 @@
     /opt/openqa-trigger-from-obs/*:*/.Media*.lst* rw,
     /opt/openqa-trigger-from-obs/*:*/products* rw,
     /opt/openqa-trigger-from-obs/*:*/.products* rw,
+
+    /opt/openqa-trigger-from-obs/*:*/*/Media*.lst rw,
+    /opt/openqa-trigger-from-obs/*:*/*/.Media*.lst* rw,
+    /opt/openqa-trigger-from-obs/*:*/*/products* rw,
+    /opt/openqa-trigger-from-obs/*:*/*/.products* rw,
 
     /usr/bin/rsync mrix,
     /var/lib/openqa/share/factory/{iso,hdd,repo,other}/** rw,
