@@ -1,0 +1,6 @@
+<openQA project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.[3-9]):WSL"
+dist_path="obspublish::openqa/openSUSE:Leap:${version}:WSL/images/x86_64/kiwi-images-wsl">
+    <flavor name="WSL" distri="opensuse" archs=".">
+        <asset filemask='.*\.appx$'/>
+    </flavor>
+</openQA>
