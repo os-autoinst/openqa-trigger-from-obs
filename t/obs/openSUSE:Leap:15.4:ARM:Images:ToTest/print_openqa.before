@@ -1,0 +1,11 @@
+/usr/bin/openqa-cli api -X post isos \
+ ARCH=armv7hl \
+ ASSET_256=openSUSE-Leap-15.4-ARM-JeOS-efi.armv7hl-2021.12.02-Build5.1.raw.xz.sha256 \
+ BUILD=5.1 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.4-ARM-JeOS-efi.armv7hl-2021.12.02-Build5.1.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=JeOS-for-AArch64 \
+ HDD_1=openSUSE-Leap-15.4-ARM-JeOS-efi.armv7hl-2021.12.02-Build5.1.raw.xz \
+ VERSION=15.4 \
+ _OBSOLETE=1
+
