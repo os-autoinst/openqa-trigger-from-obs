@@ -246,7 +246,7 @@ class ActionBatch:
         elif self.ag.version.startswith("15.") and "Jump" in self.ag.envdir:
             s = s.replace("VERSIONVALUE", "Jump:" + self.ag.version)
         elif self.subfolder and self.subfolder != "default" and not self.ag.version:
-            s = s.replace("VERSIONVALUE", self.subfolder.lstrip("Leap_"))
+            s = s.replace("VERSIONVALUE", self.subfolder.replace("Leap_", ""))
         elif self.ag.staging() and self.ag.version == "Factory":
             s = s.replace("VERSIONVALUE", "Staging:" + self.ag.staging())
         else:
