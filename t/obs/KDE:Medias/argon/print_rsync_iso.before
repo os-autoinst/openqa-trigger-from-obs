@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/KDE:Medias/images/*/openSUSE-Argon/*Argon.x86_64-15.3-Build1.139.iso /var/lib/openqa/factory/iso/Argon.x86_64-15.3-Build1.139.iso
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/KDE:Medias/images/*/openSUSE-Argon/*Argon.x86_64-15.3-Build1.139.iso.sha256 /var/lib/openqa/factory/other/Argon.x86_64-15.3-Build1.139.iso.sha256

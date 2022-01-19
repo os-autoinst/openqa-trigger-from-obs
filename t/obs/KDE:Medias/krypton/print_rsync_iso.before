@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/KDE:Medias/images/*/openSUSE-Krypton/*openSUSE_Krypton.x86_64-16.0-Build1.488.iso /var/lib/openqa/factory/iso/openSUSE_Krypton.x86_64-16.0-Build1.488.iso
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/KDE:Medias/images/*/openSUSE-Krypton/*openSUSE_Krypton.x86_64-16.0-Build1.488.iso.sha256 /var/lib/openqa/factory/other/openSUSE_Krypton.x86_64-16.0-Build1.488.iso.sha256
