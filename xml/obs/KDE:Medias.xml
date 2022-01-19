@@ -1,0 +1,15 @@
+<openQA
+    project_pattern="KDE:Medias"
+    dist_path="obspublish-other::openqa/KDE:Medias"
+    distri="opensuse">
+    <batch name="krypton" archs="x86_64">
+        <flavor name="Krypton-Live" folder="images/*/openSUSE-Krypton">
+            <iso folder="images/*/openSUSE-Krypton" filemask="Krypton.x86_64.*\.iso$"/>
+        </flavor>
+    </batch>
+    <batch name="argon" archs="x86_64">
+        <flavor name="Argon-Live" folder="images/*/openSUSE-Argon">
+            <iso folder="images/*/openSUSE-Argon" filemask="Argon.x86_64.*\.iso$"/>
+        </flavor>
+    </batch>
+</openQA>
