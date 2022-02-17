@@ -15,7 +15,7 @@
  REPO_2=openSUSE-Leap-15.3-oss-armv7hl-Build4.2-source \
  REPO_OSS=openSUSE-Leap-15.3-oss-armv7hl-Build4.2 \
  REPO_OSS_DEBUGINFO=openSUSE-Leap-15.3-oss-armv7hl-Build4.2-debuginfo \
- REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
  REPO_OSS_SOURCE=openSUSE-Leap-15.3-oss-armv7hl-Build4.2-source \
  REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Leap-15.3-oss-armv7hl-Build4.2 \

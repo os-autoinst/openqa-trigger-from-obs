@@ -17,7 +17,7 @@
  REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-i586-x86_64-Snapshot20200115 \
  REPO_OSS=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115 \
  REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-debuginfo \
- REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
  REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115-source \
  REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*,yast2-http-server*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-i586-x86_64-Snapshot20200115 \

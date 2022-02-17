@@ -15,7 +15,7 @@
  REPO_2=openSUSE-15.2-oss-aarch64-Build43.1-source \
  REPO_OSS=openSUSE-15.2-oss-aarch64-Build43.1 \
  REPO_OSS_DEBUGINFO=openSUSE-15.2-oss-aarch64-Build43.1-debuginfo \
- REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
  REPO_OSS_SOURCE=openSUSE-15.2-oss-aarch64-Build43.1-source \
  REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-aarch64-Build43.1 \
@@ -39,7 +39,7 @@
  REPO_2=openSUSE-15.2-oss-aarch64-Build43.1-source \
  REPO_OSS=openSUSE-15.2-oss-aarch64-Build43.1 \
  REPO_OSS_DEBUGINFO=openSUSE-15.2-oss-aarch64-Build43.1-debuginfo \
- REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
  REPO_OSS_SOURCE=openSUSE-15.2-oss-aarch64-Build43.1-source \
  REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-15.2-oss-aarch64-Build43.1 \

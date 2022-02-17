@@ -4,7 +4,7 @@
     archs="armv7hl">
     <flavor name="NET" folder="*product*" distri="opensuse" iso="1">
         <repos>
-            <oss folder="Leap-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Leap-${version}-oss-$arch"/>
+            <oss folder="Leap-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Leap-${version}-oss-$arch"/>
         </repos>
     </flavor>
 <!--     <news iso="DVD" archs="armv7hl"/> -->
