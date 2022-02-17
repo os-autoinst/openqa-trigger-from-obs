@@ -4,7 +4,7 @@
     archs="ppc64le">
     <flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
         <repos>
-            <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-15.2-oss-ppc64_ppc64le"/>
+            <oss folder="openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-15.2-oss-ppc64_ppc64le"/>
         </repos>
     </flavor>
 </openQA>

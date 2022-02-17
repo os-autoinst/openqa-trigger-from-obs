@@ -17,7 +17,7 @@
  REPO_NON_OSS=Tumbleweed-non-oss-s390x-Snapshot20200115 \
  REPO_OSS=Tumbleweed-oss-s390x-Snapshot20200115 \
  REPO_OSS_DEBUGINFO=Tumbleweed-oss-s390x-Snapshot20200115-debuginfo \
- REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*' \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
  REPO_OSS_SOURCE=Tumbleweed-oss-s390x-Snapshot20200115-source \
  REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Tumbleweed-oss-s390x-Snapshot20200115 \
