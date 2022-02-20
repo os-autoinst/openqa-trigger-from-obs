@@ -36,10 +36,9 @@ jobs:
           command: |
             pyenv versions
             pyenv global 3.10.2
-            git clone https://github.com/coryb/osht ../osht
             docker pull registry.opensuse.org/devel/openqa/ci/containers/serviced
             sudo chown -R 1000:1000 .
-            make test_docker PRIVILEGED_TESTS=1 OSHT_LOCATION=$(pwd)/../osht/osht.sh
+            make test_docker PRIVILEGED_TESTS=1
 
 workflows:
   version: 2.1
