@@ -29,13 +29,13 @@ jobs:
 
   integration:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:202201-02
     steps:
       - checkout
       - run: 
           command: |
             pyenv versions
-            pyenv global 3.7.0
+            pyenv global 3.10.2
             git clone https://github.com/coryb/osht ../osht
             docker pull registry.opensuse.org/devel/openqa/ci/containers/serviced
             sudo chown -R 1000:1000 .
