@@ -236,7 +236,7 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_news(news, news_archs) + '''
         }
         fi
-        echo "/usr/bin/openqa-cli api -X post isos \\\\\"
+        echo "/usr/bin/openqa-cli api -X post isos?async=1 \\\\\"
 (
  echo \" DISTRI=$distri \\\\
  ARCH=$arch \\\\

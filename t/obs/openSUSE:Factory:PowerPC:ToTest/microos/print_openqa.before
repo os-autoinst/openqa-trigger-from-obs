@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=ppc64le \
  ASSET_256=openSUSE-MicroOS-DVD-ppc64le-Snapshot20201126-Media.iso.sha256 \
  BUILD=20201126 \
@@ -22,7 +22,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=ppc64le \
  ASSET_256=openSUSE-Kubic-DVD-ppc64le-Snapshot20201126-Media.iso.sha256 \
  BUILD=20201126 \

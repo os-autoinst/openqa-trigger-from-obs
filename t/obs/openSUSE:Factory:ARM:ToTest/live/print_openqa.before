@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
@@ -22,7 +22,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
@@ -46,7 +46,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
@@ -70,7 +70,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
