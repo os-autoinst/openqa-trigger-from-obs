@@ -16,6 +16,9 @@ done
 echo geekotest > rsync.secret
 chmod 600 rsync.secret"
 
+echo "[production]
+dsn = DBI:Pg:dbname=openqa;host=/tmp" > /usr/share/openqa/etc/openqa/database.ini
+
 echo "127.0.0.1 obspublish$suff" >> /etc/hosts
 
 mkdir -p /var/lib/openqa/osc-plugin-factory/factory-package-news/
