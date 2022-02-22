@@ -16,6 +16,9 @@ done
 echo geekotest > rsync.secret
 chmod 600 rsync.secret"
 
+echo "[production]
+dsn = DBI:Pg:dbname=openqa;host=/tmp" > /usr/share/openqa/etc/openqa/database.ini
+
 echo "127.0.0.1 obspublish$suff" >> /etc/hosts
 
 mkdir -p /var/lib/openqa/osc-plugin-factory/factory-package-news/
@@ -23,14 +26,17 @@ touch /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-ne
 chmod +x /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
 /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py
 
+systemctl start postgresql
+
 systemctl restart openqa-webui.service
 systemctl restart openqa-websockets.service
+systemctl restart rsyncd
 
 [ "$METHOD" != rest ] || systemctl restart openqa-gru.service
 
 # wait for webui to become available
 sleep 2
-attempts_left=10
+attempts_left=25 # sometimes it takes 1 min for starting service (when assets download is slow?)
 while ! curl -sI http://localhost/ | grep 200 ; do
     sleep 3
     : $((attempts_left--))
@@ -60,7 +66,6 @@ mkdir -p /var/lib/openqa/.config/openqa/
 cp /etc/openqa/client.conf /var/lib/openqa/.config/openqa/
 chown "$dbuser" /var/lib/openqa/.config/openqa/client.conf
 
-systemctl enable --now rsyncd
 
 if [ "$METHOD" == rest ]; then
     openqa-cli api -X put obs_rsync/$prj/runs
