@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.3-JeOS.x86_64-15.3-kvm-and-xen-Build9.269.qcow2.sha256 \
  BUILD=9.269 \
@@ -9,7 +9,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-ARM-JeOS-efi.aarch64-2021.05.31-Build9.269.raw.xz.sha256 \
  BUILD=9.269 \
@@ -20,7 +20,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-ARM-JeOS-raspberrypi.aarch64-2021.05.31-Build9.269.raw.xz.sha256 \
  BUILD=9.269 \
@@ -31,7 +31,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_1=Leap-15.3.aarch64-15.3-libvirt_aarch64-Build9.269.vagrant.libvirt.box \
  ASSET_LIBVIRT=Leap-15.3.aarch64-15.3-libvirt_aarch64-Build9.269.vagrant.libvirt.box \
@@ -41,7 +41,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_1=Leap-15.3.x86_64-15.3-libvirt-Build9.269.vagrant.libvirt.box \
  ASSET_2=Leap-15.3.x86_64-15.3-virtualbox-Build9.269.vagrant.virtualbox.box \
@@ -53,7 +53,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-GNOME-Live-aarch64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -64,7 +64,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.3-GNOME-Live-x86_64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -75,7 +75,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-KDE-Live-aarch64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -86,7 +86,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.3-KDE-Live-x86_64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -97,7 +97,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-Rescue-CD-aarch64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -108,7 +108,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.3-Rescue-CD-x86_64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -119,7 +119,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.3-XFCE-Live-aarch64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -130,7 +130,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-15.3-XFCE-Live-x86_64-Build9.269-Media.iso.sha256 \
  BUILD=9.269 \
@@ -141,7 +141,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  BUILD=9.269 \
  DISTRI=opensuse \
@@ -149,7 +149,7 @@
  VERSION=15.3 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  BUILD=9.269 \
  DISTRI=opensuse \

@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_256=openSUSE_Krypton.x86_64-16.0-Build1.488.iso.sha256 \
  BUILD=1.488 \

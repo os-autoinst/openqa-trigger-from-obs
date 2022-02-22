@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.2-NET-aarch64-Build43.1-Media.iso.sha256 \
  BUILD=43.1 \
@@ -22,7 +22,7 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.2-DVD-aarch64-Build43.1-Media.iso.sha256 \
  BUILD=43.1 \

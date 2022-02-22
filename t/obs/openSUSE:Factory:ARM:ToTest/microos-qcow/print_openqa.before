@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-MicroOS.aarch64-16.0.0-kvm-and-xen-Snapshot20200402.qcow2.sha256 \
  BUILD=20200402 \
@@ -22,7 +22,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-MicroOS.aarch64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20200402.qcow2.sha256 \
  BUILD=20200402 \
@@ -46,7 +46,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-MicroOS.aarch64-16.0.0-Kubic-kubeadm-kvm-and-xen-Snapshot20200402.qcow2.sha256 \
  BUILD=20200402 \

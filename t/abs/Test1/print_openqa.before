@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_256=my-iso.x86_64-1.1.1-Build1.111.iso.sha256 \
  BUILD=1.111 \

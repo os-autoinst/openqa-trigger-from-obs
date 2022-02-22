@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
  ASSET_1=openSUSE-Leap-15.2-x64-Build2.116.appx \
  ASSET_256=openSUSE-Leap-15.2-x64-Build2.116.appx.sha256 \

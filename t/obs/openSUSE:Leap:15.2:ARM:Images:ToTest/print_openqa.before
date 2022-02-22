@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.2-ARM-JeOS-efi.aarch64-2019.11.27-Snapshot1.42.raw.xz.sha256 \
  BUILD=1.42 \
@@ -9,7 +9,7 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.2-ARM-JeOS-raspberrypi3.aarch64-2020.11.27-Build1.42.raw.xz.sha256 \
  BUILD=1.42 \
@@ -20,7 +20,7 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_1=Leap-15.2.aarch64-15.2-libvirt_aarch64-Build1.20.vagrant.libvirt.box \
  ASSET_LIBVIRT=Leap-15.2.aarch64-15.2-libvirt_aarch64-Build1.20.vagrant.libvirt.box \
@@ -30,7 +30,7 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.2-GNOME-Live-aarch64-Snapshot1.42-Media.iso.sha256 \
  BUILD=1.42 \
@@ -41,7 +41,7 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.2-KDE-Live-aarch64-Snapshot1.42-Media.iso.sha256 \
  BUILD=1.42 \
@@ -52,7 +52,7 @@
  VERSION=15.2 \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Leap-15.2-Rescue-CD-aarch64-Snapshot1.42-Media.iso.sha256 \
  BUILD=1.42 \

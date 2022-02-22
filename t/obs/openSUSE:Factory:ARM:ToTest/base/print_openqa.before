@@ -1,4 +1,4 @@
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_256=openSUSE-Tumbleweed-NET-aarch64-Snapshot20200115-Media.iso.sha256 \
  BUILD=20200115 \
@@ -22,7 +22,7 @@
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/usr/bin/openqa-cli api -X post isos \
+/usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
  ASSET_1=Tumbleweed.aarch64-1.0-libvirt_aarch64-Snapshot20200226.vagrant.libvirt.box \
  ASSET_256=openSUSE-Tumbleweed-DVD-aarch64-Snapshot20200115-Media.iso.sha256 \
