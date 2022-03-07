@@ -1,11 +1,12 @@
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=openSUSE-Tumbleweed-JeOS.x86_64-15.1.0-kvm-and-xen-Build30.39.qcow2.sha256 \
+ ASSET_256=openSUSE-Staging:Core-Tumbleweed-JeOS.x86_64-15.1.0-kvm-and-xen-Build30.39.qcow2.sha256 \
  BUILD=Core.30.39 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-JeOS.x86_64-15.1.0-kvm-and-xen-Build30.39.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Staging:Core-Tumbleweed-JeOS.x86_64-15.1.0-kvm-and-xen-Build30.39.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=microos \
  FLAVOR=Staging-JeOS-for-kvm-and-xen \
- HDD_1=openSUSE-Tumbleweed-JeOS.x86_64-15.1.0-kvm-and-xen-Build30.39.qcow2 \
+ HDD_1=openSUSE-Staging:Core-Tumbleweed-JeOS.x86_64-15.1.0-kvm-and-xen-Build30.39.qcow2 \
+ ISO_1=openSUSE-Staging:Core-Tumbleweed-DVD-x86_64-Build703.1-Media.iso \
  STAGING=Core \
  VERSION=Staging:Core \
  _OBSOLETE=1

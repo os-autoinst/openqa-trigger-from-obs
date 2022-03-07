@@ -146,6 +146,8 @@ class ActionBatch:
         self.flavor_aliases = defaultdict(list)
         self.flavor_aliases_flavor = []
         self.flavor_distri = defaultdict(list)
+        self.staging_pattern = {}
+        self.iso1 = {}
         self.hdds = []
         self.hdd_folder = {}
         self.assets = []
@@ -301,6 +303,11 @@ class ActionBatch:
     def doFlavor(self, node):
         if node.attrib.get("archs", ""):
             self.archs = node.attrib["archs"]
+
+        if node.attrib.get("staging_pattern", ""):
+            self.staging_pattern[node.attrib["name"]] = node.attrib["staging_pattern"]
+        if node.attrib.get("iso1", ""):
+            self.iso1[node.attrib["name"]] = node.attrib["iso1"]
 
         if node.attrib.get("dist_path", ""):
             self.dist_path = node.attrib["dist_path"]
@@ -699,6 +706,14 @@ class ActionBatch:
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
+        if len(self.staging_pattern) > 0:
+            self.p("declare -A flavor_staging", f)
+            for k, v in self.staging_pattern.items():
+                self.p("flavor_staging[{}]='{}'".format(k, v), f)
+        if len(self.iso1) > 0:
+            self.p("declare -A flavor_iso1", f)
+            for k, v in self.iso1.items():
+                self.p("flavor_iso1[{}]='{}'".format(k, v), f)
 
     def gen_print_array_flavor_distri(self, f):
         if self.news:
@@ -758,7 +773,13 @@ done < <(sort __envsub/files_asset.lst)""",
             if self.mask:
                 self.p(
                     cfg.rsync_iso(
-                        self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder
+                        self.ag.distri,
+                        self.ag.version,
+                        self.archs,
+                        self.ag.staging(),
+                        self.checksum,
+                        self.repo0folder,
+                        len(self.staging_pattern),
                     ),
                     f,
                     "| head -n 1",
@@ -767,7 +788,13 @@ done < <(sort __envsub/files_asset.lst)""",
             else:
                 self.p(
                     cfg.rsync_iso(
-                        self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder
+                        self.ag.distri,
+                        self.ag.version,
+                        self.archs,
+                        self.ag.staging(),
+                        self.checksum,
+                        self.repo0folder,
+                        len(self.staging_pattern),
                     ),
                     f,
                 )
@@ -775,7 +802,13 @@ done < <(sort __envsub/files_asset.lst)""",
             self.gen_print_array_flavor_filter(f)
             self.p(
                 cfg.rsync_iso(
-                    self.ag.distri, self.ag.version, self.archs, self.ag.staging(), self.checksum, self.repo0folder
+                    self.ag.distri,
+                    self.ag.version,
+                    self.archs,
+                    self.ag.staging(),
+                    self.checksum,
+                    self.repo0folder,
+                    len(self.staging_pattern),
                 ),
                 f,
             )
@@ -923,6 +956,25 @@ done < <(sort __envsub/files_asset.lst)""",
                 ),
                 f,
             )
+        if len(self.iso1) > 0:
+            self.p(' iso1=""', f)
+            self.p(
+                ' [ -z "${flavor_iso1[${flavor#Staging-}]}" ] || iso1=$(grep "${flavor_iso1[${flavor#Staging-}]}" __envsub/files_iso.lst 2>/dev/null | grep $arch | head -n 1)',
+                f,
+            )
+            if self.ag.staging:
+                self.p(
+                    ' [ -z "$iso1" ] || echo " ISO_1=${iso1//${flavor_iso1[${flavor#Staging-}]}/Staging:__STAGING-${flavor_iso1[${flavor#Staging-}]}} \\\\"',
+                    f,
+                )
+            else:
+                self.p(' [ -z "$iso1" ] || echo " ISO_1=$iso1 \\\\"', f)
+        if len(self.staging_pattern) > 0:
+            self.p(' staging_pattern="${flavor_staging[${flavor#Staging-}]}"', f)
+            self.p(
+                " [ -z $staging_pattern ] || destiso=${destiso//$staging_pattern/Staging:__STAGING-$staging_pattern}", f
+            )
+
         if self.repolink and not self.iso_5:
             self.p(cfg.openqa_call_legacy_builds_link, f)
         if self.legacy_builds or (self.repolink and not self.iso_5):
