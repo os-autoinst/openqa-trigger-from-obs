@@ -3,7 +3,7 @@
     dist_path="images/x86_64"
     iso_path="*product*"
     archs="x86_64">
-    <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-JeOS:kvm-and-xen">
+    <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-JeOS:kvm-and-xen" staging_pattern="Tumbleweed-JeOS" iso1="Tumbleweed-DVD">
         <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
     </flavor>
     <!-- Not in all stagings yet
