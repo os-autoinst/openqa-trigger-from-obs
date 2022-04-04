@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/YaST:Head:D-Installer/images/*/d-installer-live/*d-installer-live.x86_64-0.1-Build3.2.iso /var/lib/openqa/factory/iso/d-installer-live.x86_64-0.1-Build3.2.iso
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/YaST:Head:D-Installer/images/*/d-installer-live/*d-installer-live.x86_64-0.1-Build3.2.iso.sha256 /var/lib/openqa/factory/other/d-installer-live.x86_64-0.1-Build3.2.iso.sha256
