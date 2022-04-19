@@ -108,7 +108,7 @@ echo '# REPOOWNLIST'
 [ ! -f __envsub/files_iso.lst ] || test -n "$buildid" || buildid=$(cat __envsub/files_iso.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ -z "__STAGING" ] || buildid=${buildid//Build/Build__STAGING.}
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
-[ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
+[ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
 for repo in {REPOOWNLIST,}; do
     while read src; do
@@ -133,12 +133,13 @@ done
 rsync_repodir1 = '''
 archs=(ARCHITECTURREPO)
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
-[ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
+[ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
 for arch in "${archs[@]}"; do
     while read src; do
         [ ! -z "$src" ] || continue
         dest=$src
+        dest=${dest%-Build*}
         destPrefix=${dest%$arch*}
         destSuffix=${dest#$destPrefix}
         mid=''
@@ -375,6 +376,7 @@ def openqa_call_repot1_debugsource():
 openqa_call_repot1 = lambda: '''
         while read src; do
             dest=$src
+            dest=${dest%-Build*}
             destPrefix=${dest%$arch*}
             destSuffix=${dest#$destPrefix}
             mid=''
