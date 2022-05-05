@@ -1,4 +1,4 @@
 rsync --timeout=3600 -rtlp4 --delete --specials obspublish-other::openqa/devel:LEO/images/*/*ALP-ftp-POOL*x86_64*/*Media1/* /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/
-rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-Build17.1
+rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-Build17.10
 rsync --timeout=3600 -rtlp4 --delete --specials obspublish-other::openqa/devel:LEO/images/*/*ALP-ftp-POOL*x86_64*/*Media1/* /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/
-rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-Build17.1
+rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-Build17.10
