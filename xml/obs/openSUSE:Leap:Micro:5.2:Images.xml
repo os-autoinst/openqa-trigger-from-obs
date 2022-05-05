@@ -7,12 +7,12 @@
         <hdd filemask="openSUSE-Leap-Micro.*-Default-Build.*\.raw\.xz$"/>
     </flavor>
     <flavor name="MicroOS-Image-SelfInstall" folder="*/SUSE-MicroOS:Default-SelfInstall">
-        <hdd filemask="openSUSE-Leap-Micro.*-Default-SelfInstall-Build.*\.raw\.xz$"/>
+        <hdd filemask="openSUSE-Leap-Micro.*-Default-SelfInstall-Build.*\.iso$"/>
     </flavor>
     <flavor name="MicroOS-Image-RT" folder="*/SUSE-MicroOS:Default-RT">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-Build.*\.raw\.xz$"/>
     </flavor>
     <flavor name="MicroOS-Image-RT-SelfInstall" folder="*/SUSE-MicroOS:Default-RT-SelfInstall">
-        <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-SelfInstall-Build.*\.raw\.xz$"/>
+        <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-SelfInstall-Build.*\.iso$"/>
     </flavor>
 </openQA>

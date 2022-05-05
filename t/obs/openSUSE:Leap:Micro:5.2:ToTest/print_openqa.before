@@ -1,22 +1,22 @@
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
- ASSET_256=openSUSE-Leap-Micro-5.2-DVD-aarch64-Build14.2-Media.iso.sha256 \
- BUILD=14.2 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.2-DVD-aarch64-Build14.2-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=openSUSE-Leap-Micro-5.2-DVD-aarch64-Build37.2-Media.iso.sha256 \
+ BUILD=37.2 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.2-DVD-aarch64-Build37.2-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=leap-micro \
  FLAVOR=DVD \
- ISO=openSUSE-Leap-Micro-5.2-DVD-aarch64-Build14.2-Media.iso \
+ ISO=openSUSE-Leap-Micro-5.2-DVD-aarch64-Build37.2-Media.iso \
  VERSION=5.2 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro-5.2-DVD-x86_64-Build14.2-Media.iso.sha256 \
- BUILD=14.2 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.2-DVD-x86_64-Build14.2-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=openSUSE-Leap-Micro-5.2-DVD-x86_64-Build37.2-Media.iso.sha256 \
+ BUILD=37.2 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.2-DVD-x86_64-Build37.2-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=leap-micro \
  FLAVOR=DVD \
- ISO=openSUSE-Leap-Micro-5.2-DVD-x86_64-Build14.2-Media.iso \
+ ISO=openSUSE-Leap-Micro-5.2-DVD-x86_64-Build37.2-Media.iso \
  VERSION=5.2 \
  _OBSOLETE=1
 
