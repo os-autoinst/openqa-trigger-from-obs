@@ -3,5 +3,5 @@
     dist_path="images"
     distri="leap-micro"
     archs="aarch64 x86_64">
-    <flavor name="DVD" folder="*/000product:Leap-Micro-dvd5-dvd*" iso="1"/>
+    <flavor name="DVD" folder="*/000product:Leap-Micro-dvd5-dvd*" iso="extract_as_repo"/>
 </openQA>
