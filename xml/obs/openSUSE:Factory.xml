@@ -15,7 +15,7 @@
         <news iso="Tumbleweed-DVD" archs="x86_64"/>
     </batch>
     <batch name="microos" folder="images/local/*product*" archs="x86_64" repos="base" distri="microos">
-        <flavor name="MicroOS-DVD|Kubic-DVD" iso="1" news="1"/>
+        <flavor name="MicroOS-DVD" iso="1" news="1"/>
     </batch>
     <batch name="live" folder="images/*/live*" archs="i686 x86_64" repos="base">
         <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
@@ -34,9 +34,6 @@
         </flavor>
         <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen">
             <hdd filemask=".*ContainerHost-kvm-and-xen.*\.qcow2$"/>
-        </flavor>
-        <flavor name="MicroOS-Image-Kubic-kubeadm" folder="openSUSE-MicroOS:Kubic-kubeadm-kvm-and-xen">
-            <hdd filemask=".*Kubic-kubeadm-kvm-and-xen.*\.qcow2$"/>
         </flavor>
     </batch>
     <batch name="wsl" folder="appliances/x86_64" archs="x86_64" repos="base" distri="opensuse">
