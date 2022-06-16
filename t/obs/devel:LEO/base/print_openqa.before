@@ -1,0 +1,28 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=ALP.x86_64-0.1-SelfInstall-Build17.1.install.iso.sha256 \
+ BUILD=17.1 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/ALP.x86_64-0.1-SelfInstall-Build17.1.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=alp \
+ FLAVOR=SelfInstall \
+ ISO=ALP.x86_64-0.1-SelfInstall-Build17.1.install.iso \
+ REPO_0=ALP-0.1-x86_64-Build17.1 \
+ REPO_1=ALP-0.1-x86_64-Build17.1 \
+ REPO_ALP=ALP-0.1-x86_64-Build17.1 \
+ VERSION=0.1 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=ALP.x86_64-0.1-SelfInstall_NonTransactional-Build17.1.install.iso.sha256 \
+ BUILD=17.1 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/ALP.x86_64-0.1-SelfInstall_NonTransactional-Build17.1.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=alp \
+ FLAVOR=SelfInstall_NonTransactional \
+ ISO=ALP.x86_64-0.1-SelfInstall_NonTransactional-Build17.1.install.iso \
+ REPO_0=ALP-0.1-x86_64-Build17.1 \
+ REPO_1=ALP-0.1-x86_64-Build17.1 \
+ REPO_ALP=ALP-0.1-x86_64-Build17.1 \
+ VERSION=0.1 \
+ _OBSOLETE=1
+
