@@ -607,7 +607,7 @@ class ActionBatch:
                     cfg.read_files_repo,
                     f,
                     txt,
-                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*",
+                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*/",
                     "REPOORS",
                     "",
                     "files_repo.lst",
@@ -617,7 +617,7 @@ class ActionBatch:
                 )
 
         # let's sync media.1/media to be able verify build_id
-        if "ToTest" in self.ag.envdir or self.version_from_media:
+        if "ToTest" or "LEO" in self.ag.envdir or self.version_from_media:
             archs = self.archs
             if not archs:
                 archs = self.ag.archs
@@ -642,7 +642,7 @@ class ActionBatch:
                             os.path.basename(repodir.attrib["folder"]).lstrip("*") + repodir.get("archs", "")
                         ),
                     )
-            elif "Factory" in self.ag.envdir:
+            elif "Factory" or "LEO" in self.ag.envdir:
                 for repodir in self.repodirs:
                     if not repodir.attrib.get("gen", ""):
                         self.p(

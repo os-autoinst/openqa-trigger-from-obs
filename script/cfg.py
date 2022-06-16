@@ -135,6 +135,11 @@ archs=(ARCHITECTURREPO)
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
+
+if [[ ! -n $build ]] && [[ ! $buildid =~ (Build|Snapshot)[0-9]*[0-9]$ ]]; then
+    buildid=${buildid%%\.[[:alpha:]]*}
+fi
+
 for arch in "${archs[@]}"; do
     while read src; do
         [ ! -z "$src" ] || continue
