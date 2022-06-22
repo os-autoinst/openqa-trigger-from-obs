@@ -14,5 +14,5 @@
     </flavor>
     <!-- Hack: isos have to come last, otherwise they are missing somehow. -->
     <flavor name="Tumbleweed-DVD" distri="opensuse" iso="1"/>
-    <flavor name='MicroOS-DVD|Kubic-DVD' distri="microos" iso="1"/>
+    <flavor name='MicroOS-DVD' distri="microos" iso="1"/>
 </openQA>
