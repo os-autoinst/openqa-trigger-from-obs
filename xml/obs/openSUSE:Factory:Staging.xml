@@ -3,20 +3,6 @@
     dist_path="images/x86_64"
     iso_path="*product*"
     archs="x86_64">
-    <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-JeOS:kvm-and-xen">
-        <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
-    </flavor>
-    <!-- Not in all stagings yet
-    <flavor name="MicroOS-Image" folder="openSUSE-MicroOS:kvm-and-xen" distri="microos">
-        <hdd filemask=".*[0-9]-kvm-and-xen.*\.qcow2$"/>
-    </flavor>
-    <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen" distri="microos">
-        <hdd filemask=".*ContainerHost-kvm-and-xen.*\.qcow2$"/>
-    </flavor>
-    <flavor name="MicroOS-Image-Kubic-kubeadm" folder="openSUSE-MicroOS:Kubic-kubeadm-kvm-and-xen" distri="microos">
-        <hdd filemask=".*Kubic-kubeadm-kvm-and-xen.*\.qcow2$"/>
-    </flavor>-->
-    <!-- Hack: isos have to come last, otherwise they are missing somehow. -->
     <flavor name="Tumbleweed-DVD" distri="opensuse" iso="1"/>
     <flavor name='MicroOS-DVD|Kubic-DVD' distri="microos" iso="1"/>
 </openQA>
