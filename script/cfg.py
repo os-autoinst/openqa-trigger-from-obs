@@ -35,12 +35,8 @@ read_files_repo_link2 = '''cp __envdir/REPOLINK/files_iso_buildid.lst __envsub/
 read_files_repo_link3 = '''cp __envdir/REPOLINK/files_iso*.lst __envsub/
 '''
 
-def rsync_fix_dest(distri, version, staging, use_staging_patterns ):
+def rsync_fix_dest(distri, version, staging):
     if not staging: return ''
-    if use_staging_patterns: return '''
-    staging_pattern=$flavor
-    [ -z "${flavor_staging[$staging_pattern]}" ] || staging_pattern="${flavor_staging[$staging_pattern]}"
-    dest=${dest//$staging_pattern/Staging:__STAGING-$staging_pattern}'''
     if version != 'Factory' and len(staging) == 1: return '''dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
     return '''dest=${dest//$flavor/Staging:__STAGING-$flavor}'''
 
@@ -56,7 +52,7 @@ def rsync_commands(checksum):
         echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
     return res
 
-rsync_iso = lambda distri, version, archs, staging, checksum, repo0folder, use_staging_patterns : '''
+rsync_iso = lambda distri, version, archs, staging, checksum, repo0folder: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -68,7 +64,7 @@ for flavor in {FLAVORLIST,}; do
         ''' + rsync_iso_fix_src(archs) + '''
         [ ! -z "$src" ] || continue
         dest=$src
-        ''' + rsync_fix_dest(distri, version, staging, use_staging_patterns) + '''
+        ''' + rsync_fix_dest(distri, version, staging) + '''
         asset_folder=other
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.(qcow2|raw|vhd|vhdx|xz)$ ]] || asset_folder=hdd
