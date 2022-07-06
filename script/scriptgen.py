@@ -603,11 +603,14 @@ class ActionBatch:
                 txt = "PRODUCTREPOPATH"
                 if self.version_from_media:
                     txt = "PRODUCTREPOPATH/"
+                suffix = ""
+                if repodir.attrib.get("suffix"):
+                    suffix = repodir.attrib["suffix"]
                 self.p(
                     cfg.read_files_repo,
                     f,
                     txt,
-                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*/",
+                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix,
                     "REPOORS",
                     "",
                     "files_repo.lst",
