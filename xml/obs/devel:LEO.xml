@@ -8,7 +8,7 @@
 		<flavor name="SelfInstall" folder="ALP:SelfInstall">
 			<hdd filemask="ALP.*-SelfInstall-Build.*install.iso$"/>
 			<repos>
-				<ALP folder="ALP-ftp-POOL"/>
+				<ALP folder="ALP-ftp-POOL" suffix="/"/>
 			</repos>
 		</flavor>
 		<flavor name="SelfInstall_NonTransactional" folder="ALP:SelfInstall_NonTransactional">
