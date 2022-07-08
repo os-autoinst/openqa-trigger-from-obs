@@ -3,7 +3,7 @@
 	dist_path="obspublish-other::openqa/devel:LEO/images/*"
     distri="alp"
 	version="0.1"
-    archs="x86_64">
+    archs="x86_64 aarch64">
 	<batch name="base">
 		<flavor name="SelfInstall" folder="ALP:SelfInstall">
 			<hdd filemask="ALP.*-SelfInstall-Build.*install.iso$"/>
