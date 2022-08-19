@@ -1,8 +1,14 @@
 <openQA
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):(Staging:[A-Z]|Rings:1-MinimalX)"
     dist_path="images/x86_64"
-    iso_path="*product*"
     archs="x86_64">
-    <flavor name="Tumbleweed-DVD" distri="opensuse" iso="1"/>
-    <flavor name='MicroOS-DVD|Kubic-DVD' distri="microos" iso="1"/>
+    <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen" staging_pattern="Tumbleweed-Minimal" iso1="Tumbleweed-DVD" distri="opensuse">
+        <hdd filemask=".*Minimal.*kvm-and-xen.*\.qcow2$"/>
+    </flavor>
+    <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen" staging_pattern="MicroOS" iso1="MicroOS-DVD" distri="microos">
+        <hdd filemask=".*MicroOS.*ContainerHost-kvm-and-xen.*\.qcow2$"/>
+    </flavor>
+    <!-- Hack: isos have to come last, otherwise they are missing somehow. -->
+    <flavor name="Tumbleweed-DVD" distri="opensuse" iso="1" folder="*product*"/>
+    <flavor name='MicroOS-DVD' distri="microos" iso="1" folder="*product*"/>
 </openQA>
