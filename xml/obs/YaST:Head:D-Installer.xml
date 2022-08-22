@@ -1,0 +1,7 @@
+<openQA
+    project_pattern="YaST:Head:D-Installer"
+    dist_path="obspublish-other::openqa/YaST:Head:D-Installer/images"
+    distri="d-installer"
+    archs="aarch64 x86_64">
+    <flavor name="live" folder="*/d-installer-live" iso="1"/>
+</openQA>
