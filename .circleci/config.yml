@@ -8,8 +8,9 @@ jobs:
       - checkout
       - run:
           command: |
-            zypper -n in --no-recommends diffutils make python3 tar
+            zypper -n in --no-recommends diffutils make python3 tar git-core
       - checkout
+      - run: git clean -df
       - run: make test_regen_all
       - run: make test
 
@@ -32,7 +33,7 @@ jobs:
       image: ubuntu-2004:202201-02
     steps:
       - checkout
-      - run: 
+      - run:
           command: |
             pyenv versions
             pyenv global 3.10.2
