@@ -1,0 +1,10 @@
+<openQA
+    project_pattern="SUSE:ALP:Staging:(?P&lt;stage&gt;[A-Z])"
+    dist_path="obspublish-other::openqa/SUSE:ALP:Staging:${stage}/images/*"
+    distri="alp"
+    version="0.1"
+    archs="x86_64">
+    <flavor name="kvm" folder="ALP:kvm">
+        <hdd filemask="ALP-VM.*kvm-Build.*\.qcow2$"/>
+    </flavor>
+</openQA>
