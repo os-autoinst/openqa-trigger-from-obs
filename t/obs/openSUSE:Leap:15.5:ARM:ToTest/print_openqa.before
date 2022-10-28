@@ -1,0 +1,25 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=armv7hl \
+ ASSET_256=openSUSE-Leap-15.5-NET-armv7hl-Build28.3-Media.iso.sha256 \
+ BUILD=28.3 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.5-NET-armv7hl-Build28.3-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=NET \
+ FULLURL=1 \
+ ISO=openSUSE-Leap-15.5-NET-armv7hl-Build28.3-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
+ REPO_1=openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
+ REPO_2=openSUSE-Leap-15.5-oss-armv7hl-Build28.3-debuginfo \
+ REPO_3=openSUSE-Leap-15.5-oss-armv7hl-Build28.3-source \
+ REPO_OSS=openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
+ REPO_OSS_DEBUGINFO=openSUSE-Leap-15.5-oss-armv7hl-Build28.3-debuginfo \
+ REPO_OSS_DEBUGINFO_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Leap-15.5-oss-armv7hl-Build28.3-source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
+ VERSION=15.5 \
+ _OBSOLETE=1
+
