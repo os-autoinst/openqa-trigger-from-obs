@@ -35,7 +35,7 @@ read_files_repo_link2 = '''cp __envdir/REPOLINK/files_iso_buildid.lst __envsub/
 read_files_repo_link3 = '''cp __envdir/REPOLINK/files_iso*.lst __envsub/
 '''
 
-def rsync_fix_dest(distri, version, staging, use_staging_patterns ):
+def rsync_fix_dest(distri, version, staging, use_staging_patterns):
     if not staging: return ''
     if use_staging_patterns: return '''
     staging_pattern=$flavor
@@ -56,7 +56,7 @@ def rsync_commands(checksum):
         echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
     return res
 
-rsync_iso = lambda distri, version, archs, staging, checksum, repo0folder, use_staging_patterns : '''
+rsync_iso = lambda distri, version, archs, staging, checksum, repo0folder, use_staging_patterns: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
