@@ -975,7 +975,8 @@ done < <(sort __envsub/files_asset.lst)""",
         if len(self.staging_pattern) > 0:
             self.p(' staging_pattern="${flavor_staging[${flavor#Staging-}]}"', f)
             self.p(
-                " [ -z $staging_pattern ] || destiso=${destiso//$staging_pattern/Staging:__STAGING-$staging_pattern}", f
+                ' [ -z "$staging_pattern" ] || destiso=${destiso//$staging_pattern/Staging:__STAGING-$staging_pattern}',
+                f,
             )
 
         if self.repolink and not self.iso_5:
