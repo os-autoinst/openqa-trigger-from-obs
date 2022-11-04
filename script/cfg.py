@@ -62,7 +62,7 @@ archs=(ARCHITECTURS)
 for flavor in {FLAVORLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
-        [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
+        [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [[ ${norsync_filter[$filter]} != 1 ]] || continue
         src=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
         ''' + rsync_iso_fix_src(archs) + '''
@@ -221,7 +221,7 @@ for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
         ''' + openqa_call_start_distri(flavor_distri) + '''
-        [[ ! -v flavor_filter[@] ]] || [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
+        [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
         version=VERSIONVALUE
         if [ -z "${norsync_filter[$flavor]}" ] || [ -z $build1 ]; then {
