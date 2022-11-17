@@ -4,7 +4,7 @@
     distri="opensuse"
     archs="aarch64 x86_64">
     <!-- Actually only for x86_64, but adding archs="x86_64" here overwrites the default... -->
-    <flavor name="JeOS-for-kvm-and-xen" folder="*/kiwi-templates-JeOS:kvm-and-xen">
+    <flavor name="JeOS-for-kvm-and-xen" folder="*/kiwi-templates-Minimal:kvm-and-xen">
         <!-- Due to there being multiple archs, it omits "head -n1". So don't match .sha256(.asc). -->
         <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
     </flavor>
