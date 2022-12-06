@@ -51,8 +51,8 @@ set +e
         fi
 
         if [ -n "$builds" ] && [ $(echo "$builds" | sort | uniq | wc -l) -gt 1 ]; then
-            >&2 echo "Conflicting builds found {$builds}, skipping {$subfolder}"
-            continue
+            >&2 echo "Conflicting builds found {$builds}, exiting because of conflict in {$subfolder}"
+            exit 0
         fi
     fi
 
