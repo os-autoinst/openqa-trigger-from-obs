@@ -136,15 +136,15 @@ done
 
 rsync_repodir1 = '''
 archs=(ARCHITECTURREPO)
-[ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
-[ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
-
-if [[ ! -n $build ]] && [[ ! $buildid =~ (Build|Snapshot)[0-9]*[0-9]$ ]]; then
-    buildid=${buildid%%\.[[:alpha:]]*}
-fi
 
 for arch in "${archs[@]}"; do
+    [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep $arch | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
+    [ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
+    if [[ ! -n $build ]] && [[ ! $buildid =~ (Build|Snapshot)[0-9]*[0-9]$ ]]; then
+        buildid=${buildid%%\.[[:alpha:]]*}
+    fi
+
     while read src; do
         [ ! -z "$src" ] || continue
         dest=$src
@@ -159,7 +159,7 @@ def rsync_repodir2():
         dest=${dest//-Media2/}
         echo rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
         echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
-    done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep Media2)
+    done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep 'Media2$' )
 done
 '''
 

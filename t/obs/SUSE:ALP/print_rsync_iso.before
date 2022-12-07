@@ -1,2 +1,4 @@
-rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/SUSE:ALP/images/*/ALP:kvm/*ALP-VM.x86_64-0.0.1-kvm-Build9.2.qcow2 /var/lib/openqa/factory/hdd/ALP-VM.x86_64-0.0.1-kvm-Build9.2.qcow2
-rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/SUSE:ALP/images/*/ALP:kvm/*ALP-VM.x86_64-0.0.1-kvm-Build9.2.qcow2.sha256 /var/lib/openqa/factory/other/ALP-VM.x86_64-0.0.1-kvm-Build9.2.qcow2.sha256
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/SUSE:ALP/images/*/ALP:kvm/*ALP-VM.x86_64-0.0.1-kvm-Build21.14.qcow2 /var/lib/openqa/factory/hdd/ALP-VM.x86_64-0.0.1-kvm-Build21.14.qcow2
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/SUSE:ALP/images/*/ALP:kvm/*ALP-VM.x86_64-0.0.1-kvm-Build21.14.qcow2.sha256 /var/lib/openqa/factory/other/ALP-VM.x86_64-0.0.1-kvm-Build21.14.qcow2.sha256
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/SUSE:ALP/images/*/ALP:kvm/*ALP-VM.aarch64-0.0.1-kvm-Build21.11.qcow2 /var/lib/openqa/factory/hdd/ALP-VM.aarch64-0.0.1-kvm-Build21.11.qcow2
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/SUSE:ALP/images/*/ALP:kvm/*ALP-VM.aarch64-0.0.1-kvm-Build21.11.qcow2.sha256 /var/lib/openqa/factory/other/ALP-VM.aarch64-0.0.1-kvm-Build21.11.qcow2.sha256
