@@ -1,11 +1,11 @@
 <openQA
-    project_pattern="SUSE:ALP"
-    dist_path="obspublish-other::openqa/SUSE:ALP/images/*"
+    project_pattern="SUSE:ALP:ToTest"
+    dist_path="obspublish-other::openqa/SUSE:ALP:ToTest/images/*"
     distri="alp"
     version="0.1"
     archs="x86_64 aarch64">
     <flavor name="kvm" folder="ALP:kvm">
-        <hdd filemask="ALP-VM.*kvm-Build.*\.qcow2$"/>
+        <hdd filemask="ALP-VM.*kvm-Snapshot.*\.qcow2$"/>
         <repos>
             <ALP folder="ALP-ftp-POOL"/>
         </repos>
