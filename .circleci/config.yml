@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   unit:
     docker:
-      - image: registry.opensuse.org/opensuse/leap:15.4
+      - image: registry.opensuse.org/opensuse/tumbleweed
     steps:
       - checkout
       - run:
@@ -16,13 +16,11 @@ jobs:
 
   style:
     docker:
-      - image: registry.opensuse.org/opensuse/leap:15.4
+      - image: registry.opensuse.org/opensuse/tumbleweed
     steps:
       - checkout
       - run:
           command: |
-            zypper -n ar https://download.opensuse.org/repositories/devel:/languages:/python:/backports/15.4 py
-            zypper --gpg-auto-import-keys ref py
             zypper -n in --no-recommends make python3-black python3-importlib-metadata
       - checkout
       - run: make test_python_style
