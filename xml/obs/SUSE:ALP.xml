@@ -10,4 +10,10 @@
             <ALP folder="ALP-ftp-POOL"/>
         </repos>
     </flavor>
+    <flavor name="kvm_encrypted" folder="ALP:kvm_encrypted">
+        <hdd filemask="ALP-VM.*kvm_encrypted-Build.*\.qcow2$"/>
+        <repos>
+            <ALP folder="ALP-ftp-POOL"/>
+        </repos>
+    </flavor>
 </openQA>
