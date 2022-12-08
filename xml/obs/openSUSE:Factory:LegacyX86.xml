@@ -1,11 +1,11 @@
 <openQA
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):LegacyX86:ToTest"
     distri="opensuse">
-    <batch name="base" archs="i586 x86_64">
+    <batch name="base" archs="i586">
         <flavor name="Tumbleweed-LegacyX86-NET|Tumbleweed-LegacyX86-DVD" folder="images/local/*product*" iso="1">
-            <repos archs="x86_64">
-                <oss folder="images/local/*openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*,yast2-http-server*}" mirror="1" dest="openSUSE-Tumbleweed-LegacyX86-oss-i586-x86_64"/>
-                <non-oss folder="images/local/*openSUSE-Addon-NonOss-ftp-ftp" dest="openSUSE-Tumbleweed-LegacyX86-non-oss-i586-x86_64"/>
+            <repos archs="i586">
+                <oss folder="images/local/*openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*,yast2-http-server*}" mirror="1" dest="openSUSE-Tumbleweed-LegacyX86-oss-i586"/>
+                <non-oss folder="images/local/*openSUSE-Addon-NonOss-ftp-ftp" dest="openSUSE-Tumbleweed-LegacyX86-non-oss-i586"/>
             </repos>
         </flavor>
     </batch>
