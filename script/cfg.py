@@ -159,7 +159,7 @@ def rsync_repodir2():
         dest=${dest//-Media2/}
         echo rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
         echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
-    done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep 'Media2$' )
+    done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep Media2 )
 done
 '''
 
@@ -171,7 +171,9 @@ for arch in "${archs[@]}"; do
     while read src; do
         [ ! -z "$src" ] || continue
         [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
-        dest=''' + dest
+        dest=''' + dest + '''
+        [[ ! $src =~ .*\.license ]] || dest=$dest.license'''
+
 
 
 def openqa_call_fix_destiso(distri, version, staging):
@@ -386,13 +388,17 @@ openqa_call_repot1 = lambda: '''
         while read src; do
             dest=$src
             dest=${dest%-Build*}
+            dest=${dest%.license}
             destPrefix=${dest%$arch*}
             destSuffix=${dest#$destPrefix}
             mid=''
             dest=$destPrefix$mid$destSuffix
             repoPrefix=${dest%-Media*}
             repoSuffix=${dest#$repoPrefix}
-            dest=$repoPrefix-Build$build$repoSuffix
+            [[ ! $src =~ .license ]] || repoPrefix=$repoPrefix.license
+            B=$(grep -oE "Build|Snapshot" __envsub/files_iso.lst 2>/dev/null | head -1)
+            [ ! -z "$B" ] || B=Build
+            dest=$repoPrefix-$B$build$repoSuffix
             repoKey=REPOKEY
             repoKey=${repoKey^^}
             repoKey=${repoKey//-/_}
@@ -414,7 +420,9 @@ openqa_call_repot2 = '''
 openqa_call_repot1_dest = lambda dest: '''
         while read src; do
             [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
-            dest=''' + dest + '''-$buildex
+            dest=''' + dest + '''
+            [[ ! $src =~ .*\.license ]] || dest=$dest.license
+            dest=$dest-$buildex
             repoKey=REPOKEY
             ''' + openqa_call_repot1_debugsource() + '''
             repoKey=${repoKey^^}

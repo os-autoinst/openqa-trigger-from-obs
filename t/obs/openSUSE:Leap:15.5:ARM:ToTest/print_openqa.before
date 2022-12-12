@@ -11,7 +11,7 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
- REPO_1=openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \
+ REPO_1=openSUSE-Leap-15.5-oss-armv7hl.license-Build28.3 \
  REPO_2=openSUSE-Leap-15.5-oss-armv7hl-Build28.3-debuginfo \
  REPO_3=openSUSE-Leap-15.5-oss-armv7hl-Build28.3-source \
  REPO_OSS=openSUSE-Leap-15.5-oss-armv7hl-Build28.3 \

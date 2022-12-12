@@ -1,4 +1,8 @@
+rsync --timeout=3600 -rtlp4 --delete --specials obspublish-other::openqa/SUSE:ALP:ToTest/images/*/*ALP-ftp-POOL*x86_64*/*Media1/* /var/lib/openqa/factory/repo/ALP-0.1-x86_64.license-CURRENT/
+rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-x86_64.license-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64.license-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64.license-Snapshot20221207
 rsync --timeout=3600 -rtlp4 --delete --specials obspublish-other::openqa/SUSE:ALP:ToTest/images/*/*ALP-ftp-POOL*x86_64*/*Media1/* /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/
 rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-x86_64-Snapshot20221207
+rsync --timeout=3600 -rtlp4 --delete --specials obspublish-other::openqa/SUSE:ALP:ToTest/images/*/*ALP-ftp-POOL*aarch64*/*Media1/* /var/lib/openqa/factory/repo/ALP-0.1-aarch64.license-CURRENT/
+rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-aarch64.license-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-aarch64.license-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-aarch64.license-Snapshot20221207
 rsync --timeout=3600 -rtlp4 --delete --specials obspublish-other::openqa/SUSE:ALP:ToTest/images/*/*ALP-ftp-POOL*aarch64*/*Media1/* /var/lib/openqa/factory/repo/ALP-0.1-aarch64-CURRENT/
 rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/ALP-0.1-aarch64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-aarch64-CURRENT/ /var/lib/openqa/factory/repo/ALP-0.1-aarch64-Snapshot20221207

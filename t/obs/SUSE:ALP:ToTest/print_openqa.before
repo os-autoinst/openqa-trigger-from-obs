@@ -6,9 +6,9 @@
  DISTRI=alp \
  FLAVOR=kvm \
  HDD_1=ALP-VM.x86_64-0.0.1-kvm-Snapshot20221207.qcow2 \
- REPO_0=ALP-0.1-x86_64-Build20221207 \
- REPO_1=ALP-0.1-x86_64-Build20221207.license \
- REPO_ALP=ALP-0.1-x86_64-Build20221207 \
+ REPO_0=ALP-0.1-x86_64-Snapshot20221207 \
+ REPO_1=ALP-0.1-x86_64.license-Snapshot20221207 \
+ REPO_ALP=ALP-0.1-x86_64-Snapshot20221207 \
  VERSION=0.1 \
  _OBSOLETE=1
 
@@ -20,9 +20,9 @@
  DISTRI=alp \
  FLAVOR=kvm \
  HDD_1=ALP-VM.aarch64-0.0.1-kvm-Snapshot20221207.qcow2 \
- REPO_0=ALP-0.1-aarch64-Build20221207 \
- REPO_1=ALP-0.1-aarch64-Build20221207.license \
- REPO_ALP=ALP-0.1-aarch64-Build20221207 \
+ REPO_0=ALP-0.1-aarch64-Snapshot20221207 \
+ REPO_1=ALP-0.1-aarch64.license-Snapshot20221207 \
+ REPO_ALP=ALP-0.1-aarch64-Snapshot20221207 \
  VERSION=0.1 \
  _OBSOLETE=1
 
