@@ -47,7 +47,8 @@ set +e
         if [[ "$environ" != *Factory* ]] && [[ "$environ" != *MicroOS* ]]; then
             builds="$(grep -h -o -E 'Build[0-9](\.|[0-9]+)*[0-9]+' $subfolder/*.lst 2>/dev/null)" || :
         else
-            builds="$(grep -h -o -E '20[0-9]{6}' $subfolder/*.lst 2>/dev/null)" || :
+            # for *Factory* we include base branch for checking Snapshot consistency
+            builds="$(grep -h -o -E '20[0-9]{6}' $environ/base/*.lst 2>/dev/null || : ; grep -h -o -E '20[0-9]{6}' $subfolder/*.lst 2>/dev/null)" || :
         fi
 
         if [ -n "$builds" ] && [ $(echo "$builds" | sort | uniq | wc -l) -gt 1 ]; then
