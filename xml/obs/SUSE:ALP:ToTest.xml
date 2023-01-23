@@ -4,10 +4,13 @@
     distri="alp"
     version="0.1"
     archs="x86_64 aarch64">
+    <flavor name="d-installer" folder="d-installer-live:ALP">
+        <hdd filemask="d-installer-live.*\.iso$"/>
+    </flavor>
     <flavor name="kvm" folder="ALP:kvm">
         <hdd filemask="ALP-VM.*kvm-Snapshot.*\.qcow2$"/>
         <repos>
             <ALP folder="ALP-ftp-POOL"/>
         </repos>
-    </flavor>
+    </flavor>    
 </openQA>
