@@ -1,0 +1,45 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-15.4-CR-DVD-x86_64-Build31.205-Media.iso.sha256 \
+ BUILD=31.205 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.4-CR-DVD-x86_64-Build31.205-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=CR-DVD \
+ ISO=openSUSE-Leap-15.4-CR-DVD-x86_64-Build31.205-Media.iso \
+ VERSION=15.4 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.4-CR-DVD-aarch64-Build31.205-Media.iso.sha256 \
+ BUILD=31.205 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.4-CR-DVD-aarch64-Build31.205-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=CR-DVD \
+ ISO=openSUSE-Leap-15.4-CR-DVD-aarch64-Build31.205-Media.iso \
+ VERSION=15.4 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=ppc64le \
+ ASSET_256=openSUSE-Leap-15.4-CR-DVD-ppc64le-Build31.205-Media.iso.sha256 \
+ BUILD=31.205 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.4-CR-DVD-ppc64le-Build31.205-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=CR-DVD \
+ ISO=openSUSE-Leap-15.4-CR-DVD-ppc64le-Build31.205-Media.iso \
+ VERSION=15.4 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=s390x \
+ ASSET_256=openSUSE-Leap-15.4-CR-DVD-s390x-Build31.205-Media.iso.sha256 \
+ BUILD=31.205 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.4-CR-DVD-s390x-Build31.205-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=CR-DVD \
+ ISO=openSUSE-Leap-15.4-CR-DVD-s390x-Build31.205-Media.iso \
+ VERSION=15.4 \
+ _OBSOLETE=1
+
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/opensuse/15.4 --snapshot 31.205 /var/lib/openqa/factory/iso/openSUSE-Leap-15.4-CR-DVD-x86_64-Build31.205-Media.iso
