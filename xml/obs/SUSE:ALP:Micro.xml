@@ -1,0 +1,16 @@
+<openQA
+    project_pattern="SUSE:ALP:Micro"
+    dist_path="obspublish-other::openqa/SUSE:ALP:Products:Micro:0.1/"
+    distri="alp"
+    version="micro-0.1"
+    archs="x86_64 aarch64">
+    <flavor name="Default" folder="images/*/ALP-Micro:Default">
+        <hdd filemask="ALP-Micro.*Default-Build.*\.raw.xz$"/>
+    </flavor>
+    <flavor name="Default-qcow" folder="images/*/ALP-Micro:Default-qcow">
+        <hdd filemask="ALP-Micro.*Default-qcow-Build.*\.qcow2$"/>
+    </flavor>
+    <flavor name="Default-SelfInstall" folder="images/*/ALP-Micro:Default-SelfInstall">
+        <hdd filemask="ALP-Micro.*Default-SelfInstall-Build.*\.iso$"/>
+    </flavor>
+</openQA>
