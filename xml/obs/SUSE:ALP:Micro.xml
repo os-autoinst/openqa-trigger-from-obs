@@ -1,5 +1,5 @@
 <openQA
-    project_pattern="SUSE:ALP:Micro"
+    project_pattern="SUSE:ALP:Products:Micro:0.1"
     dist_path="obspublish-other::openqa/SUSE:ALP:Products:Micro:0.1/"
     distri="alp"
     version="micro-0.1"
