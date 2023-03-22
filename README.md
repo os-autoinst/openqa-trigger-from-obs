@@ -102,6 +102,11 @@ python3 script/scriptgen.py Leap:15.2:ToTest
 bash script/rsync.sh Leap:15.2:ToTest
 ```
 
+## Further information
+
+Find some presentation slides on
+https://slides.com/andriinikitin/obs-to-openqa
+
 ## License
 
 This project is licensed under the MIT license, see LICENSE file for details.
