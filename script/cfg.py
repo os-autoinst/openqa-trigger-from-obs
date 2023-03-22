@@ -152,7 +152,8 @@ for arch in "${archs[@]}"; do
         destPrefix=${dest%$arch*}
         destSuffix=${dest#$destPrefix}
         mid=''
-        dest=$destPrefix$mid$destSuffix'''
+        dest=$destPrefix$mid$destSuffix
+        [[ ! $src =~ .*\.license ]] || [[ $dest == *license* ]] || dest=$dest.license'''
 
 def rsync_repodir2():
     return '''

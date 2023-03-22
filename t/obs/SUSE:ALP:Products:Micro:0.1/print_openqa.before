@@ -11,7 +11,7 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-x86_64-Build6.2 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=ALP-Micro-0.1-x86_64-Build6.2 \
- REPO_1=ALP-Micro-0.1-x86_64-Build6.2 \
+ REPO_1=ALP-Micro-0.1-x86_64.license-Build6.2 \
  REPO_ALP=ALP-Micro-0.1-x86_64-Build6.2 \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-x86_64-Build6.2 \
  VERSION=micro-0.1 \
@@ -30,7 +30,7 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-aarch64-Build6.2 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=ALP-Micro-0.1-aarch64-Build6.2 \
- REPO_1=ALP-Micro-0.1-aarch64-Build6.2 \
+ REPO_1=ALP-Micro-0.1-aarch64.license-Build6.2 \
  REPO_ALP=ALP-Micro-0.1-aarch64-Build6.2 \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-aarch64-Build6.2 \
  VERSION=micro-0.1 \
@@ -49,7 +49,7 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-x86_64-Build6.2 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=ALP-Micro-0.1-x86_64-Build6.2 \
- REPO_1=ALP-Micro-0.1-x86_64-Build6.2 \
+ REPO_1=ALP-Micro-0.1-x86_64.license-Build6.2 \
  REPO_ALP=ALP-Micro-0.1-x86_64-Build6.2 \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-x86_64-Build6.2 \
  VERSION=micro-0.1 \
@@ -68,7 +68,7 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-x86_64-Build6.2 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=ALP-Micro-0.1-x86_64-Build6.2 \
- REPO_1=ALP-Micro-0.1-x86_64-Build6.2 \
+ REPO_1=ALP-Micro-0.1-x86_64.license-Build6.2 \
  REPO_ALP=ALP-Micro-0.1-x86_64-Build6.2 \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/ALP-Micro-0.1-x86_64-Build6.2 \
  VERSION=micro-0.1 \
