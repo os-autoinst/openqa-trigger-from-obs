@@ -1,0 +1,19 @@
+<openQA
+    project_pattern="SUSE:ALP:Products:Bedrock:0.1"
+    dist_path="obspublish-other::openqa/SUSE:ALP:Products:Bedrock:0.1/"
+    distri="alp"
+    version="bedrock-0.1"
+    archs="x86_64 aarch64">
+    <flavor name="Default" folder="images/*/ALP-Bedrock:Default">
+        <hdd filemask="ALP-Bedrock.*Default-Build.*\.raw.xz$"/>
+        <repos>
+            <ALP folder="images/local/000product:ALP-Bedrock-ftp-POOL*" mirror="1"/>
+        </repos>
+    </flavor>
+    <flavor name="Default-qcow" folder="images/*/ALP-Bedrock:Default-qcow" repos="Default">
+        <hdd filemask="ALP-Bedrock.*Default-qcow-Build.*\.qcow2$"/>
+    </flavor>
+    <flavor name="Default-SelfInstall" folder="images/*/ALP-Bedrock:Default-SelfInstall" repos="Default">
+        <hdd filemask="ALP-Bedrock.*Default-SelfInstall-Build.*\.iso$"/>
+    </flavor>
+</openQA>
