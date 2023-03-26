@@ -16,4 +16,7 @@
     <flavor name="Default-SelfInstall" folder="images/*/ALP-Micro:Default-SelfInstall" repos="Default">
         <hdd filemask="ALP-Micro.*Default-SelfInstall-Build.*\.iso$"/>
     </flavor>
+    <flavor name="Default-encrypted" folder="images/*/ALP-Micro:Default-encrypted" repos="Default">
+        <hdd filemask="ALP-Micro.*Default-encrypted-Build.*\.raw$"/>
+    </flavor>
 </openQA>
