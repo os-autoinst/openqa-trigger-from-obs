@@ -16,4 +16,7 @@
     <flavor name="Default-SelfInstall" folder="images/*/ALP-Bedrock:Default-SelfInstall" repos="Default">
         <hdd filemask="ALP-Bedrock.*Default-SelfInstall-Build.*\.iso$"/>
     </flavor>
+    <flavor name="Default-encrypted" folder="images/*/ALP-Bedrock:Default-encrypted" repos="Default">
+        <hdd filemask="ALP-Bedrock.*Default-encrypted-Build.*\.raw$"/>
+    </flavor>
 </openQA>
