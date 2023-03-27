@@ -8,7 +8,7 @@
     <flavor name="DVD" folder="*/000product:Leap-Micro-dvd5-dvd*">
         <hdd filemask="openSUSE-Leap-Micro.*-DVD.*.iso$"/>
         <repos>
-            <leap-micro folder="/000product:Leap-Micro-ftp-ftp*" mirror="1"/>
+            <leap-micro folder="/000product:Leap-Micro-ftp-ftp" mirror="1"/>
         </repos>
     </flavor>
     <flavor name="MicroOS-Image" folder="../../openSUSE:Leap:Micro:VERSIONVALUE:Images/images/*/SUSE-MicroOS:Default" repos="DVD">

@@ -220,6 +220,10 @@ openqa_call_start = lambda distri, version, archs, staging, news, news_archs, fl
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
+(
+# some xml have VARIABLE= definition which uses `pwd`, so we change current dir for them
+cd __envdir/..
+
 for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
@@ -399,7 +403,9 @@ openqa_call_repot1 = lambda: '''
             [[ ! $src =~ .license ]] || repoPrefix=$repoPrefix.license
             B=$(grep -oE "Build|Snapshot" __envsub/files_iso.lst 2>/dev/null | head -1)
             [ ! -z "$B" ] || B=Build
-            dest=$repoPrefix-$B$build$repoSuffix
+            buildrepo=$(cat __envsub/Media1*$arch.lst 2> /dev/null | grep -o -E 'Build.*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
+            [ -n "$buildrepo" ] || buildrepo=$build
+            dest=$repoPrefix-$B$buildrepo$repoSuffix
             repoKey=REPOKEY
             repoKey=${repoKey^^}
             repoKey=${repoKey//-/_}
@@ -432,7 +438,7 @@ openqa_call_repot1_dest = lambda dest: '''
 
 def openqa_call_news_end(distri, news, news_arch):
     if not news:
-        return ''
+        return ')'
     suff = ''
     if news_arch and news_arch != 'x86_64':
         suff = '-' + news_arch
@@ -443,7 +449,9 @@ def openqa_call_news_end(distri, news, news_arch):
     folder=''' + folder + '''
     folder=${folder%-dvd}''' + suff + '''
     echo  /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/$folder/VERSIONVALUE --snapshot $build1 /var/lib/openqa/factory/iso/${news[$n]}
-done'''
+done
+)
+'''
 
 def openqa_call_end(version):
     if version == 'Factory': return '''
