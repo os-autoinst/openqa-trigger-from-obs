@@ -649,8 +649,7 @@ class ActionBatch:
                         self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild,
                         "Media1.lst",
                         "Media1_{}.lst".format(
-                            os.path.basename(repodir.attrib["folder"]).lstrip("*").rstrip("*")
-                            + repodir.get("archs", "$arch")
+                            os.path.basename(repodir.attrib["folder"]).lstrip("*") + repodir.get("archs", "")
                         ),
                     )
             elif "Factory" or "LEO" in self.ag.envdir:

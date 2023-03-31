@@ -3,12 +3,11 @@
     dist_path="images"
     distri="leap-micro"
     archs="aarch64 x86_64"
-    variable="BUILD_ISO=$( grep DVD `pwd`/openSUSE:Leap:Micro:${version}:ToTest/files_iso.lst | grep -o -E 'Build.*' |grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
-              BUILD_IMAGE=$( grep -v DVD `pwd`/openSUSE:Leap:Micro:${version}:ToTest/files_iso.lst | grep -o -E 'Build.*' |grep -o -E '[0-9]+\.[0-9]+' | head -n 1)">
-    <flavor name="DVD" folder="*/000product:Leap-Micro-dvd5-dvd*">
-        <hdd filemask="openSUSE-Leap-Micro.*-DVD.*.iso$"/>
+    variable="BUILD_ISO=$( grep DVD `pwd`/obs/openSUSE:Leap:Micro:${version}:ToTest/files_iso.lst | grep -o -E 'Build.*' |grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
+              BUILD_IMAGE=$( grep -v DVD `pwd`/obs/openSUSE:Leap:Micro:${version}:ToTest/files_iso.lst | grep -o -E 'Build.*' |grep -o -E '[0-9]+\.[0-9]+' | head -n 1)">
+    <flavor name="DVD" iso="1" archs="aarch64 x86_64" folder="*/000product:Leap-Micro-dvd5-dvd*">
         <repos>
-            <leap-micro folder="/000product:Leap-Micro-ftp-ftp" mirror="1"/>
+            <leap-micro folder="/000product:Leap-Micro-ftp-ftp*" mirror="1"/>
         </repos>
     </flavor>
     <flavor name="MicroOS-Image" folder="../../openSUSE:Leap:Micro:VERSIONVALUE:Images/images/*/SUSE-MicroOS:Default" repos="DVD">
@@ -17,10 +16,10 @@
     <flavor name="Default-SelfInstall" folder="../../openSUSE:Leap:Micro:VERSIONVALUE:Images/images/*/SUSE-MicroOS:Default-SelfInstall" repos="DVD">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-SelfInstall-Build.*\.iso$"/>
     </flavor>
-    <flavor name="MicroOS-Image-RT" folder="../../openSUSE:Leap:Micro:VERSIONVALUE:Images/images/*/SUSE-MicroOS:Default-RT" repos="DVD">
+    <flavor name="MicroOS-Image-RT" archs="x86_64" folder="../../openSUSE:Leap:Micro:VERSIONVALUE:Images/images/*/SUSE-MicroOS:Default-RT" repos="DVD">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-Build.*\.raw\.xz$"/>
     </flavor>
-    <flavor name="Default-RT-SelfInstall" folder="../../openSUSE:Leap:Micro:VERSIONVALUE:Images/images/*/SUSE-MicroOS:Default-RT-SelfInstall" repos="DVD">
+    <flavor name="Default-RT-SelfInstall" archs="x86_64" folder="../../openSUSE:Leap:Micro:VERSIONVALUE:Images/images/*/SUSE-MicroOS:Default-RT-SelfInstall" repos="DVD">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-SelfInstall-Build.*\.iso$"/>
     </flavor>
 </openQA>
