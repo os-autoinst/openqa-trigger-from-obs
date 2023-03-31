@@ -1,194 +1,100 @@
 /usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=aarch64 \
- ASSET_256=openSUSE-Leap-Micro-5.4-DVD-aarch64-Build13.2-Media.iso.sha256 \
- BUILD=13.2 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.4-DVD-aarch64-Build13.2-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-Build3.23.raw.xz.sha256 \
+ BUILD=3.23 \
+ BUILD_ISO=13.2               BUILD_IMAGE=3.23 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-Build3.23.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=leap-micro \
  FLAVOR=DVD \
  FULLURL=1 \
- ISO=openSUSE-Leap-Micro-5.4-DVD-aarch64-Build13.2-Media.iso \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ HDD_1=openSUSE-Leap-Micro.x86_64-5.4.0-Default-Build3.23.raw.xz \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-aarch64-Build13.2 \
- REPO_1=Leap-Micro-5.4-aarch64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-aarch64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ REPO_0=Leap-Micro-5.4-x86_64-Build3.23 \
+ REPO_1=Leap-Micro-5.4-x86_64.license-Build3.23 \
+ REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build3.23 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  VERSION=5.4 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro-5.4-DVD-x86_64-Build13.2-Media.iso.sha256 \
- BUILD=13.2 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.4-DVD-x86_64-Build13.2-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=leap-micro \
- FLAVOR=DVD \
- FULLURL=1 \
- ISO=openSUSE-Leap-Micro-5.4-DVD-x86_64-Build13.2-Media.iso \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-x86_64-Build13.2 \
- REPO_1=Leap-Micro-5.4-x86_64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- VERSION=5.4 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=aarch64 \
- ASSET_256=openSUSE-Leap-Micro.aarch64-5.4.0-Default-Build3.24.raw.xz.sha256 \
- BUILD=3.24 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.aarch64-5.4.0-Default-Build3.24.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-SelfInstall-Build3.23.install.iso.sha256 \
+ BUILD=3.23 \
+ BUILD_ISO=13.2               BUILD_IMAGE=3.23 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-SelfInstall-Build3.23.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=leap-micro \
  FLAVOR=MicroOS-Image \
  FULLURL=1 \
- HDD_1=openSUSE-Leap-Micro.aarch64-5.4.0-Default-Build3.24.raw.xz \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ ISO=openSUSE-Leap-Micro.x86_64-5.4.0-Default-SelfInstall-Build3.23.install.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-aarch64-Build13.2 \
- REPO_1=Leap-Micro-5.4-aarch64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-aarch64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ REPO_0=Leap-Micro-5.4-x86_64-Build3.23 \
+ REPO_1=Leap-Micro-5.4-x86_64.license-Build3.23 \
+ REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build3.23 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  VERSION=5.4 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-Build3.24.raw.xz.sha256 \
- BUILD=3.24 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-Build3.24.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=leap-micro \
- FLAVOR=MicroOS-Image \
- FULLURL=1 \
- HDD_1=openSUSE-Leap-Micro.x86_64-5.4.0-Default-Build3.24.raw.xz \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-x86_64-Build13.2 \
- REPO_1=Leap-Micro-5.4-x86_64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- VERSION=5.4 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=aarch64 \
- ASSET_256=openSUSE-Leap-Micro.aarch64-5.4.0-Default-SelfInstall-Build3.24.install.iso.sha256 \
- BUILD=3.24 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.aarch64-5.4.0-Default-SelfInstall-Build3.24.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-Build3.23.raw.xz.sha256 \
+ BUILD=3.23 \
+ BUILD_ISO=13.2               BUILD_IMAGE=3.23 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-Build3.23.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=leap-micro \
  FLAVOR=Default-SelfInstall \
  FULLURL=1 \
- ISO=openSUSE-Leap-Micro.aarch64-5.4.0-Default-SelfInstall-Build3.24.install.iso \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ HDD_1=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-Build3.23.raw.xz \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-aarch64-Build13.2 \
- REPO_1=Leap-Micro-5.4-aarch64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-aarch64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ REPO_0=Leap-Micro-5.4-x86_64-Build3.23 \
+ REPO_1=Leap-Micro-5.4-x86_64.license-Build3.23 \
+ REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build3.23 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  VERSION=5.4 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-SelfInstall-Build3.24.install.iso.sha256 \
- BUILD=3.24 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-SelfInstall-Build3.24.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=leap-micro \
- FLAVOR=Default-SelfInstall \
- FULLURL=1 \
- ISO=openSUSE-Leap-Micro.x86_64-5.4.0-Default-SelfInstall-Build3.24.install.iso \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-x86_64-Build13.2 \
- REPO_1=Leap-Micro-5.4-x86_64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- VERSION=5.4 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=aarch64 \
- BUILD=13.2 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.23.install.iso.sha256 \
+ BUILD=3.23 \
+ BUILD_ISO=13.2               BUILD_IMAGE=3.23 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.23.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=leap-micro \
  FLAVOR=MicroOS-Image-RT \
  FULLURL=1 \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ ISO=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.23.install.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-aarch64-Build13.2 \
- REPO_1=Leap-Micro-5.4-aarch64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-aarch64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ REPO_0=Leap-Micro-5.4-x86_64-Build3.23 \
+ REPO_1=Leap-Micro-5.4-x86_64.license-Build3.23 \
+ REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build3.23 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  VERSION=5.4 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-Build3.24.raw.xz.sha256 \
- BUILD=3.24 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-Build3.24.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=leap-micro \
- FLAVOR=MicroOS-Image-RT \
- FULLURL=1 \
- HDD_1=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-Build3.24.raw.xz \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-x86_64-Build13.2 \
- REPO_1=Leap-Micro-5.4-x86_64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- VERSION=5.4 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=aarch64 \
- BUILD=13.2 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.23.install.iso.sha256 \
+ BUILD=3.23 \
+ BUILD_ISO=13.2               BUILD_IMAGE=3.23 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.23.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=leap-micro \
  FLAVOR=Default-RT-SelfInstall \
  FULLURL=1 \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
+ ISO=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.23.install.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-aarch64-Build13.2 \
- REPO_1=Leap-Micro-5.4-aarch64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-aarch64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-aarch64-Build13.2 \
- VERSION=5.4 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.24.install.iso.sha256 \
- BUILD=3.24 \
- BUILD_ISO=13.2               BUILD_IMAGE=3.24 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.24.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=leap-micro \
- FLAVOR=Default-RT-SelfInstall \
- FULLURL=1 \
- ISO=openSUSE-Leap-Micro.x86_64-5.4.0-Default-RT-SelfInstall-Build3.24.install.iso \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
- MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=Leap-Micro-5.4-x86_64-Build13.2 \
- REPO_1=Leap-Micro-5.4-x86_64.license-Build13.2 \
- REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build13.2 \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build13.2 \
+ REPO_0=Leap-Micro-5.4-x86_64-Build3.23 \
+ REPO_1=Leap-Micro-5.4-x86_64.license-Build3.23 \
+ REPO_LEAP_MICRO=Leap-Micro-5.4-x86_64-Build3.23 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/Leap-Micro-5.4-x86_64-Build3.23 \
  VERSION=5.4 \
  _OBSOLETE=1
 

@@ -43,7 +43,7 @@ set +e
         continue
     fi
 
-    if [[ "$environ" == *ToTest* ]] && [[ "$environ" != *Leap:Micro* ]]; then
+    if [[ "$environ" == *ToTest* ]]; then
         if [[ "$environ" != *Factory* ]] && [[ "$environ" != *MicroOS* ]]; then
             builds="$(grep -h -o -E 'Build[0-9](\.|[0-9]+)*[0-9]+' $subfolder/*.lst 2>/dev/null)" || :
         else
@@ -84,7 +84,7 @@ set +e
     for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
         fail=0
         bash -xe "$subfolder/.run_last/$f" > "$logdir/$f".log 2>&1 || fail=1
-        [ "$fail" -eq 0 ] || break
+        [ "$fail" -eq 0 ] || break 
     done
     (exit "$fail")
 )
