@@ -1,0 +1,13 @@
+<openQA
+    project_pattern="SUSE:ALP:Products:Installer:0.8"
+    dist_path="obspublish-other::openqa/SUSE:ALP:Products:Installer:0.8/"
+    distri="alp"
+    version="0.8"
+    archs="x86_64 s390x aarch64">
+    <flavor name="d-installer-live" folder="images/*/ALP-Installer:d-installer-live" iso="1">
+        <repos>
+            <ALP folder="images/local/000product:ALP-Installer-ftp-POOL" mirror="1"/>
+        </repos>
+    </flavor>
+</openQA>
+
