@@ -2,7 +2,7 @@
     project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.4):Images:ToTest"
     dist_path="images"
     distri="opensuse"
-    archs="aarch64 x86_64">
+    archs="aarch64 x86_64 ppc64le s390x">
     <!-- Actually only for x86_64, but adding archs="x86_64" here overwrites the default... -->
     <flavor name="JeOS-for-kvm-and-xen" folder="*/kiwi-templates-Minimal:kvm-and-xen">
         <!-- Due to there being multiple archs, it omits "head -n1". So don't match .sha256(.asc). -->
@@ -26,4 +26,6 @@
     <flavor name="Rescue-CD" folder="*/livecd-leap-x11" iso="1"/>
     <flavor name="XFCE-Live" folder="*/livecd-leap-xfce" iso="1"/>
     <flavor name="Container-Image" rsync="0"/>
+    <flavor name="CR-DVD" folder="*/000product:Leap-dvd5-dvd-*"  distri="opensuse" iso="1"/>
+    <news iso="CR-DVD" archs="x86_64"/>
 </openQA>
