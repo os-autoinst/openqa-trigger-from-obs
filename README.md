@@ -1,4 +1,5 @@
 # openqa-trigger-from-obs
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/os-autoinst/openqa-trigger-from-obs/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/os-autoinst/openqa-trigger-from-obs/tree/master)
 
 This project is aiming to simplify the integration between the Open
 Build Service (OBS) and openqa.opensuse.org (o3).
@@ -41,10 +42,10 @@ to one of those projects.
 ## Changes needed for existing projects
 
 Typical steps:
-1. Investigate the corresponding part in scriptgen.py and change according to
+1. Investigate the corresponding part in *scriptgen.py* and change according to
    new requirements.
 2. Re-generate scripts in test folders with `make test_regen_all`
-3. Update .before scripts in test folders with `make test_update_before_files`
+3. Update *.before* scripts in test folders with `make test_update_before_files`
 4. Run consistency tests with `make test`
 5. Review and acknowledge impact on projects e.g. `git difftool`
 The commands will highlight all affected projects and exact changes and side
@@ -60,26 +61,28 @@ commit affects them in the future.
 
 1. Find a project with similar settings, create a copy of its xml file and
    tweak changes as needed.
-2. Create folder t/obs/ProjectName and generate scripts using
+2. Create folder *t/obs/ProjectName* and generate scripts using
    `make test_regen_all`
 3. Examine the script for the first phase (read `Testability` section above)
-   t/obs/ProjectName/read_files.sh
+   *t/obs/ProjectName/read_files.sh*
 4. Use generated commands `rsync --list-only` to create files 
-t/obs/ProjectName/*.lst
-the same way they are created in read_files.sh
+   *t/obs/ProjectName/\*.lst* 
+   the same way they are created in *read_files.sh*
 5. Generate rsync and openqa commands based on these new *.lst files
-`make test_update_before_files`
+   `make test_update_before_files`
 6. Run consistency test `make test`
 7. Review and test bash commands generated in, which will be executed in
    production:
-t/obs/ProjectName/print_rsync_iso.before
-t/obs/ProjectName/print_rsync_repo.before
-t/obs/ProjectName/print_openqa.before
-8. Add to a new git commit the xml file and t/obs/ProjectName folder
+   * t/obs/ProjectName/print_rsync_iso.before
+   * t/obs/ProjectName/print_rsync_repo.before
+   * t/obs/ProjectName/print_openqa.before
+8. Add to a new git commit the xml file and *t/obs/ProjectName* folder
+```
 git checkout -b add_projectname
 git add xml/obs/ProjectName.xml t/obs/ProjectName
 git commit -m 'Add ProjectName'
 git push origin add_projectname
+```
 9. Create a pull request from add_projectname branch and make sure CI shows
    green outcome
 
