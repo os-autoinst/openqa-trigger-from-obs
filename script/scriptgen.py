@@ -631,7 +631,7 @@ class ActionBatch:
             archs = self.archs
             if not archs:
                 archs = self.ag.archs
-            wild = "*"
+            wild = ""
             done = ""
             if archs:
                 wild = "*" + archs + "*"
