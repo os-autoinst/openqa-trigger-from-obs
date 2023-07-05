@@ -158,7 +158,7 @@ for arch in "${archs[@]}"; do
 def rsync_repodir2():
     return '''
         dest=${dest//-Media2/}
-        echo rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/*Media2/*  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
+        echo rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/*Media2/  /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/
         echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
     done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep Media2 )
 done
