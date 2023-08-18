@@ -1,0 +1,12 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Leap:Micro:5.5:ToTest/images/*/000product:Leap-Micro-dvd5-dvd*/*openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media.iso /var/lib/openqa/factory/iso/openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Leap:Micro:5.5:ToTest/images/*/000product:Leap-Micro-dvd5-dvd*/*openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media.iso.sha256
+[ -d /var/lib/openqa/factory/repo/openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media ] || {
+    mkdir /var/lib/openqa/factory/repo/openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media
+    bsdtar xf /var/lib/openqa/factory/iso/openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media.iso -C /var/lib/openqa/factory/repo/openSUSE-Leap-Micro-5.5-DVD-aarch64-Build5.3-Media
+}
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Leap:Micro:5.5:ToTest/images/*/000product:Leap-Micro-dvd5-dvd*/*openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media.iso /var/lib/openqa/factory/iso/openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Leap:Micro:5.5:ToTest/images/*/000product:Leap-Micro-dvd5-dvd*/*openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media.iso.sha256
+[ -d /var/lib/openqa/factory/repo/openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media ] || {
+    mkdir /var/lib/openqa/factory/repo/openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media
+    bsdtar xf /var/lib/openqa/factory/iso/openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media.iso -C /var/lib/openqa/factory/repo/openSUSE-Leap-Micro-5.5-DVD-x86_64-Build5.3-Media
+}
