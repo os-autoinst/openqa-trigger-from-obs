@@ -1,0 +1,157 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-15.6-Minimal-VM.x86_64-15.6.0-kvm-and-xen-Build11.6.qcow2.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-Minimal-VM.x86_64-15.6.0-kvm-and-xen-Build11.6.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=JeOS-for-kvm-and-xen \
+ HDD_1=openSUSE-Leap-15.6-Minimal-VM.x86_64-15.6.0-kvm-and-xen-Build11.6.qcow2 \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.5-ARM-JeOS-efi.aarch64-2023.03.31-Build11.6.raw.xz.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.5-ARM-JeOS-efi.aarch64-2023.03.31-Build11.6.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=JeOS-for-AArch64 \
+ HDD_1=openSUSE-Leap-15.5-ARM-JeOS-efi.aarch64-2023.03.31-Build11.6.raw.xz \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.5-ARM-JeOS-raspberrypi.aarch64-2023.03.31-Build11.6.raw.xz.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.5-ARM-JeOS-raspberrypi.aarch64-2023.03.31-Build11.6.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=JeOS-for-RPi \
+ HDD_1=openSUSE-Leap-15.5-ARM-JeOS-raspberrypi.aarch64-2023.03.31-Build11.6.raw.xz \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_1=Leap-15.5.aarch64-15.5-libvirt_aarch64-Build11.6.vagrant.libvirt.box \
+ ASSET_LIBVIRT=Leap-15.5.aarch64-15.5-libvirt_aarch64-Build11.6.vagrant.libvirt.box \
+ BUILD=11.6 \
+ DISTRI=opensuse \
+ FLAVOR=Vagrant \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_1=Leap-15.5.x86_64-15.5-libvirt-Build11.6.vagrant.libvirt.box \
+ ASSET_LIBVIRT=Leap-15.5.x86_64-15.5-libvirt-Build11.6.vagrant.libvirt.box \
+ BUILD=11.6 \
+ DISTRI=opensuse \
+ FLAVOR=Vagrant \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.6-GNOME-Live-aarch64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-GNOME-Live-aarch64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=GNOME-Live \
+ ISO=openSUSE-Leap-15.6-GNOME-Live-aarch64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-15.6-GNOME-Live-x86_64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-GNOME-Live-x86_64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=GNOME-Live \
+ ISO=openSUSE-Leap-15.6-GNOME-Live-x86_64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.6-KDE-Live-aarch64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-KDE-Live-aarch64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=KDE-Live \
+ ISO=openSUSE-Leap-15.6-KDE-Live-aarch64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-15.6-KDE-Live-x86_64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-KDE-Live-x86_64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=KDE-Live \
+ ISO=openSUSE-Leap-15.6-KDE-Live-x86_64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.6-Rescue-CD-aarch64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-Rescue-CD-aarch64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=Rescue-CD \
+ ISO=openSUSE-Leap-15.6-Rescue-CD-aarch64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-15.6-Rescue-CD-x86_64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-Rescue-CD-x86_64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=Rescue-CD \
+ ISO=openSUSE-Leap-15.6-Rescue-CD-x86_64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-15.6-XFCE-Live-aarch64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-XFCE-Live-aarch64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=XFCE-Live \
+ ISO=openSUSE-Leap-15.6-XFCE-Live-aarch64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-15.6-XFCE-Live-x86_64-Build11.6-Media.iso.sha256 \
+ BUILD=11.6 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-15.6-XFCE-Live-x86_64-Build11.6-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=XFCE-Live \
+ ISO=openSUSE-Leap-15.6-XFCE-Live-x86_64-Build11.6-Media.iso \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ BUILD=11.6 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ BUILD=11.6 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=15.6 \
+ _OBSOLETE=1
+
