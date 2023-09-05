@@ -45,4 +45,9 @@
             <hdd filemask=".*ContainerHost-kvm-and-xen.*\.qcow2$"/>
         </flavor>
     </batch>
+    <batch name="wsl" folder="appliances/aarch64" archs="aarch64" repos="base" distri="opensuse">
+        <flavor name="WSL" folder="kiwi-images-wsl">
+            <asset filemask=".*\.appx$"/>
+        </flavor>
+    </batch>
 </openQA>
