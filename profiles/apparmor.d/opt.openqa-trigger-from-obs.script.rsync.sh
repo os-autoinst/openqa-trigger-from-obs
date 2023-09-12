@@ -54,7 +54,7 @@
   /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py rUx,
   /usr/share/openqa/script/openqa-cli rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_cli,
   /usr/bin/openqa-cli rPx -> /opt/openqa-trigger-from-obs/script/rsync.sh//openqa_cli,
-  /var/lib/openqa/share/factory/repo/** rwl, # need write and link permissions, because bsdtar may extracts iso here
+  /var/lib/openqa/share/factory/repo/** rwl, # need write and link permissions, because bsdtar may extract iso here
   /var/lib/openqa/share/factory/{iso,hdd,other}/** r,
   /{usr/bin,bin}/bash mrix,
   owner /proc/*/fd/* w,
