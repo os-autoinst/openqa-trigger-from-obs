@@ -32,6 +32,9 @@
         <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen">
             <hdd filemask=".*ContainerHost-kvm-and-xen.*\.qcow2$"/>
         </flavor>
+        <flavor name="MicroOS-SelfInstall" folder="openSUSE-MicroOS:SelfInstall">
+            <hdd filemask=".*[0-9]-SelfInstall.*\.install\.iso$"/>
+        </flavor>
     </batch>
     <batch name="wsl" folder="appliances/x86_64" archs="x86_64" repos="base" distri="opensuse">
         <flavor name="WSL" folder="kiwi-images-wsl">
