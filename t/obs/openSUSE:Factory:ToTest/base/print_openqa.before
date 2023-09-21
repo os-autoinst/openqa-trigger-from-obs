@@ -11,9 +11,10 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114 \
- REPO_1=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-debuginfo \
- REPO_2=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-source \
- REPO_3=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20200114 \
+ REPO_1=openSUSE-Tumbleweed-oss-x86_64.license-Snapshot20200114 \
+ REPO_2=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-debuginfo \
+ REPO_3=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-source \
+ REPO_4=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20200114 \
  REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20200114 \
  REPO_OSS=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114 \
  REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-debuginfo \
@@ -41,9 +42,10 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114 \
- REPO_1=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-debuginfo \
- REPO_2=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-source \
- REPO_3=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20200114 \
+ REPO_1=openSUSE-Tumbleweed-oss-x86_64.license-Snapshot20200114 \
+ REPO_2=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-debuginfo \
+ REPO_3=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-source \
+ REPO_4=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20200114 \
  REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20200114 \
  REPO_OSS=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114 \
  REPO_OSS_DEBUGINFO=openSUSE-Tumbleweed-oss-x86_64-Snapshot20200114-debuginfo \
