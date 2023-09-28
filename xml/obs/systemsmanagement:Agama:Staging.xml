@@ -4,6 +4,9 @@
     distri="alp"
     version="agama-3.0-staging"
     archs="x86_64 aarch64 ppc64le s390x">
+    <flavor name="agama-live" folder="images/*/agama-live">
+        <hdd filemask="agama-live.*-Build.*iso$"/>
+    </flavor>
     <flavor name="agama-live-ALP" folder="images/*/agama-live:ALP">
         <hdd filemask="agama-live.*-ALP-Build.*iso$"/>
     </flavor>
