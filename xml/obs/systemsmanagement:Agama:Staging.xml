@@ -2,7 +2,7 @@
     project_pattern="systemsmanagement:Agama:Staging"
     dist_path="obspublish-other::openqa/systemsmanagement:Agama:Staging/"
     distri="alp"
-    version="agama-3.0-staging"
+    version="agama-4.0-staging"
     archs="x86_64 aarch64 ppc64le s390x">
     <flavor name="agama-live-ALP" folder="images/*/agama-live:ALP">
         <hdd filemask="agama-live.*-ALP-Build.*iso$"/>

@@ -6,7 +6,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-ALP \
  ISO=agama-live.x86_64-3.0.0-ALP-Build2.29.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -17,7 +17,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-ALP \
  ISO=agama-live.aarch64-3.0.0-ALP-Build2.27.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -28,7 +28,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-ALP \
  ISO=agama-live.s390x-3.0.0-ALP-Build2.24.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -39,7 +39,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-ALP-Playwright \
  ISO=agama-live.x86_64-3.0.0-ALP-Playwright-Build2.30.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -50,7 +50,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-ALP-Playwright \
  ISO=agama-live.aarch64-3.0.0-ALP-Playwright-Build2.28.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -61,7 +61,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-openSUSE \
  ISO=agama-live.x86_64-3.0.0-openSUSE-Build2.34.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -72,7 +72,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-openSUSE \
  ISO=agama-live.aarch64-3.0.0-openSUSE-Build2.32.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -83,7 +83,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-openSUSE \
  ISO=agama-live.ppc64le-3.0.0-openSUSE-Build2.34.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -94,7 +94,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-openSUSE \
  ISO=agama-live.s390x-3.0.0-openSUSE-Build2.30.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -105,7 +105,7 @@
  DISTRI=alp \
  FLAVOR=agama-live-openSUSE-Playwright \
  ISO=agama-live.x86_64-3.0.0-openSUSE-Playwright-Build2.30.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
@@ -116,6 +116,6 @@
  DISTRI=alp \
  FLAVOR=agama-live-openSUSE-Playwright \
  ISO=agama-live.aarch64-3.0.0-openSUSE-Playwright-Build2.28.iso \
- VERSION=agama-3.0-staging \
+ VERSION=agama-4.0-staging \
  _OBSOLETE=1
 
