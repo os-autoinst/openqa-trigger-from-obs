@@ -1,9 +1,9 @@
 <openQA
-    project_pattern="openSUSE:Slowroll:Staging"
-    dist_path="images"
+    project_pattern="openSUSE:(?P&lt;version&gt;Slowroll:Staging)"
+    dist_path="images/x86_64"
     distri="opensuse"
     archs="x86_64">
-    <flavor name="JeOS-for-kvm-and-xen" folder="*/kiwi-templates-Minimal:kvm-and-xen">
+    <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
         <!-- Due to there being multiple archs, it omits "head -n1". So don't match .sha256(.asc). -->
         <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
     </flavor>
