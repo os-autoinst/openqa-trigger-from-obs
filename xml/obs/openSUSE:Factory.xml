@@ -24,6 +24,9 @@
         <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
             <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
         </flavor>
+	<flavor name="JeOS-for-Cloud" folder="kiwi-templates-Minimal:Cloud">
+            <hdd filemask=".*Cloud.*\.qcow2$"/>
+        </flavor>
     </batch>
     <batch name="microos-qcow" folder="appliances/x86_64" archs="x86_64" repos="base" distri="microos">
         <flavor name="MicroOS-Image" folder="openSUSE-MicroOS:kvm-and-xen">
