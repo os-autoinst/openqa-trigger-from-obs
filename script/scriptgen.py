@@ -180,6 +180,7 @@ class ActionBatch:
         if self.ag.brand != "obs" and not self.ag.staging():
             self.meta_variables = "_DEPRIORITIZEBUILD=1"
         self.offset = 1
+        self.media1 = 1
 
     def productpath(self):
         if self.dist_path:
@@ -361,6 +362,8 @@ class ActionBatch:
             self.legacy_builds = node.attrib["legacy_builds"]
         if node.attrib.get("offset", ""):
             self.offset = node.attrib["offset"]
+        if node.attrib.get("media1", ""):
+            self.media1 = node.attrib["media1"]
 
         for t in node.findall(".//repos"):
             if t.attrib.get("archs", ""):
@@ -561,7 +564,10 @@ class ActionBatch:
         if self.repolink and not self.isos and not self.iso_5 and not self.hdds and not self.assets:
             self.p(cfg.read_files_repo_link3, f)
         if self.repos:
-            self.p(cfg.read_files_repo, f)
+            if self.media1 == "0":
+                self.p(cfg.read_files_repo, f, "| grep -P 'Media1(.license)?$'", "")
+            else:
+                self.p(cfg.read_files_repo, f)
             if self.build_id_from_iso:
                 self.p(
                     cfg.read_files_repo,
