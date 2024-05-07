@@ -14,6 +14,7 @@ for dir in "$@" ; do
 	# check if functions are implemented
 	[ -e "$dir"/print_rsync_repo.sh ] || continue
 	[ -e "$dir"/print_openqa.sh ] || continue
+	grep -q Media1 "$dir"/files_repo*lst || continue
 	[ "$(bash $dir/print_openqa.sh | wc -l)" -gt 1 ] || { >&2 echo "SKIP $dir" && continue; }
 
     # repo_from_iso is a special case when iso is extracted as repo
