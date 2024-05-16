@@ -1,5 +1,5 @@
 <openQA
-    project_pattern="openSUSE:(?P&lt;version&gt;Slowroll:Staging)"
+    project_pattern="openSUSE:(?P&lt;version&gt;Slowroll:Build:.)"
     dist_path="images/x86_64"
     distri="opensuse"
     archs="x86_64">
