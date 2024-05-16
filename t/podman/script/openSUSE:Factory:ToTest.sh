@@ -28,14 +28,18 @@ echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Add
 
 # create just empty files as at this point we are not interested about proper binaries
 chown -R "$dbuser" /mockOBS
- 
-su $dbuser -c 'set -ex
+(
 cd /opt/openqa-trigger-from-obs
 mkdir -p openSUSE:Factory:ToTest
-python3 script/scriptgen.py openSUSE:Factory:ToTest
-[ ! -e openSUSE:Factory:ToTest/base/.run_last ] || rm openSUSE:Factory:ToTest/base/.run_last
 echo geekotest > rsync.secret
-chmod 600 rsync.secret'
+chmod 600 rsync.secret
+chown geekotest rsync.secret
+)
+
+su $dbuser -c 'set -ex
+cd /opt/openqa-trigger-from-obs
+python3 script/scriptgen.py openSUSE:Factory:ToTest
+[ ! -e openSUSE:Factory:ToTest/base/.run_last ] || rm openSUSE:Factory:ToTest/base/.run_last'
 
 echo '127.0.0.1 obspublish' >> /etc/hosts
 systemctl enable --now postgresql
