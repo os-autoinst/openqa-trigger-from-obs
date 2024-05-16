@@ -2,7 +2,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 (
 dockerfail=0
-cd docker
+cd podman
 for t in *.sh; do
     [ -x "$t" ] || continue
     for i in $(seq 1 3); do

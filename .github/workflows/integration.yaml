@@ -1,0 +1,14 @@
+---
+name: CI
+
+on: [pull_request, workflow_dispatch]  # yamllint disable-line rule:truthy
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: integration
+        run: |
+          podman pull registry.opensuse.org/devel/openqa/ci/containers/serviced
+          make test_docker PRIVILEGED_TESTS=1

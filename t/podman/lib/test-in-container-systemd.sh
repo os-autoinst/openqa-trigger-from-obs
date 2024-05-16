@@ -29,11 +29,11 @@ containername="localtest.${basename,,}"
 
 test "${PRIVILEGED_TESTS}" == 1 || ( echo PRIVILEGED_TESTS is not set to 1 ; exit 1)
 
-docker info >/dev/null 2>&1 || (echo Docker doesnt seem to be running ; exit 1)
+podman info >/dev/null 2>&1 || (echo podman doesnt seem to be running ; exit 1)
 
 map_port=""
 [ -z "$EXPOSE_PORT" ] || map_port="-p $EXPOSE_PORT:80"
-docker run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs --env METHOD=$METHOD --rm --name "$containername" -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -- registry.opensuse.org/devel/openqa/ci/containers/serviced
+podman run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs:z --env METHOD=$METHOD --rm --name "$containername" -d -- registry.opensuse.org/devel/openqa/ci/containers/serviced
 
 in_cleanup=0
 
@@ -44,7 +44,7 @@ function cleanup {
         read -rsn1 -p"Test failed, press any key to finish";echo
     fi
     [ "$ret" == 0 ] || echo FAIL $basename
-    docker stop -t 0 "$containername" >&/dev/null || :
+    podman stop -t 0 "$containername" >&/dev/null || :
 }
 
 trap cleanup INT TERM EXIT
@@ -53,17 +53,17 @@ counter=1
 # wait container start
 until [ $counter -gt 10 ]; do
   sleep 0.5
-  docker exec "$containername" pwd >& /dev/null && break
+  podman exec "$containername" pwd >& /dev/null && break
   ((counter++))
 done
 
-docker exec "$containername" pwd >& /dev/null || (echo Cannot start container; exit 1 ) >&2
+podman exec "$containername" pwd >& /dev/null || (echo Cannot start container; exit 1 ) >&2
 
-docker exec "$containername" bash /opt/init-trigger-from-obs.sh
+podman exec "$containername" bash /opt/init-trigger-from-obs.sh
 
-[ -z "$CIRCLE_JOB" ] || echo 'aa-complain /usr/share/openqa/script/openqa' | docker exec "$containername" bash -x
+[ -z "$CIRCLE_JOB" ] || echo 'aa-complain /usr/share/openqa/script/openqa' | podman exec "$containername" bash -x
 set +e
-docker cp lib/common.sh "$containername":/lib
-docker exec -e TESTCASE="$testcase" "$containername" bash -xe /opt/openqa-trigger-from-obs/t/docker/$testcase
+podman cp lib/common.sh "$containername":/lib
+podman exec -e TESTCASE="$testcase" "$containername" bash -xe /opt/openqa-trigger-from-obs/t/podman/$testcase
 ret=$?
 ( exit $ret )

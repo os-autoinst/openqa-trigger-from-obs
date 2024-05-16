@@ -5,16 +5,23 @@ prepare_project() {
 prj=$1
 suff=$2
 
-su $dbuser -c "set -ex
+(
 cd /opt/openqa-trigger-from-obs
 mkdir -p $prj
+chown $dbuser $prj
+echo geekotest > rsync.secret
+chmod 600 rsync.secret
+chown $dbuser rsync.secret
+)
+
+su $dbuser -c "set -ex
+cd /opt/openqa-trigger-from-obs
 python3 script/scriptgen.py $prj
 for l in $prj/*/.run_last ; do
     [ ! -e \$l ] || rm \$l
 done
 [ ! -e $prj/.run_last ] || rm $prj/.run_last
-echo geekotest > rsync.secret
-chmod 600 rsync.secret"
+"
 
 echo "[production]
 dsn = DBI:Pg:dbname=openqa;host=/tmp" > /usr/share/openqa/etc/openqa/database.ini
@@ -28,6 +35,7 @@ chmod +x /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package
 
 systemctl start postgresql
 
+systemctl restart apache2
 systemctl restart openqa-webui.service
 systemctl restart openqa-websockets.service
 systemctl restart rsyncd
