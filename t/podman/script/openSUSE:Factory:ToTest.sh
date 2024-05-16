@@ -26,11 +26,11 @@ echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Add
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media3
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media3/sourcefile
 
-# create just empty files as at this point we are not interested about proper binaries
 chown -R "$dbuser" /mockOBS
 (
 cd /opt/openqa-trigger-from-obs
 mkdir -p openSUSE:Factory:ToTest
+chown geekotest openSUSE:Factory:ToTest
 echo geekotest > rsync.secret
 chmod 600 rsync.secret
 chown geekotest rsync.secret
@@ -43,7 +43,8 @@ python3 script/scriptgen.py openSUSE:Factory:ToTest
 
 echo '127.0.0.1 obspublish' >> /etc/hosts
 systemctl enable --now postgresql
-systemctl enable --now rsyncd
+systemctl restart rsyncd
+sleep 1 # is it a bug that rsyncd needs sleep to work properly?
 
 runs_before="$(ls -lda /opt/openqa-trigger-from-obs/openSUSE:Factory:ToTest/base/.run_*/ 2>/dev/null | wc -l)"
 
