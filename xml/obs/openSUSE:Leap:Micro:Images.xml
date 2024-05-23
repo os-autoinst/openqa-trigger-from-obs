@@ -1,18 +1,24 @@
 <openQA
-    project_pattern="openSUSE:Leap:Micro:(?P&lt;version&gt;5.[2-9]):Images:ToTest"
+    project_pattern="openSUSE:Leap:Micro:(?P&lt;version&gt;6.[0-9]):Images:ToTest"
     dist_path="images"
     distri="leap-micro"
     archs="aarch64 x86_64">
-    <flavor name="MicroOS-Image" folder="*/SUSE-MicroOS:Default">
+    <flavor name="Default" folder="*/Leap-Micro:Default">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-Build.*\.raw\.xz$"/>
     </flavor>
-    <flavor name="Default-SelfInstall" folder="*/SUSE-MicroOS:Default-SelfInstall">
+    <flavor name="Default-SelfInstall" folder="*/Leap-Micro:Default-SelfInstall">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-SelfInstall-Build.*\.iso$"/>
     </flavor>
-    <flavor name="MicroOS-Image-RT" folder="*/SUSE-MicroOS:Default-RT">
+    <flavor name="Default-RT" folder="*/Leap-Micro:Default-RT">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-Build.*\.raw\.xz$"/>
     </flavor>
-    <flavor name="Default-RT-SelfInstall" folder="*/SUSE-MicroOS:Default-RT-SelfInstall">
+    <flavor name="Default-RT-SelfInstall" folder="*/Leap-Micro::Default-RT-SelfInstall">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-SelfInstall-Build.*\.iso$"/>
+    </flavor>
+    <flavor name="Default-encrypted" folder="*/Leap-Micro:Default-encrypted">
+        <hdd filemask="openSUSE-Leap-Micro.*-Default-encrypted-Build.*\.raw$"/>
+    </flavor>
+    <flavor name="Default-qcow" folder="*/Leap-Micro:Default-qcow">
+        <hdd filemask="openSUSE-Leap-Micro.*-Default-qcow-Build.*\.qcow2$"/>
     </flavor>
 </openQA>
