@@ -1,6 +1,0 @@
-<openQA
-    project_pattern="openSUSE:Leap:Micro:(?P&lt;version&gt;6.[2-9]):ToTest"
-    dist_path="images"
-    distri="leap-micro"
-    archs="aarch64 x86_64">
-</openQA>

@@ -9,16 +9,28 @@
     <flavor name="Default-SelfInstall" folder="*/Leap-Micro:Default-SelfInstall">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-SelfInstall-Build.*\.iso$"/>
     </flavor>
-    <flavor name="Default-RT" folder="*/Leap-Micro:Default-RT">
-        <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-Build.*\.raw\.xz$"/>
-    </flavor>
-    <flavor name="Default-RT-SelfInstall" folder="*/Leap-Micro::Default-RT-SelfInstall">
-        <hdd filemask="openSUSE-Leap-Micro.*-Default-RT-SelfInstall-Build.*\.iso$"/>
-    </flavor>
     <flavor name="Default-encrypted" folder="*/Leap-Micro:Default-encrypted">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-encrypted-Build.*\.raw$"/>
     </flavor>
     <flavor name="Default-qcow" folder="*/Leap-Micro:Default-qcow">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-qcow-Build.*\.qcow2$"/>
+    </flavor>
+    <flavor name="Base" folder="*/Leap-Micro:Base">
+        <hdd filemask="openSUSE-Leap-Micro.*-Base-Build.*\.raw\.xz$"/>
+    </flavor>
+    <flavor name="Base-SelfInstall" folder="*/Leap-Micro:Base-SelfInstall">
+        <hdd filemask="openSUSE-Leap-Micro.*-Base-SelfInstall-Build.*\.iso$"/>
+    </flavor>
+    <flavor name="Base-RT" folder="*/Leap-Micro:Base-RT">
+        <hdd filemask="openSUSE-Leap-Micro.*-Base-RT-Build.*\.raw\.xz$"/>
+    </flavor>
+    <flavor name="Base-RT-SelfInstall" folder="*/Leap-Micro:Base-RT-SelfInstall">
+        <hdd filemask="openSUSE-Leap-Micro.*-Base-RT-SelfInstall-Build.*\.iso$"/>
+    </flavor>
+    <flavor name="Base-encrypted" folder="*/Leap-Micro:Base-encrypted">
+        <hdd filemask="openSUSE-Leap-Micro.*-Base-encrypted-Build.*\.raw$"/>
+    </flavor>
+    <flavor name="Base-qcow" folder="*/Leap-Micro:Base-qcow">
+        <hdd filemask="openSUSE-Leap-Micro.*-Base-qcow-Build.*\.qcow2$"/>
     </flavor>
 </openQA>

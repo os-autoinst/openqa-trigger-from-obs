@@ -44,28 +44,6 @@
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Default-RT-Build13.1.raw.xz.sha256 \
- BUILD=13.1 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Default-RT-Build13.1.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=leap-micro \
- FLAVOR=Default-RT \
- HDD_1=openSUSE-Leap-Micro.x86_64-6.0-Default-RT-Build13.1.raw.xz \
- VERSION=6.0 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=x86_64 \
- ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Default-RT-SelfInstall-Build13.1.install.iso.sha256 \
- BUILD=13.1 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Default-RT-SelfInstall-Build13.1.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=leap-micro \
- FLAVOR=Default-RT-SelfInstall \
- ISO=openSUSE-Leap-Micro.x86_64-6.0-Default-RT-SelfInstall-Build13.1.install.iso \
- VERSION=6.0 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=x86_64 \
  ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Default-encrypted-Build13.1.raw.sha256 \
  BUILD=13.1 \
  CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Default-encrypted-Build13.1.raw.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
@@ -94,6 +72,105 @@
  DISTRI=leap-micro \
  FLAVOR=Default-qcow \
  HDD_1=openSUSE-Leap-Micro.x86_64-6.0-Default-qcow-Build13.1.qcow2 \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-Micro.aarch64-6.0-Base-Build13.1.raw.xz.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.aarch64-6.0-Base-Build13.1.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base \
+ HDD_1=openSUSE-Leap-Micro.aarch64-6.0-Base-Build13.1.raw.xz \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Base-Build13.1.raw.xz.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Base-Build13.1.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base \
+ HDD_1=openSUSE-Leap-Micro.x86_64-6.0-Base-Build13.1.raw.xz \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-Micro.aarch64-6.0-Base-SelfInstall-Build13.1.install.iso.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.aarch64-6.0-Base-SelfInstall-Build13.1.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base-SelfInstall \
+ ISO=openSUSE-Leap-Micro.aarch64-6.0-Base-SelfInstall-Build13.1.install.iso \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Base-SelfInstall-Build13.1.install.iso.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Base-SelfInstall-Build13.1.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base-SelfInstall \
+ ISO=openSUSE-Leap-Micro.x86_64-6.0-Base-SelfInstall-Build13.1.install.iso \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Base-RT-Build13.1.raw.xz.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Base-RT-Build13.1.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base-RT \
+ HDD_1=openSUSE-Leap-Micro.x86_64-6.0-Base-RT-Build13.1.raw.xz \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Base-RT-SelfInstall-Build13.1.install.iso.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Base-RT-SelfInstall-Build13.1.install.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base-RT-SelfInstall \
+ ISO=openSUSE-Leap-Micro.x86_64-6.0-Base-RT-SelfInstall-Build13.1.install.iso \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Base-encrypted-Build13.1.raw.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Base-encrypted-Build13.1.raw.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base-encrypted \
+ HDD_1=openSUSE-Leap-Micro.x86_64-6.0-Base-encrypted-Build13.1.raw \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Leap-Micro.aarch64-6.0-Base-qcow-Build13.1.qcow2.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.aarch64-6.0-Base-qcow-Build13.1.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base-qcow \
+ HDD_1=openSUSE-Leap-Micro.aarch64-6.0-Base-qcow-Build13.1.qcow2 \
+ VERSION=6.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Leap-Micro.x86_64-6.0-Base-qcow-Build13.1.qcow2.sha256 \
+ BUILD=13.1 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Leap-Micro.x86_64-6.0-Base-qcow-Build13.1.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=leap-micro \
+ FLAVOR=Base-qcow \
+ HDD_1=openSUSE-Leap-Micro.x86_64-6.0-Base-qcow-Build13.1.qcow2 \
  VERSION=6.0 \
  _OBSOLETE=1
 
