@@ -2,7 +2,7 @@
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):ARM:ToTest"
     distri="opensuse">
     <batch name="base" archs="aarch64 armv7hl">
-        <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="images/local/*product*" iso="1">
+        <flavor name="Tumbleweed-NET" folder="images/local/*product*" iso="1">
             <repos>
                 <oss folder="images/local/*openSUSE-ftp-ftp" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-$arch"/>
             </repos>
@@ -11,6 +11,7 @@
             </assets>
         </flavor>
         <news iso="Tumbleweed-DVD" archs="aarch64"/>
+	    <flavor name="Tumbleweed-DVD" folder="images/local/*product*" iso="1" archs="aarch64" repos="Tumbleweed-NET"/>
     </batch>
     <batch name="microos" folder="images/local/*product*" archs="aarch64" repos="base" distri="microos">
         <flavor name="MicroOS-DVD" iso="1" news="aarch64"/>
@@ -27,6 +28,9 @@
             <assets archs="aarch64">
                 <libvirt folder="*vagrant*libvirt*" filemask="libvirt.box"/>
             </assets>
+        </flavor>
+        <flavor name="JeOS-for-" folder="kiwi-templates-Minimal:Cloud">
+            <hdd filemask=".*Minimal-VM.aarch64.*-Cloud.*\.qcow2$"/>
         </flavor>
     </batch>
     <batch name="jeos-armv7hl" folder="appliances/armv7l" archs="armv7hl" repos="base">
