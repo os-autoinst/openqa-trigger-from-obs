@@ -1,0 +1,9 @@
+# !/bin/bash
+
+echo "Hello work hook script run for OBS project '$1'."
+
+# you could query the OBS API from here
+
+# you could compute a YAML document containing relevant test scenario (see https://open.qa/docs/#scenarios_yaml)
+
+# you could output a file called `openqa.cmd` with the openqa-cli commands to be run (not using `print_openqa.sh` for that anymore)
