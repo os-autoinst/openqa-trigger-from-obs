@@ -79,6 +79,12 @@ set +e
     [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
     ln -s -T "$(pwd)/$logdir" $subfolder/.run_last
 
+    # run additional hook script from current subfolder
+    [[ -x "$subfolder/hook_script" ]] && "$subfolder/hook_script" 2>$logdir/hook_script.err > $logdir/hook_script.out
+
+    # run additional hook script from script folder
+    [[ -x "$DIR/generic_hook" ]] && "$DIR/generic_hook" "$environ" 2>$logdir/generic_hook.err > $logdir/generic_hook.out
+
     [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
     for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
