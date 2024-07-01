@@ -71,7 +71,6 @@ for flavor in {FLAVORLIST,}; do
         ''' + rsync_fix_dest(distri, version, staging, use_staging_patterns) + '''
         asset_folder=other
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
-        [[ ! $dest =~ \.json$  ]] || asset_folder=iso
         [[ ! $dest =~ \.(qcow2|raw|vhd|vmdk|vhdx|xz)$ ]] || asset_folder=hdd
         ''' + rsync_commands(checksum) + '''
         repo0folder=${dest%.iso}
