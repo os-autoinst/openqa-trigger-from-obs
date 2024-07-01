@@ -71,6 +71,7 @@ for flavor in {FLAVORLIST,}; do
         ''' + rsync_fix_dest(distri, version, staging, use_staging_patterns) + '''
         asset_folder=other
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
+        [[ ! $dest =~ \.spdx\.json$  ]] || asset_folder=iso
         [[ ! $dest =~ \.(qcow2|raw|vhd|vmdk|vhdx|xz)$ ]] || asset_folder=hdd
         ''' + rsync_commands(checksum) + '''
         repo0folder=${dest%.iso}
@@ -283,6 +284,8 @@ def openqa_call_start_ex(checksum):
     return ''' if [[ ${norsync_filter[$filter]} == 1 ]]; then
    :
  elif [[ $destiso =~ \.iso$ ]]; then
+   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
+ elif [[ $destiso =~ \.spdx.json$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
  elif [[ $destiso =~ \.(hdd|qcow2|raw|raw\.xz|raw\.gz|vhdx\.xz|vmdk|vmdk\.xz)$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + '''\"
