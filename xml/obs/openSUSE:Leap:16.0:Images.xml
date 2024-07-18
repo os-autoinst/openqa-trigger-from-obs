@@ -1,0 +1,7 @@
+<openQA
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;16.0):Images:ToTest"
+    dist_path="images"
+    distri="opensuse"
+    archs="aarch64 x86_64">
+    <flavor name="agama-installer-openSUSE" folder="*/agama-installer-openSUSE" iso="1"/>
+</openQA>
