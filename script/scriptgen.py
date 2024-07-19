@@ -554,8 +554,19 @@ class ActionBatch:
                             "Media1?.iso$",
                             iso,
                         )
-                    else:
+                    elif self.media1 != "0":
                         self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(iso, ""), "SRCISO", iso)
+                    else:
+                        self.p(
+                            cfg.read_files_iso,
+                            f,
+                            "FOLDER",
+                            self.iso_folder.get(iso, ""),
+                            "SRCISO",
+                            iso,
+                            "Media1?.iso$",
+                            ".iso$",
+                        )
 
         if self.repolink:
             self.p(cfg.read_files_repo_link, f)
