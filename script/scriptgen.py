@@ -16,6 +16,7 @@ class ActionGenerator:
         self.brand = brand
         self.envdir = os.path.join(envdir, project)
         self.distri = ""
+        self.openqa_cli = "/usr/bin/openqa-cli api -X post isos?async=1"
         self.version = version
         self.batches = []
         project = project.split("::")[0]
@@ -63,6 +64,8 @@ class ActionGenerator:
         self.version = root.attrib.get("version", self.version)
         if root.attrib.get("distri", ""):
             self.distri = root.attrib["distri"]
+
+        self.openqa_cli = root.attrib.get("openqa_cli", self.openqa_cli)
 
         for t in root.findall(".//batch"):
             batch = self.doBatch(t)
@@ -955,6 +958,7 @@ done < <(sort __envsub/files_asset.lst)""",
                     self.meta_variables,
                     self.assets_flavor,
                     self.repo0folder,
+                    self.ag.openqa_cli,
                 ),
                 f,
                 "| grep $arch | head -n 1",
@@ -973,6 +977,7 @@ done < <(sort __envsub/files_asset.lst)""",
                     self.meta_variables,
                     self.assets_flavor,
                     self.repo0folder,
+                    self.ag.openqa_cli,
                 ),
                 f,
             )

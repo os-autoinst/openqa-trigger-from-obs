@@ -219,7 +219,7 @@ def openqa_call_start_meta_variables(meta_variables):
 def pre_openqa_call_start(repos):
     return ''
 
-openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, repo0folder: '''
+openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, repo0folder, openqa_cli: '''
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
@@ -252,7 +252,7 @@ for flavor in {FLAVORALIASLIST,}; do
         ''' + openqa_call_news(news, news_archs) + '''
         }
         fi
-        echo "/usr/bin/openqa-cli api -X post isos?async=1 \\\\\"
+        echo "''' + openqa_cli + ''' \\\\\"
 (
  echo \" DISTRI=$distri \\\\
  ARCH=$arch \\\\
