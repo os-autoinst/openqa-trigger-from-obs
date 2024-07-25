@@ -81,6 +81,8 @@ class ActionGenerator:
             batches_string = root.attrib.get("batches", "default")
             for b in batches_string.split("|"):
                 batch = self.doBatch(root, b)
+                if root.attrib.get("metavars"):
+                    batch.meta_variables = root.attrib.get("metavars")
                 if batch:
                     for news in root.findall(".//news"):
                         if news.attrib.get("iso", ""):
