@@ -7,7 +7,7 @@ pull_request_rules:
           - status-success=integration
           - status-success=unit
       - and:
-          - "#approved-reviews-by>=1"
+          - "#approved-reviews-by>=2"
           - "#changes-requested-reviews-by=0"
           # https://doc.mergify.io/examples.html#require-all-requested-reviews-to-be-approved
           - "#review-requested=0"
