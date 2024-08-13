@@ -1,19 +1,10 @@
 <openQA
     project_pattern="systemsmanagement:Agama:Devel"
     dist_path="obspublish-other::openqa/systemsmanagement:Agama:Devel/"
-    distri="alp"
-    version="agama-4.0-devel"
+    distri="opensuse"
+    version="agama-9.0"
     archs="x86_64 aarch64 ppc64le s390x">
-    <flavor name="agama-live-ALP" folder="images/*/agama-live:ALP">
-        <hdd filemask="agama-live.*-ALP-Build.*iso$"/>
-    </flavor>
-    <flavor name="agama-live-ALP-Playwright" folder="images/*/agama-live:ALP-Playwright">
-        <hdd filemask="agama-live.*-ALP-Playwright-Build.*iso$"/>
-    </flavor>
-    <flavor name="agama-live-openSUSE" folder="images/*/agama-live:openSUSE">
-        <hdd filemask="agama-live.*-openSUSE-Build.*iso$"/>
-    </flavor>
-    <flavor name="agama-live-openSUSE-Playwright" folder="images/*/agama-live:openSUSE-Playwright">
-        <hdd filemask="agama-live.*-openSUSE-Playwright-Build.*iso$"/>
+    <flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/">
+        <hdd filemask="agama-installer.*-openSUSE-Build.*iso$"/>
     </flavor>
 </openQA>
