@@ -1,0 +1,22 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=agama-installer-Leap.aarch64.9.0.0-openSUSE-Build2.4.iso.sha256 \
+ BUILD=2.4 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/agama-installer-Leap.aarch64.9.0.0-openSUSE-Build2.4.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=agama-installer-Leap \
+ ISO=agama-installer-Leap.aarch64.9.0.0-openSUSE-Build2.4.iso \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=agama-installer-Leap.x86_64.9.0.0-openSUSE-Build2.4.iso.sha256 \
+ BUILD=2.4 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/agama-installer-Leap.x86_64.9.0.0-openSUSE-Build2.4.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=agama-installer-Leap \
+ ISO=agama-installer-Leap.x86_64.9.0.0-openSUSE-Build2.4.iso \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
