@@ -581,7 +581,14 @@ class ActionBatch:
             self.p(cfg.read_files_repo_link3, f)
         if self.repos:
             if self.media1 == "0":
-                self.p(cfg.read_files_repo, f, "| grep -P 'Media1(.license)?$'", "")
+                self.p(
+                    cfg.read_files_repo,
+                    f,
+                    "| grep -P 'Media1(.license)?$'",
+                    "",
+                    "| grep -P 'Media[1-3](.license)?$'",
+                    "",
+                )
             else:
                 self.p(cfg.read_files_repo, f)
             if self.build_id_from_iso:

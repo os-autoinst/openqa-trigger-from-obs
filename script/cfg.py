@@ -115,6 +115,8 @@ echo '# REPOOWNLIST'
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 [ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
+buildid=${buildid/.iso}
+
 for repo in {REPOOWNLIST,}; do
     while read src; do
         [ ! -z "$src" ] || continue
@@ -375,6 +377,8 @@ openqa_call_repot = lambda build_id_from_iso, repos: '''
                 repoKey=${repot}
                 repoKey=${repoKey^^}
                 repoKey=${repoKey//-/_}
+                repoKey=${repoKey//./_}
+                repoKey=${repoKey//$/}
                 echo " REPO_$i=$repoDest \\\\"
                 ''' + openqa_call_repot_part3() + '''
                 ''' + openqa_call_build_id_from_iso2(build_id_from_iso) + '''
@@ -408,6 +412,8 @@ openqa_call_repot1 = lambda: '''
             repoKey=REPOKEY
             repoKey=${repoKey^^}
             repoKey=${repoKey//-/_}
+            repoKey=${repoKey//./_}
+            repoKey=${repoKey//$/}
             ''' + openqa_call_repot1_debugsource() + '''
             dest=${dest//-Media1/}
             dest=${dest//-Media2/}
@@ -433,6 +439,8 @@ openqa_call_repot1_dest = lambda dest: '''
             ''' + openqa_call_repot1_debugsource() + '''
             repoKey=${repoKey^^}
             repoKey=${repoKey//-/_}
+            repoKey=${repoKey//./_}
+            repoKey=${repoKey//$/}
 '''
 
 def openqa_call_news_end(distri, news, news_arch):
