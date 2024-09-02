@@ -8,6 +8,9 @@
     <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen" staging_pattern="MicroOS" iso1="MicroOS-DVD" distri="microos">
         <hdd filemask=".*MicroOS.*ContainerHost-kvm-and-xen.*\.qcow2$"/>
     </flavor>
+    <flavor name="MicroOS-Image-sdboot" folder="openSUSE-MicroOS:kvm-and-xen-sdboot" staging_pattern="MicroOS" iso1="MicroOS-DVD" distri="microos">
+        <hdd filemask=".*MicroOS.*kvm-and-xen-sdboot.*\.qcow2$"/>
+    </flavor>
     <!-- Hack: isos have to come last, otherwise they are missing somehow. -->
     <flavor name="Tumbleweed-DVD" distri="opensuse" iso="1" folder="*product*"/>
     <flavor name='MicroOS-DVD' distri="microos" iso="1" folder="*product*"/>
