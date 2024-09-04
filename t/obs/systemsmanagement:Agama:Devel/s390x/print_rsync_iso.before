@@ -1,0 +1,6 @@
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/systemsmanagement:Agama:Devel//iso/images/*/agama-installer:openSUSE//*agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso /var/lib/openqa/factory/iso/agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/systemsmanagement:Agama:Devel//iso/images/*/agama-installer:openSUSE//*agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso.sha256 /var/lib/openqa/factory/other/agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso.sha256
+[ -d /var/lib/openqa/factory/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9 ] || {
+    mkdir /var/lib/openqa/factory/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9
+    bsdtar xf /var/lib/openqa/factory/iso/agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso -C /var/lib/openqa/factory/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9
+}
