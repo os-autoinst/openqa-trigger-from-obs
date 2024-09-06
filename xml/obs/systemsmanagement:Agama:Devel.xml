@@ -2,9 +2,11 @@
     project_pattern="systemsmanagement:Agama:Devel"
     dist_path="obspublish-other::openqa/systemsmanagement:Agama:Devel/"
     distri="opensuse"
-    version="agama-9.0"
-    archs="x86_64 aarch64 ppc64le s390x">
-    <flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/">
-        <hdd filemask="agama-installer.*-openSUSE-Build.*iso$"/>
-    </flavor>
+    version="agama-9.0">
+    <batch name="base" archs="86_64 aarch64 ppc64le">
+        <flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="1" media1="0"/>
+    </batch>
+    <batch name="s390x" archs="s390x" iso_path="iso">
+	<flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="extract_as_repo" media1="0"/>
+    </batch>
 </openQA>

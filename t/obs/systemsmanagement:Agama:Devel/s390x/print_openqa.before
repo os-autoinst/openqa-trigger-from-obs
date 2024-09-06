@@ -1,0 +1,17 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=s390x \
+ ASSET_256=agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso.sha256 \
+ BUILD=17.9 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=agama-installer \
+ FULLURL=1 \
+ ISO=agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=agama-installer.s390x-9.0.0-openSUSE-Build17.9 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9 \
+ VERSION=agama-9.0 \
+ _OBSOLETE=1
+
