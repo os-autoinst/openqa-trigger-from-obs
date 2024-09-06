@@ -1,5 +1,5 @@
 /usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=86_64 \
+ ARCH=x86_64 \
  ASSET_256=agama-installer.x86_64-9.0.0-openSUSE-Build17.9.iso.sha256 \
  BUILD=17.9 \
  CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/agama-installer.x86_64-9.0.0-openSUSE-Build17.9.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
