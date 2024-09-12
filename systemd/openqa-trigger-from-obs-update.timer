@@ -6,4 +6,4 @@ OnCalendar=*:0/3
 Unit=openqa-trigger-from-obs-update.service
 
 [Install]
-WantedBy=default.target
+WantedBy=timers.target
