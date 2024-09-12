@@ -6,6 +6,3 @@ After=network-online.target
 Type=oneshot
 ExecStart=/usr/bin/git -C /opt/openqa-trigger-from-obs pull --quiet --rebase origin master
 User=geekotest
-
-[Install]
-WantedBy=default.target
