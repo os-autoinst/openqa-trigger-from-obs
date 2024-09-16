@@ -168,6 +168,7 @@ class ActionBatch:
         self.fixed_iso = ""
         self.mask = ""
         self.iso_extract_as_repo = {}
+        self.ln_iso_to_repo = {}
         self.mirror_repo = ""
         self.repos = []
         self.repolink = ""
@@ -276,6 +277,7 @@ class ActionBatch:
             s = s.replace("FLAVORORS", "|".join(self.flavors))
             s = s.replace("FLAVORALIASLIST", ",".join(aliases))
             s = s.replace("FLAVORASREPOORS", "|".join([f for f in self.flavors if self.iso_extract_as_repo.get(f, 0)]))
+            s = s.replace("FLAVORTOREPOORS", "|".join([f for f in self.flavors if self.ln_iso_to_repo.get(f, 0)]))
 
         if self.repos or (self.repolink and not "/" in self.repolink):
             repos = self.repos.copy()
@@ -354,6 +356,8 @@ class ActionBatch:
                         self.iso_extract_as_repo[iso] = 1
                         self.repo0folder = node.attrib["extract_as_repo"]
                 self.isos.append(iso)
+                if node.attrib.get("ln_iso_to_repo", ""):
+                    self.ln_iso_to_repo[iso] = node.attrib["ln_iso_to_repo"]
 
         if node.attrib.get("name", "") and node.attrib.get("folder", ""):
             self.iso_folder[node.attrib["name"]] = node.attrib["folder"]
@@ -1049,6 +1053,8 @@ done < <(sort __envsub/files_asset.lst)""",
                     s = cfg.openqa_call_repo0b
                     destiso = self.fixed_iso[:-4]
                 self.p(s, f, "REPO0_ISO", destiso)
+                if self.ln_iso_to_repo.get(iso, 0):
+                    self.p(s, f, "REPO_0", "REPO_999", "REPO0_ISO", destiso + ".iso")
                 if self.iso_5:
                     pref = self.iso_5.replace("-", "_").rstrip("_DVD")
                     self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))

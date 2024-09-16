@@ -7,6 +7,6 @@
         <flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="1" media1="0"/>
     </batch>
     <batch name="s390x" archs="s390x">
-	<flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="extract_as_repo" media1="0"/>
+	<flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="extract_as_repo" ln_iso_to_repo="1" media1="0"/>
     </batch>
 </openQA>
