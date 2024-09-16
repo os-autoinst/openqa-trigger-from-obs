@@ -11,6 +11,7 @@
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=agama-installer.s390x-9.0.0-openSUSE-Build17.9 \
+ REPO_999=agama-installer.s390x-9.0.0-openSUSE-Build17.9.iso \
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/agama-installer.s390x-9.0.0-openSUSE-Build17.9 \
  VERSION=agama-9.0 \
  _OBSOLETE=1
