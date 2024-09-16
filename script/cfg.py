@@ -80,7 +80,7 @@ for flavor in {FLAVORLIST,}; do
     mkdir /var/lib/openqa/factory/repo/$repo0folder
     bsdtar xf /var/lib/openqa/factory/iso/$dest -C /var/lib/openqa/factory/repo/$repo0folder
 }"
-        [ -z "FLAVORTOREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORTOREPOORS)$" ) -eq 0 ] || echo "cp -l /var/lib/openqa/factory/iso/$dest /var/lib/openqa/factory/openqa/factory/repo/"
+        [ -z "FLAVORTOREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORTOREPOORS)$" ) -eq 0 ] || echo "cp -l /var/lib/openqa/factory/iso/$dest /var/lib/openqa/factory/repo/"
     done
 done'''
 
