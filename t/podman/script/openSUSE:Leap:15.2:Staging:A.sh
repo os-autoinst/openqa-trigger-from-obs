@@ -9,7 +9,7 @@ touch /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-L
 touch /mockOBS/openSUSE\:Leap\:15.2\:Staging\:A/images/x86_64/product/openSUSE-Leap-15.2-DVD-x86_64-Build248.1-Media.iso.sha256
 chown -R "$dbuser" /mockOBS
 
-prepare_project openSUSE:Leap:15.2:Staging:A -stage
+prepare_project openSUSE:Leap:15.2:Staging:A stage
 
 set -x
 # make sure run did happen
