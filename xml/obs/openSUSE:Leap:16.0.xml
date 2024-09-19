@@ -3,7 +3,7 @@
     iso_path="images"
     repo_path="product/local/000productcompose"
     distri="opensuse"
-    archs="aarch64 x86_64">
+    archs="aarch64 x86_64 ppc64le s390x">
     <flavor name="agama-installer-Leap" folder="*/*agama-installer-Leap*" iso="1" media1="0">
         <repos>
             <oss name="Leap-16.0-aarch64-ppc64le-s390x-x86_64$" mirror="1"/>

@@ -24,3 +24,29 @@
  VERSION=16.0 \
  _OBSOLETE=1
 
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=ppc64le \
+ ASSET_256=agama-installer-Leap.ppc64le-9.0.0-openSUSE-Build2.4.iso.sha256 \
+ BUILD=2.4 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/agama-installer-Leap.ppc64le-9.0.0-openSUSE-Build2.4.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=agama-installer-Leap \
+ ISO=agama-installer-Leap.ppc64le-9.0.0-openSUSE-Build2.4.iso \
+ REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build2.4 \
+ REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build2.4 \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=s390x \
+ ASSET_256=agama-installer-Leap.s390x-9.0.0-openSUSE-Build2.4.iso.sha256 \
+ BUILD=2.4 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/agama-installer-Leap.s390x-9.0.0-openSUSE-Build2.4.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=agama-installer-Leap \
+ ISO=agama-installer-Leap.s390x-9.0.0-openSUSE-Build2.4.iso \
+ REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build2.4 \
+ REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build2.4 \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
