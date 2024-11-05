@@ -10,7 +10,7 @@
         <hdd filemask="openSUSE-Leap-Micro.*-Default-SelfInstall-Build.*\.iso$"/>
     </flavor>
     <flavor name="Default-encrypted" folder="*/Leap-Micro:Default-encrypted">
-        <hdd filemask="openSUSE-Leap-Micro.*-Default-encrypted-Build.*\.raw$"/>
+        <hdd filemask="openSUSE-Leap-Micro.*-Default-encrypted-Build.*\.raw.xz$"/>
     </flavor>
     <flavor name="Default-qcow" folder="*/Leap-Micro:Default-qcow">
         <hdd filemask="openSUSE-Leap-Micro.*-Default-qcow-Build.*\.qcow2$"/>
@@ -28,7 +28,7 @@
         <hdd filemask="openSUSE-Leap-Micro.*-Base-RT-SelfInstall-Build.*\.iso$"/>
     </flavor>
     <flavor name="Base-encrypted" folder="*/Leap-Micro:Base-encrypted">
-        <hdd filemask="openSUSE-Leap-Micro.*-Base-encrypted-Build.*\.raw$"/>
+        <hdd filemask="openSUSE-Leap-Micro.*-Base-encrypted-Build.*\.raw.xz$"/>
     </flavor>
     <flavor name="Base-qcow" folder="*/Leap-Micro:Base-qcow">
         <hdd filemask="openSUSE-Leap-Micro.*-Base-qcow-Build.*\.qcow2$"/>
