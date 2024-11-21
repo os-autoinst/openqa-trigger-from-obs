@@ -562,6 +562,8 @@ class ActionBatch:
                             "",
                             "Media1?.iso$",
                             iso,
+                            "(Media1?|install.*).iso$",
+                            iso,
                         )
                     elif self.media1 != "0":
                         self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(iso, ""), "SRCISO", iso)

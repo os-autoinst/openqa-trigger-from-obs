@@ -72,9 +72,11 @@ for flavor in {FLAVORLIST,}; do
         asset_folder=other
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.spdx\.json$  ]] || asset_folder=iso
+        [[ ! $dest =~ \.tar$  ]] || asset_folder=iso
         [[ ! $dest =~ \.(qcow2|raw|vhd|vmdk|vhdx|xz)$ ]] || asset_folder=hdd
         ''' + rsync_commands(checksum) + '''
         repo0folder=${dest%.iso}
+        repo0folder=${repo0folder%.tar}
         ''' + (repo0folder if repo0folder else "") + '''
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/$repo0folder ] || {
     mkdir /var/lib/openqa/factory/repo/$repo0folder
@@ -250,6 +252,7 @@ for flavor in {FLAVORALIASLIST,}; do
         [ -z "__STAGING" ] || build1=__STAGING.$build
         ''' + openqa_call_fix_destiso(distri, version, staging) + '''
         repo0folder=${destiso%.iso}
+        repo0folder=${repo0folder%.tar}
         ''' + (repo0folder if repo0folder else "") + '''
         [ "$arch" != . ] || arch=x86_64
         ''' + openqa_call_news(news, news_archs) + '''
@@ -289,6 +292,8 @@ def openqa_call_start_ex(checksum):
  elif [[ $destiso =~ \.iso$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
  elif [[ $destiso =~ \.spdx.json$ ]]; then
+   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
+ elif [[ $destiso =~ \.tar$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
  elif [[ $destiso =~ \.(hdd|qcow2|raw|raw\.xz|raw\.gz|vhdx\.xz|vmdk|vmdk\.xz)$ ]]; then
    echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + '''\"
