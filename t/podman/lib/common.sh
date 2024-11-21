@@ -5,6 +5,8 @@ prepare_project() {
 prj=$1
 suff=$2
 
+test -z "$suff" || suff=-$suff
+
 (
 cd /opt/openqa-trigger-from-obs
 mkdir -p $prj
