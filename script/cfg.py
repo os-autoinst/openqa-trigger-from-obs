@@ -244,6 +244,7 @@ for flavor in {FLAVORALIASLIST,}; do
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
         [ -n "$iso$build" ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
         [ -n "$build"  ] || continue
+        buildex=${buildex/.install.iso/}
         buildex=${buildex/.iso/}
         buildex=${buildex/.raw.xz/}
         buildex=${buildex/.qcow2/}
