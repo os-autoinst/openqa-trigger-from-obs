@@ -652,7 +652,7 @@ class ActionBatch:
                     cfg.read_files_repo,
                     f,
                     txt,
-                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix,
+                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix.replace('.install', ''),
                     "REPOORS",
                     "",
                     "files_repo.lst",
