@@ -24,6 +24,9 @@
         <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
             <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
         </flavor>
+	<flavor name="JeOS-for-kvm-and-xen-sdboot" folder="kiwi-templates-Minimal:kvm-and-xen-sdboot">
+            <hdd filemask=".*kvm-and-xen-sdboot.*\.qcow2$"/>
+        </flavor>
 	<flavor name="JeOS-for-OpenStack-Cloud" folder="kiwi-templates-Minimal:Cloud">
             <hdd filemask=".*Minimal-VM.*-Cloud-.*\.qcow2$"/>
         </flavor>
