@@ -4,7 +4,7 @@
     distri="opensuse"
     version="agama-9.0">
     <batch name="base" archs="x86_64 aarch64 ppc64le">
-        <flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="1" media1="0"/>
+        <flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="iso" extract_as_repo="1" media1="0"/>
     </batch>
     <batch name="s390x" archs="s390x">
 	<flavor name="agama-installer" folder="images/*/agama-installer:openSUSE/" iso="extract_as_repo" ln_iso_to_repo="1" media1="0"/>
