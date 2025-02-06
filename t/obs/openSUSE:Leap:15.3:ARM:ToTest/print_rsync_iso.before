@@ -1,2 +1,0 @@
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Leap:15.3:ARM:ToTest/images/local/*product*/*openSUSE-Leap-15.3-NET-armv7hl-Build4.2-Media.iso /var/lib/openqa/factory/iso/openSUSE-Leap-15.3-NET-armv7hl-Build4.2-Media.iso
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Leap:15.3:ARM:ToTest/images/local/*product*/*openSUSE-Leap-15.3-NET-armv7hl-Build4.2-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Leap-15.3-NET-armv7hl-Build4.2-Media.iso.sha256
