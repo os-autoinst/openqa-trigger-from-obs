@@ -30,6 +30,9 @@
 	<flavor name="JeOS-for-OpenStack-Cloud" folder="kiwi-templates-Minimal:Cloud">
             <hdd filemask=".*Minimal-VM.*-Cloud-.*\.qcow2$"/>
         </flavor>
+        <flavor name="JeOS-for-kvm-and-xen-grub-bls" folder="kiwi-templates-Minimal:kvm-and-xen-grub-bls">
+		<hdd filemask=".*Minimal-VM.*kvm-and-xen-grub-bls.*\.qcow2$"/>
+        </flavor>
     </batch>
     <batch name="microos-qcow" folder="appliances/x86_64" archs="x86_64" repos="base" distri="microos">
         <flavor name="MicroOS-Image" folder="openSUSE-MicroOS:kvm-and-xen">
@@ -37,6 +40,9 @@
         </flavor>
         <flavor name="MicroOS-Image-sdboot" folder="openSUSE-MicroOS:kvm-and-xen-sdboot">
             <hdd filemask=".*[0-9]-kvm-and-xen-sdboot.*\.qcow2$"/>
+        </flavor>
+        <flavor name="MicroOS-Image-grub-bls" folder="openSUSE-MicroOS:kvm-and-xen-grub-bls">
+            <hdd filemask=".*kvm-and-xen-grub-bls-.*\.qcow2$"/>
         </flavor>
         <flavor name="MicroOS-Image-ContainerHost" folder="openSUSE-MicroOS:ContainerHost-kvm-and-xen">
             <hdd filemask=".*ContainerHost-kvm-and-xen.*\.qcow2$"/>
