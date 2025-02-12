@@ -1,4 +1,5 @@
-openSUSE-MicroOS.x86_64-16.0.0-kvm-and-xen-Snapshot20240222.qcow2
-openSUSE-MicroOS.x86_64-16.0.0-kvm-and-xen-sdboot-Snapshot20240222.qcow2
-openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20240222.qcow2
-openSUSE-MicroOS.x86_64-16.0.0-SelfInstall-Snapshot20240222.install.iso
+openSUSE-MicroOS.x86_64-16.0.0-kvm-and-xen-Snapshot20250210.qcow2
+openSUSE-MicroOS.x86_64-16.0.0-kvm-and-xen-sdboot-Snapshot20250210.qcow2
+openSUSE-MicroOS.x86_64-16.0.0-kvm-and-xen-grub-bls-Snapshot20250210.qcow2
+openSUSE-MicroOS.x86_64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20250210.qcow2
+openSUSE-MicroOS.x86_64-16.0.0-SelfInstall-Snapshot20250210.install.iso
