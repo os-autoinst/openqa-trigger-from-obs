@@ -1,0 +1,11 @@
+<openQA
+    project_pattern="openSUSE:(?P&lt;version&gt;Slowroll:Build:.)"
+    distri="opensuse"
+    archs="x86_64">
+    <flavor name="DVD" iso="1">
+        <repos archs="x86_64">
+            <oss folder="oss???" mirror="1" dest="openSUSE-Slowroll-oss-x86_64"/>
+            <non-oss folder="non-oss???" dest="openSUSE-Slowroll-non-oss-x86_64"/>
+        </repos>
+    </flavor>
+</openQA>
