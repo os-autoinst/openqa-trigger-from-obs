@@ -20,6 +20,9 @@
     <batch name="live" folder="images/*/live*" archs="x86_64" repos="base">
         <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
     </batch>
+    <batch name="agama" archs="x86_64" repos="base">
+        <flavor name="agama-installer" iso="1" media1="0" folder="appliances/*/agama-installer*"/>
+    </batch>
     <batch name="jeos" folder="appliances/x86_64" archs="x86_64" repos="base">
         <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
             <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
