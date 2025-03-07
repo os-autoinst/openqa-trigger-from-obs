@@ -1,6 +1,6 @@
 <!-- the purpose of this test is to make sure that DVD gets extracted with bsdtar tool in print_iso output -->
 <!-- it is important that extracted folder is referenced as REPO_0 in print_openqa, otherwise the folder will be automatically removed (ass OpenQA topic regarding "unregistered assets")-->
-<openQA project_pattern="TestExtractAsRepo(?P&lt;version&gt;[1-9])" dist_path="test" archs="x86_64">
+<openQA project_pattern="TestExtractAsRepo(?P&lt;version&gt;[1-9])" dist_path="test" archs="x86_64" media1="0">
     <flavor name="HDD" distri="distri">
         <hdd filemask="raw.xz$"/>
     </flavor>

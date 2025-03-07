@@ -30,6 +30,7 @@ class ActionGenerator:
                 pp = os.path.join(pp, productpath)
         self.productpath = pp
         self.archs = "aarch64 armv7l armv7hl ppc64le s390x x86_64"
+        self.media1 = 1
 
     def staging(self):
         m = re.match(r".*Staging:(?P<staging>[A-Z]).*", self.envdir)
@@ -64,6 +65,8 @@ class ActionGenerator:
         self.version = root.attrib.get("version", self.version)
         if root.attrib.get("distri", ""):
             self.distri = root.attrib["distri"]
+        if root.attrib.get("media1", ""):
+            self.media1 = root.attrib["media1"]
 
         self.openqa_cli = root.attrib.get("openqa_cli", self.openqa_cli)
 
@@ -102,6 +105,7 @@ class ActionGenerator:
             print("Batch node has no name attribute", file=sys.stderr)
             return
         batch = ActionBatch(name, self)
+        batch.media1 = self.media1
         if node.attrib.get("repos", ""):
             batch.repolink = node.attrib["repos"]
         if node.attrib.get("folder", ""):
@@ -196,8 +200,6 @@ class ActionBatch:
     def productisopath(self):
         if self.iso_path and self.dist_path:
             return self.dist_path + "/" + self.iso_path
-        if self.iso_path and self.iso_path != "iso":
-            return self.iso_path
         if self.dist_path:
             return self.dist_path
         ret = self.ag.productisopath()
@@ -547,17 +549,21 @@ class ActionBatch:
             self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(self.iso_5, ""), "SRCISO", self.iso_5)
         elif self.isos:
             # if isos don't belong to custom folder - just read them all with single command
-            if not self.iso_folder:
+            if not self.iso_folder and self.media1 != "0":
                 # self.p(cfg.read_files_isos, f, "FOLDER", self.folder)
                 self.p(cfg.read_files_isos, f)
             else:
                 for iso in self.isos:
+                    folder = self.folder
+                    if self.iso_folder:
+                        folder = self.iso_folder.get(iso, "")
+
                     if "*" in iso:
                         self.p(
                             cfg.read_files_iso,
                             f,
                             "FOLDER",
-                            self.iso_folder.get(iso, ""),
+                            folder,
                             "SRCISO",
                             "",
                             "Media1?.iso$",
@@ -566,13 +572,13 @@ class ActionBatch:
                             iso,
                         )
                     elif self.media1 != "0":
-                        self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(iso, ""), "SRCISO", iso)
+                        self.p(cfg.read_files_iso, f, "FOLDER", folder, "SRCISO", iso)
                     else:
                         self.p(
                             cfg.read_files_iso,
                             f,
                             "FOLDER",
-                            self.iso_folder.get(iso, ""),
+                            folder,
                             "SRCISO",
                             iso,
                             "Media1?.iso$",
