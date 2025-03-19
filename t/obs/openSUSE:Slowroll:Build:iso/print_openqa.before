@@ -1,0 +1,11 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=openSUSE-Slowroll-DVD-x86_64-Build30.1-Media.iso.sha256 \
+ BUILD=30.1 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Slowroll-DVD-x86_64-Build30.1-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=DVD \
+ ISO=openSUSE-Slowroll-DVD-x86_64-Build30.1-Media.iso \
+ VERSION=slowroll \
+ _OBSOLETE=1
+
