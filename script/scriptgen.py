@@ -486,7 +486,7 @@ class ActionBatch:
     def gen_repo(self, repodir, gen, f):
         if "$build" in gen:
             self.p(
-                """build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_iso.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)""",
+                r"""build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_iso.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)""",
                 f,
             )
         body = gen
