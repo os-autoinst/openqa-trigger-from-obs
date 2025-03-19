@@ -2,6 +2,6 @@
     project_pattern="openSUSE:Slowroll:Build:iso"
     dist_path="images/*/000product*"
     distri="opensuse"
-    version="slowroll">
+    version="Slowroll">
     <flavor name="DVD" distri="opensuse" iso="1" media1="0"></flavor>
 </openQA>
