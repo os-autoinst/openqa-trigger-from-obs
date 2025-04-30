@@ -1,5 +1,5 @@
 <openQA
-    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.[3-9]):ToTest"
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;15.[5-9]):ToTest"
     dist_path="images/local"
     archs="x86_64 aarch64 ppc64le s390x">
     <flavor name="NET|DVD" folder="*product*" distri="opensuse" iso="1">
