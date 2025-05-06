@@ -9,4 +9,7 @@
             <oss name="Leap-16.0-aarch64-ppc64le-s390x-x86_64$" mirror="1"/>
         </repos>
     </flavor>
+    <flavor name="offline-installer" folder="../product/local" media1="0">
+	<iso filemask="offline-installer" folder="../product/local/*leap_dvd5*"/>
+    </flavor>
 </openQA>
