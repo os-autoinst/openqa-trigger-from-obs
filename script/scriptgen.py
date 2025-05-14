@@ -1095,15 +1095,25 @@ done < <(sort __envsub/files_asset.lst)""",
         self.p(" i={}".format(i), f)
 
         if self.repos or self.repolink:
+            sl = ""
             if self.ag.brand == "ibs":
                 self.p(" i=9", f)  # temporary to simplify diff with old rsync scripts, may be removed later
-            # some trickery for REPO_SLE_ vs REPO_SL_ variables in ibs
-            sl = "SLE_"
+                # some trickery for REPO_SLE_ vs REPO_SL_ variables in ibs
+                sl = "SLE_"
             for r in self.repos:
                 if r.tag.startswith("SL"):
                     sl = ""
                     break
-            self.p(cfg.openqa_call_repot(self.build_id_from_iso, self.repos), f, "REPOTYPE", "''", "REPOPREFIX", sl)
+            self.p(
+                cfg.openqa_call_repot(self.build_id_from_iso, self.repos),
+                f,
+                "REPOTYPE",
+                "''",
+                "REPOPREFIX",
+                sl,
+                "REPO0_ISO",
+                "$repoDest",
+            )
 
         repodirs = self.repodirs
         if not repodirs and self.repolink:

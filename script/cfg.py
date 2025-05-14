@@ -391,6 +391,7 @@ openqa_call_repot = lambda build_id_from_iso, repos: '''
                 ''' + openqa_call_build_id_from_iso2(build_id_from_iso) + '''
                 [[ $repo =~ license ]] || echo " REPO_REPOPREFIX$repoKey=$repoDest \\\\"
                 ''' + openqa_call_extra(repos) + '''
+                [ $i != 0 ] || ''' + openqa_call_repo0() + '''
                 : $((i++))
             done < <(grep $repot$additional_repo_suffix __envsub/files_repo.lst | grep REPOTYPE | grep $arch | sort)
         done'''
