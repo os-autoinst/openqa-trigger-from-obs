@@ -1,3 +1,5 @@
+import os
+
 header = '''# GENERATED FILE - DO NOT EDIT
 set -e
 '''
@@ -110,8 +112,7 @@ done'''
 def pre_rsync_repo(repos):
     return ''
 
-rsync_repo1 = '''
-echo '# REPOOWNLIST'
+rsync_repo_buildid = '''
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ ! -f __envsub/files_iso.lst ] || test -n "$buildid" || buildid=$(cat __envsub/files_iso.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ -z "__STAGING" ] || buildid=${buildid//Build/Build__STAGING.}
@@ -119,7 +120,11 @@ echo '# REPOOWNLIST'
 [ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
 buildid=${buildid/.iso}
+'''
 
+rsync_repo1 = '''
+echo '# REPOOWNLIST'
+''' + rsync_repo_buildid + '''
 for repo in {REPOOWNLIST,}; do
     while read src; do
         [ ! -z "$src" ] || continue
@@ -171,6 +176,29 @@ def rsync_repodir2():
     done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep Media2 )
 done
 '''
+
+
+def rsync_repomultiarch(destpath, debug, source):
+    destpath = destpath.rstrip("/")
+    dest = os.path.basename(destpath)
+    res = '''
+echo rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/'''+ destpath +'''/ /var/lib/openqa/factory/repo/''' + dest + '''-CURRENT
+echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/''' + dest + '''-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-$buildid/
+'''
+
+    if debug:
+        debugfilter = "--include=" + debug + " --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*"
+        res = res + '''
+echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + debugfilter + ''' PRODUCTREPOPATH/'''+ destpath +'''-Debug/ /var/lib/openqa/factory/repo/''' + dest + '''-Debug-CURRENT/
+echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/''' + dest + '''-Debug-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Debug-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Debug-$buildid/'''
+
+    if source:
+        sourcefilter = "--include=" + source + " --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*"
+        res = res + '''
+echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + sourcefilter + ''' PRODUCTREPOPATH/'''+ destpath +'''-Source/ /var/lib/openqa/factory/repo/''' + dest + '''-Source-CURRENT/
+echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/''' + dest + '''-Source-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Source-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Source-$buildid/'''
+
+    return res
 
 rsync_repodir1_dest = lambda dest: '''
 archs=(ARCHITECTURREPO)
