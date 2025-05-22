@@ -175,6 +175,7 @@ class ActionBatch:
         self.ln_iso_to_repo = {}
         self.mirror_repo = ""
         self.repos = []
+        self.reposmultiarch = []  # these repos need not to be processed for each arch
         self.repolink = ""
         self.build_id_from_iso = 0
         self.repodirs = []
@@ -381,6 +382,10 @@ class ActionBatch:
                 self.archs_repo = t.attrib["archs"]
 
         for t in node.findall(".//repos/*"):
+            if t.get("multiarch", ""):
+                self.reposmultiarch.append(t)
+                continue
+
             if "folder" in t.attrib:
                 self.repodirs.append(t)
             else:
@@ -864,6 +869,19 @@ done < <(sort __envsub/files_asset.lst)""",
         print(cfg.header, file=f)
         if self.ag.version:
             print("version=" + self.ag.version, file=f)
+
+        if self.reposmultiarch:
+            self.p(cfg.rsync_repo_buildid, f)
+            for repo in self.reposmultiarch:
+                destpath = repo.get("folder", repo.tag)
+                dest = os.path.basename(destpath)
+                self.p(
+                    cfg.rsync_repomultiarch(
+                        repo.get("folder", repo.tag), repo.get("debug", ""), repo.get("source", "")
+                    ),
+                    f,
+                )
+
         if self.repos:
             self.p(cfg.pre_rsync_repo(self.repos), f)
             self.p(cfg.rsync_repo1, f)
@@ -1002,6 +1020,28 @@ done < <(sort __envsub/files_asset.lst)""",
                 ),
                 f,
             )
+
+        imultiarch = 0
+        for repo in self.reposmultiarch:
+            destpath = repo.get("folder", repo.tag)
+            destpath = destpath.rstrip("/")
+            dest = os.path.basename(destpath)
+            self.p(' echo " REPO_{}={}-$buildex" \\\\'.format(imultiarch, dest), f)
+            self.p(' echo " REPO_{}={}-$buildex" \\\\'.format(repo.tag.upper(), dest), f)
+            imultiarch = imultiarch + 1
+            if repo.get("debug", ""):
+                self.p(' echo " REPO_{}={}-Debug-$buildex" \\\\'.format(imultiarch, dest), f)
+                self.p(' echo " REPO_{}_DEBUG={}-Debug-$buildex" \\\\'.format(repo.tag.upper(), dest), f)
+                self.p(" echo \" REPO_{}_DEBUG_PACKAGES='{}'\" \\\\".format(repo.tag.upper(), repo.get("debug", "")), f)
+                imultiarch = imultiarch + 1
+            if repo.get("source", ""):
+                self.p(' echo " REPO_{}={}-Source-$buildex" \\\\'.format(imultiarch, dest), f)
+                self.p(' echo " REPO_{}_SOURCE={}-Source-$buildex" \\\\'.format(repo.tag.upper(), dest), f)
+                self.p(
+                    " echo \" REPO_{}_SOURCE_PACKAGES='{}'\" \\\\".format(repo.tag.upper(), repo.get("source", "")), f
+                )
+                imultiarch = imultiarch + 1
+
         if len(self.iso1) > 0:
             self.p(' iso1=""', f)
             self.p(

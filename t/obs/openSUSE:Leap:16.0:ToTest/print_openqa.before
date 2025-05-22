@@ -7,7 +7,10 @@
  FLAVOR=agama-installer-Leap \
  ISO=agama-installer-Leap.aarch64-16.0.0-Leap-Build1.3.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
@@ -20,7 +23,10 @@
  FLAVOR=agama-installer-Leap \
  ISO=agama-installer-Leap.x86_64-16.0.0-Leap-Build1.3.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
@@ -33,7 +39,10 @@
  FLAVOR=agama-installer-Leap \
  ISO=agama-installer-Leap.ppc64le-16.0.0-Leap-Build1.3.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
@@ -46,7 +55,10 @@
  FLAVOR=agama-installer-Leap \
  ISO=agama-installer-Leap.s390x-16.0.0-Leap-Build1.3.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
@@ -59,7 +71,10 @@
  FLAVOR=offline-installer \
  ISO=Leap-16.0-offline-installer-aarch64-Build1.3.install.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
@@ -72,7 +87,10 @@
  FLAVOR=offline-installer \
  ISO=Leap-16.0-offline-installer-x86_64-Build1.3.install.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
@@ -85,7 +103,10 @@
  FLAVOR=offline-installer \
  ISO=Leap-16.0-offline-installer-ppc64le-Build1.3.install.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
@@ -98,7 +119,10 @@
  FLAVOR=offline-installer \
  ISO=Leap-16.0-offline-installer-s390x-Build1.3.install.iso \
  REPO_0=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
- REPO_SLE_LEAP_16_0_AARCH64_PPC64LE_S390X_X86_64=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_1=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
+ REPO_LEAP_OSS_DEBUG=Leap-16.0-aarch64-ppc64le-s390x-x86_64-Debug-Build1.3 \
+ REPO_LEAP_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
  VERSION=16.0 \
  _OBSOLETE=1
 
