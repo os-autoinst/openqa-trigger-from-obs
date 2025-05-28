@@ -363,6 +363,14 @@ def openqa_call_repo0():
  FULLURL=1 \\\\"
     }'''
 
+def openqa_call_repo_unconditional():
+    return ''' echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
+ FULLURL=1 \\\\"
+    '''
+
 openqa_call_repo0a = ' [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || '
 
 openqa_call_repo0b = ' echo " REPO_0=REPO0_ISO \\\\"'
