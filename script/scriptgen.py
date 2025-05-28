@@ -1041,6 +1041,8 @@ done < <(sort __envsub/files_asset.lst)""",
                     " echo \" REPO_{}_SOURCE_PACKAGES='{}'\" \\\\".format(repo.tag.upper(), repo.get("source", "")), f
                 )
                 imultiarch = imultiarch + 1
+            if imultiarch > 0:
+                self.p(cfg.openqa_call_repo_unconditional(), f, "REPO0_ISO", '{}-$buildex'.format(dest))
 
         if len(self.iso1) > 0:
             self.p(' iso1=""', f)
