@@ -1022,6 +1022,7 @@ done < <(sort __envsub/files_asset.lst)""",
             )
 
         imultiarch = 0
+        mirrorsalreadyadded = False
         for repo in self.reposmultiarch:
             destpath = repo.get("folder", repo.tag)
             destpath = destpath.rstrip("/")
@@ -1041,8 +1042,9 @@ done < <(sort __envsub/files_asset.lst)""",
                     " echo \" REPO_{}_SOURCE_PACKAGES='{}'\" \\\\".format(repo.tag.upper(), repo.get("source", "")), f
                 )
                 imultiarch = imultiarch + 1
-            if imultiarch > 0:
+            if imultiarch > 0 and repo.get("mirror", 0) and not mirrorsalreadyadded:
                 self.p(cfg.openqa_call_repo_unconditional(), f, "REPO0_ISO", "{}-$buildex".format(dest))
+                mirrorsalreadyadded = True
 
         if len(self.iso1) > 0:
             self.p(' iso1=""', f)
