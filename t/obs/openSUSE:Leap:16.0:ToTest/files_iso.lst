@@ -1,9 +1,9 @@
-agama-installer-Leap.aarch64-16.0.0-Leap-Build1.3.iso
-agama-installer-Leap.aarch64-16.0.0-Leap-PXE-Build1.3.install.iso
-agama-installer-Leap.ppc64le-16.0.0-Leap-Build1.3.iso
-agama-installer-Leap.s390x-16.0.0-Leap-Build1.3.iso
-agama-installer-Leap.x86_64-16.0.0-Leap-Build1.3.iso
-agama-installer-Leap.x86_64-16.0.0-Leap-PXE-Build1.3.install.iso
+agama-installer.aarch64-15.0.0-Leap_16.0-Build1.3.iso
+agama-installer.aarch64-15.0.0-Leap_16.0_PXE-Build1.3.install.iso
+agama-installer.ppc64le-15.0.0-Leap_16.0-Build1.3.iso
+agama-installer.s390x-15.0.0-Leap_16.0-Build1.3.iso
+agama-installer.x86_64-15.0.0-Leap_16.0-Build1.3.iso
+agama-installer.x86_64-15.0.0-Leap_16.0_PXE-Build1.3.install.iso
 Leap-16.0-offline-installer-aarch64-Build1.3.install.iso
 Leap-16.0-offline-installer-ppc64le-Build1.3.install.iso
 Leap-16.0-offline-installer-s390x-Build1.3.install.iso
