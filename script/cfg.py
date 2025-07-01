@@ -119,6 +119,7 @@ rsync_repo_buildid = '''
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 [ -n "$buildid" ] || buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
+buildid=${buildid/.install}
 buildid=${buildid/.iso}
 '''
 
