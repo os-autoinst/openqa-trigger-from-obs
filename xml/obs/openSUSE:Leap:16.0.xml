@@ -4,10 +4,11 @@
     repo_path="product/local"
     distri="opensuse"
     archs="aarch64 x86_64 ppc64le s390x">
-    <flavor name="agama-installer-Leap" folder="*/*agama-installer-Leap*" iso="1" media1="0">
+    <flavor name="online-installer" folder="../product/local" media1="0">
         <repos>
             <leap_oss mirror="1" multiarch="1" folder="*leap_oss/Leap-16.0-aarch64-ppc64le-s390x-x86_64/" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}"/>
         </repos>
+	<iso filemask="online-installer" folder="../product/local/*leap_mini*"/>
     </flavor>
     <flavor name="offline-installer" folder="../product/local" media1="0">
 	<iso filemask="offline-installer" folder="../product/local/*leap_dvd5*"/>
