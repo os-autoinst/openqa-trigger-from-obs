@@ -1206,7 +1206,7 @@ def parse_dir(root, d, files):
             continue
 
         rootXml = ElementTree.parse(root + "/" + f).getroot()
-        if not rootXml:
+        if not len(rootXml):
             print("Ignoring [" + f + "]: Cannot parse xml", file=sys.stderr)
             continue
 
