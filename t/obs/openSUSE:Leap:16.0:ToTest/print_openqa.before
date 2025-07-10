@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=online-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-online-installer-aarch64-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
@@ -27,6 +28,7 @@
  DISTRI=opensuse \
  FLAVOR=online-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-online-installer-x86_64-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
@@ -48,6 +50,7 @@
  DISTRI=opensuse \
  FLAVOR=online-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-online-installer-ppc64le-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
@@ -69,6 +72,7 @@
  DISTRI=opensuse \
  FLAVOR=online-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-online-installer-s390x-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
@@ -90,6 +94,7 @@
  DISTRI=opensuse \
  FLAVOR=offline-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-offline-installer-aarch64-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
@@ -111,6 +116,7 @@
  DISTRI=opensuse \
  FLAVOR=offline-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-offline-installer-x86_64-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
@@ -132,6 +138,7 @@
  DISTRI=opensuse \
  FLAVOR=offline-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-offline-installer-ppc64le-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
@@ -153,6 +160,7 @@
  DISTRI=opensuse \
  FLAVOR=offline-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  ISO=Leap-16.0-offline-installer-s390x-Build1.3.install.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/Leap-16.0-aarch64-ppc64le-s390x-x86_64-Build1.3 \
