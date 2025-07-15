@@ -1,3 +1,7 @@
+.PHONY: help
+help:
+	@echo Call one of the available targets:
+	@sed -n 's/\(^[^.#[:space:]A-Z]*\):.*$$/\1/p' Makefile | uniq
 
 # projects_opensuse := $(shell echo openSUSE:Leap:15.2:Staging:{A..D})
 
