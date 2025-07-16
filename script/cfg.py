@@ -301,9 +301,9 @@ openqa_call_legacy_builds=''
 
 def openqa_call_start_iso(checksum):
     if checksum:
-        return r''' [ -z "$destiso" ] || echo \" ISO=${destiso} \\\\
- CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
- ASSET_256=${destiso}.sha256 \\\\\"'''
+        return r''' [ -z "$destiso" ] || echo " ISO=${destiso} \\
+ CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\
+ ASSET_256=${destiso}.sha256 \\"'''
     return ''' [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
 
@@ -311,8 +311,8 @@ def openqa_call_start_ex1(checksum, tag):
     res = tag + '=${destiso} \\\\'
     if checksum:
         res += '''
- CHECKSUM_''' + tag + r'''=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
- ASSET_256=${destiso}.sha256 \\\\'''
+ CHECKSUM_''' + tag + r'''=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\
+ ASSET_256=${destiso}.sha256 \\'''
     return res
 
 
@@ -320,15 +320,15 @@ def openqa_call_start_ex(checksum):
     return r''' if [[ ${norsync_filter[$filter]} == 1 ]]; then
    :
  elif [[ $destiso =~ \.iso$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
  elif [[ $destiso =~ \.spdx.json$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
  elif [[ $destiso =~ \.tar$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
  elif [[ $destiso =~ \.(hdd|qcow2|raw|raw\.xz|raw\.gz|vhdx\.xz|vmdk|vmdk\.xz)$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + r'''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + r'''"
  elif [ -n "$destiso" ]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + r'''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + r'''"
  fi
 '''
 
@@ -343,13 +343,13 @@ openqa_call_start_hdds=r'''
          fi
      done
      n=$((i++))
-     echo " ASSET_$((n+255))=$src.sha256 \\\\"
+     echo " ASSET_$((n+255))=$src.sha256 \\"
      if [[ $src =~ .iso$ ]]; then
-         echo " ISO=$src \\\\"
-         echo " CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+         echo " ISO=$src \\"
+         echo " CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\"
      else
-         echo " HDD_$n=$src \\\\"
-         echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+         echo " HDD_$n=$src \\"
+         echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\"
      fi
  done < <(grep ${arch} __envsub/files_iso.lst | sort)
 '''
