@@ -26,7 +26,7 @@ read_files_repo = '''rsync -4 --list-only $rsync_pwd_option PRODUCTREPOPATH/ | g
 '''
 
 read_files_repo_media = '''rsync -4 $rsync_pwd_option PRODUCTREPOPATH/*Media1/media.1/media __envsub/Media1.lst'''
-read_files_repo_media_convert = ''' && echo "Snapshot$(grep -oP '[\d]{8}' __envsub/products)" >> __envsub/destlst'''
+read_files_repo_media_convert = r''' && echo "Snapshot$(grep -oP '[\d]{8}' __envsub/products)" >> __envsub/destlst'''
 
 read_files_repo_link = '''cp __envdir/REPOLINK/files_repo*.lst __envsub/
 '''
@@ -70,7 +70,7 @@ for flavor in {FLAVORLIST,}; do
         ''' + rsync_iso_fix_src(archs) + '''
         [ ! -z "$src" ] || continue
         dest=$src
-        ''' + rsync_fix_dest(distri, version, staging, use_staging_patterns) + '''
+        ''' + rsync_fix_dest(distri, version, staging, use_staging_patterns) + r'''
         asset_folder=other
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.spdx\.json$  ]] || asset_folder=iso
@@ -168,7 +168,7 @@ for arch in "${archs[@]}"; do
         [[ ! $src =~ .*\.license ]] || [[ $dest == *license* ]] || dest=$dest.license'''
 
 def rsync_repodir2():
-    return '''
+    return r'''
         dest=${dest//-Media2/}
         Mdia=Media2
         [[ ! $src =~ .*\.license ]] || Mdia=Media2.license
@@ -201,7 +201,7 @@ echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa
 
     return res
 
-rsync_repodir1_dest = lambda dest: '''
+rsync_repodir1_dest = lambda dest: r'''
 archs=(ARCHITECTURREPO)
 buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 
@@ -266,11 +266,11 @@ for flavor in {FLAVORALIASLIST,}; do
         version=VERSIONVALUE
         if [ -z "${norsync_filter[$flavor]}" ] || [ -z $build1 ]; then {
         iso=$(grep "$filter" __envsub/files_iso.lst 2>/dev/null | grep $arch | head -n 1)
-        ''' + openqa_call_start_fix_iso(archs) + '''
+        ''' + openqa_call_start_fix_iso(archs) + r'''
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | tail -n 1) || :
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*') || :
-        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
-        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + '''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
+        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + r'''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
+        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + r'''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
         [ -n "$iso$build" ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
         [ -n "$build"  ] || continue
         buildex=${buildex/.install.iso/}
@@ -301,9 +301,9 @@ openqa_call_legacy_builds=''
 
 def openqa_call_start_iso(checksum):
     if checksum:
-        return ''' [ -z "$destiso" ] || echo \" ISO=${destiso} \\\\
- CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
- ASSET_256=${destiso}.sha256 \\\\\"'''
+        return r''' [ -z "$destiso" ] || echo " ISO=${destiso} \\
+ CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\
+ ASSET_256=${destiso}.sha256 \\"'''
     return ''' [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
  ASSET_256=${destiso}.sha256 \\\\\"'''
 
@@ -311,28 +311,28 @@ def openqa_call_start_ex1(checksum, tag):
     res = tag + '=${destiso} \\\\'
     if checksum:
         res += '''
- CHECKSUM_''' + tag + '''=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\
- ASSET_256=${destiso}.sha256 \\\\'''
+ CHECKSUM_''' + tag + r'''=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\
+ ASSET_256=${destiso}.sha256 \\'''
     return res
 
 
 def openqa_call_start_ex(checksum):
-    return ''' if [[ ${norsync_filter[$filter]} == 1 ]]; then
+    return r''' if [[ ${norsync_filter[$filter]} == 1 ]]; then
    :
  elif [[ $destiso =~ \.iso$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
  elif [[ $destiso =~ \.spdx.json$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
  elif [[ $destiso =~ \.tar$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ISO')  + '''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
  elif [[ $destiso =~ \.(hdd|qcow2|raw|raw\.xz|raw\.gz|vhdx\.xz|vmdk|vmdk\.xz)$ ]]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + '''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + r'''"
  elif [ -n "$destiso" ]; then
-   echo \" ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + '''\"
+   echo " ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + r'''"
  fi
 '''
 
-openqa_call_start_hdds='''
+openqa_call_start_hdds=r'''
  i=1
  while read src; do
      folder=""
@@ -343,13 +343,13 @@ openqa_call_start_hdds='''
          fi
      done
      n=$((i++))
-     echo " ASSET_$((n+255))=$src.sha256 \\\\"
+     echo " ASSET_$((n+255))=$src.sha256 \\"
      if [[ $src =~ .iso$ ]]; then
-         echo " ISO=$src \\\\"
-         echo " CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+         echo " ISO=$src \\"
+         echo " CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\"
      else
-         echo " HDD_$n=$src \\\\"
-         echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\\\"
+         echo " HDD_$n=$src \\"
+         echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\"
      fi
  done < <(grep ${arch} __envsub/files_iso.lst | sort)
 '''
@@ -399,13 +399,13 @@ def openqa_call_repot_part3():
 def openqa_call_build_id_from_iso1(build_id_from_iso):
     if not build_id_from_iso:
         return ""
-    return '''build2=$(grep $repot __envsub/files_iso_buildid.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
+    return r'''build2=$(grep $repot __envsub/files_iso_buildid.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
                 [ -z "$build2" ] || build1=$build2'''
 
 def openqa_call_build_id_from_iso2(build_id_from_iso):
     if not build_id_from_iso:
         return ""
-    return '''[ "$repoKey" != LIVE_PATCHING ] || repoKey=LIVE
+    return r'''[ "$repoKey" != LIVE_PATCHING ] || repoKey=LIVE
                 [[ $repoDest != *Media1* ]] || [[ $repo =~ license ]] || [ -z "$build2" ] || echo " BUILD_$repoKey=$build2 \\\\"'''
 
 def openqa_call_extra(repos):
@@ -477,7 +477,7 @@ openqa_call_repot2 = '''
 openqa_call_repot1_dest = lambda dest: '''
         while read src; do
             [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
-            dest=''' + dest + '''
+            dest=''' + dest + r'''
             [[ ! $src =~ .*\.license ]] || dest=$dest.license
             dest=$dest-$buildex
             repoKey=REPOKEY
