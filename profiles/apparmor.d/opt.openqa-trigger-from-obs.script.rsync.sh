@@ -75,7 +75,7 @@
     /opt/openqa-trigger-from-obs/*:*/*/.run*/openqa*.log w,
     /opt/openqa-trigger-from-obs/*:*/.run*/openqa*.log w,
     /usr/bin/openqa-cli rix,
-    /usr/share/openqa/lib/** r,
+    /usr/share/openqa/** r,
     /usr/share/openqa/script/openqa-cli rix,
     /var/lib/openqa/.config/openqa/client.conf r,
     /var/lib/openqa/share/factory/{iso,hdd,repo,other}/** r,
