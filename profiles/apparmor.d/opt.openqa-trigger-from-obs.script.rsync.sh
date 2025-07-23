@@ -85,6 +85,7 @@
   profile rsync flags=(attach_disconnected) {
     #include <abstractions/base>
     #include <abstractions/nameservice>
+    #include <abstractions/openssl>
 
     capability net_bind_service,
 
