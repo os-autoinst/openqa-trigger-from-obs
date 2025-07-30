@@ -659,11 +659,19 @@ class ActionBatch:
                 suffix = ""
                 if repodir.attrib.get("suffix"):
                     suffix = repodir.attrib["suffix"]
+                repopath = ""
+                if "/" in self.folder:
+                    repopath = self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                else:
+                    repopath = (
+                        self.ag.productrepopath() + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                    )
+
                 args = (
                     cfg.read_files_repo,
                     f,
                     txt,
-                    self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix,
+                    repopath,
                     "REPOORS",
                     "",
                     "files_repo.lst",
@@ -701,21 +709,6 @@ class ActionBatch:
                             os.path.basename(repodir.attrib["folder"]).lstrip("*") + repodir.get("archs", "")
                         ),
                     )
-            elif "Factory" or "LEO" in self.ag.envdir:
-                for repodir in self.repodirs:
-                    if not repodir.attrib.get("gen", ""):
-                        self.p(
-                            cfg.read_files_repo_media + cfg.read_files_repo_media_convert,
-                            f,
-                            "PRODUCTREPOPATH",
-                            self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild,
-                            "Media1.lst",
-                            "",
-                            "destlst",
-                            "Media1_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip("*")),
-                            "media.1/media",
-                            "media.1/products",
-                        )
 
             if done:
                 self.p(done, f)
