@@ -660,7 +660,7 @@ class ActionBatch:
                 if repodir.attrib.get("suffix"):
                     suffix = repodir.attrib["suffix"]
                 repopath = ""
-                if "/" in self.folder:
+                if "/" in self.folder or "/" in repodir.attrib["folder"]:
                     repopath = self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix
                 else:
                     repopath = (
