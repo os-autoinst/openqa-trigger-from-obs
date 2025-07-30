@@ -1,11 +1,12 @@
 <openQA
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):ToTest"
-    distri="opensuse">
+    distri="opensuse"
+    repo_path="images/local">
     <batch name="base" archs="x86_64">
-        <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="images/local/*product*" iso="1">
-            <repos archs="x86_64">
-                <oss folder="images/local/0openSUSE/" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*,yast2-http-server*}" mirror="1" dest="openSUSE-Tumbleweed-oss-x86_64"/>
-                <non-oss folder="images/local/0NonFree/" dest="openSUSE-Tumbleweed-non-oss-x86_64"/>
+        <flavor name="Tumbleweed-NET|Tumbleweed-DVD" folder="images/local/*product*" iso="1" media1="0">
+            <repos>
+                <oss folder="0openSUSE" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*,yast2-http-server*}" mirror="1" dest="openSUSE-Tumbleweed-oss-x86_64"/>
+                <non-oss folder="0NonFree" dest="openSUSE-Tumbleweed-non-oss-x86_64"/>
             </repos>
             <assets archs="x86_64" flavor="DVD">
                 <libvirt folder="appliances/*/*vagrant*libvirt*" filemask="libvirt.box"/>
