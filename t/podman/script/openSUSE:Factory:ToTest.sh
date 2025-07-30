@@ -9,22 +9,21 @@ echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-
 mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-dvd5-dvd-x86_64
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200209-Media.iso
 echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-cd-mini-x86_64/openSUSE-Tumbleweed-DVD-x86_64-Snapshot20200209-Media.iso.sha256
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media1/media.1
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media1/repo
-echo Snapshot20200209 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media1/media.1/products
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media2/x86_64
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media2/x86_64/mraa-debug
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media2/x86_64/other
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media3/src
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media3/src/coreutils
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-ftp-ftp-x86_64/openSUSE-x86_64-Media3/src/other
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media1/media.1
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media1/repo
-echo Snapshot20200209 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media1/media.1/media
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media2
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media2/debugfile
-mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media3
-echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/000product:openSUSE-Addon-NonOss-ftp-ftp-x86_64/openSUSE-Addon-NonOss-FTP-x86_64-Media3/sourcefile
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64/
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64/repo
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64-Debug/x86_64
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64-Debug/x86_64/mraa-debug
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64-Debug/x86_64/other
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64-Source/src
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64-Source/src/coreutils
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/0openSUSE/openSUSE-20200209-x86_64-Source/src/other
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/images/local/0NonFree/openSUSE-NonOss-20200209-x86_64
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/images/local/0NonFree/openSUSE-NonOss-20200209-x86_64/repo
+
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/appliances/x86_64/vagrantlibvirt
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/appliances/x86_64/vagrantlibvirt/Tumbleweed.x86_64-1.0-libvirt-Snapshot20200209.vagrant.libvirt.box
+mkdir -p /mockOBS/openSUSE\:Factory\:ToTest/appliances/x86_64/vagrantvirtualbox
+echo 1 > /mockOBS/openSUSE\:Factory\:ToTest/appliances/x86_64/vagrantvirtualbox/Tumbleweed.x86_64-1.0-virtualbox-Snapshot20200209.vagrant.virtualbox.box
 
 chown -R "$dbuser" /mockOBS
 (
