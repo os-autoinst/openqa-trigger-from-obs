@@ -14,6 +14,8 @@
  REPO_1=openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222.appx-Debug \
  REPO_2=openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222.appx-Source \
  REPO_3=openSUSE-Tumbleweed-oss-x86_64.license-Snapshot20240222.appx \
+ REPO_4=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20240222.appx \
+ REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20240222.appx \
  REPO_OSS=openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222.appx \
  REPO_OSS_DEBUG=openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222.appx-Debug \
  REPO_OSS_DEBUG_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
