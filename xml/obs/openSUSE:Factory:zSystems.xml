@@ -1,6 +1,7 @@
 <openQA
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):zSystems:ToTest"
     dist_path="images/local"
+    repo_path=""
     distri="opensuse">
     <flavor name="Tumbleweed-DVD" folder="*product*" iso="1" archs="s390x">
         <repos>
