@@ -659,7 +659,7 @@ class ActionBatch:
                 suffix = ""
                 if repodir.attrib.get("suffix"):
                     suffix = repodir.attrib["suffix"]
-                self.p(
+                args = (
                     cfg.read_files_repo,
                     f,
                     txt,
@@ -671,6 +671,9 @@ class ActionBatch:
                     "ARCHORS",
                     archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l"),
                 )
+                if self.media1 == "0":
+                    args += ("| grep -P 'Media[1-3](.license)?$'", "")
+                self.p(*args)
 
         # let's sync media.1/media to be able verify build_id
         if "ToTest" or "LEO" in self.ag.envdir or self.version_from_media:
@@ -803,7 +806,7 @@ declare -A asset_folders""",
         break
     done
     echo "rsync --timeout=3600 -tlp4 --specials PRODUCTPATH/$folder/*$src /var/lib/openqa/factory/other/"
-done < <(sort __envsub/files_asset.lst)""",
+done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             f,
         )
 
@@ -904,6 +907,14 @@ done < <(sort __envsub/files_asset.lst)""",
                 continue
             if not r.attrib.get("dest", ""):
                 self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
+            elif self.media1 == "0":
+                self.p(
+                    cfg.rsync_repodir1_dest_media0(
+                        r.attrib["dest"], r.get("debug", ""), r.get("source", ""), r.attrib["folder"]
+                    ),
+                    f,
+                )
+                continue
             elif not r.attrib.get("gen", ""):
                 self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
 
@@ -1132,7 +1143,7 @@ done < <(sort __envsub/files_asset.lst)""",
       done
       [ -z "$asset_tag" ] || echo " ASSET_${asset_tag^^}=$src \\\\"
       : $((i++))
-  done < <(grep ${arch} __envsub/files_asset.lst | sort)""",
+  done < <(grep ${arch} __envsub/files_asset.lst | LANG=C.UTF-8 sort)""",
                 f,
             )
 
@@ -1156,7 +1167,7 @@ done < <(sort __envsub/files_asset.lst)""",
         for r in repodirs:
             if r.attrib.get("dest", "") == "":
                 self.p(
-                    cfg.openqa_call_repot1(),
+                    cfg.openqa_call_repot1(r.get("debug", ""), r.get("source", "")),
                     f,
                     "REPOKEY",
                     r.attrib.get("rename", r.tag),
@@ -1164,7 +1175,12 @@ done < <(sort __envsub/files_asset.lst)""",
                     "mid='{}'".format(r.attrib.get("mid", "")),
                 )
             else:
-                self.p(cfg.openqa_call_repot1_dest(r.attrib["dest"]), f, "REPOKEY", r.attrib.get("rename", r.tag))
+                self.p(
+                    cfg.openqa_call_repot1_dest(r.attrib["dest"], r.get("debug", ""), r.get("source", "")),
+                    f,
+                    "REPOKEY",
+                    r.attrib.get("rename", r.tag),
+                )
 
             for ren in self.renames:
                 self.p("            dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
@@ -1173,7 +1189,7 @@ done < <(sort __envsub/files_asset.lst)""",
                     "            [ $i != 0 ] || {{ {};  }}".format(cfg.openqa_call_repo0()), f, "REPO0_ISO", "$dest", f
                 )
             media_filter = ""
-            if r.attrib.get("debug", "") == "" or r.attrib.get("source", "") == "":
+            if self.media1 != "0" and (r.attrib.get("debug", "") == "" or r.attrib.get("source", "") == ""):
                 if r.attrib.get("debug", "") == "" and r.attrib.get("source", "") == "":
                     media_filter = "| grep Media1 "
                 elif r.attrib.get("debug", "") == "":
