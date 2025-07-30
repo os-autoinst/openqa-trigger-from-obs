@@ -692,12 +692,12 @@ class ActionBatch:
             done = ""
             if archs:
                 wild = "*" + archs + "*"
-            if " " in archs and self.repodirs:
-                self.p("for arch in {}; do".format(archs), f)
-                wild = "*$arch*"
-                done = "done"
-
             if "Leap" in self.ag.envdir or "Jump" in self.ag.envdir or self.version_from_media:
+                if " " in archs and self.repodirs:
+                    self.p("for arch in {}; do".format(archs), f)
+                    wild = "*$arch*"
+                    done = "done"
+
                 for repodir in self.repodirs:
                     self.p(
                         cfg.read_files_repo_media,
