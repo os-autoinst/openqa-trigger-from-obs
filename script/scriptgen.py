@@ -361,9 +361,9 @@ class ActionBatch:
                 self.isos.append(iso)
                 if node.attrib.get("ln_iso_to_repo", ""):
                     self.ln_iso_to_repo[iso] = node.attrib["ln_iso_to_repo"]
-
-        if node.attrib.get("name", "") and node.attrib.get("folder", ""):
-            self.iso_folder[node.attrib["name"]] = node.attrib["folder"]
+        elif node.attrib.get("name", "") and node.attrib.get("folder", ""):
+            for iso in node.attrib["name"].split("|"):
+                self.iso_folder[iso] = node.attrib["folder"]
 
         for t in node.findall(".//isos/*"):
             self.isos.append(t.tag)
@@ -559,15 +559,15 @@ class ActionBatch:
                 self.p(cfg.read_files_isos, f)
             else:
                 for iso in self.isos:
-                    folder = self.folder
-                    if self.iso_folder:
-                        folder = self.iso_folder.get(iso, "")
+                    folder = self.iso_folder.get(iso, "")
+                    if folder:
+                        folder = folder + "/"
 
                     if "*" in iso:
                         self.p(
                             cfg.read_files_iso,
                             f,
-                            "FOLDER",
+                            "FOLDER/",
                             folder,
                             "SRCISO",
                             "",
@@ -577,12 +577,12 @@ class ActionBatch:
                             iso,
                         )
                     elif self.media1 != "0":
-                        self.p(cfg.read_files_iso, f, "FOLDER", folder, "SRCISO", iso)
+                        self.p(cfg.read_files_iso, f, "FOLDER/", folder, "SRCISO", iso)
                     else:
                         self.p(
                             cfg.read_files_iso,
                             f,
-                            "FOLDER",
+                            "FOLDER/",
                             folder,
                             "SRCISO",
                             iso,
