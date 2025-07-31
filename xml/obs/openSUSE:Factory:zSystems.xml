@@ -5,8 +5,8 @@
     media1="0">
     <flavor name="Tumbleweed-DVD" folder="images/local/*product*" iso="1" archs="s390x">
         <repos>
-            <oss folder="0openSUSE" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="Tumbleweed-oss-$arch"/>
-            <non-oss folder="0NonFree" dest="Tumbleweed-non-oss-$arch"/>
+            <oss folder="0openSUSE" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="Tumbleweed-oss-s390x"/>
+            <non-oss folder="0NonFree" dest="Tumbleweed-non-oss-s390x"/>
         </repos>
     </flavor>
 </openQA>
