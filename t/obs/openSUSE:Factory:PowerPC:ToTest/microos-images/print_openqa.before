@@ -1,0 +1,25 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=ppc64le \
+ ASSET_256=openSUSE-MicroOS.ppc64le-16.0.0-ppc64le-512B-Snapshot20250806.raw.xz.sha256 \
+ BUILD=20250806 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS.ppc64le-16.0.0-ppc64le-512B-Snapshot20250806.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=microos \
+ FLAVOR=MicroOS-Image \
+ FULLURL=1 \
+ HDD_1=openSUSE-MicroOS.ppc64le-16.0.0-ppc64le-512B-Snapshot20250806.raw.xz \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806 \
+ REPO_1=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806-Debug \
+ REPO_2=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806-Source \
+ REPO_3=openSUSE-Tumbleweed-oss-ppc64_ppc64le.license-Snapshot20250806 \
+ REPO_OSS=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806 \
+ REPO_OSS_DEBUG=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806-Debug \
+ REPO_OSS_DEBUG_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806-Source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250806 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
