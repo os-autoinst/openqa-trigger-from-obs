@@ -29,7 +29,7 @@ class ActionGenerator:
             if productpath and "::" not in productpath and "//" not in productpath:
                 pp = os.path.join(pp, productpath)
         self.productpath = pp
-        self.archs = "aarch64 armv7l armv7hl ppc64le s390x x86_64"
+        self.archs = "aarch64 armv7l armv7hl ppc64le riscv64 s390x x86_64"
         self.media1 = 1
 
     def staging(self):
@@ -945,7 +945,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     "files_repo.lst",
                     "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
                     "RSYNCFILTER",
-                    " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace(
+                    " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                         "PACKAGES", r.attrib["debug"]
                     ),
                 )
@@ -965,7 +965,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         "files_repo.lst",
                         "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
                         "RSYNCFILTER",
-                        " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,s390x,src,x86_64}/*".replace(
+                        " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                             "PACKAGES", r.attrib["source"]
                         ),
                         "Media2",
