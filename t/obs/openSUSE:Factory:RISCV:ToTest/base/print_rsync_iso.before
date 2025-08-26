@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:RISCV:ToTest/images/local/*product*/*openSUSE-Tumbleweed-NET-riscv64-Snapshot20250825-Media.iso /var/lib/openqa/factory/iso/openSUSE-Tumbleweed-NET-riscv64-Snapshot20250825-Media.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:RISCV:ToTest/images/local/*product*/*openSUSE-Tumbleweed-NET-riscv64-Snapshot20250825-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-riscv64-Snapshot20250825-Media.iso.sha256

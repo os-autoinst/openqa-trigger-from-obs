@@ -1,0 +1,39 @@
+<openQA
+    project_pattern="openSUSE:(?P&lt;version&gt;Factory):RISCV:ToTest"
+    distri="opensuse"
+    repo_path="images/local"
+    media1="0"
+    >
+    <batch name="base" archs="riscv64">
+        <flavor name="Tumbleweed-NET" folder="images/local/*product*" iso="1">
+            <repos>
+                <oss folder="0openSUSE" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-riscv64"/>
+            </repos>
+        </flavor>
+    </batch>
+    <batch name="base-dvd" archs="riscv64" repos="base">
+        <flavor name="Tumbleweed-DVD" folder="images/local/*product*" iso="1"/>
+    </batch>
+    <batch name="microos" folder="images/local/*product*" archs="riscv64" repos="base" distri="microos">
+        <flavor name="MicroOS-DVD" iso="1"/>
+    </batch>
+    <batch name="jeos" folder="appliances/riscv64" archs="riscv64" repos="base">
+        <flavor name="JeOS-for-RISCV" folder="JeOS:JeOS-efi.riscv64">
+            <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
+        </flavor>
+        <flavor name="JeOS-for-kvm-and-xen-sdboot" folder="kiwi-templates-Minimal:kvm-and-xen-sdboot">
+            <hdd filemask=".*kvm-and-xen-sdboot.*\.qcow2$"/>
+        </flavor>
+        <flavor name="JeOS-for-kvm-and-xen-grub-bls" folder="kiwi-templates-Minimal:kvm-and-xen-grub-bls">
+            <hdd filemask=".*kvm-and-xen-grub-bls.*\.qcow2$"/>
+        </flavor>
+    </batch>
+    <batch name="microos-qcow" folder="appliances/riscv64" archs="riscv64" repos="base" distri="microos">
+        <flavor name="MicroOS-Image-sdboot" folder="openSUSE-MicroOS:kvm-and-xen-sdboot">
+            <hdd filemask=".*[0-9]-kvm-and-xen-sdboot.*\.qcow2$"/>
+        </flavor>
+        <flavor name="MicroOS-Image-grub-bls" folder="openSUSE-MicroOS:kvm-and-xen-grub-bls">
+            <hdd filemask=".*kvm-and-xen-grub-bls-.*\.qcow2$"/>
+        </flavor>
+    </batch>
+</openQA>

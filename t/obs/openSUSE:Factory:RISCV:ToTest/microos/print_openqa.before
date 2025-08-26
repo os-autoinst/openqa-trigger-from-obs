@@ -1,0 +1,25 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=riscv64 \
+ ASSET_256=openSUSE-MicroOS-DVD-riscv64-Snapshot20250825-Media.iso.sha256 \
+ BUILD=20250825 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS-DVD-riscv64-Snapshot20250825-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=microos \
+ FLAVOR=DVD \
+ FULLURL=1 \
+ ISO=openSUSE-MicroOS-DVD-riscv64-Snapshot20250825-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
+ REPO_1=openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825-Debug \
+ REPO_2=openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825-Source \
+ REPO_3=openSUSE-Tumbleweed-oss-riscv64.license-Snapshot20250825 \
+ REPO_OSS=openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
+ REPO_OSS_DEBUG=openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825-Debug \
+ REPO_OSS_DEBUG_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825-Source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
