@@ -14,7 +14,7 @@
     <batch name="microos" folder="images/local/*product*" archs="ppc64le" repos="base" distri="microos">
         <flavor name="MicroOS-DVD" iso="1" news="ppc64le"/>
     </batch>
-    <batch name="microos-images" folder="images/ppc64le" archs="ppc64le" repos="base" distri="microos">
+    <batch name="microos-images" folder="appliances/ppc64le" archs="ppc64le" repos="base" distri="microos">
         <flavor name="MicroOS-Image" folder="openSUSE-MicroOS:ppc64le-512B">
             <hdd filemask=".*[0-9]-ppc64le-512B.*\.raw.xz$"/>
         </flavor>
