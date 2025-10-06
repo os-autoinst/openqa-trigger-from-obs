@@ -1,4 +1,8 @@
 import os
+import re
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
 
 header = '''# GENERATED FILE - DO NOT EDIT
 set -e
@@ -306,10 +310,100 @@ def openqa_call_start_meta_variables(meta_variables):
 def pre_openqa_call_start(repos):
     return ''
 
-openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, repo0folder, openqa_cli: '''
+def _find_latest_livepatches(url):
+    """
+    Scrapes a URL to find all kernel-livepatch-* with the
+    most recent date.
+    """
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching URL: {e}")
+        return []
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    livepatches_unfiltered = []
+    latest_date = None
+    lp_regex = r'kernel-livepatch-((?:\d+_?)+-\d+)'
+    #pdb.set_trace()
+    for link in soup.find_all('a'):
+        if (link and link.text.startswith('kernel-livepatch-')):
+            #and '-rt' in link.text):
+            #pdb.set_trace()
+            if link.next_sibling and isinstance(link.next_sibling, str):
+                date_str = link.next_sibling.strip().split()[0]
+
+                try:
+                    # NOTE: The date format on dist.suse.de is YYYY-MM-DD.
+                    current_date = datetime.strptime(date_str, '%Y-%m-%d')
+                    livepatches_unfiltered.append({'name': link.text, 'date': current_date})
+
+                    if latest_date is None or current_date > latest_date:
+                        latest_date = current_date
+                except (ValueError, IndexError):
+                    # Continue if the date format is unexpected or not present
+                    continue
+
+    if latest_date is None:
+        return []
+    # to list only the recent ones
+    latest_patches_list = []
+    for patch in livepatches_unfiltered:
+        if patch['date'] == latest_date:
+            kernel_version = re.search(lp_regex, patch['name'])
+            latest_patches_list.append(kernel_version.group(1))
+
+    return latest_patches_list
+
+def _find_product_folder(p):
+    """
+    Tries to find the product name looking it up in the server's repo dirs
+    :param p: The local path as defined in ActionGenerator.envdir
+    :return: The matched product name
+    """
+    uri, prod = os.path.split(p)
+    target_filename = "files_iso.lst"
+    iso_file_found = None
+
+    for root, dirs, files in os.walk(p):
+        if target_filename in files:
+            iso_file_found = os.path.join(root, target_filename)
+            break # found
+
+    if iso_file_found:
+        with open(iso_file_found, 'r') as f:
+            iso_file = f.readline().strip()
+        if iso_file.endswith("spdx.json"):
+            prod_folder_pattern = r'(.*)-(?:aarch64|x86_64|s390x|ppc64le)'
+            prod_folder = re.match(prod_folder_pattern, iso_file)
+            if prod_folder:
+                return prod_folder.group(1)
+    return  ""
+
+def openqa_fetch_livepatch_list(ag_vars):
+    kpatches = {}
+    productpath_local = ag_vars.envdir
+    prod_build_name = _find_product_folder(productpath_local)
+    if not prod_build_name:
+        return # no spdx.json, return and do what you do
+    repo_path = ag_vars.productrepopath().replace('::', '/', 1)
+    repo_path = repo_path.replace("repos", ag_vars.brand)
+    repo_path = f"https://{repo_path}"
+    for arch in ['x86_64','aarch64','s390x','ppc64le']:
+        totest_url = f"{repo_path}/{prod_build_name}-{arch}/{arch}/"
+        latest_kernel_livepatches = _find_latest_livepatches(totest_url)
+
+        if latest_kernel_livepatches:
+            kpatches.update({arch: latest_kernel_livepatches})
+    return kpatches
+
+openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, repo0folder, openqa_cli, livepatches={},: '''
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
-
+declare -a livepatches
+livepatches=(NONE)
 for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
@@ -326,6 +420,11 @@ for flavor in {FLAVORALIASLIST,}; do
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + r'''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
         [ -n "$iso$build" ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
         [ -n "$build"  ] || continue
+        livepatches_all="''' + str(livepatches) + r'''"
+        livepatches=($(echo "$livepatches_all" | sed "s/[{}']//g" | sed 's/, /\n/g' | awk -F':' -v arch="$arch" '$1 == arch {print $2}'))
+        if [ ${#livepatches[@]} -eq 0 ]; then
+            livepatches=(NONE)
+        fi
         buildex=${buildex/.install.iso/}
         buildex=${buildex/.iso/}
         buildex=${buildex/.raw.xz/}
@@ -342,7 +441,12 @@ for flavor in {FLAVORALIASLIST,}; do
         }
         fi
         # test "$destiso" != "" || continue
+        for livepatch in "${livepatches[@]}"; do
         echo "''' + openqa_cli + ''' \\\\\"
+        if [[ "${livepatch}" != "NONE" ]]; then
+        echo \" KGRAFT=1 \\\\
+ KERNEL_VERSION=${livepatch} \\\\\"
+        fi
 (
  echo \" DISTRI=$distri \\\\
  ARCH=$arch \\\\
@@ -583,6 +687,7 @@ def openqa_call_end(version):
         echo " FLAVOR=${flavor//Tumbleweed-/} \\\\"
 ) | LANG=C.UTF-8 sort
         echo ""
+        done
     done
 done
 '''
