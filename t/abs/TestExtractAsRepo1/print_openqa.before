@@ -17,6 +17,7 @@
  DISTRI=distri \
  FLAVOR=DVD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/my-DVD.x86_64-1.1.1-Build1.111 \
  ISO=my-DVD.x86_64-1.1.1-Build1.111.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/my-DVD.x86_64-1.1.1-Build1.111 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/my-DVD.x86_64-1.1.1-Build1.111 \

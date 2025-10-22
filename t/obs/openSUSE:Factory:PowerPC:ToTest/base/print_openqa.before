@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=NET \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-NET-ppc64-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
@@ -31,6 +32,7 @@
  DISTRI=opensuse \
  FLAVOR=NET \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-NET-ppc64le-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
@@ -56,6 +58,7 @@
  DISTRI=opensuse \
  FLAVOR=DVD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-DVD-ppc64-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
@@ -81,6 +84,7 @@
  DISTRI=opensuse \
  FLAVOR=DVD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-DVD-ppc64le-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20200115 \

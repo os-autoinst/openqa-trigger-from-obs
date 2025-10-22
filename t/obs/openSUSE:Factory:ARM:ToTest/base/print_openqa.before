@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=NET \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  ISO=openSUSE-Tumbleweed-NET-aarch64-Snapshot20240610-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
@@ -31,6 +32,7 @@
  DISTRI=opensuse \
  FLAVOR=NET \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  ISO=openSUSE-Tumbleweed-NET-armv7hl-Snapshot20240610-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \

@@ -439,6 +439,7 @@ def openqa_call_repo0():
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  FULLURL=1 \\\\"
     }'''
 

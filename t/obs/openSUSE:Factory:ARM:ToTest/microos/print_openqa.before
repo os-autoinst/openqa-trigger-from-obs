@@ -6,6 +6,7 @@
  DISTRI=microos \
  FLAVOR=DVD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
  ISO=openSUSE-MicroOS-DVD-aarch64-Snapshot20221106-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \

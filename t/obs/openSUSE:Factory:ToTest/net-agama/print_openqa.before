@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=agama-installer \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929 \
  ISO=agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929 \

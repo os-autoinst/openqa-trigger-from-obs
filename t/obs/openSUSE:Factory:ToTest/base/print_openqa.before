@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=NET \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  ISO=openSUSE-Tumbleweed-NET-x86_64-Snapshot20250210-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
@@ -37,6 +38,7 @@
  DISTRI=opensuse \
  FLAVOR=DVD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  ISO=openSUSE-Tumbleweed-DVD-x86_64-Snapshot20250210-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \

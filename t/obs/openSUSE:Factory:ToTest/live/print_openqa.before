@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=Rescue-CD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  ISO=openSUSE-Tumbleweed-Rescue-CD-x86_64-Snapshot20240222-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
@@ -33,6 +34,7 @@
  DISTRI=opensuse \
  FLAVOR=GNOME-Live \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  ISO=openSUSE-Tumbleweed-GNOME-Live-x86_64-Snapshot20240222-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
@@ -60,6 +62,7 @@
  DISTRI=opensuse \
  FLAVOR=KDE-Live \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  ISO=openSUSE-Tumbleweed-KDE-Live-x86_64-Snapshot20240222-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
@@ -87,6 +90,7 @@
  DISTRI=opensuse \
  FLAVOR=XFCE-Live \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  ISO=openSUSE-Tumbleweed-XFCE-Live-x86_64-Snapshot20240222-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222 \

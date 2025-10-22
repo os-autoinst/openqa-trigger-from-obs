@@ -7,6 +7,7 @@
  FLAVOR=JeOS-for-kvm-and-xen \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-Minimal-VM.x86_64-1.0.0-kvm-and-xen-Snapshot20250210.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -34,6 +35,7 @@
  FLAVOR=JeOS-for-kvm-and-xen-sdboot \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-Minimal-VM.x86_64-1.0.0-kvm-and-xen-sdboot-Snapshot20250210.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -61,6 +63,7 @@
  FLAVOR=JeOS-for-OpenStack-Cloud \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-Minimal-VM.x86_64-1.0.0-Cloud-Snapshot20250210.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -88,6 +91,7 @@
  FLAVOR=JeOS-for-kvm-and-xen-grub-bls \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-Minimal-VM.x86_64-1.0.0-kvm-and-xen-grub-bls-Snapshot20250210.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20250210 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
