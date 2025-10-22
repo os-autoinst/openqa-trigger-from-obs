@@ -178,6 +178,29 @@ def rsync_repodir2():
 done
 '''
 
+rsync_remodir_multiarch = '''
+buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
+
+while read src; do
+    [ ! -z "$src" ] || continue
+    dest=$src
+    dest=${dest%-Build*}
+
+    echo rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT
+    echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
+done < <(cat __envsub/files_repo.lst | grep -v Debug | grep -v Source | grep -v .license )
+'''
+
+rsync_remodir_multiarch_debug = '''
+while read src; do
+    [ ! -z "$src" ] || continue
+    dest=$src
+    dest=${dest%-Build*}
+
+    echo rsync --timeout=3600 -rtlp4 --delete --specials  RSYNCFILTER PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
+    echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
+done < <(cat __envsub/files_repo.lst | grep Debug )
+'''
 
 def rsync_repomultiarch(destpath, debug, source):
     destpath = destpath.rstrip("/")
@@ -325,6 +348,7 @@ for flavor in {FLAVORALIASLIST,}; do
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + r'''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
         [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + r'''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
         [ -n "$iso$build" ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
+        [ -n "$build" ] || [ "FIXEDISO" != 1 ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
         [ -n "$build"  ] || continue
         buildex=${buildex/.install.iso/}
         buildex=${buildex/.iso/}
@@ -415,6 +439,7 @@ def openqa_call_repo0():
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  FULLURL=1 \\\\"
     }'''
 
@@ -495,7 +520,7 @@ def openqa_call_repot1_debugsource(debug, source):
     if debug:
         res = res + '''
             [[ $src != *-Debug ]] || repoKey=${repoKey}_DEBUG
-            [[ $src != *-Debug ]] || dest=$dest-Debug'''
+            [[ $src != *-Debug ]] || [[ $dest == *Debug* ]] || dest=$dest-Debug'''
     else:
         res = res + '''
             [[ $src != *-Debug ]] || continue'''
@@ -503,7 +528,7 @@ def openqa_call_repot1_debugsource(debug, source):
     if source:
         res = res + '''
             [[ $src != *-Source ]] || repoKey=${repoKey}_SOURCE
-            [[ $src != *-Source ]] || dest=$dest-Source'''
+            [[ $src != *-Source ]] || [[ $dest == *Source* ]] || dest=$dest-Source'''
     else:
         res = res + '''
             [[ $src != *-Source ]] || continue'''

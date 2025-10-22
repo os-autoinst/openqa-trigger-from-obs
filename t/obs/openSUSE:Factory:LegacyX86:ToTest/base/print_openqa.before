@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=LegacyX86-NET \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyX86-oss-i586-Snapshot20221207 \
  ISO=openSUSE-Tumbleweed-LegacyX86-NET-i586-Snapshot20221207-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyX86-oss-i586-Snapshot20221207 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyX86-oss-i586-Snapshot20221207 \
@@ -33,6 +34,7 @@
  DISTRI=opensuse \
  FLAVOR=LegacyX86-DVD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyX86-oss-i586-Snapshot20221207 \
  ISO=openSUSE-Tumbleweed-LegacyX86-DVD-i586-Snapshot20221207-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyX86-oss-i586-Snapshot20221207 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyX86-oss-i586-Snapshot20221207 \

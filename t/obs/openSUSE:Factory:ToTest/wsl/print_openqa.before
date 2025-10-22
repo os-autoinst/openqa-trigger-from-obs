@@ -7,6 +7,7 @@
  DISTRI=opensuse \
  FLAVOR=WSL \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222.appx \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222.appx \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-x86_64-Snapshot20240222.appx \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \

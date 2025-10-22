@@ -7,6 +7,7 @@
  FLAVOR=JeOS-for-AArch64 \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-ARM-JeOS-efi.armv7l-2024.05.15-Snapshot20240610.raw.xz \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -32,6 +33,7 @@
  FLAVOR=JeOS-for-RPi \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-ARM-JeOS-raspberrypi2.armv7l-2024.05.15-Snapshot20240610.raw.xz \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20240610 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \

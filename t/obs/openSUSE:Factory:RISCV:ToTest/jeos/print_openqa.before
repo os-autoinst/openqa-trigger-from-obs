@@ -7,6 +7,7 @@
  FLAVOR=JeOS-for-RISCV \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-RISC-V-JeOS-efi.riscv64-2025.07.29-Snapshot20250813.raw.xz \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -32,6 +33,7 @@
  FLAVOR=JeOS-for-kvm-and-xen-sdboot \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-Minimal-VM.riscv64-1.0.0-kvm-and-xen-sdboot-Snapshot20250825.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -57,6 +59,7 @@
  FLAVOR=JeOS-for-kvm-and-xen-grub-bls \
  FULLURL=1 \
  HDD_1=openSUSE-Tumbleweed-Minimal-VM.riscv64-1.0.0-kvm-and-xen-grub-bls-Snapshot20250825.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \

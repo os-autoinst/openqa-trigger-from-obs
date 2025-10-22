@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=DVD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  ISO=openSUSE-Tumbleweed-DVD-riscv64-Snapshot20250825-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250825 \

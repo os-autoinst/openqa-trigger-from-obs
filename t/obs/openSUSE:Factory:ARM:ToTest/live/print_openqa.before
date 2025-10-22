@@ -6,6 +6,7 @@
  DISTRI=opensuse \
  FLAVOR=Rescue-CD \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-Rescue-CD-aarch64-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
@@ -31,6 +32,7 @@
  DISTRI=opensuse \
  FLAVOR=GNOME-Live \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-GNOME-Live-aarch64-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
@@ -56,6 +58,7 @@
  DISTRI=opensuse \
  FLAVOR=KDE-Live \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-KDE-Live-aarch64-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
@@ -81,6 +84,7 @@
  DISTRI=opensuse \
  FLAVOR=XFCE-Live \
  FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  ISO=openSUSE-Tumbleweed-XFCE-Live-aarch64-Snapshot20200115-Media.iso \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20200115 \

@@ -167,6 +167,7 @@ class ActionBatch:
         self.asset_rsync = {}
         self.norsync = {}
         self.isos = []
+        self.isos_fixed = []
         self.iso_folder = {}
         self.iso_5 = ""
         self.fixed_iso = ""
@@ -309,6 +310,10 @@ class ActionBatch:
         if self.ag.domain:
             s = s.replace("opensuse.org", self.ag.domain)
         s = s.replace("REPOLINK", self.repolink)
+        fixediso = "0"
+        if self.isos_fixed:
+            fixediso = "1"
+        s = s.replace("FIXEDISO", fixediso)
         print(s, file=f)
 
     def doFlavor(self, node):
@@ -340,13 +345,14 @@ class ActionBatch:
                     self.fixed_iso = node.attrib["fixed_iso"]
                 if node.attrib.get("rsync", "1") == "0":
                     self.norsync[f] = 1
-
-        if node.attrib.get("iso", "") and node.attrib.get("name", ""):
+        iso_attrib = node.attrib.get("iso", "")
+        if iso_attrib.endswith(".iso"):
+            self.isos_fixed.append(iso_attrib)
+        elif iso_attrib and node.attrib.get("name", ""):
             for iso in node.attrib["name"].split("|"):
                 if node.attrib.get("folder", ""):
                     # self.iso_path = node.attrib["folder"]
                     self.iso_folder[iso] = node.attrib["folder"]
-                iso_attrib = node.attrib["iso"]
                 if iso_attrib == "extract_as_repo":
                     self.iso_extract_as_repo[iso] = 1
                 elif iso_attrib != "1":
@@ -382,7 +388,7 @@ class ActionBatch:
                 self.archs_repo = t.attrib["archs"]
 
         for t in node.findall(".//repos/*"):
-            if t.get("multiarch", ""):
+            if t.get("multiarch", "") and not self.isos_fixed:
                 self.reposmultiarch.append(t)
                 continue
 
@@ -590,6 +596,12 @@ class ActionBatch:
                             ".iso$",
                         )
 
+        if self.isos_fixed:
+            self.p("for arch in ARCHITECTURS; do", f)
+            for iso in self.isos_fixed:
+                self.p("  echo {} >> __envsub/files_iso.lst".format(iso), f)
+            self.p("done", f)
+
         if self.repolink:
             self.p(cfg.read_files_repo_link, f)
         if self.repolink and self.build_id_from_iso:
@@ -659,13 +671,14 @@ class ActionBatch:
                 suffix = ""
                 if repodir.attrib.get("suffix"):
                     suffix = repodir.attrib["suffix"]
-                repopath = ""
+
+                selffolder = ""
+                if self.folder:
+                    selffolder = "/" + self.folder
                 if "/" in self.folder or "/" in repodir.attrib["folder"]:
-                    repopath = self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                    repopath = self.ag.productpath + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
                 else:
-                    repopath = (
-                        self.ag.productrepopath() + "/" + self.folder + "/*" + repodir.attrib["folder"] + "*" + suffix
-                    )
+                    repopath = self.ag.productrepopath() + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
 
                 args = (
                     cfg.read_files_repo,
@@ -680,7 +693,7 @@ class ActionBatch:
                     archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l"),
                 )
                 if self.media1 == "0":
-                    args += ("| grep -P 'Media[1-3](.license)?$'", "")
+                    args += ("| grep -P 'Media[1-3](.license)?$'", "| grep -v .license")
                 self.p(*args)
 
         # let's sync media.1/media to be able verify build_id
@@ -693,21 +706,36 @@ class ActionBatch:
             if archs:
                 wild = "*" + archs + "*"
             if "Leap" in self.ag.envdir or "Jump" in self.ag.envdir or self.version_from_media:
-                if " " in archs and self.repodirs:
+                if " " in archs and self.repodirs and "1" != repodir.attrib.get("multiarch", ""):
                     self.p("for arch in {}; do".format(archs), f)
                     wild = "*$arch*"
                     done = "done"
 
                 for repodir in self.repodirs:
+                    selffolder = ""
+                    if self.folder:
+                        selffolder = "/" + self.folder
+                    if "/" in self.folder or "/" in repodir.attrib["folder"]:
+                        repopath = self.ag.productpath + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                    else:
+                        repopath = (
+                            self.ag.productrepopath() + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                        )
+
+                    Media1Replace = "*Media1"
+                    if self.media1 == "0":
+                        Media1Replace = "*"
                     self.p(
                         cfg.read_files_repo_media,
                         f,
                         "PRODUCTREPOPATH",
-                        self.ag.productpath + "/" + self.folder + "/*" + repodir.attrib["folder"] + wild,
+                        repopath,
                         "Media1.lst",
                         "Media1_{}.lst".format(
                             os.path.basename(repodir.attrib["folder"]).lstrip("*") + repodir.get("archs", "")
                         ),
+                        "*Media1",
+                        Media1Replace,
                     )
 
             if done:
@@ -898,6 +926,30 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
         for r in self.repodirs:
             if r.attrib.get("gen", ""):
                 continue
+            if self.media1 == "0" and "1" == r.attrib.get("multiarch", ""):
+                self.p(
+                    cfg.rsync_remodir_multiarch,
+                    f,
+                    "files_repo.lst",
+                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                    "PRODUCTREPOPATH",
+                    self.productrepopath() + xtrapath + r.attrib["folder"],
+                )
+                if r.attrib.get("debug", ""):
+                    self.p(
+                        cfg.rsync_remodir_multiarch_debug,
+                        f,
+                        "files_repo.lst",
+                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                        "PRODUCTREPOPATH",
+                        self.productrepopath() + xtrapath + r.attrib["folder"],
+                        "RSYNCFILTER",
+                        " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
+                            "PACKAGES", r.attrib["debug"]
+                        ),
+                    )
+                continue
+
             if not r.attrib.get("dest", ""):
                 self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
             elif self.media1 == "0":

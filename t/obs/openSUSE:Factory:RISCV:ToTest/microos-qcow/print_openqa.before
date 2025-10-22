@@ -7,6 +7,7 @@
  FLAVOR=MicroOS-Image-sdboot \
  FULLURL=1 \
  HDD_1=openSUSE-MicroOS.riscv64-16.0.0-kvm-and-xen-sdboot-Snapshot20250813.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -32,6 +33,7 @@
  FLAVOR=MicroOS-Image-grub-bls \
  FULLURL=1 \
  HDD_1=openSUSE-MicroOS.riscv64-16.0.0-kvm-and-xen-grub-bls-Snapshot20250813.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-riscv64-Snapshot20250813 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \

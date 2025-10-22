@@ -7,6 +7,7 @@
  FLAVOR=MicroOS-Image \
  FULLURL=1 \
  HDD_1=openSUSE-MicroOS.ppc64le-16.0.0-ppc64le-512B-Snapshot20250910.raw.xz \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250910 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250910 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-ppc64_ppc64le-Snapshot20250910 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \

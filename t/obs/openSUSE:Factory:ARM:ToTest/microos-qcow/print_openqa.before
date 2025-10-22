@@ -7,6 +7,7 @@
  FLAVOR=MicroOS-Image \
  FULLURL=1 \
  HDD_1=openSUSE-MicroOS.aarch64-16.0.0-kvm-and-xen-Snapshot20231022.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -32,6 +33,7 @@
  FLAVOR=MicroOS-Image-sdboot \
  FULLURL=1 \
  HDD_1=openSUSE-MicroOS.aarch64-16.0.0-kvm-and-xen-sdboot-Snapshot20231022.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
@@ -57,6 +59,7 @@
  FLAVOR=MicroOS-Image-ContainerHost \
  FULLURL=1 \
  HDD_1=openSUSE-MicroOS.aarch64-16.0.0-ContainerHost-kvm-and-xen-Snapshot20231022.qcow2 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20231022 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
