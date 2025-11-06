@@ -688,7 +688,7 @@ class ActionBatch:
                     "REPOORS",
                     "",
                     "files_repo.lst",
-                    "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).lstrip("*")),
+                    "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).strip("*")),
                     "ARCHORS",
                     archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l"),
                 )
@@ -702,6 +702,7 @@ class ActionBatch:
             if not archs:
                 archs = self.ag.archs
             wild = ""
+            arch = ""
             done = ""
             if archs:
                 wild = "*" + archs + "*"
@@ -709,6 +710,7 @@ class ActionBatch:
                 if " " in archs and self.repodirs and "1" != repodir.attrib.get("multiarch", ""):
                     self.p("for arch in {}; do".format(archs), f)
                     wild = "*$arch*"
+                    arch = "$arch"
                     done = "done"
 
                 for repodir in self.repodirs:
@@ -716,11 +718,9 @@ class ActionBatch:
                     if self.folder:
                         selffolder = "/" + self.folder
                     if "/" in self.folder or "/" in repodir.attrib["folder"]:
-                        repopath = self.ag.productpath + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                        repopath = self.ag.productpath + selffolder + "/*" + repodir.attrib["folder"] + wild
                     else:
-                        repopath = (
-                            self.ag.productrepopath() + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
-                        )
+                        repopath = self.ag.productrepopath() + selffolder + "/*" + repodir.attrib["folder"] + wild
 
                     Media1Replace = "*Media1"
                     if self.media1 == "0":
@@ -732,7 +732,7 @@ class ActionBatch:
                         repopath,
                         "Media1.lst",
                         "Media1_{}.lst".format(
-                            os.path.basename(repodir.attrib["folder"]).lstrip("*") + repodir.get("archs", "")
+                            os.path.basename(repodir.attrib["folder"]).strip("*") + repodir.get("archs", arch)
                         ),
                         "*Media1",
                         Media1Replace,
@@ -931,7 +931,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     cfg.rsync_remodir_multiarch,
                     f,
                     "files_repo.lst",
-                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                     "PRODUCTREPOPATH",
                     self.productrepopath() + xtrapath + r.attrib["folder"],
                 )
@@ -940,7 +940,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         cfg.rsync_remodir_multiarch_debug,
                         f,
                         "files_repo.lst",
-                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                         "PRODUCTREPOPATH",
                         self.productrepopath() + xtrapath + r.attrib["folder"],
                         "RSYNCFILTER",
@@ -974,7 +974,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 "PRODUCTREPOPATH",
                 self.productpath() + xtrapath + r.attrib["folder"] + suffix,
                 "files_repo.lst",
-                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                 "Media2",
                 "Media1",
                 "-debuginfo",
@@ -995,7 +995,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     "PRODUCTREPOPATH",
                     self.productpath() + xtrapath + r.attrib["folder"] + suffix,
                     "files_repo.lst",
-                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                     "RSYNCFILTER",
                     " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                         "PACKAGES", r.attrib["debug"]
@@ -1015,7 +1015,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         "PRODUCTREPOPATH",
                         self.productpath() + xtrapath + r.attrib["folder"] + suffix,
                         "files_repo.lst",
-                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                         "RSYNCFILTER",
                         " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                             "PACKAGES", r.attrib["source"]
@@ -1245,7 +1245,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 cfg.openqa_call_repot2.format(media_filter),
                 f,
                 "files_repo.lst",
-                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).lstrip("*")),
+                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                 "DEBUG_PACKAGES",
                 r.attrib.get("debug", "").strip("{}"),
                 "SOURCE_PACKAGES",
