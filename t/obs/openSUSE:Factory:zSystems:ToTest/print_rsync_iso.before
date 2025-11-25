@@ -1,2 +1,0 @@
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:zSystems:ToTest/images/local/*product*/*openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso /var/lib/openqa/factory/iso/openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso
-rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:zSystems:ToTest/images/local/*product*/*openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-DVD-s390x-Snapshot20200115-Media.iso.sha256

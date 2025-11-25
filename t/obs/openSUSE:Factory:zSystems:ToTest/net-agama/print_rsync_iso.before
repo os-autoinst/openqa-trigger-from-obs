@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:zSystems:ToTest/images/*/agama-installer*/*agama-installer.s390x-11.0.0-openSUSE-Snapshot20250221.iso /var/lib/openqa/factory/iso/agama-installer.s390x-11.0.0-openSUSE-Snapshot20250221.iso
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:zSystems:ToTest/images/*/agama-installer*/*agama-installer.s390x-11.0.0-openSUSE-Snapshot20250221.iso.sha256 /var/lib/openqa/factory/other/agama-installer.s390x-11.0.0-openSUSE-Snapshot20250221.iso.sha256
