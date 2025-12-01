@@ -11,7 +11,7 @@
             </repos>
         </flavor>
     </batch>
-    <batch name="net-agama" folder="images/*/agama-installer*" archs="s390x" repos="base">
+    <batch name="net-agama" folder="appliances/*/agama-installer*" archs="s390x" repos="base">
         <flavor name="agama-installer" iso="1"/>
     </batch>
 </openQA>
