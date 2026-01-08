@@ -1,0 +1,55 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2025.12.13-Armv9Snapshot20260107.raw.xz.sha256 \
+ BUILD=20260107 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2025.12.13-Armv9Snapshot20260107.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=Armv9JeOS-for-AArch64 \
+ HDD_1=openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2025.12.13-Armv9Snapshot20260107.raw.xz \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-Armv9Snapshot20260107.qcow2.sha256 \
+ BUILD=20260107 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-Armv9Snapshot20260107.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=Armv9JeOS-for-kvm-and-xen \
+ HDD_1=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-Armv9Snapshot20260107.qcow2 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-sdboot-Armv9Snapshot20260107.qcow2.sha256 \
+ BUILD=20260107 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-sdboot-Armv9Snapshot20260107.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=Armv9JeOS-for-kvm-and-xen-sdboot \
+ HDD_1=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-sdboot-Armv9Snapshot20260107.qcow2 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-Cloud-Armv9Snapshot20260107.qcow2.sha256 \
+ BUILD=20260107 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-Cloud-Armv9Snapshot20260107.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=Armv9JeOS-for-OpenStack-Cloud \
+ HDD_1=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-Cloud-Armv9Snapshot20260107.qcow2 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-grub-bls-Armv9Snapshot20260107.qcow2.sha256 \
+ BUILD=20260107 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-grub-bls-Armv9Snapshot20260107.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=Armv9JeOS-for-kvm-and-xen-grub-bls \
+ HDD_1=openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-grub-bls-Armv9Snapshot20260107.qcow2 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
