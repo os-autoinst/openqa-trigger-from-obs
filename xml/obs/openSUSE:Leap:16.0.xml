@@ -5,7 +5,7 @@
     archs="aarch64 x86_64 ppc64le s390x">
     <flavor name="offline-installer" media1="0" iso="Leap-16.0-offline-installer-$arch.install.iso">
         <repos>
-            <oss mirror="1" multiarch="1" version_from_media="1" folder="leap_oss" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}"/>
+            <oss mirror="1" multiarch="1" version_from_media="1" folder="leap_oss" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" rsynctimeout="7200"/>
         </repos>
     </flavor>
 </openQA>
