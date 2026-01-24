@@ -1,0 +1,11 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=Aeon-Installer.x86_64-0.1.0-Snapshot20250210.raw.xz.sha256 \
+ BUILD=20250210 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Aeon-Installer.x86_64-0.1.0-Snapshot20250210.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=aeon \
+ FLAVOR=Installer \
+ HDD_1=Aeon-Installer.x86_64-0.1.0-Snapshot20250210.raw.xz \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
