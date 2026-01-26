@@ -177,6 +177,7 @@ class ActionBatch:
         self.mirror_repo = ""
         self.repos = []
         self.reposmultiarch = []  # these repos need not to be processed for each arch
+        self.rsync_timeout = 3600
         self.repolink = ""
         self.build_id_from_iso = 0
         self.repodirs = []
@@ -897,6 +898,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
         if self.reposmultiarch:
             self.p(cfg.rsync_repo_buildid, f)
             for repo in self.reposmultiarch:
+                rsync_timeout = repo.get("rsynctimeout", self.rsync_timeout)
                 destpath = repo.get("folder", repo.tag)
                 dest = os.path.basename(destpath)
                 self.p(
@@ -904,6 +906,8 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         repo.get("folder", repo.tag), repo.get("debug", ""), repo.get("source", "")
                     ),
                     f,
+                    "RSYNCTIMEOUT",
+                    rsync_timeout,
                 )
 
         if self.repos:
@@ -927,6 +931,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             if r.attrib.get("gen", ""):
                 continue
             if self.media1 == "0" and "1" == r.attrib.get("multiarch", ""):
+                rsync_timeout = r.attrib.get("rsynctimeout", self.rsync_timeout)
                 self.p(
                     cfg.rsync_remodir_multiarch,
                     f,
@@ -934,6 +939,8 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                     "PRODUCTREPOPATH",
                     self.productrepopath() + xtrapath + r.attrib["folder"],
+                    "RSYNCTIMEOUT",
+                    rsync_timeout,
                 )
                 if r.attrib.get("debug", ""):
                     self.p(
@@ -947,6 +954,8 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                             "PACKAGES", r.attrib["debug"]
                         ),
+                        "RSYNCTIMEOUT",
+                        rsync_timeout,
                     )
                 continue
 
