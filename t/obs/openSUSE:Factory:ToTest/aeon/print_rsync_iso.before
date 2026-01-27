@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ToTest/appliances/x86_64/Aeon/*Aeon-Installer.x86_64-0.1.0-Snapshot20250210.raw.xz /var/lib/openqa/factory/hdd/Aeon-Installer.x86_64-0.1.0-Snapshot20250210.raw.xz
+rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ToTest/appliances/x86_64/Aeon/*Aeon-Installer.x86_64-0.1.0-Snapshot20250210.raw.xz.sha256 /var/lib/openqa/factory/other/Aeon-Installer.x86_64-0.1.0-Snapshot20250210.raw.xz.sha256
