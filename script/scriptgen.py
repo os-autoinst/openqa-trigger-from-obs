@@ -699,22 +699,23 @@ class ActionBatch:
 
         # let's sync media.1/media to be able verify build_id
         if "ToTest" or "LEO" in self.ag.envdir or self.version_from_media:
-            archs = self.archs
-            if not archs:
-                archs = self.ag.archs
-            wild = ""
-            arch = ""
-            done = ""
-            if archs:
-                wild = "*" + archs + "*"
             if "Leap" in self.ag.envdir or "Jump" in self.ag.envdir or self.version_from_media:
-                if " " in archs and self.repodirs and "1" != repodir.attrib.get("multiarch", ""):
-                    self.p("for arch in {}; do".format(archs), f)
-                    wild = "*$arch*"
-                    arch = "$arch"
-                    done = "done"
-
                 for repodir in self.repodirs:
+                    archs = self.archs
+                    if not archs:
+                        archs = self.ag.archs
+                    wild = ""
+                    arch = ""
+                    done = ""
+                    if archs and not " " in archs:
+                        wild = "*" + archs + "*"
+
+                    if " " in archs and self.repodirs and "1" != repodir.attrib.get("multiarch", ""):
+                        self.p("for arch in {}; do".format(archs), f)
+                        wild = "*$arch*"
+                        arch = "$arch"
+                        done = "done"
+
                     selffolder = ""
                     if self.folder:
                         selffolder = "/" + self.folder
@@ -739,8 +740,8 @@ class ActionBatch:
                         Media1Replace,
                     )
 
-            if done:
-                self.p(done, f)
+                    if done:
+                        self.p(done, f)
 
         if self.assets and self.assets_flavor:
             for k, v in self.asset_folders.items():
