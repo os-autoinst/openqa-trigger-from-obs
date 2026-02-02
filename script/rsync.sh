@@ -14,7 +14,11 @@ if [ -e "$environ/rsync.lock" ] && kill -0 $(cat "$environ/rsync.lock") 2>/dev/n
     (exit 1)
 fi
 
-trap "rm -f $environ/rsync.lock; exit" INT TERM EXIT
+cleanup() {
+    rm -f "$environ/rsync.lock"
+    exit
+}
+trap cleanup INT TERM EXIT
 echo $$ > $environ/rsync.lock
 
 [ ! -f rsync.secret ] || export RSYNC_PASSWORD="$(cat rsync.secret)"
@@ -27,6 +31,13 @@ for subfolder in $environ/*/ ; do
 set +e
 (
     set -e
+
+    current_run_last=
+    cleanup() {
+        [[ $current_run_last ]] && rm -vf "$current_run_last"
+    }
+    trap cleanup INT TERM EXIT
+
     [ -e "$subfolder/read_files.sh" ] || { >&2 echo "No file found: {$subfolder/read_files.sh}"; exit 1; }
     if [ ! -e "$subfolder/print_rsync_iso.sh" ] && [ ! -e "$subfolder/print_rsync_repo.sh" ]; then
         >&2 echo "Neither of files found: {$subfolder/print_rsync_iso.sh} nor {$subfolder/print_rsync_repo.sh}"
@@ -77,7 +88,8 @@ set +e
 
     # remove symbolic link if exists, because ln -f needs additional permissions for apparmor
     [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
-    ln -s -T "$(pwd)/$logdir" $subfolder/.run_last
+    current_run_last=$subfolder/.run_last
+    ln -s -T "$(pwd)/$logdir" "$current_run_last"
 
     [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
@@ -86,6 +98,7 @@ set +e
         bash -xe "$subfolder/.run_last/$f" > "$logdir/$f".log 2>&1 || fail=1
         [ "$fail" -eq 0 ] || break 
     done
+    current_run_last=
     (exit "$fail")
 )
     res=$?
