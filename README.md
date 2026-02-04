@@ -1,3 +1,5 @@
+tina was here
+
 # openqa-trigger-from-obs
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/os-autoinst/openqa-trigger-from-obs/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/os-autoinst/openqa-trigger-from-obs/tree/master)
 
