@@ -75,17 +75,19 @@ set +e
         [ ! -f "$f" ] || cp $f $logdir/
     done
 
-    # remove symbolic link if exists, because ln -f needs additional permissions for apparmor
-    [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
-    ln -s -T "$(pwd)/$logdir" $subfolder/.run_last
-
     [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
+    current_dir=$PWD/$logdir
     for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
         fail=0
-        bash -xe "$subfolder/.run_last/$f" > "$logdir/$f".log 2>&1 || fail=1
+        bash -xe "$current_dir/$f" > "$logdir/$f".log 2>&1 || fail=1
         [ "$fail" -eq 0 ] || break 
     done
+
+    # remove symbolic link if exists, because ln -f needs additional permissions for apparmor
+    [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
+    ln -s -T "$current_dir" "$subfolder"/.run_last
+
     (exit "$fail")
 )
     res=$?
