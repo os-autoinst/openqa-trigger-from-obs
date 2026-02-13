@@ -61,7 +61,7 @@
             <asset filemask=".*\.appx$"/>
         </flavor>
     </batch>
-    <batch name="aeon" folder="appliances/x86_64" archs="x86_64" distri="aeon">
+    <batch name="project-aeon" folder="appliances/x86_64" archs="x86_64" distri="aeon">
         <flavor name="Installer" folder="Aeon">
             <hdd filemask=".*Aeon-Installer.*\.raw\.xz$"/>
         </flavor>
