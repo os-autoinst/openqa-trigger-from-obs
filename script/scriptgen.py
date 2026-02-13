@@ -503,19 +503,11 @@ class ActionBatch:
             )
         body = gen
         if repodir.attrib.get("source", ""):
-            body = (
-                body
-                + """
-"""
-                + gen.replace("Media1", "Media2")
-            )
+            body = body + """
+""" + gen.replace("Media1", "Media2")
         if repodir.attrib.get("debug", ""):
-            body = (
-                body
-                + """
-"""
-                + gen.replace("Media1", "Media3")
-            )
+            body = body + """
+""" + gen.replace("Media1", "Media3")
         self.p('echo "' + body + '" > __envsub/files_repo_' + repodir.attrib["folder"] + ".lst", f)
 
     def gen_read_files(self, f):
@@ -1364,7 +1356,7 @@ def gen_files(project):
     xmldir = detect_xml_dir(project)
 
     for root, _, files in os.walk("xml/" + xmldir):
-        (xmlfile, dist_path, version) = parse_dir(root, project, files)
+        xmlfile, dist_path, version = parse_dir(root, project, files)
 
     if not xmlfile:
         print("Cannot find xml file for {} ...".format(project), file=sys.stderr)
