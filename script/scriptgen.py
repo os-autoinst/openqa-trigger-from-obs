@@ -196,6 +196,7 @@ class ActionBatch:
         self.offset = 1
         self.media1 = 1
         self.sha = "256"
+        self.realisoflavor = ""
 
     def productpath(self):
         if self.dist_path:
@@ -320,6 +321,7 @@ class ActionBatch:
         s = s.replace("SHAEXT", ".sha" + str(self.sha))
         s = s.replace("SHALEN", "64" if str(self.sha) == "256" else "128")
         s = s.replace("SHAVALUE", str(self.sha))
+        s = s.replace("REALISOFLAVOR", self.realisoflavor)
         print(s, file=f)
 
     def doFlavor(self, node):
@@ -333,6 +335,9 @@ class ActionBatch:
 
         if node.attrib.get("dist_path", ""):
             self.dist_path = node.attrib["dist_path"]
+
+        if node.attrib.get("realisoflavor", ""):
+            self.realisoflavor = node.attrib["realisoflavor"]
 
         if node.attrib.get("name", ""):
             if node.attrib.get("news"):
@@ -585,6 +590,8 @@ class ActionBatch:
                     elif self.media1 != "0":
                         self.p(cfg.read_files_iso, f, "FOLDER/", folder, "SRCISO", iso)
                     else:
+                        # Support overriding the name of the iso via <flavor realisoflavor="foo">
+                        iso = self.realisoflavor if self.realisoflavor else iso
                         self.p(
                             cfg.read_files_iso,
                             f,
