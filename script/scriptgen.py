@@ -414,6 +414,15 @@ class ActionBatch:
                         self.flavor_aliases[t.attrib.get("alias", "")].append(p + n + s)
                         self.flavor_aliases_flavor.append(p + n + s)
 
+        if node.attrib.get("extra_flavors", ""):
+            extra_flavors = node.attrib.get("extra_flavors", "")
+            for extra_flavor in extra_flavors.split("|"):
+                flavor, distri = extra_flavor.split("/")
+                self.flavor_distri[flavor].append(distri)
+                self.flavor_aliases[flavor].append(distri)
+                self.flavor_aliases_flavor.append(flavor)
+
+
         for t in node.findall(".//renames/*"):
             if "to" in t.attrib:
                 self.renames.append([t.attrib.get("from", t.tag), t.attrib["to"]])
@@ -781,6 +790,7 @@ class ActionBatch:
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
                 self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
+
         if len(self.staging_pattern) > 0:
             self.p("declare -A flavor_staging", f)
             for k, v in self.staging_pattern.items():
