@@ -23,7 +23,7 @@
         <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
     </batch>
     <batch name="net-agama" folder="appliances/*/agama-installer*" archs="x86_64" repos="base">
-        <flavor name="agama-installer" iso="1"/>
+        <flavor name="agama-installer" iso="1" extra_flavors="MicroOS-agama/microos|Pepe/foobar"/>
     </batch>
     <batch name="jeos" folder="appliances/x86_64" archs="x86_64" repos="base">
         <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
