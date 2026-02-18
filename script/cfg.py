@@ -333,12 +333,15 @@ openqa_call_start = lambda distri, version, archs, staging, news, news_archs, fl
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
+isoflavor=REALISOFLAVOR
+
 for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
         ''' + openqa_call_start_distri(flavor_distri) + '''
         [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
+        [ -z "$isoflavor" ] || filter=${isoflavor}
         version=VERSIONVALUE
         if [ -z "${norsync_filter[$flavor]}" ] || [ -z $build1 ]; then {
         iso=$(grep "$filter" __envsub/files_iso.lst 2>/dev/null | grep $arch | head -n 1)

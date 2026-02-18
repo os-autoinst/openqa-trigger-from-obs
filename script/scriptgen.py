@@ -194,6 +194,7 @@ class ActionBatch:
             self.meta_variables = "_DEPRIORITIZEBUILD=1"
         self.offset = 1
         self.media1 = 1
+        self.realisoflavor = ""
 
     def productpath(self):
         if self.dist_path:
@@ -315,6 +316,7 @@ class ActionBatch:
         if self.isos_fixed:
             fixediso = "1"
         s = s.replace("FIXEDISO", fixediso)
+        s = s.replace("REALISOFLAVOR", self.realisoflavor)
         print(s, file=f)
 
     def doFlavor(self, node):
@@ -328,6 +330,9 @@ class ActionBatch:
 
         if node.attrib.get("dist_path", ""):
             self.dist_path = node.attrib["dist_path"]
+
+        if node.attrib.get("realisoflavor", ""):
+            self.realisoflavor = node.attrib["realisoflavor"]
 
         if node.attrib.get("name", ""):
             if node.attrib.get("news"):
@@ -578,6 +583,8 @@ class ActionBatch:
                     elif self.media1 != "0":
                         self.p(cfg.read_files_iso, f, "FOLDER/", folder, "SRCISO", iso)
                     else:
+                        # Support overriding the name of the iso via <flavor realisoflavor="foo">
+                        iso = self.realisoflavor if self.realisoflavor else iso
                         self.p(
                             cfg.read_files_iso,
                             f,

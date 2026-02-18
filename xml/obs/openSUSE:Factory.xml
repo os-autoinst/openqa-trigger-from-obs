@@ -26,6 +26,9 @@
         <flavor name="agama-installer" iso="1" distri="opensuse"/>
         <flavor name="agama-install" iso="1" distri="microos"/>
     </batch>
+    <batch name="microos-net-agama" folder="appliances/*/agama-installer*" archs="x86_64" repos="base" distri="microos">
+        <flavor name="MicroOS-agama" iso="1" realisoflavor="agama-installer"/>
+    </batch>
     <batch name="jeos" folder="appliances/x86_64" archs="x86_64" repos="base">
         <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
             <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
