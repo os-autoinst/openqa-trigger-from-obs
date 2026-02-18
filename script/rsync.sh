@@ -77,12 +77,18 @@ set +e
 
     [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
+    trap 'kill -- -$pid 2>/dev/null' TERM INT
+
     current_dir=$PWD/$logdir
     for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
         fail=0
-        bash -xe "$current_dir/$f" > "$logdir/$f".log 2>&1 || fail=1
+        bash -xe "$current_dir/$f" > "$logdir/$f".log 2>&1 &
+        pid=$!
+        wait $pid || fail=1
         [ "$fail" -eq 0 ] || break 
     done
+
+    trap - TERM INT
 
     # remove symbolic link if exists, because ln -f needs additional permissions for apparmor
     [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
