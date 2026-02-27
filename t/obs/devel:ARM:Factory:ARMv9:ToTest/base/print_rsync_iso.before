@@ -1,0 +1,2 @@
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/devel:ARM:Factory:ARMv9:ToTest//images/local/*product*/*openSUSE-Tumbleweed-NET-aarch64-Armv9Snapshot20260107-Media.iso /var/lib/openqa/factory/iso/openSUSE-Tumbleweed-NET-aarch64-Armv9Snapshot20260107-Media.iso
+rsync --timeout=3600 -tlp4 --specials obspublish-other::openqa/devel:ARM:Factory:ARMv9:ToTest//images/local/*product*/*openSUSE-Tumbleweed-NET-aarch64-Armv9Snapshot20260107-Media.iso.sha256 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-aarch64-Armv9Snapshot20260107-Media.iso.sha256

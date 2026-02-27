@@ -1,0 +1,47 @@
+<openQA
+    project_pattern="devel:ARM:(?P&lt;version&gt;Factory):ARMv9:ToTest"
+    distri="opensuse"
+    repo_path="images/local"
+    dist_path="obspublish-other::openqa/devel:ARM:Factory:ARMv9:ToTest/"
+    media1="0"
+    >
+    <batch name="base" archs="aarch64">
+        <!-- TODO: Fix name to not clash with regular TW -->
+        <flavor name="Tumbleweed-NET" folder="images/local/*product*" iso="1" realflavoriso="Tumbleweed-NET-aarch64-Armv9">
+            <repos>
+                <oss folder="0openSUSE" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-armv9"/>
+            </repos>
+        </flavor>
+    </batch>
+<!--    <batch name="base-dvd" archs="aarch64" repos="base">
+        <flavor name="Tumbleweed-DVD" folder="images/local/*product*" iso="1">
+            <assets archs="aarch64" flavor="DVD">
+                <libvirt folder="appliances/aarch64/*vagrant*libvirt*" filemask="libvirt.box"/>
+            </assets>
+        </flavor>
+        <news iso="Tumbleweed-DVD" archs="aarch64"/>
+    </batch>
+    <batch name="microos" folder="images/local/*product*" archs="aarch64" repos="base" distri="microos">
+        <flavor name="MicroOS-DVD" iso="1" news="aarch64"/>
+    </batch>
+    <batch name="live" folder="images/*/live*" archs="aarch64" repos="base">
+        <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
+    </batch> -->
+    <batch name="jeos-aarch64" folder="appliances/aarch64" archs="aarch64" repos="base">
+        <flavor name="Armv9JeOS-for-AArch64" folder="JeOS:JeOS-efi.aarch64">
+            <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
+        </flavor>
+        <flavor name="Armv9JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
+            <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
+        </flavor>
+        <flavor name="Armv9JeOS-for-kvm-and-xen-sdboot" folder="kiwi-templates-Minimal:kvm-and-xen-sdboot">
+            <hdd filemask=".*kvm-and-xen-sdboot.*\.qcow2$"/>
+        </flavor>
+        <flavor name="Armv9JeOS-for-OpenStack-Cloud" folder="kiwi-templates-Minimal:Cloud">
+            <hdd filemask=".*Minimal-VM.*-Cloud-.*\.qcow2$"/>
+        </flavor>
+        <flavor name="Armv9JeOS-for-kvm-and-xen-grub-bls" folder="kiwi-templates-Minimal:kvm-and-xen-grub-bls">
+            <hdd filemask=".*Minimal-VM.*kvm-and-xen-grub-bls.*\.qcow2$"/>
+        </flavor>
+    </batch>
+</openQA>
