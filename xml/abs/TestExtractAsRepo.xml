@@ -4,5 +4,5 @@
     <flavor name="HDD" distri="distri">
         <hdd filemask="raw.xz$"/>
     </flavor>
-    <flavor name="DVD" distri="distri" iso="iso" extract_as_repo="1"/>
+    <flavor name="DVD" distri="distri" iso="iso" extract_as_repo="1" sha="512"/>
 </openQA>
