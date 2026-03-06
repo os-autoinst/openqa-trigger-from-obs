@@ -1,8 +1,8 @@
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256 \
+ ASSET_512=my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha512 \
  BUILD=1.111 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ CHECKSUM_HDD_1=$(cut -b-128 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha512 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=distri \
  FLAVOR=HDD \
  HDD_1=my-Test.x86_64-1.1.1-Build1.111.raw.xz \
@@ -11,9 +11,9 @@
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=my-DVD.x86_64-1.1.1-Build1.111.iso.sha256 \
+ ASSET_512=my-DVD.x86_64-1.1.1-Build1.111.iso.sha512 \
  BUILD=1.111 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/my-DVD.x86_64-1.1.1-Build1.111.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ CHECKSUM_ISO=$(cut -b-128 /var/lib/openqa/factory/other/my-DVD.x86_64-1.1.1-Build1.111.iso.sha512 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=distri \
  FLAVOR=DVD \
  FULLURL=1 \

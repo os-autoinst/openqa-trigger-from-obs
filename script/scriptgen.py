@@ -31,6 +31,7 @@ class ActionGenerator:
         self.productpath = pp
         self.archs = "aarch64 armv7l armv7hl ppc64le riscv64 s390x x86_64"
         self.media1 = 1
+        self.sha = "256"
 
     def staging(self):
         m = re.match(r".*Staging:(?P<staging>[A-Z]).*", self.envdir)
@@ -194,6 +195,7 @@ class ActionBatch:
             self.meta_variables = "_DEPRIORITIZEBUILD=1"
         self.offset = 1
         self.media1 = 1
+        self.sha = "256"
 
     def productpath(self):
         if self.dist_path:
@@ -315,6 +317,9 @@ class ActionBatch:
         if self.isos_fixed:
             fixediso = "1"
         s = s.replace("FIXEDISO", fixediso)
+        s = s.replace("SHAEXT", ".sha" + str(self.sha))
+        s = s.replace("SHALEN", "64" if str(self.sha) == "256" else "128")
+        s = s.replace("SHAVALUE", str(self.sha))
         print(s, file=f)
 
     def doFlavor(self, node):
@@ -383,6 +388,8 @@ class ActionBatch:
             self.offset = node.attrib["offset"]
         if node.attrib.get("media1", ""):
             self.media1 = node.attrib["media1"]
+        if node.attrib.get("sha", ""):
+            self.sha = node.attrib["sha"]
 
         for t in node.findall(".//repos"):
             if t.attrib.get("archs", ""):
