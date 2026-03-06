@@ -174,6 +174,7 @@ class ActionBatch:
         self.mask = ""
         self.iso_extract_as_repo = {}
         self.ln_iso_to_repo = {}
+        self.flavor_sha = {}
         self.mirror_repo = ""
         self.repos = []
         self.reposmultiarch = []  # these repos need not to be processed for each arch
@@ -346,6 +347,8 @@ class ActionBatch:
                     self.fixed_iso = node.attrib["fixed_iso"]
                 if node.attrib.get("rsync", "1") == "0":
                     self.norsync[f] = 1
+                if node.attrib.get("sha"):
+                    self.flavor_sha[f] = node.attrib["sha"]
         iso_attrib = node.attrib.get("iso", "")
         if iso_attrib.endswith(".iso"):
             self.isos_fixed.append(iso_attrib)
@@ -782,6 +785,12 @@ class ActionBatch:
             for k, v in self.iso1.items():
                 self.p("flavor_iso1[{}]='{}'".format(k, v), f)
 
+    def gen_print_array_flavor_sha(self, f):
+        if self.flavor_sha:
+            self.p("declare -A flavor_sha", f)
+            for fl, sha in self.flavor_sha.items():
+                self.p("flavor_sha[{}]='{}'".format(fl, sha), f)
+
     def gen_print_array_flavor_distri(self, f):
         if self.news:
             self.p("declare -A news", f)
@@ -828,6 +837,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
     def gen_print_rsync_iso(self, f):
         print(cfg.header, file=f)
         self.gen_print_array_no_rsync(f)
+        self.gen_print_array_flavor_sha(f)
         if ((len(self.hdds) > 1 and (not self.isos)) or (self.isos and self.hdds)) and len(self.flavors) < 2:
             self.gen_print_array_hdd_folder(f)
             if self.archs == "armv7hl":
@@ -1032,6 +1042,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
         print(cfg.header, file=f)
         self.p(cfg.pre_openqa_call_start(self.repos), f)
         self.gen_print_array_no_rsync(f)
+        self.gen_print_array_flavor_sha(f)
         self.gen_print_array_flavor_filter(f)
         self.gen_print_array_flavor_distri(f)
         self.gen_print_array_hdd_folder(f)

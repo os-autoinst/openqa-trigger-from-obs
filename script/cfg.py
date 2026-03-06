@@ -55,13 +55,14 @@ def rsync_commands(checksum):
     res = '''echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"'''
     if checksum:
         res = res + '''
-        echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src.sha256 /var/lib/openqa/factory/other/$dest.sha256"'''
+        echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src$sha_ext /var/lib/openqa/factory/other/$dest$sha_ext"'''
     return res
 
 rsync_iso = lambda distri, version, archs, staging, checksum, repo0folder, use_staging_patterns: '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
+    sha_ext=".sha${flavor_sha[$flavor]:-256}"
     for arch in "${archs[@]}"; do
         filter=$flavor
         [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
@@ -92,6 +93,7 @@ rsync_hdds = '''
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
+    sha_ext=".sha${flavor_sha[$flavor]:-256}"
     for arch in "${archs[@]}"; do
         while read src; do
             folder=""
@@ -103,7 +105,7 @@ for flavor in {FLAVORLIST,}; do
             done
             [[ $src =~ .iso$ ]] && asset="iso" || asset="hdd"
             echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/$asset/"
-            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src.sha256 /var/lib/openqa/factory/other/"
+            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src$sha_ext /var/lib/openqa/factory/other/"
             echo ""
         done < <(grep ${arch} __envsub/files_iso.lst | LANG=C.UTF-8 sort)
     done
@@ -334,6 +336,10 @@ archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
 for flavor in {FLAVORALIASLIST,}; do
+    sha_ext=".sha${flavor_sha[$flavor]:-256}"
+    cut_len=$((${flavor_sha[$flavor]:-256}/4))
+    grep_len=40
+    [ "${flavor_sha[$flavor]:-256}" != "512" ] || grep_len=128
     for arch in "${archs[@]}"; do
         filter=$flavor
         ''' + openqa_call_start_distri(flavor_distri) + '''
@@ -380,17 +386,17 @@ openqa_call_legacy_builds=''
 def openqa_call_start_iso(checksum):
     if checksum:
         return r''' [ -z "$destiso" ] || echo " ISO=${destiso} \\
- CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\
- ASSET_256=${destiso}.sha256 \\"'''
+ CHECKSUM_ISO=\$(cut -b-$cut_len /var/lib/openqa/factory/other/${destiso}$sha_ext | grep -E '[0-9a-f]{5,$grep_len}' | head -n1) \\
+ ASSET_256=${destiso}$sha_ext \\"'''
     return ''' [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
- ASSET_256=${destiso}.sha256 \\\\\"'''
+ ASSET_256=${destiso}$sha_ext \\\\\"'''
 
 def openqa_call_start_ex1(checksum, tag):
     res = tag + '=${destiso} \\\\'
     if checksum:
         res += '''
- CHECKSUM_''' + tag + r'''=\$(cut -b-64 /var/lib/openqa/factory/other/${destiso}.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\
- ASSET_256=${destiso}.sha256 \\'''
+ CHECKSUM_''' + tag + r'''=\$(cut -b-$cut_len /var/lib/openqa/factory/other/${destiso}$sha_ext | grep -E '[0-9a-f]{5,$grep_len}' | head -n1) \\
+ ASSET_256=${destiso}$sha_ext \\'''
     return res
 
 
@@ -421,13 +427,13 @@ openqa_call_start_hdds=r'''
          fi
      done
      n=$((i++))
-     echo " ASSET_$((n+255))=$src.sha256 \\"
+     echo " ASSET_$((n+255))=$src$sha_ext \\"
      if [[ $src =~ .iso$ ]]; then
          echo " ISO=$src \\"
-         echo " CHECKSUM_ISO=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\"
+         echo " CHECKSUM_ISO=\$(cut -b-$cut_len /var/lib/openqa/factory/other/$src$sha_ext | grep -E '[0-9a-f]{5,$grep_len}' | head -n1) \\"
      else
          echo " HDD_$n=$src \\"
-         echo " CHECKSUM_HDD_$n=\$(cut -b-64 /var/lib/openqa/factory/other/$src.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \\"
+         echo " CHECKSUM_HDD_$n=\$(cut -b-$cut_len /var/lib/openqa/factory/other/$src$sha_ext | grep -E '[0-9a-f]{5,$grep_len}' | head -n1) \\"
      fi
  done < <(grep ${arch} __envsub/files_iso.lst | LANG=C.UTF-8 sort)
 '''
