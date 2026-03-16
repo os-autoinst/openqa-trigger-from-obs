@@ -1069,6 +1069,12 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 "| grep {} | grep $arch | head -n 1".format(self.mask),
             )
         else:
+            livepatch_updates = cfg.openqa_fetch_livepatch_list(self.ag)
+            openqa_livepatches = {}
+            if livepatch_updates:
+                openqa_livepatches = {
+                    f"{arch}:{' '.join(versions)}" for arch, versions in livepatch_updates.items() if versions
+                }
             self.p(
                 cfg.openqa_call_start(
                     self.ag.distri,
@@ -1082,6 +1088,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     self.assets_flavor,
                     self.repo0folder,
                     self.ag.openqa_cli,
+                    openqa_livepatches,
                 ),
                 f,
             )

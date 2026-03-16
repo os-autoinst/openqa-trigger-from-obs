@@ -58,7 +58,8 @@ until [ $counter -gt 10 ]; do
 done
 
 podman exec "$containername" pwd >& /dev/null || (echo Cannot start container; exit 1 ) >&2
-
+# install python dependencies
+podman exec "$containername" bash zypper -y in python3-requests python3-beautifulsoup4
 podman exec "$containername" bash /opt/init-trigger-from-obs.sh
 
 [ -z "$CIRCLE_JOB" ] || echo 'aa-complain /usr/share/openqa/script/openqa' | podman exec "$containername" bash -x
