@@ -1,0 +1,11 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ ASSET_256=openSUSE-Tumbleweed-NET-aarch64-Armv9Snapshot20260107-Media.iso.sha256 \
+ BUILD=20260107 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-aarch64-Armv9Snapshot20260107-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=NET \
+ ISO=openSUSE-Tumbleweed-NET-aarch64-Armv9Snapshot20260107-Media.iso \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
