@@ -13,6 +13,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
@@ -35,6 +37,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
@@ -57,6 +61,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
@@ -79,6 +85,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
@@ -101,6 +109,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
@@ -123,6 +133,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
@@ -145,6 +157,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
@@ -167,6 +181,8 @@
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
  REPO_0=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_1=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
+ REPO_2=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
+ REPO_NON-OSS=Leap-Addon-NonOss-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Build4.3 \
  REPO_OSS_DEBUG=Leap-16.1-aarch64-ppc64le-s390x-x86_64-Debug-Build4.3 \
  REPO_OSS_DEBUG_PACKAGES='{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}' \
