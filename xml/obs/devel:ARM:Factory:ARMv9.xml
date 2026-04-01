@@ -7,7 +7,7 @@
     >
     <batch name="base" archs="aarch64">
         <!-- TODO: Fix name to not clash with regular TW -->
-        <flavor name="Tumbleweed-NET" folder="images/local/*product*" iso="1" realflavoriso="Tumbleweed-NET-aarch64-Armv9">
+        <flavor name="Tumbleweed-Armv9-NET" folder="images/local/*product*" iso="1">
             <repos>
                 <oss folder="0openSUSE" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-oss-armv9"/>
             </repos>
