@@ -1,4 +1,5 @@
 #!/bin/bash
+set -m
 
 set -e
 environ=$1
@@ -77,7 +78,7 @@ set +e
 
     [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
 
-    trap 'kill -- -$pid 2>/dev/null' TERM INT
+    trap 'kill -- -$pid 2>/dev/null || pkill -P $$; exit 1' TERM INT
 
     current_dir=$PWD/$logdir
     for f in {rsync_iso.cmd,rsync_repo.cmd,openqa.cmd}; do
