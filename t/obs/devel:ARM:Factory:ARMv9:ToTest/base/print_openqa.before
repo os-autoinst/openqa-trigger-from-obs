@@ -5,7 +5,21 @@
  CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-Armv9-NET-aarch64-Snapshot20260107-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=Armv9-NET \
+ FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107 \
  ISO=openSUSE-Tumbleweed-Armv9-NET-aarch64-Snapshot20260107-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107 \
+ REPO_1=openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107-Debug \
+ REPO_2=openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107-Source \
+ REPO_OSS=openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107 \
+ REPO_OSS_DEBUG=openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107-Debug \
+ REPO_OSS_DEBUG_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107-Source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-Armv9-oss-aarch64-Snapshot20260107 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
