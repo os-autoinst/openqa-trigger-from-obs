@@ -4,8 +4,8 @@ pull_request_rules:
       - and: &base_checks
           - base=master
           - -label~=^acceptance-tests-needed|not-ready
-          - status-success=integration
-          - status-success=unit
+          - "#check-pending=0"
+          - "#check-failure=0"
       - and:
           - "#approved-reviews-by>=2"
           - "#changes-requested-reviews-by=0"
