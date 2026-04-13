@@ -3,6 +3,9 @@ name: CI
 
 on: [pull_request, workflow_dispatch]  # yamllint disable-line rule:truthy
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
