@@ -958,7 +958,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         "PRODUCTREPOPATH",
                         self.productrepopath() + xtrapath + r.attrib["folder"],
                         "RSYNCFILTER",
-                        " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
+                        " --include=PACKAGES --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                             "PACKAGES", r.attrib["debug"]
                         ),
                         "RSYNCTIMEOUT",

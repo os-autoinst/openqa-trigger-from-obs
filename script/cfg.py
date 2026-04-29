@@ -211,13 +211,13 @@ echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/li
 '''
 
     if debug:
-        debugfilter = "--include=" + debug + " --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        debugfilter = "--include=" + debug + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
         res = res + '''
 echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials ''' + debugfilter + ''' PRODUCTREPOPATH/'''+ destpath +'''-Debug/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Debug-CURRENT/
 echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Debug-CURRENT/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Debug-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Debug-$buildid/'''
 
     if source:
-        sourcefilter = "--include=" + source + " --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        sourcefilter = "--include=" + source + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
         res = res + '''
 echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials ''' + sourcefilter + ''' PRODUCTREPOPATH/'''+ destpath +'''-Source/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Source-CURRENT/
 echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Source-CURRENT/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Source-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Source-$buildid/'''
@@ -256,7 +256,7 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
         [[ $src != *"-Debug" ]] || {
 '''
     if debug:
-        xtra="--include=" + debug + " --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        xtra="--include=" + debug + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
         res = res + '''
             echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/
             echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/$dest-$buildid-Debug
@@ -270,7 +270,7 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
         [[ $src != *"-Source" ]] || {
 '''
     if source:
-        xtra="--include=" + source + " --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        xtra="--include=" + source + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
         res = res + '''
             echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/
             echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/$dest-$buildid-Source
