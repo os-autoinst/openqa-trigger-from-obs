@@ -10,6 +10,7 @@
   # which are generated during deplyment
   # and log files
   # so rules below are quire pedantic
+  /opt/openqa-trigger-from-obs/ r,
   /opt/openqa-trigger-from-obs/** r,
   /opt/openqa-trigger-from-obs/*:*/*/.run*/ rw,
   /opt/openqa-trigger-from-obs/*:*/*/.run*/* rw,
