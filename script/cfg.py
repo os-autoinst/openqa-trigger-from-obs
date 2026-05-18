@@ -140,7 +140,7 @@ rsync_repo2 = '''
         repoDest=$destPrefix-$buildid$destSuffix
         repoCur=$destPrefix-CURRENT$destSuffix
         [ -z "__STAGING" ] || repoCur=$destPrefix-__STAGING-CURRENT$destSuffix
-        echo "rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/fixed/$repoCur"
+        echo "rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/fixed/$repoCur"
         echo "rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
     done < <(grep $repo$additional_repo_suffix __envsub/files_repo.lst)
 done
@@ -186,7 +186,7 @@ while read src; do
     dest=$src
     dest=${dest%-Build*}
 
-    echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT
+    echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT
     echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
 done < <(cat __envsub/files_repo.lst | grep -v Debug | grep -v Source | grep -v .license )
 '''
@@ -206,7 +206,7 @@ def rsync_repomultiarch(destpath, debug, source):
     destpath = destpath.rstrip("/")
     dest = os.path.basename(destpath)
     res = '''
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials PRODUCTREPOPATH/'''+ destpath +'''/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-CURRENT
+echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/'''+ destpath +'''/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-CURRENT
 echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/''' + dest + '''-CURRENT/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-$buildid/
 '''
 
@@ -236,9 +236,12 @@ for arch in "${archs[@]}"; do
         [[ ! $src =~ .*\\.license ]] || dest=$dest.license'''
 
 
-def rsync_repodir1_dest_media0(dest, debug, source, folder):
+def rsync_repodir1_dest_media0(dest, debug, source, folder, exclude=""):
     repo = os.path.basename(folder).lstrip("*")
     xtra=""
+    if exclude:
+        for ex in exclude.split():
+            xtra += " --exclude='" + ex + "'"
     res = r'''
 
 # archs=(ARCHITECTURREPO)
@@ -256,10 +259,10 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
         [[ $src != *"-Debug" ]] || {
 '''
     if debug:
-        xtra="--include=" + debug + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        xtra_debug="--include=" + debug + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
         res = res + '''
-            echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/
-            echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/$dest-$buildid-Debug
+            echo "rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra_debug + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/"
+            echo "rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/$dest-$buildid-Debug"
 '''
     res = res + '''
             continue
@@ -270,10 +273,10 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
         [[ $src != *"-Source" ]] || {
 '''
     if source:
-        xtra="--include=" + source + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        xtra_source="--include=" + source + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
         res = res + '''
-            echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/
-            echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/$dest-$buildid-Source
+            echo "rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra_source + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/"
+            echo "rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/$dest-$buildid-Source"
 '''
     res = res + '''
             continue
@@ -281,8 +284,8 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
 '''
 
     res = res + '''
-        echo rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
-        echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid
+        echo "rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/"
+        echo "rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid"
     done < <(LANG=C.UTF-8 sort __envsub/files_repo_''' + repo + '''.lst )
 # done
 '''
