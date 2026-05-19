@@ -37,5 +37,10 @@ test_regen_all:
 test_update_before_files: test_regen_all
 	(cd t && bash test_before_after_diff.sh --update-before *bs/*)
 
+# Override to use uv, e.g. PYTHON_RUN="uv run"
+PYTHON_RUN ?=
+
 test_python_style:
-	black --check --fast --diff script/scriptgen.py 
+	$(PYTHON_RUN) ruff check
+	$(PYTHON_RUN) ruff format --check
+	$(PYTHON_RUN) ty check
