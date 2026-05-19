@@ -1,10 +1,9 @@
 import sys
 import os
 import re
-from subprocess import check_output, CalledProcessError, STDOUT
+from subprocess import check_output, CalledProcessError
 import argparse
 import copy
-from contextlib import suppress
 from xml.etree import ElementTree
 from collections import defaultdict
 
@@ -30,7 +29,7 @@ class ActionGenerator:
                 pp = os.path.join(pp, productpath)
         self.productpath = pp
         self.archs = "aarch64 armv7l armv7hl ppc64le riscv64 s390x x86_64"
-        self.media1 = 1
+        self.media1 = "1"
         self.sha = "256"
 
     def staging(self):
@@ -193,8 +192,8 @@ class ActionBatch:
         self.meta_variables = "_OBSOLETE=1"
         if self.ag.brand != "obs" and not self.ag.staging():
             self.meta_variables = "_DEPRIORITIZEBUILD=1"
-        self.offset = 1
-        self.media1 = 1
+        self.offset = "1"
+        self.media1 = "1"
         self.sha = "256"
         self.realisoflavor = ""
 
@@ -237,15 +236,15 @@ class ActionBatch:
         extra9=None,
         extra10=None,
     ):
-        if extra1 != None and extra2 != None:
+        if extra1 is not None and extra2 is not None:
             s = s.replace(extra1, extra2)
-            if extra3 != None and extra4 != None:
+            if extra3 is not None and extra4 is not None:
                 s = s.replace(extra3, extra4)
-                if extra5 != None and extra6 != None:
+                if extra5 is not None and extra6 is not None:
                     s = s.replace(extra5, extra6)
-                    if extra7 != None and extra8 != None:
+                    if extra7 is not None and extra8 is not None:
                         s = s.replace(extra7, extra8)
-                        if extra9 != None and extra10 != None:
+                        if extra9 is not None and extra10 is not None:
                             s = s.replace(extra9, extra10)
         xtrapath = ""
         if self.folder:
@@ -267,7 +266,9 @@ class ActionBatch:
         elif self.ag.staging() and self.ag.version == "Factory":
             s = s.replace("VERSIONVALUE", "Staging:" + self.ag.staging())
         else:
-            s = s.replace("VERSIONVALUE", self.ag.version.replace("Factory", "Tumbleweed"))
+            s = s.replace(
+                "VERSIONVALUE", self.ag.version.replace("Factory", "Tumbleweed")
+            )
         s = s.replace("DISTRIVALUE", self.distri)
         s = s.replace("__STAGING", self.ag.staging())
         s = s.replace("ARCHITECTURS", self.archs)
@@ -275,7 +276,9 @@ class ActionBatch:
             s = s.replace("ARCHITECTURREPO", self.archs_repo)
         else:
             s = s.replace("ARCHITECTURREPO", self.archs)
-        s = s.replace("ARCHORS", self.archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l"))
+        s = s.replace(
+            "ARCHORS", self.archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l")
+        )
         s = s.replace("SUBFOLDER", self.subfolder)
 
         if self.flavors or self.flavor_aliases_flavor:
@@ -284,13 +287,27 @@ class ActionBatch:
             aliases.extend(self.flavor_aliases_flavor)
             s = s.replace("FLAVORORS", "|".join(self.flavors))
             s = s.replace("FLAVORALIASLIST", ",".join(aliases))
-            s = s.replace("FLAVORASREPOORS", "|".join([f for f in self.flavors if self.iso_extract_as_repo.get(f, 0)]))
-            s = s.replace("FLAVORTOREPOORS", "|".join([f for f in self.flavors if self.ln_iso_to_repo.get(f, 0)]))
+            s = s.replace(
+                "FLAVORASREPOORS",
+                "|".join(
+                    [f for f in self.flavors if self.iso_extract_as_repo.get(f, 0)]
+                ),
+            )
+            s = s.replace(
+                "FLAVORTOREPOORS",
+                "|".join([f for f in self.flavors if self.ln_iso_to_repo.get(f, 0)]),
+            )
 
-        if self.repos or (self.repolink and not "/" in self.repolink):
+        if self.repos or (self.repolink and "/" not in self.repolink):
             repos = self.repos.copy()
             s = s.replace(
-                "REPOOWNLIST", ",".join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos.copy()])
+                "REPOOWNLIST",
+                ",".join(
+                    [
+                        m.attrib["name"] if "name" in m.attrib else m.tag
+                        for m in repos.copy()
+                    ]
+                ),
             )
             if self.repolink:
                 repos.extend(self.ag.batch_by_name(self.repolink).repos)
@@ -305,10 +322,23 @@ class ActionBatch:
                     ),
                 )
             else:
-                s = s.replace("REPOLIST", ",".join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
-            s = s.replace("REPOORS", "|".join([m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]))
+                s = s.replace(
+                    "REPOLIST",
+                    ",".join(
+                        [
+                            m.attrib["name"] if "name" in m.attrib else m.tag
+                            for m in repos
+                        ]
+                    ),
+                )
+            s = s.replace(
+                "REPOORS",
+                "|".join(
+                    [m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]
+                ),
+            )
         mirror_repo = self.mirror_repo
-        if not mirror_repo and self.repolink and not "/" in self.repolink:
+        if not mirror_repo and self.repolink and "/" not in self.repolink:
             self.mirror_repo = self.ag.batch_by_name(self.repolink).mirror_repo
         s = s.replace("MIRRORREPO", self.mirror_repo)
         if self.ag.domain:
@@ -489,10 +519,10 @@ class ActionBatch:
             with open(filename, "r") as f:
                 line1 = f.readline()
                 line2 = f.readline()
-                if line1 and not "GENERATED" in line1:
+                if line1 and "GENERATED" not in line1:
                     if not line1.lstrip().startswith("#"):
                         custom = 1
-                    elif line2 and not "GENERATED" in line2:
+                    elif line2 and "GENERATED" not in line2:
                         custom = 1
         if custom:
             print("Will not overwrite custom file: " + filename, file=sys.stderr)
@@ -515,12 +545,27 @@ class ActionBatch:
             )
         body = gen
         if repodir.attrib.get("source", ""):
-            body = body + """
-""" + gen.replace("Media1", "Media2")
+            body = (
+                body
+                + """
+"""
+                + gen.replace("Media1", "Media2")
+            )
         if repodir.attrib.get("debug", ""):
-            body = body + """
-""" + gen.replace("Media1", "Media3")
-        self.p('echo "' + body + '" > __envsub/files_repo_' + repodir.attrib["folder"] + ".lst", f)
+            body = (
+                body
+                + """
+"""
+                + gen.replace("Media1", "Media3")
+            )
+        self.p(
+            'echo "'
+            + body
+            + '" > __envsub/files_repo_'
+            + repodir.attrib["folder"]
+            + ".lst",
+            f,
+        )
 
     def gen_read_files(self, f):
         self.p(cfg.header, f, "set -e", "set -eo pipefail")
@@ -560,9 +605,23 @@ class ActionBatch:
                     )
         if not self.isos and not self.hdds:
             for asset in self.assets:
-                self.p(cfg.read_files_hdd, f, "FOLDER", self.asset_folders.get(asset, ""), "ISOMASK", asset)
+                self.p(
+                    cfg.read_files_hdd,
+                    f,
+                    "FOLDER",
+                    self.asset_folders.get(asset, ""),
+                    "ISOMASK",
+                    asset,
+                )
         if self.iso_5:
-            self.p(cfg.read_files_iso, f, "FOLDER", self.iso_folder.get(self.iso_5, ""), "SRCISO", self.iso_5)
+            self.p(
+                cfg.read_files_iso,
+                f,
+                "FOLDER",
+                self.iso_folder.get(self.iso_5, ""),
+                "SRCISO",
+                self.iso_5,
+            )
         elif self.isos:
             # if isos don't belong to custom folder - just read them all with single command
             if not self.iso_folder and self.media1 != "0":
@@ -613,7 +672,13 @@ class ActionBatch:
             self.p(cfg.read_files_repo_link, f)
         if self.repolink and self.build_id_from_iso:
             self.p(cfg.read_files_repo_link2, f)
-        if self.repolink and not self.isos and not self.iso_5 and not self.hdds and not self.assets:
+        if (
+            self.repolink
+            and not self.isos
+            and not self.iso_5
+            and not self.hdds
+            and not self.assets
+        ):
             self.p(cfg.read_files_repo_link3, f)
         if self.repos:
             if self.media1 == "0":
@@ -648,7 +713,10 @@ class ActionBatch:
                     "|".join(
                         [
                             m.attrib["name"] if "name" in m.attrib else m.tag
-                            for m in filter(lambda x: x.attrib.get(cfg.media2_name(), ""), self.repos)
+                            for m in filter(
+                                lambda x: x.attrib.get(cfg.media2_name(), ""),
+                                self.repos,
+                            )
                         ]
                     ),
                 )
@@ -662,7 +730,10 @@ class ActionBatch:
                     "|".join(
                         [
                             m.attrib["name"] if "name" in m.attrib else m.tag
-                            for m in filter(lambda x: x.attrib.get(cfg.media3_name(), ""), self.repos)
+                            for m in filter(
+                                lambda x: x.attrib.get(cfg.media3_name(), ""),
+                                self.repos,
+                            )
                         ]
                     ),
                 )
@@ -683,9 +754,23 @@ class ActionBatch:
                 if self.folder:
                     selffolder = "/" + self.folder
                 if "/" in self.folder or "/" in repodir.attrib["folder"]:
-                    repopath = self.ag.productpath + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                    repopath = (
+                        self.ag.productpath
+                        + selffolder
+                        + "/*"
+                        + repodir.attrib["folder"]
+                        + "*"
+                        + suffix
+                    )
                 else:
-                    repopath = self.ag.productrepopath() + selffolder + "/*" + repodir.attrib["folder"] + "*" + suffix
+                    repopath = (
+                        self.ag.productrepopath()
+                        + selffolder
+                        + "/*"
+                        + repodir.attrib["folder"]
+                        + "*"
+                        + suffix
+                    )
 
                 args = (
                     cfg.read_files_repo,
@@ -695,7 +780,9 @@ class ActionBatch:
                     "REPOORS",
                     "",
                     "files_repo.lst",
-                    "files_repo_{}.lst".format(os.path.basename(repodir.attrib["folder"]).strip("*")),
+                    "files_repo_{}.lst".format(
+                        os.path.basename(repodir.attrib["folder"]).strip("*")
+                    ),
                     "ARCHORS",
                     archs.replace(" ", "|").replace("armv7hl", "armv7hl|armv7l"),
                 )
@@ -705,7 +792,11 @@ class ActionBatch:
 
         # let's sync media.1/media to be able verify build_id
         if "ToTest" or "LEO" in self.ag.envdir or self.version_from_media:
-            if "Leap" in self.ag.envdir or "Jump" in self.ag.envdir or self.version_from_media:
+            if (
+                "Leap" in self.ag.envdir
+                or "Jump" in self.ag.envdir
+                or self.version_from_media
+            ):
                 for repodir in self.repodirs:
                     archs = self.archs
                     if not archs:
@@ -713,10 +804,14 @@ class ActionBatch:
                     wild = ""
                     arch = ""
                     done = ""
-                    if archs and not " " in archs:
+                    if archs and " " not in archs:
                         wild = "*" + archs + "*"
 
-                    if " " in archs and self.repodirs and "1" != repodir.attrib.get("multiarch", ""):
+                    if (
+                        " " in archs
+                        and self.repodirs
+                        and "1" != repodir.attrib.get("multiarch", "")
+                    ):
                         self.p("for arch in {}; do".format(archs), f)
                         wild = "*$arch*"
                         arch = "$arch"
@@ -726,9 +821,21 @@ class ActionBatch:
                     if self.folder:
                         selffolder = "/" + self.folder
                     if "/" in self.folder or "/" in repodir.attrib["folder"]:
-                        repopath = self.ag.productpath + selffolder + "/*" + repodir.attrib["folder"] + wild
+                        repopath = (
+                            self.ag.productpath
+                            + selffolder
+                            + "/*"
+                            + repodir.attrib["folder"]
+                            + wild
+                        )
                     else:
-                        repopath = self.ag.productrepopath() + selffolder + "/*" + repodir.attrib["folder"] + wild
+                        repopath = (
+                            self.ag.productrepopath()
+                            + selffolder
+                            + "/*"
+                            + repodir.attrib["folder"]
+                            + wild
+                        )
 
                     Media1Replace = "*Media1"
                     if self.media1 == "0":
@@ -740,7 +847,8 @@ class ActionBatch:
                         repopath,
                         "Media1.lst",
                         "Media1_{}.lst".format(
-                            os.path.basename(repodir.attrib["folder"]).strip("*") + repodir.get("archs", arch)
+                            os.path.basename(repodir.attrib["folder"]).strip("*")
+                            + repodir.get("archs", arch)
                         ),
                         "*Media1",
                         Media1Replace,
@@ -812,7 +920,9 @@ class ActionBatch:
             self.p("iso_folder[{}]='{}/'".format(k, v), f)
 
     def gen_print_array_hdd_folder(self, f):
-        if ((len(self.hdd_folder) > 1) or (self.hdd_folder and self.isos)) and len(self.flavors) == 1:
+        if ((len(self.hdd_folder) > 1) or (self.hdd_folder and self.isos)) and len(
+            self.flavors
+        ) == 1:
             self.p("declare -A hdd_folder", f)
             for k, v in self.hdd_folder.items():
                 self.p("hdd_folder[{}]='{}'".format(k, v), f)
@@ -842,13 +952,22 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
     def gen_print_rsync_iso(self, f):
         print(cfg.header, file=f)
         self.gen_print_array_no_rsync(f)
-        if ((len(self.hdds) > 1 and (not self.isos)) or (self.isos and self.hdds)) and len(self.flavors) < 2:
+        if (
+            (len(self.hdds) > 1 and (not self.isos)) or (self.isos and self.hdds)
+        ) and len(self.flavors) < 2:
             self.gen_print_array_hdd_folder(f)
             if self.archs == "armv7hl":
-                self.p(cfg.rsync_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
+                self.p(
+                    cfg.rsync_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}"
+                )
             else:
                 self.p(cfg.rsync_hdds, f)
-        elif self.isos or self.iso_5 or (self.hdds and not self.productpath().startswith("http")) or self.assets:
+        elif (
+            self.isos
+            or self.iso_5
+            or (self.hdds and not self.productpath().startswith("http"))
+            or self.assets
+        ):
             self.gen_print_array_flavor_filter(f)
             self.gen_print_array_iso_folder(f)
             if self.mask:
@@ -906,11 +1025,11 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             self.p(cfg.rsync_repo_buildid, f)
             for repo in self.reposmultiarch:
                 rsync_timeout = repo.get("rsynctimeout", self.rsync_timeout)
-                destpath = repo.get("folder", repo.tag)
-                dest = os.path.basename(destpath)
                 self.p(
                     cfg.rsync_repomultiarch(
-                        repo.get("folder", repo.tag), repo.get("debug", ""), repo.get("source", "")
+                        repo.get("folder", repo.tag),
+                        repo.get("debug", ""),
+                        repo.get("source", ""),
                     ),
                     f,
                     "RSYNCTIMEOUT",
@@ -943,7 +1062,9 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     cfg.rsync_remodir_multiarch,
                     f,
                     "files_repo.lst",
-                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
+                    "files_repo_{}.lst".format(
+                        os.path.basename(r.attrib["folder"]).strip("*")
+                    ),
                     "PRODUCTREPOPATH",
                     self.productrepopath() + xtrapath + r.attrib["folder"],
                     "RSYNCTIMEOUT",
@@ -954,7 +1075,9 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         cfg.rsync_remodir_multiarch_debug,
                         f,
                         "files_repo.lst",
-                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
+                        "files_repo_{}.lst".format(
+                            os.path.basename(r.attrib["folder"]).strip("*")
+                        ),
                         "PRODUCTREPOPATH",
                         self.productrepopath() + xtrapath + r.attrib["folder"],
                         "RSYNCFILTER",
@@ -967,11 +1090,19 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 continue
 
             if not r.attrib.get("dest", ""):
-                self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
+                self.p(
+                    cfg.rsync_repodir1,
+                    f,
+                    "mid=''",
+                    "mid='{}'".format(r.attrib.get("mid", "")),
+                )
             elif self.media1 == "0":
                 self.p(
                     cfg.rsync_repodir1_dest_media0(
-                        r.attrib["dest"], r.get("debug", ""), r.get("source", ""), r.attrib["folder"]
+                        r.attrib["dest"],
+                        r.get("debug", ""),
+                        r.get("source", ""),
+                        r.attrib["folder"],
                     ),
                     f,
                 )
@@ -990,7 +1121,9 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 "PRODUCTREPOPATH",
                 self.productpath() + xtrapath + r.attrib["folder"] + suffix,
                 "files_repo.lst",
-                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
+                "files_repo_{}.lst".format(
+                    os.path.basename(r.attrib["folder"]).strip("*")
+                ),
                 "Media2",
                 "Media1",
                 "-debuginfo",
@@ -1000,7 +1133,12 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             )
             if r.attrib.get("debug", ""):
                 if not r.attrib.get("dest", ""):
-                    self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
+                    self.p(
+                        cfg.rsync_repodir1,
+                        f,
+                        "mid=''",
+                        "mid='{}'".format(r.attrib.get("mid", "")),
+                    )
                 else:
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
@@ -1011,7 +1149,9 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     "PRODUCTREPOPATH",
                     self.productpath() + xtrapath + r.attrib["folder"] + suffix,
                     "files_repo.lst",
-                    "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
+                    "files_repo_{}.lst".format(
+                        os.path.basename(r.attrib["folder"]).strip("*")
+                    ),
                     "RSYNCFILTER",
                     " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                         "PACKAGES", r.attrib["debug"]
@@ -1019,7 +1159,12 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 )
             if r.attrib.get("source", ""):
                 if not r.attrib.get("dest", ""):
-                    self.p(cfg.rsync_repodir1, f, "mid=''", "mid='{}'".format(r.attrib.get("mid", "")))
+                    self.p(
+                        cfg.rsync_repodir1,
+                        f,
+                        "mid=''",
+                        "mid='{}'".format(r.attrib.get("mid", "")),
+                    )
                 else:
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
@@ -1031,7 +1176,9 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         "PRODUCTREPOPATH",
                         self.productpath() + xtrapath + r.attrib["folder"] + suffix,
                         "files_repo.lst",
-                        "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
+                        "files_repo_{}.lst".format(
+                            os.path.basename(r.attrib["folder"]).strip("*")
+                        ),
                         "RSYNCFILTER",
                         " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
                             "PACKAGES", r.attrib["source"]
@@ -1100,22 +1247,53 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             destpath = destpath.rstrip("/")
             dest = os.path.basename(destpath)
             self.p(' echo " REPO_{}={}-$buildex" \\\\'.format(imultiarch, dest), f)
-            self.p(' echo " REPO_{}={}-$buildex" \\\\'.format(repo.tag.upper(), dest), f)
+            self.p(
+                ' echo " REPO_{}={}-$buildex" \\\\'.format(repo.tag.upper(), dest), f
+            )
             imultiarch = imultiarch + 1
             if repo.get("debug", ""):
-                self.p(' echo " REPO_{}={}-Debug-$buildex" \\\\'.format(imultiarch, dest), f)
-                self.p(' echo " REPO_{}_DEBUG={}-Debug-$buildex" \\\\'.format(repo.tag.upper(), dest), f)
-                self.p(" echo \" REPO_{}_DEBUG_PACKAGES='{}'\" \\\\".format(repo.tag.upper(), repo.get("debug", "")), f)
+                self.p(
+                    ' echo " REPO_{}={}-Debug-$buildex" \\\\'.format(imultiarch, dest),
+                    f,
+                )
+                self.p(
+                    ' echo " REPO_{}_DEBUG={}-Debug-$buildex" \\\\'.format(
+                        repo.tag.upper(), dest
+                    ),
+                    f,
+                )
+                self.p(
+                    " echo \" REPO_{}_DEBUG_PACKAGES='{}'\" \\\\".format(
+                        repo.tag.upper(), repo.get("debug", "")
+                    ),
+                    f,
+                )
                 imultiarch = imultiarch + 1
             if repo.get("source", ""):
-                self.p(' echo " REPO_{}={}-Source-$buildex" \\\\'.format(imultiarch, dest), f)
-                self.p(' echo " REPO_{}_SOURCE={}-Source-$buildex" \\\\'.format(repo.tag.upper(), dest), f)
                 self.p(
-                    " echo \" REPO_{}_SOURCE_PACKAGES='{}'\" \\\\".format(repo.tag.upper(), repo.get("source", "")), f
+                    ' echo " REPO_{}={}-Source-$buildex" \\\\'.format(imultiarch, dest),
+                    f,
+                )
+                self.p(
+                    ' echo " REPO_{}_SOURCE={}-Source-$buildex" \\\\'.format(
+                        repo.tag.upper(), dest
+                    ),
+                    f,
+                )
+                self.p(
+                    " echo \" REPO_{}_SOURCE_PACKAGES='{}'\" \\\\".format(
+                        repo.tag.upper(), repo.get("source", "")
+                    ),
+                    f,
                 )
                 imultiarch = imultiarch + 1
             if imultiarch > 0 and repo.get("mirror", 0) and not mirrorsalreadyadded:
-                self.p(cfg.openqa_call_repo_unconditional(), f, "REPO0_ISO", "{}-$buildex".format(dest))
+                self.p(
+                    cfg.openqa_call_repo_unconditional(),
+                    f,
+                    "REPO0_ISO",
+                    "{}-$buildex".format(dest),
+                )
                 mirrorsalreadyadded = True
 
         if len(self.iso1) > 0:
@@ -1145,9 +1323,16 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
 
         i = 0
         isos = self.isos.copy()
-        if ((len(self.hdds) > 1 and not self.isos) or (self.hdds and self.isos)) and len(self.flavors) == 1:
+        if (
+            (len(self.hdds) > 1 and not self.isos) or (self.hdds and self.isos)
+        ) and len(self.flavors) == 1:
             if self.archs == "armv7hl":
-                self.p(cfg.openqa_call_start_hdds, f, "grep ${arch}", "grep ${arch//armv7hl/armv7l}")
+                self.p(
+                    cfg.openqa_call_start_hdds,
+                    f,
+                    "grep ${arch}",
+                    "grep ${arch//armv7hl/armv7l}",
+                )
             else:
                 self.p(cfg.openqa_call_start_hdds, f, "i=1", "i=" + self.offset)
         elif self.hdds or (self.assets and not self.isos):
@@ -1212,14 +1397,23 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
 
         if self.repos or self.repolink:
             if self.ag.brand == "ibs":
-                self.p(" i=9", f)  # temporary to simplify diff with old rsync scripts, may be removed later
+                self.p(
+                    " i=9", f
+                )  # temporary to simplify diff with old rsync scripts, may be removed later
             # some trickery for REPO_SLE_ vs REPO_SL_ variables in ibs
             sl = "SLE_"
             for r in self.repos:
                 if r.tag.startswith("SL"):
                     sl = ""
                     break
-            self.p(cfg.openqa_call_repot(self.build_id_from_iso, self.repos), f, "REPOTYPE", "''", "REPOPREFIX", sl)
+            self.p(
+                cfg.openqa_call_repot(self.build_id_from_iso, self.repos),
+                f,
+                "REPOTYPE",
+                "''",
+                "REPOPREFIX",
+                sl,
+            )
 
         repodirs = self.repodirs
         if not repodirs and self.repolink:
@@ -1237,7 +1431,9 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 )
             else:
                 self.p(
-                    cfg.openqa_call_repot1_dest(r.attrib["dest"], r.get("debug", ""), r.get("source", "")),
+                    cfg.openqa_call_repot1_dest(
+                        r.attrib["dest"], r.get("debug", ""), r.get("source", "")
+                    ),
                     f,
                     "REPOKEY",
                     r.attrib.get("rename", r.tag),
@@ -1247,10 +1443,18 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 self.p("            dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
             if i == 0:
                 self.p(
-                    "            [ $i != 0 ] || {{ {};  }}".format(cfg.openqa_call_repo0()), f, "REPO0_ISO", "$dest", f
+                    "            [ $i != 0 ] || {{ {};  }}".format(
+                        cfg.openqa_call_repo0()
+                    ),
+                    f,
+                    "REPO0_ISO",
+                    "$dest",
+                    f,
                 )
             media_filter = ""
-            if self.media1 != "0" and (r.attrib.get("debug", "") == "" or r.attrib.get("source", "") == ""):
+            if self.media1 != "0" and (
+                r.attrib.get("debug", "") == "" or r.attrib.get("source", "") == ""
+            ):
                 if r.attrib.get("debug", "") == "" and r.attrib.get("source", "") == "":
                     media_filter = "| grep Media1 "
                 elif r.attrib.get("debug", "") == "":
@@ -1261,7 +1465,9 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 cfg.openqa_call_repot2.format(media_filter),
                 f,
                 "files_repo.lst",
-                "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
+                "files_repo_{}.lst".format(
+                    os.path.basename(r.attrib["folder"]).strip("*")
+                ),
                 "DEBUG_PACKAGES",
                 r.attrib.get("debug", "").strip("{}"),
                 "SOURCE_PACKAGES",
@@ -1289,7 +1495,10 @@ def parse_dir(root, d, files):
 
         pattern = rootXml.attrib.get("project_pattern", "")
         if not pattern:
-            print("Ignoring [" + f + "]: Cannot find attribute project_pattern", file=sys.stderr)
+            print(
+                "Ignoring [" + f + "]: Cannot find attribute project_pattern",
+                file=sys.stderr,
+            )
             continue
 
         try:
@@ -1307,26 +1516,39 @@ def parse_dir(root, d, files):
         version = found_match.groupdict().get("version", "")
         if version.find("'") != -1:
             print(
-                "OBS: Ignoring [" + d + "]: Version cannot contain quote characters; got: " + version, file=sys.stderr
+                "OBS: Ignoring ["
+                + d
+                + "]: Version cannot contain quote characters; got: "
+                + version,
+                file=sys.stderr,
             )
             continue
 
         dist_path = rootXml.attrib.get("dist_path", "")
         if dist_path.find('"') != -1:
             print(
-                "OBS: Ignoring [" + d + "]: dist_path cannot contain quote characters; got: " + dist_path,
+                "OBS: Ignoring ["
+                + d
+                + "]: dist_path cannot contain quote characters; got: "
+                + dist_path,
                 file=sys.stderr,
             )
             continue
         if dist_path.find("`") != -1:
             print(
-                "OBS: Ignoring [" + d + "]: dist_path cannot contain backtick characters; got: " + dist_path,
+                "OBS: Ignoring ["
+                + d
+                + "]: dist_path cannot contain backtick characters; got: "
+                + dist_path,
                 file=sys.stderr,
             )
             continue
         if dist_path.find("$(") != -1:
             print(
-                "OBS: Ignoring [" + d + "]: dist_path cannot contain '$(' characters; got: " + dist_path,
+                "OBS: Ignoring ["
+                + d
+                + "]: dist_path cannot contain '$(' characters; got: "
+                + dist_path,
                 file=sys.stderr,
             )
             continue
@@ -1338,7 +1560,9 @@ def parse_dir(root, d, files):
                 if v and v.find("'") == -1:
                     myenv[k] = v
             try:
-                output = check_output(["echo " + dist_path], shell=True, executable="/bin/bash", env=myenv).decode()
+                output = check_output(
+                    ["echo " + dist_path], shell=True, executable="/bin/bash", env=myenv
+                ).decode()
                 success = True
             except CalledProcessError as e:
                 output = e.output.decode()
@@ -1357,7 +1581,7 @@ def parse_dir(root, d, files):
 
 def detect_xml_dir(project):
     # if project has no path
-    if not "/" in project:
+    if "/" not in project:
         return os.getcwd()[-3:]
 
     return os.path.dirname(project)[-3:]
@@ -1377,9 +1601,9 @@ def gen_files(project):
         return 1
 
     if xmldir == "abs":
-        import abs
+        pass
     if xmldir == "ibs":
-        import ibs
+        pass
 
     a = ActionGenerator(os.getcwd(), project, dist_path, version, xmldir)
     if a is None:
@@ -1410,7 +1634,7 @@ if __name__ == "__main__":
     parser.add_argument("project", nargs="?", help="Folder matching OBS project")
 
     class Args:
-        pass
+        project: str | None = None
 
     args = Args()
     parser.parse_args(namespace=args)
