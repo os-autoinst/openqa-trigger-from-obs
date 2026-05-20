@@ -1,64 +1,80 @@
 import os
 
-header = '''# GENERATED FILE - DO NOT EDIT
+header: str = """# GENERATED FILE - DO NOT EDIT
 set -e
-'''
+"""
 
-clear_lst = '''for f in __envsub/{files_,Media}*.lst; do
+clear_lst = """for f in __envsub/{files_,Media}*.lst; do
     [ ! -f "$f" ] ||  : > "$f"
 done
 
 [ ! -f __envdir/../rsync.secret ] || rsync_pwd_option=--password-file=__envdir/../rsync.secret
-'''
+"""
 
-read_files_curl = '''curl -s PRODUCTPATH/ | grep -o 'ISOMASK' | head -n 1 >> __envsub/files_iso.lst'''
+read_files_curl = (
+    """curl -s PRODUCTPATH/ | grep -o 'ISOMASK' | head -n 1 >> __envsub/files_iso.lst"""
+)
 
-read_files_hdd = '''rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/FOLDER/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | grep -E 'ARCHORS' >> __envsub/files_iso.lst
-'''
+read_files_hdd = """rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/FOLDER/ | grep -o 'ISOMASK' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' | grep -E 'ARCHORS' >> __envsub/files_iso.lst
+"""
 
-read_files_iso = '''rsync -4 --list-only $rsync_pwd_option PRODUCTISOPATH/FOLDER/*SRCISO* | grep -P 'Media1?.iso$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
-'''
+read_files_iso = """rsync -4 --list-only $rsync_pwd_option PRODUCTISOPATH/FOLDER/*SRCISO* | grep -P 'Media1?.iso$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
+"""
 
-read_files_isos = '''rsync -4 --list-only $rsync_pwd_option PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
-'''
+read_files_isos = """rsync -4 --list-only $rsync_pwd_option PRODUCTISOPATH/ | grep -P 'Media1?.iso$' | grep -E 'ARCHORS' | awk '{ $1=$2=$3=$4=""; print substr($0,5); }' >> __envsub/files_iso.lst
+"""
 
-read_files_repo = '''rsync -4 --list-only $rsync_pwd_option PRODUCTREPOPATH/ | grep '^d' | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envsub/files_repo.lst
-'''
+read_files_repo = """rsync -4 --list-only $rsync_pwd_option PRODUCTREPOPATH/ | grep '^d' | grep -P 'Media[1-3](.license)?$' | awk '{ $1=$2=$3=$4=""; print substr($0,5); } ' | grep -v IGNOREPATTERN | grep -E 'REPOORS' | grep -E 'ARCHORS'  >> __envsub/files_repo.lst
+"""
 
-read_files_repo_media = '''rsync -4 $rsync_pwd_option PRODUCTREPOPATH/*Media1/media.1/media __envsub/Media1.lst'''
-read_files_repo_media_convert = r''' && echo "Snapshot$(grep -oP '[\d]{8}' __envsub/products)" >> __envsub/destlst'''
+read_files_repo_media = """rsync -4 $rsync_pwd_option PRODUCTREPOPATH/*Media1/media.1/media __envsub/Media1.lst"""
+read_files_repo_media_convert = r""" && echo "Snapshot$(grep -oP '[\d]{8}' __envsub/products)" >> __envsub/destlst"""
 
-read_files_repo_link = '''cp __envdir/REPOLINK/files_repo*.lst __envsub/
-'''
+read_files_repo_link = """cp __envdir/REPOLINK/files_repo*.lst __envsub/
+"""
 
-read_files_repo_link2 = '''cp __envdir/REPOLINK/files_iso_buildid.lst __envsub/
-'''
+read_files_repo_link2 = """cp __envdir/REPOLINK/files_iso_buildid.lst __envsub/
+"""
 
-read_files_repo_link3 = '''cp __envdir/REPOLINK/files_iso*.lst __envsub/
-'''
+read_files_repo_link3 = """cp __envdir/REPOLINK/files_iso*.lst __envsub/
+"""
+
 
 def rsync_fix_dest(distri, version, staging, use_staging_patterns):
-    if not staging: return ''
-    if use_staging_patterns: return '''
+    if not staging:
+        return ""
+    if use_staging_patterns:
+        return """
     staging_pattern=$flavor
     [ -z "${flavor_staging[$staging_pattern]}" ] || staging_pattern="${flavor_staging[$staging_pattern]}"
-    dest=${dest//$staging_pattern/Staging:__STAGING-$staging_pattern}'''
-    if version != 'Factory' and len(staging) == 1: return '''dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}'''
-    return '''dest=${dest//$flavor/Staging:__STAGING-$flavor}'''
+    dest=${dest//$staging_pattern/Staging:__STAGING-$staging_pattern}"""
+    if version != "Factory" and len(staging) == 1:
+        return """dest=${dest//$flavor/Staging:__STAGING-Staging-$flavor}"""
+    return """dest=${dest//$flavor/Staging:__STAGING-$flavor}"""
+
 
 def rsync_iso_fix_src(archs):
-    if 'armv7hl' in archs and not 'armv7l' in archs:
+    if "armv7hl" in archs and "armv7l" not in archs:
         return '[ -n "$src" ] || [ "$arch" != armv7hl ] || src=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
-    return ''
+    return ""
+
 
 def rsync_commands(checksum):
     res = '''echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"'''
     if checksum:
-        res = res + '''
+        res = (
+            res
+            + '''
         echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$srcSHAEXT /var/lib/openqa/factory/other/$destSHAEXT"'''
+        )
     return res
 
-rsync_iso = lambda distri, version, archs, staging, checksum, repo0folder, use_staging_patterns: '''
+
+def rsync_iso(
+    distri, version, archs, staging, checksum, repo0folder, use_staging_patterns
+):
+    return (
+        """
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -67,28 +83,38 @@ for flavor in {FLAVORLIST,}; do
         [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [[ ${norsync_filter[$filter]} != 1 ]] || continue
         src=$(grep "$filter" __envsub/files_iso.lst | grep $arch | head -n 1)
-        ''' + rsync_iso_fix_src(archs) + '''
+        """
+        + rsync_iso_fix_src(archs)
+        + """
         [ ! -z "$src" ] || continue
         dest=$src
-        ''' + rsync_fix_dest(distri, version, staging, use_staging_patterns) + r'''
+        """
+        + rsync_fix_dest(distri, version, staging, use_staging_patterns)
+        + r"""
         asset_folder=other
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.spdx\.json$  ]] || asset_folder=iso
         [[ ! $dest =~ \.tar$  ]] || asset_folder=iso
         [[ ! $dest =~ \.(qcow2|raw|vhd|vmdk|vhdx|xz)$ ]] || asset_folder=hdd
-        ''' + rsync_commands(checksum) + '''
+        """
+        + rsync_commands(checksum)
+        + """
         repo0folder=${dest%.iso}
         repo0folder=${repo0folder%.tar}
-        ''' + (repo0folder if repo0folder else "") + '''
+        """
+        + (repo0folder if repo0folder else "")
+        + """
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d /var/lib/openqa/factory/repo/$repo0folder ] || {
     mkdir /var/lib/openqa/factory/repo/$repo0folder
     bsdtar xf /var/lib/openqa/factory/iso/$dest -C /var/lib/openqa/factory/repo/$repo0folder
 }"
         [ -z "FLAVORTOREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORTOREPOORS)$" ) -eq 0 ] || echo "cp -l /var/lib/openqa/factory/iso/$dest /var/lib/openqa/factory/repo/"
     done
-done'''
+done"""
+    )
 
-rsync_hdds = '''
+
+rsync_hdds = """
 archs=(ARCHITECTURS)
 
 for flavor in {FLAVORLIST,}; do
@@ -107,12 +133,14 @@ for flavor in {FLAVORLIST,}; do
             echo ""
         done < <(grep ${arch} __envsub/files_iso.lst | LANG=C.UTF-8 sort)
     done
-done'''
+done"""
+
 
 def pre_rsync_repo(repos):
-    return ''
+    return ""
 
-rsync_repo_buildid = '''
+
+rsync_repo_buildid = """
 [ ! -f __envsub/files_iso.lst ] || buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ ! -f __envsub/files_iso.lst ] || test -n "$buildid" || buildid=$(cat __envsub/files_iso.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 [ -z "__STAGING" ] || buildid=${buildid//Build/Build__STAGING.}
@@ -121,11 +149,14 @@ rsync_repo_buildid = '''
 
 buildid=${buildid/.install}
 buildid=${buildid/.iso}
-'''
+"""
 
-rsync_repo1 = '''
+rsync_repo1 = (
+    """
 echo '# REPOOWNLIST'
-''' + rsync_repo_buildid + '''
+"""
+    + rsync_repo_buildid
+    + """
 for repo in {REPOOWNLIST,}; do
     while read src; do
         [ ! -z "$src" ] || continue
@@ -133,9 +164,10 @@ for repo in {REPOOWNLIST,}; do
         destPrefix=${dest%-Media*}
         destSuffix=${dest#$destPrefix}
         dest=$destPrefix
-'''
+"""
+)
 
-rsync_repo2 = '''
+rsync_repo2 = """
         destPrefix=$dest
         repoDest=$destPrefix-$buildid$destSuffix
         repoCur=$destPrefix-CURRENT$destSuffix
@@ -144,9 +176,9 @@ rsync_repo2 = '''
         echo "rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
     done < <(grep $repo$additional_repo_suffix __envsub/files_repo.lst)
 done
-'''
+"""
 
-rsync_repodir1 = '''
+rsync_repodir1 = """
 archs=(ARCHITECTURREPO)
 
 
@@ -165,10 +197,11 @@ for arch in "${archs[@]}"; do
         destSuffix=${dest#$destPrefix}
         mid=''
         dest=$destPrefix$mid$destSuffix
-        [[ ! $src =~ .*\\.license ]] || [[ $dest == *license* ]] || dest=$dest.license'''
+        [[ ! $src =~ .*\\.license ]] || [[ $dest == *license* ]] || dest=$dest.license"""
+
 
 def rsync_repodir2():
-    return r'''
+    return r"""
         dest=${dest//-Media2/}
         Mdia=Media2
         [[ ! $src =~ .*\.license ]] || Mdia=Media2.license
@@ -176,9 +209,10 @@ def rsync_repodir2():
         echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
     done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep Media2 )
 done
-'''
+"""
 
-rsync_remodir_multiarch = '''
+
+rsync_remodir_multiarch = """
 buildid=$(grep -hEo 'Build[0-9]+(.[0-9]+)?' __envsub/Media1_*.lst 2>/dev/null | head -n 1)
 
 while read src; do
@@ -189,9 +223,9 @@ while read src; do
     echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT
     echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
 done < <(cat __envsub/files_repo.lst | grep -v Debug | grep -v Source | grep -v .license )
-'''
+"""
 
-rsync_remodir_multiarch_debug = '''
+rsync_remodir_multiarch_debug = """
 while read src; do
     [ ! -z "$src" ] || continue
     dest=$src
@@ -200,46 +234,108 @@ while read src; do
     echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials  RSYNCFILTER PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
     echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
 done < <(cat __envsub/files_repo.lst | grep Debug )
-'''
+"""
+
 
 def rsync_repomultiarch(destpath, debug, source):
     destpath = destpath.rstrip("/")
     dest = os.path.basename(destpath)
-    res = '''
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials PRODUCTREPOPATH/'''+ destpath +'''/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-CURRENT
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/''' + dest + '''-CURRENT/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-$buildid/
-'''
+    res = (
+        """
+echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials PRODUCTREPOPATH/"""
+        + destpath
+        + """/ /var/lib/openqa/factory/repo/fixed/"""
+        + dest
+        + """-CURRENT
+echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
+        + dest
+        + """-CURRENT/ /var/lib/openqa/factory/repo/fixed/"""
+        + dest
+        + """-CURRENT/ /var/lib/openqa/factory/repo/"""
+        + dest
+        + """-$buildid/
+"""
+    )
 
     if debug:
-        debugfilter = "--include=" + debug + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
-        res = res + '''
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials ''' + debugfilter + ''' PRODUCTREPOPATH/'''+ destpath +'''-Debug/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Debug-CURRENT/
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Debug-CURRENT/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Debug-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Debug-$buildid/'''
+        debugfilter = (
+            "--include="
+            + debug
+            + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        )
+        res = (
+            res
+            + """
+echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials """
+            + debugfilter
+            + """ PRODUCTREPOPATH/"""
+            + destpath
+            + """-Debug/ /var/lib/openqa/factory/repo/fixed/"""
+            + dest
+            + """-Debug-CURRENT/
+echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
+            + dest
+            + """-Debug-CURRENT/ /var/lib/openqa/factory/repo/fixed/"""
+            + dest
+            + """-Debug-CURRENT/ /var/lib/openqa/factory/repo/"""
+            + dest
+            + """-Debug-$buildid/"""
+        )
 
     if source:
-        sourcefilter = "--include=" + source + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
-        res = res + '''
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials ''' + sourcefilter + ''' PRODUCTREPOPATH/'''+ destpath +'''-Source/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Source-CURRENT/
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Source-CURRENT/ /var/lib/openqa/factory/repo/fixed/''' + dest + '''-Source-CURRENT/ /var/lib/openqa/factory/repo/''' + dest + '''-Source-$buildid/'''
+        sourcefilter = (
+            "--include="
+            + source
+            + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        )
+        res = (
+            res
+            + """
+echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials """
+            + sourcefilter
+            + """ PRODUCTREPOPATH/"""
+            + destpath
+            + """-Source/ /var/lib/openqa/factory/repo/fixed/"""
+            + dest
+            + """-Source-CURRENT/
+echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
+            + dest
+            + """-Source-CURRENT/ /var/lib/openqa/factory/repo/fixed/"""
+            + dest
+            + """-Source-CURRENT/ /var/lib/openqa/factory/repo/"""
+            + dest
+            + """-Source-$buildid/"""
+        )
 
     return res
 
-rsync_repodir1_dest = lambda dest: r'''
+
+def rsync_repodir1_dest(dest):
+    return (
+        r"""
 archs=(ARCHITECTURREPO)
 buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
 
 for arch in "${archs[@]}"; do
     while read src; do
         [ ! -z "$src" ] || continue
-        [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
-        dest=''' + dest + '''
-        [[ ! $src =~ .*\\.license ]] || dest=$dest.license'''
+        [[ """
+        + dest
+        + """ =~ $arch ]] || [[ """
+        + dest
+        + """ =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
+        dest="""
+        + dest
+        + """
+        [[ ! $src =~ .*\\.license ]] || dest=$dest.license"""
+    )
 
 
 def rsync_repodir1_dest_media0(dest, debug, source, folder):
     repo = os.path.basename(folder).lstrip("*")
-    xtra=""
-    res = r'''
+    xtra = ""
+    res = (
+        r"""
 
 # archs=(ARCHITECTURREPO)
 buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
@@ -247,89 +343,161 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
 # for arch in "${archs[@]}"; do
     while read src; do
         [ ! -z "$src" ] || continue
-        [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
-        dest=''' + dest + '''
+        [[ """
+        + dest
+        + """ =~ $arch ]] || [[ """
+        + dest
+        + """ =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
+        dest="""
+        + dest
+        + """
         [[ ! $src =~ .*\\.license ]] || dest=$dest.license
-'''
+"""
+    )
 
-    res = res + '''
+    res = (
+        res
+        + """
         [[ $src != *"-Debug" ]] || {
-'''
+"""
+    )
     if debug:
-        xtra="--include=" + debug + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
-        res = res + '''
-            echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/
+        xtra = (
+            "--include="
+            + debug
+            + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        )
+        res = (
+            res
+            + """
+            echo rsync --timeout=3600 -rtlp4 --delete --specials """
+            + xtra
+            + """ PRODUCTREPOPATH/"""
+            + folder
+            + """/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/
             echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/$dest-$buildid-Debug
-'''
-    res = res + '''
+"""
+        )
+    res = (
+        res
+        + """
             continue
         }
-'''
+"""
+    )
 
-    res = res + '''
+    res = (
+        res
+        + """
         [[ $src != *"-Source" ]] || {
-'''
+"""
+    )
     if source:
-        xtra="--include=" + source + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
-        res = res + '''
-            echo rsync --timeout=3600 -rtlp4 --delete --specials ''' + xtra + ''' PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/
+        xtra = (
+            "--include="
+            + source
+            + " --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*"
+        )
+        res = (
+            res
+            + """
+            echo rsync --timeout=3600 -rtlp4 --delete --specials """
+            + xtra
+            + """ PRODUCTREPOPATH/"""
+            + folder
+            + """/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/
             echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/$dest-$buildid-Source
-'''
-    res = res + '''
+"""
+        )
+    res = (
+        res
+        + """
             continue
         }
-'''
+"""
+    )
 
-    res = res + '''
-        echo rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/''' + folder + '''/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
+    res = (
+        res
+        + """
+        echo rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/"""
+        + folder
+        + """/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
         echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid
-    done < <(LANG=C.UTF-8 sort __envsub/files_repo_''' + repo + '''.lst )
+    done < <(LANG=C.UTF-8 sort __envsub/files_repo_"""
+        + repo
+        + """.lst )
 # done
-'''
+"""
+    )
 
     return res
 
 
 def openqa_call_fix_destiso(distri, version, staging):
     if not staging:
-        return ''
-    if (version == 'Factory' or len(staging)>1):
-        return '''destiso=${iso//$flavor/Staging:__STAGING-$flavor}
-        flavor=Staging-$flavor'''
-    return '''version=${version}:S:__STAGING
+        return ""
+    if version == "Factory" or len(staging) > 1:
+        return """destiso=${iso//$flavor/Staging:__STAGING-$flavor}
+        flavor=Staging-$flavor"""
+    return """version=${version}:S:__STAGING
         destiso=${iso//$flavor/Staging:__STAGING-Staging-$flavor}
-        flavor=Staging-$flavor'''
+        flavor=Staging-$flavor"""
+
 
 def openqa_call_start_fix_iso(archs):
-    if 'armv7hl' in archs and not 'armv7l' in archs:
+    if "armv7hl" in archs and "armv7l" not in archs:
         return '[ -n "$iso" ] || [ "$arch" != armv7hl ] || iso=$(grep "$filter" __envsub/files_iso.lst | grep armv7l | head -n 1)'
-    return ''
+    return ""
+
 
 def openqa_call_news(news, news_archs):
     if not news:
-        return ''
-    news_str = '''[[ ! "$flavor" =~ ''' + news + ''' ]]'''
+        return ""
+    news_str = """[[ ! "$flavor" =~ """ + news + """ ]]"""
     if news_archs:
-        news_str += ''' || [ "$arch" != ''' + news_archs + ''' ]'''
+        news_str += """ || [ "$arch" != """ + news_archs + """ ]"""
     return news_str + ''' || news["$flavor"]="$destiso"'''
+
 
 def openqa_call_start_distri(flavor_distri):
     if flavor_distri:
-        return '''distri=DISTRIVALUE
-        [ -z "${flavor_distri[$flavor]}" ] || distri=${flavor_distri[$flavor]}'''
-    return 'distri=DISTRIVALUE'
+        return """distri=DISTRIVALUE
+        [ -z "${flavor_distri[$flavor]}" ] || distri=${flavor_distri[$flavor]}"""
+    return "distri=DISTRIVALUE"
+
 
 def openqa_call_start_meta_variables(meta_variables):
     if not meta_variables:
-        return 'VERSION=$version\"'
+        return 'VERSION=$version"'
 
-    return '''VERSION=$version \\\\
- ''' + meta_variables + '\"'
+    return (
+        """VERSION=$version \\\\
+ """
+        + meta_variables
+        + '"'
+    )
+
 
 def pre_openqa_call_start(repos):
-    return ''
+    return ""
 
-openqa_call_start = lambda distri, version, archs, staging, news, news_archs, flavor_distri, meta_variables, assets_flavor, repo0folder, openqa_cli: '''
+
+def openqa_call_start(
+    distri,
+    version,
+    archs,
+    staging,
+    news,
+    news_archs,
+    flavor_distri,
+    meta_variables,
+    assets_flavor,
+    repo0folder,
+    openqa_cli,
+):
+    return (
+        """
 archs=(ARCHITECTURS)
 [ ! -f __envsub/files_repo.lst ] || ! grep -q -- "-POOL-" __envsub/files_repo.lst || additional_repo_suffix=-POOL
 
@@ -338,18 +506,26 @@ isoflavor=REALISOFLAVOR
 for flavor in {FLAVORALIASLIST,}; do
     for arch in "${archs[@]}"; do
         filter=$flavor
-        ''' + openqa_call_start_distri(flavor_distri) + '''
+        """
+        + openqa_call_start_distri(flavor_distri)
+        + """
         [ -z "${flavor_filter[$flavor]}" ] || filter=${flavor_filter[$flavor]}
         [ $filter != Appliance ] || filter="qcow2"
         [ -z "$isoflavor" ] || filter=${isoflavor}
         version=VERSIONVALUE
         if [ -z "${norsync_filter[$flavor]}" ] || [ -z $build1 ]; then {
         iso=$(grep "$filter" __envsub/files_iso.lst 2>/dev/null | grep $arch | head -n 1)
-        ''' + openqa_call_start_fix_iso(archs) + r'''
+        """
+        + openqa_call_start_fix_iso(archs)
+        + r'''
         build=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | tail -n 1) || :
         buildex=$(echo $iso | grep -o -E '(Build|Snapshot)[^-]*') || :
-        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + r'''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
-        [ -n "$iso" ] || [ "$flavor" != "''' + assets_flavor + r'''" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
+        [ -n "$iso" ] || [ "$flavor" != "'''
+        + assets_flavor
+        + r'''" ] || build=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*' | head -n 1)
+        [ -n "$iso" ] || [ "$flavor" != "'''
+        + assets_flavor
+        + r"""" ] || buildex=$(grep -o -E '(Build|Snapshot)[^-]*' __envsub/files_asset.lst | head -n 1)
         [ -n "$iso$build" ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
         [ -n "$build" ] || [ "FIXEDISO" != 1 ] || build=$(grep -h -o -E '(Build|Snapshot)[^-]*' __envsub/Media1*.lst 2>/dev/null | head -n 1 | grep -o -E '[0-9]\.?[0-9]+(\.[0-9]+)*')|| :
         [ -n "$build"  ] || continue
@@ -360,60 +536,90 @@ for flavor in {FLAVORALIASLIST,}; do
         build1=$build
         destiso=$iso
         [ -z "__STAGING" ] || build1=__STAGING.$build
-        ''' + openqa_call_fix_destiso(distri, version, staging) + '''
+        """
+        + openqa_call_fix_destiso(distri, version, staging)
+        + """
         repo0folder=${destiso%.iso}
         repo0folder=${repo0folder%.tar}
-        ''' + (repo0folder if repo0folder else "") + '''
+        """
+        + (repo0folder if repo0folder else "")
+        + """
         [ "$arch" != . ] || arch=x86_64
-        ''' + openqa_call_news(news, news_archs) + '''
+        """
+        + openqa_call_news(news, news_archs)
+        + '''
         }
         fi
         # test "$destiso" != "" || continue
-        echo "''' + openqa_cli + ''' \\\\\"
+        echo "'''
+        + openqa_cli
+        + """ \\\\\"
 (
  echo \" DISTRI=$distri \\\\
  ARCH=$arch \\\\
  BUILD=$build1 \\\\
- ''' + openqa_call_start_meta_variables(meta_variables)
+ """
+        + openqa_call_start_meta_variables(meta_variables)
+    )
 
-openqa_call_legacy_builds_link=''
 
-openqa_call_legacy_builds=''
+openqa_call_legacy_builds_link = ""
+
+openqa_call_legacy_builds = ""
+
 
 def openqa_call_start_iso(checksum):
     if checksum:
         return r''' [ -z "$destiso" ] || echo " ISO=${destiso} \\
  CHECKSUM_ISO=\$(cut -b-SHALEN /var/lib/openqa/factory/other/${destiso}SHAEXT | grep -E '[0-9a-f]{5,40}' | head -n1) \\
  ASSET_SHAVALUE=${destiso}SHAEXT \\"'''
-    return ''' [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
- ASSET_SHAVALUE=${destiso}SHAEXT \\\\\"'''
+    return """ [ -z "$destiso]" || echo \" ISO=${destiso} \\\\
+ ASSET_SHAVALUE=${destiso}SHAEXT \\\\\""""
+
 
 def openqa_call_start_ex1(checksum, tag):
-    res = tag + '=${destiso} \\\\'
+    res = tag + "=${destiso} \\\\"
     if checksum:
-        res += '''
- CHECKSUM_''' + tag + r'''=\$(cut -b-SHALEN /var/lib/openqa/factory/other/${destiso}SHAEXT | grep -E '[0-9a-f]{5,40}' | head -n1) \\
- ASSET_SHAVALUE=${destiso}SHAEXT \\'''
+        res += (
+            """
+ CHECKSUM_"""
+            + tag
+            + r"""=\$(cut -b-SHALEN /var/lib/openqa/factory/other/${destiso}SHAEXT | grep -E '[0-9a-f]{5,40}' | head -n1) \\
+ ASSET_SHAVALUE=${destiso}SHAEXT \\"""
+        )
     return res
 
 
 def openqa_call_start_ex(checksum):
-    return r''' if [[ ${norsync_filter[$filter]} == 1 ]]; then
+    return (
+        r""" if [[ ${norsync_filter[$filter]} == 1 ]]; then
    :
  elif [[ $destiso =~ \.iso$ ]]; then
-   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
+   echo " """
+        + openqa_call_start_ex1(checksum, "ISO")
+        + r""""
  elif [[ $destiso =~ \.spdx.json$ ]]; then
-   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
+   echo " """
+        + openqa_call_start_ex1(checksum, "ISO")
+        + r""""
  elif [[ $destiso =~ \.tar$ ]]; then
-   echo " ''' + openqa_call_start_ex1(checksum, 'ISO')  + r'''"
+   echo " """
+        + openqa_call_start_ex1(checksum, "ISO")
+        + r""""
  elif [[ $destiso =~ \.(hdd|qcow2|raw|raw\.xz|raw\.gz|vhdx\.xz|vmdk|vmdk\.xz)$ ]]; then
-   echo " ''' + openqa_call_start_ex1(checksum, 'HDD_1')  + r'''"
+   echo " """
+        + openqa_call_start_ex1(checksum, "HDD_1")
+        + r""""
  elif [ -n "$destiso" ]; then
-   echo " ''' + openqa_call_start_ex1(checksum, 'ASSET_1')  + r'''"
+   echo " """
+        + openqa_call_start_ex1(checksum, "ASSET_1")
+        + r""""
  fi
-'''
+"""
+    )
 
-openqa_call_start_hdds=r'''
+
+openqa_call_start_hdds = r"""
  i=1
  while read src; do
      folder=""
@@ -433,56 +639,64 @@ openqa_call_start_hdds=r'''
          echo " CHECKSUM_HDD_$n=\$(cut -b-SHALEN /var/lib/openqa/factory/other/$srcSHAEXT | grep -E '[0-9a-f]{5,40}' | head -n1) \\"
      fi
  done < <(grep ${arch} __envsub/files_iso.lst | LANG=C.UTF-8 sort)
-'''
+"""
+
 
 # if MIRROREPO is set - expressions for FLAVORASREPOORS will evaluate to false
 def openqa_call_repo0():
-    return ''' [ -z "FLAVORASREPOORSMIRRORREPO" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) == 0"MIRRORREPO" ] || {
+    return """ [ -z "FLAVORASREPOORSMIRRORREPO" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) == 0"MIRRORREPO" ] || {
     echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  FULLURL=1 \\\\"
-    }'''
+    }"""
+
 
 def openqa_call_repo_unconditional():
-    return ''' echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
+    return """ echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  FULLURL=1 \\\\"
-    '''
+    """
+
 
 openqa_call_repo0a = ' [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || '
 
 openqa_call_repo0b = ' echo " REPO_0=REPO0_ISO \\\\"'
 
-openqa_call_repo5 = '''    destRepo=${destiso%.iso}
+openqa_call_repo5 = """    destRepo=${destiso%.iso}
   filter1=${filter//-DVD/-POOL}
   destRepo=${destRepo//$filter/$filter1}
   echo " REPO_5=$destRepo \\\\
  REPO_6=$destRepo.license \\\\
  REPO_REPOALIAS=$destRepo \\\\"
-'''
+"""
+
 
 def openqa_call_repot_part1():
-    return '''[ -z "__STAGING" ] || repo=${repo//Module/Staging:__STAGING-Module}
-                [ -z "__STAGING" ] || repo=${repo//Product/Staging:__STAGING-Product}'''
+    return """[ -z "__STAGING" ] || repo=${repo//Module/Staging:__STAGING-Module}
+                [ -z "__STAGING" ] || repo=${repo//Product/Staging:__STAGING-Product}"""
+
 
 def openqa_call_repot_part2():
-    return 'repoDest=$repoPrefix-Build$build$repoSuffix'
+    return "repoDest=$repoPrefix-Build$build$repoSuffix"
+
 
 def openqa_call_repot_part3():
-    return '''[[ $repoDest != *Media2* ]] || repoKey=${repoKey}_DEBUG
-                [[ $repoDest != *Media3* ]] || repoKey=${repoKey}_SOURCE'''
+    return """[[ $repoDest != *Media2* ]] || repoKey=${repoKey}_DEBUG
+                [[ $repoDest != *Media3* ]] || repoKey=${repoKey}_SOURCE"""
+
 
 def openqa_call_build_id_from_iso1(build_id_from_iso):
     if not build_id_from_iso:
         return ""
-    return r'''build2=$(grep $repot __envsub/files_iso_buildid.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
-                [ -z "$build2" ] || build1=$build2'''
+    return r"""build2=$(grep $repot __envsub/files_iso_buildid.lst | grep $arch | grep -o -E '(Build|Snapshot)[^-]*' | grep -o -E '[0-9]+.?[0-9]+(\.[0-9]+)?' | head -n 1)
+                [ -z "$build2" ] || build1=$build2"""
+
 
 def openqa_call_build_id_from_iso2(build_id_from_iso):
     if not build_id_from_iso:
@@ -490,56 +704,88 @@ def openqa_call_build_id_from_iso2(build_id_from_iso):
     return r'''[ "$repoKey" != LIVE_PATCHING ] || repoKey=LIVE
                 [[ $repoDest != *Media1* ]] || [[ $repo =~ license ]] || [ -z "$build2" ] || echo " BUILD_$repoKey=$build2 \\\\"'''
 
-def openqa_call_extra(repos):
-    return ''
 
-openqa_call_repot = lambda build_id_from_iso, repos: '''
+def openqa_call_extra(repos):
+    return ""
+
+
+def openqa_call_repot(build_id_from_iso, repos):
+    return (
+        """
         for repot in {REPOLIST,}; do
             while read repo; do
-                ''' + openqa_call_repot_part1() + '''
+                """
+        + openqa_call_repot_part1()
+        + """
                 repoPrefix=${repo%-Media*}
                 repoSuffix=${repo#$repoPrefix}
-                ''' + openqa_call_build_id_from_iso1(build_id_from_iso) + '''
-                ''' + openqa_call_repot_part2() + '''
+                """
+        + openqa_call_build_id_from_iso1(build_id_from_iso)
+        + """
+                """
+        + openqa_call_repot_part2()
+        + """
                 repoKey=${repot}
                 repoKey=${repoKey^^}
                 repoKey=${repoKey//-/_}
                 repoKey=${repoKey//./_}
                 repoKey=${repoKey//$/}
                 echo " REPO_$i=$repoDest \\\\"
-                ''' + openqa_call_repot_part3() + '''
-                ''' + openqa_call_build_id_from_iso2(build_id_from_iso) + '''
+                """
+        + openqa_call_repot_part3()
+        + """
+                """
+        + openqa_call_build_id_from_iso2(build_id_from_iso)
+        + """
                 [[ $repo =~ license ]] || echo " REPO_REPOPREFIX$repoKey=$repoDest \\\\"
-                ''' + openqa_call_extra(repos) + '''
+                """
+        + openqa_call_extra(repos)
+        + """
                 : $((i++))
             done < <(grep $repot$additional_repo_suffix __envsub/files_repo.lst | grep REPOTYPE | grep $arch | LANG=C.UTF-8 sort)
-        done'''
+        done"""
+    )
+
 
 def openqa_call_repot1_debugsource(debug, source):
-    res = '''[[ $src != *Media2* ]] || repoKey=${repoKey}_DEBUGINFO
+    res = """[[ $src != *Media2* ]] || repoKey=${repoKey}_DEBUGINFO
             [[ $src != *Media2* ]] || dest=$dest-debuginfo
             [[ $src != *Media3* ]] || repoKey=${repoKey}_SOURCE
-            [[ $src != *Media3* ]] || dest=$dest-source'''
+            [[ $src != *Media3* ]] || dest=$dest-source"""
     if debug:
-        res = res + '''
+        res = (
+            res
+            + """
             [[ $src != *-Debug ]] || repoKey=${repoKey}_DEBUG
-            [[ $src != *-Debug ]] || [[ $dest == *Debug* ]] || dest=$dest-Debug'''
+            [[ $src != *-Debug ]] || [[ $dest == *Debug* ]] || dest=$dest-Debug"""
+        )
     else:
-        res = res + '''
-            [[ $src != *-Debug ]] || continue'''
+        res = (
+            res
+            + """
+            [[ $src != *-Debug ]] || continue"""
+        )
 
     if source:
-        res = res + '''
+        res = (
+            res
+            + """
             [[ $src != *-Source ]] || repoKey=${repoKey}_SOURCE
-            [[ $src != *-Source ]] || [[ $dest == *Source* ]] || dest=$dest-Source'''
+            [[ $src != *-Source ]] || [[ $dest == *Source* ]] || dest=$dest-Source"""
+        )
     else:
-        res = res + '''
-            [[ $src != *-Source ]] || continue'''
+        res = (
+            res
+            + """
+            [[ $src != *-Source ]] || continue"""
+        )
 
     return res
 
 
-openqa_call_repot1 = lambda debug, source: '''
+def openqa_call_repot1(debug, source):
+    return (
+        """
         while read src; do
             dest=$src
             dest=${dest%-Build*}
@@ -559,53 +805,77 @@ openqa_call_repot1 = lambda debug, source: '''
             repoKey=${repoKey//-/_}
             repoKey=${repoKey//./_}
             repoKey=${repoKey//$/}
-            ''' + openqa_call_repot1_debugsource(debug, source) + '''
+            """
+        + openqa_call_repot1_debugsource(debug, source)
+        + """
             dest=${dest//-Media1/}
             dest=${dest//-Media2/}
             dest=${dest//-Media3/}
-'''
+"""
+    )
 
-openqa_call_repot2 = '''
+
+openqa_call_repot2 = """
             echo " REPO_$i=$dest \\\\"
             [[ $src =~ license ]] || echo " REPO_$repoKey=$dest \\\\"
             [[ ! $repoKey =~ _DEBUGINFO ]] || [ -z "DEBUG_PACKAGES" ] || echo " REPO_${{repoKey}}_PACKAGES='DEBUG_PACKAGES' \\\\"
             [[ $repoKey != *_DEBUG ]]      || [ -z "DEBUG_PACKAGES" ] || echo " REPO_${{repoKey}}_PACKAGES='DEBUG_PACKAGES' \\\\"
             [[ ! $repoKey =~ _SOURCE ]] || [ -z "SOURCE_PACKAGES" ] || echo " REPO_${{repoKey}}_PACKAGES='SOURCE_PACKAGES' \\\\"
             : $((i++))
-        done < <(grep ${{arch//i686/i586}} __envsub/files_repo.lst {} | LANG=C.UTF-8 sort)'''
+        done < <(grep ${{arch//i686/i586}} __envsub/files_repo.lst {} | LANG=C.UTF-8 sort)"""
 
 
-openqa_call_repot1_dest = lambda dest, debug, source: '''
+def openqa_call_repot1_dest(dest, debug, source):
+    return (
+        """
         while read src; do
-            [[ ''' + dest + ''' =~ $arch ]] || [[ ''' + dest + ''' =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
-            dest=''' + dest + r'''
+            [[ """
+        + dest
+        + """ =~ $arch ]] || [[ """
+        + dest
+        + """ =~ ${arch//i686/i586} ]] || [[ "ARCHITECTURREPO" == . ]] || break
+            dest="""
+        + dest
+        + r"""
             [[ ! $src =~ .*\.license ]] || dest=$dest.license
             dest=$dest-$buildex
             repoKey=REPOKEY
-            ''' + openqa_call_repot1_debugsource(debug, source) + '''
+            """
+        + openqa_call_repot1_debugsource(debug, source)
+        + """
             repoKey=${repoKey^^}
             repoKey=${repoKey//-/_}
             repoKey=${repoKey//./_}
             repoKey=${repoKey//$/}
-'''
+"""
+    )
+
 
 def openqa_call_news_end(distri, news, news_arch):
     if not news:
-        return ''
-    suff = ''
-    if news_arch and news_arch != 'x86_64':
-        suff = '-' + news_arch
-    folder='${n,,}'
-    if distri != 'microos':
-        folder = 'opensuse'
-    return '''for n in "${!news[@]}"; do
-    folder=''' + folder + '''
-    folder=${folder%-dvd}''' + suff + '''
+        return ""
+    suff = ""
+    if news_arch and news_arch != "x86_64":
+        suff = "-" + news_arch
+    folder = "${n,,}"
+    if distri != "microos":
+        folder = "opensuse"
+    return (
+        """for n in "${!news[@]}"; do
+    folder="""
+        + folder
+        + """
+    folder=${folder%-dvd}"""
+        + suff
+        + """
     echo  /var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/$folder/VERSIONVALUE --snapshot $build1 /var/lib/openqa/factory/iso/${news[$n]}
-done'''
+done"""
+    )
+
 
 def openqa_call_end(version):
-    if version == 'Factory': return '''
+    if version == "Factory":
+        return """
         [ $flavor != MicroOS-DVD ] || flavor=DVD
         [ $flavor != Staging-MicroOS-DVD ] || flavor=Staging-DVD
         echo " FLAVOR=${flavor//Tumbleweed-/} \\\\"
@@ -613,17 +883,19 @@ def openqa_call_end(version):
         echo ""
     done
 done
-'''
-    return '''
+"""
+    return """
         echo " FLAVOR=$flavor \\\\"
 ) | LANG=C.UTF-8 sort
         echo ""
     done
 done
-'''
+"""
+
 
 def media2_name():
-    return 'debug'
+    return "debug"
+
 
 def media3_name():
-    return 'source'
+    return "source"
