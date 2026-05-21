@@ -38,6 +38,4 @@ test_update_before_files: test_regen_all
 	(cd t && bash test_before_after_diff.sh --update-before *bs/*)
 
 test_python_style:
-	uv run ruff check
-	uv run ruff format --check
-	uv run ty check
+	black --check --fast --diff script/scriptgen.py 

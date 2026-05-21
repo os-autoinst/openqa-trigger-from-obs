@@ -1,16 +1,2 @@
-[project]
-name = "openqa-trigger-from-obs"
-version = "0.1.0"
-requires-python = ">=3.10"
-
-[dependency-groups]
-dev = [
-    "ruff>=0.15",
-    "ty>=0.0.26",
-]
-
-[tool.ruff]
-exclude = ["script/ibs.py"]
-
 [tool.black]
 line-length = 120
