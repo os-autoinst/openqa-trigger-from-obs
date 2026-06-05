@@ -42,3 +42,35 @@
  VERSION=16.0 \
  _OBSOLETE=1
 
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=aarch64 \
+ BUILD=16.2 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=ppc64le \
+ BUILD=16.2 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=s390x \
+ BUILD=16.2 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ BUILD=16.2 \
+ DISTRI=opensuse \
+ FLAVOR=Container-Image \
+ VERSION=16.0 \
+ _OBSOLETE=1
+
