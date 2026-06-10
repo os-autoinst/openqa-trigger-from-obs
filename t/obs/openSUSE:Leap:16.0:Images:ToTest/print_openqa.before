@@ -1,50 +1,39 @@
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-Build16.2.qcow2.sha256 \
- BUILD=16.2 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-Build16.2.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-Build17.94.qcow2.sha256 \
+ BUILD=17.94 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-Build17.94.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=Minimal-VM-for-kvm-and-xen \
- HDD_1=Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-Build16.2.qcow2 \
- VERSION=16.0 \
- _OBSOLETE=1
-
-/usr/bin/openqa-cli api -X post isos?async=1 \
- ARCH=x86_64 \
- ASSET_256=Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-encrypt-Build16.2.qcow2.sha256 \
- BUILD=16.2 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-encrypt-Build16.2.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
- DISTRI=opensuse \
- FLAVOR=Minimal-VM-for-kvm-and-xen-encrypt \
- HDD_1=Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-encrypt-Build16.2.qcow2 \
+ HDD_1=Leap-16.0-Minimal-VM.x86_64-kvm-and-xen-Build17.94.qcow2 \
  VERSION=16.0 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
- ASSET_256=Leap-16.0-Minimal-VM.aarch64-Cloud-Build16.2.qcow2.sha256 \
- BUILD=16.2 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Leap-16.0-Minimal-VM.aarch64-Cloud-Build16.2.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=Leap-16.0-Minimal-VM.aarch64-Cloud-Build17.94.qcow2.sha256 \
+ BUILD=17.94 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Leap-16.0-Minimal-VM.aarch64-Cloud-Build17.94.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=Minimal-VM-Cloud \
- HDD_1=Leap-16.0-Minimal-VM.aarch64-Cloud-Build16.2.qcow2 \
+ HDD_1=Leap-16.0-Minimal-VM.aarch64-Cloud-Build17.94.qcow2 \
  VERSION=16.0 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- ASSET_256=Leap-16.0-Minimal-VM.x86_64-Cloud-Build16.2.qcow2.sha256 \
- BUILD=16.2 \
- CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Leap-16.0-Minimal-VM.x86_64-Cloud-Build16.2.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=Leap-16.0-Minimal-VM.x86_64-Cloud-Build17.94.qcow2.sha256 \
+ BUILD=17.94 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/Leap-16.0-Minimal-VM.x86_64-Cloud-Build17.94.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=opensuse \
  FLAVOR=Minimal-VM-Cloud \
- HDD_1=Leap-16.0-Minimal-VM.x86_64-Cloud-Build16.2.qcow2 \
+ HDD_1=Leap-16.0-Minimal-VM.x86_64-Cloud-Build17.94.qcow2 \
  VERSION=16.0 \
  _OBSOLETE=1
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
- BUILD=16.2 \
+ BUILD=17.94 \
  DISTRI=opensuse \
  FLAVOR=Container-Image \
  VERSION=16.0 \
@@ -52,7 +41,7 @@
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=ppc64le \
- BUILD=16.2 \
+ BUILD=17.94 \
  DISTRI=opensuse \
  FLAVOR=Container-Image \
  VERSION=16.0 \
@@ -60,7 +49,7 @@
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=s390x \
- BUILD=16.2 \
+ BUILD=17.94 \
  DISTRI=opensuse \
  FLAVOR=Container-Image \
  VERSION=16.0 \
@@ -68,7 +57,7 @@
 
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=x86_64 \
- BUILD=16.2 \
+ BUILD=17.94 \
  DISTRI=opensuse \
  FLAVOR=Container-Image \
  VERSION=16.0 \
