@@ -6,9 +6,6 @@
     <flavor name="Minimal-VM-for-kvm-and-xen" folder="*/kiwi-templates-Minimal:kvm-and-xen">
         <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
     </flavor>
-    <flavor name="Minimal-VM-for-kvm-and-xen-encrypt" folder="*/kiwi-templates-Minimal:kvm-and-xen-encrypt">
-        <hdd filemask=".*kvm-and-xen-encrypt.*\.qcow2$"/>
-    </flavor>
     <flavor name="Minimal-VM-Cloud" folder="*/kiwi-templates-Minimal:Cloud">
         <hdd filemask=".*Minimal-VM.*-Cloud-.*\.qcow2$"/>
     </flavor>
