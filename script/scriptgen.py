@@ -915,6 +915,8 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     f,
                     "RSYNCTIMEOUT",
                     rsync_timeout,
+                    "RSYNCFILTER",
+                    " ".join(["--exclude='" + e + "'" for e in repo.get("exclude", "").split()]),
                 )
 
         if self.repos:
@@ -929,7 +931,18 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     f,
                 )
 
-            self.p(cfg.rsync_repo2, f)
+            excludes = []
+            for repo in self.repos:
+                ex = repo.attrib.get("exclude", "")
+                if ex:
+                    for e in ex.split():
+                        excludes.append("--exclude='" + e + "'")
+            rsync_filter = " ".join(excludes)
+
+            if rsync_filter:
+                self.p(cfg.rsync_repo2, f, "RSYNCFILTER", rsync_filter)
+            else:
+                self.p(cfg.rsync_repo2, f, "RSYNCFILTER", "")
 
         xtrapath = "/*"
         if self.folder:
@@ -948,6 +961,8 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     self.productrepopath() + xtrapath + r.attrib["folder"],
                     "RSYNCTIMEOUT",
                     rsync_timeout,
+                    "RSYNCFILTER",
+                    " ".join(["--exclude='" + e + "'" for e in r.attrib.get("exclude", "").split()]),
                 )
                 if r.attrib.get("debug", ""):
                     self.p(
@@ -958,9 +973,12 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         "PRODUCTREPOPATH",
                         self.productrepopath() + xtrapath + r.attrib["folder"],
                         "RSYNCFILTER",
-                        " --include=PACKAGES --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
-                            "PACKAGES", r.attrib["debug"]
-                        ),
+                        (
+                            " --include=PACKAGES --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/* "
+                            + " ".join(["--exclude='" + e + "'" for e in r.attrib.get("exclude", "").split()])
+                        )
+                        .strip()
+                        .replace("PACKAGES", r.attrib["debug"]),
                         "RSYNCTIMEOUT",
                         rsync_timeout,
                     )
@@ -971,7 +989,11 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             elif self.media1 == "0":
                 self.p(
                     cfg.rsync_repodir1_dest_media0(
-                        r.attrib["dest"], r.get("debug", ""), r.get("source", ""), r.attrib["folder"]
+                        r.attrib["dest"],
+                        r.get("debug", ""),
+                        r.get("source", ""),
+                        r.attrib["folder"],
+                        r.attrib.get("exclude", ""),
                     ),
                     f,
                 )
@@ -996,7 +1018,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 "-debuginfo",
                 "",
                 "RSYNCFILTER",
-                "",
+                " ".join(["--exclude='" + e + "'" for e in r.attrib.get("exclude", "").split()]),
             )
             if r.attrib.get("debug", ""):
                 if not r.attrib.get("dest", ""):
@@ -1013,9 +1035,12 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     "files_repo.lst",
                     "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                     "RSYNCFILTER",
-                    " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
-                        "PACKAGES", r.attrib["debug"]
-                    ),
+                    (
+                        " --include=PACKAGES --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/* "
+                        + " ".join(["--exclude='" + e + "'" for e in r.attrib.get("exclude", "").split()])
+                    )
+                    .strip()
+                    .replace("PACKAGES", r.attrib["debug"]),
                 )
             if r.attrib.get("source", ""):
                 if not r.attrib.get("dest", ""):
@@ -1033,9 +1058,12 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         "files_repo.lst",
                         "files_repo_{}.lst".format(os.path.basename(r.attrib["folder"]).strip("*")),
                         "RSYNCFILTER",
-                        " --include=PACKAGES --exclude={aarch64,armv7hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/*".replace(
-                            "PACKAGES", r.attrib["source"]
-                        ),
+                        (
+                            " --include=PACKAGES --exclude={aarch64,armv7hl,armv6hl,i586,i686,noarch,nosrc,ppc64,ppc64le,riscv64,s390x,src,x86_64}/* "
+                            + " ".join(["--exclude='" + e + "'" for e in r.attrib.get("exclude", "").split()])
+                        )
+                        .strip()
+                        .replace("PACKAGES", r.attrib["source"]),
                         "Media2",
                         "Media3",
                         "-debuginfo",
