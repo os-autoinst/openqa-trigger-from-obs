@@ -178,7 +178,7 @@ class ActionBatch:
         self.mirror_repo = ""
         self.repos = []
         self.reposmultiarch = []  # these repos need not to be processed for each arch
-        self.rsync_timeout = 3600
+        self.rsync_timeout = "3600"
         self.repolink = ""
         self.build_id_from_iso = 0
         self.repodirs = []
