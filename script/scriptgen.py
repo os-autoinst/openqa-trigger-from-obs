@@ -806,8 +806,7 @@ class ActionBatch:
             self.p("flavor_distri[{}]='{}'".format(fl, distri), f)
 
     def gen_print_array_iso_folder(self, f):
-        if self.iso_folder:
-            self.p("declare -A iso_folder", f)
+        self.p("declare -A iso_folder", f)
         for k, v in self.iso_folder.items():
             self.p("iso_folder[{}]='{}/'".format(k, v), f)
 
