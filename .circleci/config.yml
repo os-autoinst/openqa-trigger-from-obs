@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   unit:
     docker:
-      - image: registry.opensuse.org/opensuse/leap:15.5
+      - image: registry.opensuse.org/opensuse/leap:16.0
     steps:
       - checkout
       - run:
