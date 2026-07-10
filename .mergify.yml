@@ -30,9 +30,12 @@ pull_request_rules:
     actions:
       merge:
         method: merge
-  - name: ask to resolve conflict
+  - name: automatic merge for dependabot updates
     conditions:
-      - conflict
+      - and: *base_checks
+      - and:
+          - base=master
+          - author=dependabot[bot]
     actions:
-      comment:
-        message: This pull request is now in conflicts. Could you fix it? 🙏
+      merge:
+        method: squash
