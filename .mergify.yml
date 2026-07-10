@@ -39,9 +39,3 @@ pull_request_rules:
     actions:
       merge:
         method: squash
-  - name: ask to resolve conflict
-    conditions:
-      - conflict
-    actions:
-      comment:
-        message: This pull request is now in conflicts. Could you fix it? 🙏
