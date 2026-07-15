@@ -44,6 +44,7 @@
   /usr/bin/ln ix,
   /usr/bin/ls ix,
   /usr/bin/mkdir ix,
+  /usr/bin/pkill ix,
   /usr/bin/rm ix,
   /usr/bin/rsync Px -> /opt/openqa-trigger-from-obs/script/rsync.sh//rsync,
   /usr/bin/sleep ix,
