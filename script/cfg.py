@@ -643,15 +643,20 @@ openqa_call_start_hdds = r"""
 
 
 # if MIRROREPO is set - expressions for FLAVORASREPOORS will evaluate to false
-def openqa_call_repo0():
-    return """ [ -z "FLAVORASREPOORSMIRRORREPO" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) == 0"MIRRORREPO" ] || {
-    echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\
+def openqa_call_repo0(add_ignored_iso_repo=False):
+    iso_as_repo = """\n REPO_ISO=${repo0folder} \\\\""" if add_ignored_iso_repo else r""
+    return (
+        """ [ -z "FLAVORASREPOORSMIRRORREPO" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) == 0"MIRRORREPO" ] || {
+    echo " MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \\\\"""
+        + iso_as_repo
+        + """
  SUSEMIRROR=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/REPO0_ISO \\\\
  FULLURL=1 \\\\"
     }"""
+    )
 
 
 def openqa_call_repo_unconditional():
