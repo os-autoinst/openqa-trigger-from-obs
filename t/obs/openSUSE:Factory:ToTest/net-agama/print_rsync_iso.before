@@ -3,6 +3,7 @@ rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ToTest
 [ -d /var/lib/openqa/factory/repo/agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929 ] || {
     mkdir /var/lib/openqa/factory/repo/agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929
     bsdtar xf /var/lib/openqa/factory/iso/agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929.iso -C /var/lib/openqa/factory/repo/agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929
+    ln -sf /var/lib/openqa/factory/repo/agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929 /var/lib/openqa/factory/repo/fixed/Tumbleweed-agama-installer-x86_64-CURRENT
 }
 rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ToTest/appliances/*/agama-installer*/*agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929.iso /var/lib/openqa/factory/iso/agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929.iso
 rsync --timeout=3600 -tlp4 --specials obspublish::openqa/openSUSE:Factory:ToTest/appliances/*/agama-installer*/*agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929.iso.sha256 /var/lib/openqa/factory/other/agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929.iso.sha256

@@ -5,4 +5,5 @@ rsync --timeout=3600 -tlp4 --specials obspublish::openqa/TestExtractAsRepo1/test
 [ -d /var/lib/openqa/factory/repo/my-DVD.x86_64-1.1.1-Build1.111 ] || {
     mkdir /var/lib/openqa/factory/repo/my-DVD.x86_64-1.1.1-Build1.111
     bsdtar xf /var/lib/openqa/factory/iso/my-DVD.x86_64-1.1.1-Build1.111.iso -C /var/lib/openqa/factory/repo/my-DVD.x86_64-1.1.1-Build1.111
+    ln -sf /var/lib/openqa/factory/repo/my-DVD.x86_64-1.1.1-Build1.111 /var/lib/openqa/factory/repo/fixed/1-DVD-x86_64-CURRENT
 }
