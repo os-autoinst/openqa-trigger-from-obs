@@ -1668,7 +1668,8 @@ def gen_files(project):
         import abs  # noqa: F401
     if xmldir == "ibs":
         with suppress(ImportError):
-            import ibs  # noqa: F401  # ty: ignore[unresolved-import]
+            # https://github.com/astral-sh/ty/issues/2681 ignore unused-ignore-comment rule twice
+            import ibs  # noqa: F401 # ty: ignore[unused-ignore-comment, unresolved-import, unused-ignore-comment]
 
     a = ActionGenerator(os.getcwd(), project, dist_path, version, xmldir)
     if a is None:
