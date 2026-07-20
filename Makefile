@@ -43,4 +43,4 @@ PYTHON_RUN ?=
 test_python_style:
 	$(PYTHON_RUN) ruff check
 	$(PYTHON_RUN) ruff format --check
-	$(PYTHON_RUN) ty check
+	$(PYTHON_RUN) ty check --exclude script/ibs.py

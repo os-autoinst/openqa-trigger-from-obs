@@ -23,7 +23,7 @@
         <flavor name="Rescue-CD|GNOME-Live|KDE-Live|XFCE-Live" iso="1"/>
     </batch>
     <batch name="net-agama" folder="appliances/*/agama-installer*" archs="x86_64" repos="base">
-        <flavor name="agama-installer" iso="1" distri="opensuse"/>
+        <flavor name="agama-installer" iso="extract_as_repo" ignore_repo_from_iso="1" distri="opensuse"/>
         <flavor name="agama-install" iso="1" distri="microos"/>
     </batch>
     <batch name="jeos" folder="appliances/x86_64" archs="x86_64" repos="base">

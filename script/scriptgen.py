@@ -174,6 +174,7 @@ class ActionBatch:
         self.fixed_iso = ""
         self.mask = ""
         self.iso_extract_as_repo = {}
+        self.iso_extract_ignore_repo_from_iso = False
         self.ln_iso_to_repo = {}
         self.mirror_repo = ""
         self.repos = []
@@ -397,6 +398,11 @@ class ActionBatch:
                     self.iso_folder[iso] = node.attrib["folder"]
                 if iso_attrib == "extract_as_repo":
                     self.iso_extract_as_repo[iso] = 1
+                    iso_extract_ignore_repo_from_iso = node.attrib.get(
+                        "ignore_repo_from_iso", False
+                    )
+                    if iso_extract_ignore_repo_from_iso:
+                        self.iso_extract_ignore_repo_from_iso = True
                 elif iso_attrib != "1":
                     if node.attrib.get("extract_as_repo", ""):
                         self.iso_extract_as_repo[iso] = 1
@@ -1409,14 +1415,17 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             if self.iso_extract_as_repo.get(iso, 0) or self.iso_5:
                 destiso = "${repo0folder}"
                 i += 1
-                s = ""
-                if not self.fixed_iso:
-                    self.p(cfg.openqa_call_repo0(), f, "REPO0_ISO", destiso, f)
-                    s = cfg.openqa_call_repo0a + cfg.openqa_call_repo0b
-                else:
+                s = cfg.openqa_call_repo0a + cfg.openqa_call_repo0b
+                if self.fixed_iso:
                     s = cfg.openqa_call_repo0b
                     destiso = self.fixed_iso[:-4]
-                self.p(s, f, "REPO0_ISO", destiso)
+
+                if self.iso_extract_ignore_repo_from_iso:
+                    i -= 1
+                else:
+                    self.p(cfg.openqa_call_repo0(), f, "REPO0_ISO", destiso, f)
+                    self.p(s, f, "REPO0_ISO", destiso)
+
                 if self.ln_iso_to_repo.get(iso, 0):
                     self.p(s, f, "REPO_0", "REPO_999", "REPO0_ISO", destiso + ".iso")
                 if self.iso_5:
@@ -1499,7 +1508,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             if i == 0:
                 self.p(
                     "            [ $i != 0 ] || {{ {};  }}".format(
-                        cfg.openqa_call_repo0()
+                        cfg.openqa_call_repo0(self.iso_extract_ignore_repo_from_iso)
                     ),
                     f,
                     "REPO0_ISO",
@@ -1659,7 +1668,8 @@ def gen_files(project):
         import abs  # noqa: F401
     if xmldir == "ibs":
         with suppress(ImportError):
-            import ibs  # noqa: F401  # ty: ignore[unresolved-import]
+            # https://github.com/astral-sh/ty/issues/2681 ignore unused-ignore-comment rule twice
+            import ibs  # noqa: F401 # ty: ignore[unused-ignore-comment, unresolved-import, unused-ignore-comment]
 
     a = ActionGenerator(os.getcwd(), project, dist_path, version, xmldir)
     if a is None:

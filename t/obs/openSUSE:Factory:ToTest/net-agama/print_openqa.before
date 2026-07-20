@@ -16,6 +16,7 @@
  REPO_2=openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929-Source \
  REPO_3=openSUSE-Tumbleweed-oss-x86_64.license-Snapshot20250929 \
  REPO_4=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20250929 \
+ REPO_ISO=agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929 \
  REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20250929 \
  REPO_OSS=openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929 \
  REPO_OSS_DEBUG=openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929-Debug \
@@ -44,6 +45,7 @@
  REPO_2=openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929-Source \
  REPO_3=openSUSE-Tumbleweed-oss-x86_64.license-Snapshot20250929 \
  REPO_4=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20250929 \
+ REPO_ISO=agama-installer.x86_64-17.0.0-openSUSE-Snapshot20250929 \
  REPO_NON_OSS=openSUSE-Tumbleweed-non-oss-x86_64-Snapshot20250929 \
  REPO_OSS=openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929 \
  REPO_OSS_DEBUG=openSUSE-Tumbleweed-oss-x86_64-Snapshot20250929-Debug \
