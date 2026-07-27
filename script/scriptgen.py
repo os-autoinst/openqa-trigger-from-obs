@@ -1413,7 +1413,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 if self.ln_iso_to_repo.get(iso, 0):
                     self.p(s, f, "REPO_0", "REPO_999", "REPO0_ISO", destiso + ".iso")
                 if self.iso_5:
-                    pref = self.iso_5.replace("-", "_").rstrip("_DVD")
+                    pref = self.iso_5.replace("-", "_").removesuffix("_DVD")
                     self.p(cfg.openqa_call_repo5, f, "REPOALIAS", f"SLE_{pref}")
                 break  # for now only REPO_0
 
