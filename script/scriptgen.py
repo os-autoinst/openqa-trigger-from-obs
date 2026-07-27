@@ -791,71 +791,70 @@ class ActionBatch:
                 self.p(*args)
 
         # let's sync media.1/media to be able verify build_id
-        if "ToTest" or "LEO" in self.ag.envdir or self.version_from_media:
-            if (
-                "Leap" in self.ag.envdir
-                or "Jump" in self.ag.envdir
-                or self.version_from_media
-            ):
-                for repodir in self.repodirs:
-                    archs = self.archs
-                    if not archs:
-                        archs = self.ag.archs
-                    wild = ""
-                    arch = ""
-                    done = ""
-                    if archs and " " not in archs:
-                        wild = "*" + archs + "*"
+        if (
+            "Leap" in self.ag.envdir
+            or "Jump" in self.ag.envdir
+            or self.version_from_media
+        ):
+            for repodir in self.repodirs:
+                archs = self.archs
+                if not archs:
+                    archs = self.ag.archs
+                wild = ""
+                arch = ""
+                done = ""
+                if archs and " " not in archs:
+                    wild = "*" + archs + "*"
 
-                    if (
-                        " " in archs
-                        and self.repodirs
-                        and "1" != repodir.attrib.get("multiarch", "")
-                    ):
-                        self.p(f"for arch in {archs}; do", f)
-                        wild = "*$arch*"
-                        arch = "$arch"
-                        done = "done"
+                if (
+                    " " in archs
+                    and self.repodirs
+                    and "1" != repodir.attrib.get("multiarch", "")
+                ):
+                    self.p(f"for arch in {archs}; do", f)
+                    wild = "*$arch*"
+                    arch = "$arch"
+                    done = "done"
 
-                    selffolder = ""
-                    if self.folder:
-                        selffolder = "/" + self.folder
-                    if "/" in self.folder or "/" in repodir.attrib["folder"]:
-                        repopath = (
-                            self.ag.productpath
-                            + selffolder
-                            + "/*"
-                            + repodir.attrib["folder"]
-                            + wild
-                        )
-                    else:
-                        repopath = (
-                            self.ag.productrepopath()
-                            + selffolder
-                            + "/*"
-                            + repodir.attrib["folder"]
-                            + wild
-                        )
-
-                    Media1Replace = "*Media1"
-                    if self.media1 == "0":
-                        Media1Replace = "*"
-                    self.p(
-                        cfg.read_files_repo_media,
-                        f,
-                        "PRODUCTREPOPATH",
-                        repopath,
-                        "Media1.lst",
-                        "Media1_{}.lst".format(
-                            os.path.basename(repodir.attrib["folder"]).strip("*")
-                            + repodir.get("archs", arch)
-                        ),
-                        "*Media1",
-                        Media1Replace,
+                selffolder = ""
+                if self.folder:
+                    selffolder = "/" + self.folder
+                if "/" in self.folder or "/" in repodir.attrib["folder"]:
+                    repopath = (
+                        self.ag.productpath
+                        + selffolder
+                        + "/*"
+                        + repodir.attrib["folder"]
+                        + wild
+                    )
+                else:
+                    repopath = (
+                        self.ag.productrepopath()
+                        + selffolder
+                        + "/*"
+                        + repodir.attrib["folder"]
+                        + wild
                     )
 
-                    if done:
-                        self.p(done, f)
+                Media1Replace = "*Media1"
+                if self.media1 == "0":
+                    Media1Replace = "*"
+                self.p(
+                    cfg.read_files_repo_media,
+                    f,
+                    "PRODUCTREPOPATH",
+                    repopath,
+                    "Media1.lst",
+                    "Media1_{}.lst".format(
+                        os.path.basename(repodir.attrib["folder"]).strip("*")
+                        + repodir.get("archs", arch)
+                    ),
+                    "*Media1",
+                    Media1Replace,
+                )
+
+                if done:
+                    self.p(done, f)
 
         if self.assets and self.assets_flavor:
             for k, v in self.asset_folders.items():
