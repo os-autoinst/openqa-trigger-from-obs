@@ -14,3 +14,6 @@ exclude = ["script/ibs.py"]
 
 [tool.black]
 line-length = 120
+
+[tool.ty.src]
+exclude = ["script/ibs.py"]
