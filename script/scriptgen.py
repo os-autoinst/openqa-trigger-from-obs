@@ -1567,7 +1567,7 @@ def parse_dir(root, d, files):
 
         try:
             r = re.compile(pattern)
-        except Exception as e:
+        except re.error as e:  # this should be PatternError - https://docs.python.org/3/library/re.html#exceptions
             print("Ignoring [" + f + "]: Regexp error: " + str(e), file=sys.stderr)
             continue
 
