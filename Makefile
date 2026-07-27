@@ -40,7 +40,14 @@ test_update_before_files: test_regen_all
 # Override to use uv, e.g. PYTHON_RUN="uv run"
 PYTHON_RUN ?=
 
-test_python_style:
-	$(PYTHON_RUN) ruff check
-	$(PYTHON_RUN) ruff format --check
-	$(PYTHON_RUN) ty check --exclude script/ibs.py
+.PHONY: ruff_check ruff_format ty_check test_python_style
+test_python_style: ruff_check ruff_format ty_check test_python_style
+
+ruff_check:
+	$(PYTHON_RUN) ruff check $(ARGS)
+
+ruff_format:
+	$(PYTHON_RUN) ruff format --check $(ARGS)
+
+ty_check:
+	$(PYTHON_RUN) ty check $(ARGS)
