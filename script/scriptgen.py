@@ -1,12 +1,12 @@
-import sys
-import os
-import re
-from subprocess import check_output, CalledProcessError
 import argparse
 import copy
-from contextlib import suppress
-from xml.etree import ElementTree
+import os
+import re
+import sys
 from collections import defaultdict
+from contextlib import suppress
+from subprocess import CalledProcessError, check_output
+from xml.etree import ElementTree
 
 import cfg
 
@@ -304,12 +304,7 @@ class ActionBatch:
             repos = self.repos.copy()
             s = s.replace(
                 "REPOOWNLIST",
-                ",".join(
-                    [
-                        m.attrib["name"] if "name" in m.attrib else m.tag
-                        for m in repos.copy()
-                    ]
-                ),
+                ",".join([m.attrib.get("name", m.tag) for m in repos.copy()]),
             )
             if self.repolink:
                 repos.extend(self.ag.batch_by_name(self.repolink).repos)
@@ -318,7 +313,7 @@ class ActionBatch:
                     "REPOLIST",
                     ",".join(
                         [
-                            m.attrib["name"] if "name" in m.attrib else m.tag
+                            m.attrib.get("name", m.tag)
                             for m in self.ag.batch_by_name(self.repolink).repos
                         ]
                     ),
@@ -326,18 +321,11 @@ class ActionBatch:
             else:
                 s = s.replace(
                     "REPOLIST",
-                    ",".join(
-                        [
-                            m.attrib["name"] if "name" in m.attrib else m.tag
-                            for m in repos
-                        ]
-                    ),
+                    ",".join([m.attrib.get("name", m.tag) for m in repos]),
                 )
             s = s.replace(
                 "REPOORS",
-                "|".join(
-                    [m.attrib["name"] if "name" in m.attrib else m.tag for m in repos]
-                ),
+                "|".join([m.attrib.get("name", m.tag) for m in repos]),
             )
         mirror_repo = self.mirror_repo
         if not mirror_repo and self.repolink and "/" not in self.repolink:
@@ -526,11 +514,16 @@ class ActionBatch:
             with open(filename, "r") as f:
                 line1 = f.readline()
                 line2 = f.readline()
-                if line1 and "GENERATED" not in line1:
-                    if not line1.lstrip().startswith("#"):
-                        custom = 1
-                    elif line2 and "GENERATED" not in line2:
-                        custom = 1
+                if (
+                    line1
+                    and "GENERATED" not in line1
+                    and (
+                        not line1.lstrip().startswith("#")
+                        or line2
+                        and "GENERATED" not in line2
+                    )
+                ):
+                    custom = 1
         if custom:
             print("Will not overwrite custom file: " + filename, file=sys.stderr)
             return
@@ -672,7 +665,7 @@ class ActionBatch:
         if self.isos_fixed:
             self.p("for arch in ARCHITECTURS; do", f)
             for iso in self.isos_fixed:
-                self.p("  echo {} >> __envsub/files_iso.lst".format(iso), f)
+                self.p(f"  echo {iso} >> __envsub/files_iso.lst", f)
             self.p("done", f)
 
         if self.repolink:
@@ -719,7 +712,7 @@ class ActionBatch:
                     "REPOORS",
                     "|".join(
                         [
-                            m.attrib["name"] if "name" in m.attrib else m.tag
+                            m.attrib.get("name", m.tag)
                             for m in filter(
                                 lambda x: x.attrib.get(cfg.media2_name(), ""),
                                 self.repos,
@@ -736,7 +729,7 @@ class ActionBatch:
                     "REPOORS",
                     "|".join(
                         [
-                            m.attrib["name"] if "name" in m.attrib else m.tag
+                            m.attrib.get("name", m.tag)
                             for m in filter(
                                 lambda x: x.attrib.get(cfg.media3_name(), ""),
                                 self.repos,
@@ -819,7 +812,7 @@ class ActionBatch:
                         and self.repodirs
                         and "1" != repodir.attrib.get("multiarch", "")
                     ):
-                        self.p("for arch in {}; do".format(archs), f)
+                        self.p(f"for arch in {archs}; do", f)
                         wild = "*$arch*"
                         arch = "$arch"
                         done = "done"
@@ -867,19 +860,17 @@ class ActionBatch:
         if self.assets and self.assets_flavor:
             for k, v in self.asset_folders.items():
                 self.p(
-                    """rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{}/*{} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst""".format(
-                        v, k
-                    ),
+                    f"""rsync -4 --list-only $rsync_pwd_option PRODUCTPATH/{v}/*{k} | awk '{{ $1=$2=$3=$4=""; print substr($0,5); }}' >> __envsub/files_asset.lst""",
                     f,
                 )
 
     def gen_print_array_no_rsync(self, f):
         self.p("declare -A norsync_filter", f)
         for fl in self.norsync:
-            self.p("norsync_filter[{}]='{}'".format(fl, 1), f)
+            self.p(f"norsync_filter[{fl}]='{1}'", f)
         for fl, h in zip(self.flavors, self.assets):
             if self.asset_rsync.get(h, 1) == "0":
-                self.p("norsync_filter[{}]='{}'".format(h, 1), f)
+                self.p(f"norsync_filter[{h}]='{1}'", f)
 
     def gen_print_array_flavor_filter(self, f):
         added_declare_flavor_filter = 0
@@ -888,28 +879,28 @@ class ActionBatch:
             added_declare_flavor_filter = 1
         # this assumes every flavor has hdd_url - we must store relation if that is not the case
         for fl, h in zip(self.flavors, self.hdds):
-            self.p("flavor_filter[{}]='{}'".format(fl, h), f)
+            self.p(f"flavor_filter[{fl}]='{h}'", f)
         if not self.isos and not self.hdds:
             for fl, h in zip(self.flavors, self.assets):
-                self.p("flavor_filter[{}]='{}'".format(fl, h), f)
+                self.p(f"flavor_filter[{fl}]='{h}'", f)
         if not self.assets and ((not self.hdds) or len(self.flavors) == 1):
             for fl, iso in zip(self.flavors, self.isos):
                 if iso != "1" and iso != "0" and iso != "extract_as_repo":
                     if not added_declare_flavor_filter:
                         self.p("declare -A flavor_filter", f)
                         added_declare_flavor_filter = 1
-                    self.p("flavor_filter[{}]='{}'".format(fl, iso), f)
+                    self.p(f"flavor_filter[{fl}]='{iso}'", f)
         for fl, alias_list in self.flavor_aliases.items():
             for alias in alias_list:
-                self.p("flavor_filter[{}]='{}'".format(alias, fl), f)
+                self.p(f"flavor_filter[{alias}]='{fl}'", f)
         if len(self.staging_pattern) > 0:
             self.p("declare -A flavor_staging", f)
             for k, v in self.staging_pattern.items():
-                self.p("flavor_staging[{}]='{}'".format(k, v), f)
+                self.p(f"flavor_staging[{k}]='{v}'", f)
         if len(self.iso1) > 0:
             self.p("declare -A flavor_iso1", f)
             for k, v in self.iso1.items():
-                self.p("flavor_iso1[{}]='{}'".format(k, v), f)
+                self.p(f"flavor_iso1[{k}]='{v}'", f)
 
     def gen_print_array_flavor_distri(self, f):
         if self.news:
@@ -918,12 +909,12 @@ class ActionBatch:
             return
         self.p("declare -A flavor_distri", f)
         for fl, distri in self.flavor_distri.items():
-            self.p("flavor_distri[{}]='{}'".format(fl, distri), f)
+            self.p(f"flavor_distri[{fl}]='{distri}'", f)
 
     def gen_print_array_iso_folder(self, f):
         self.p("declare -A iso_folder", f)
         for k, v in self.iso_folder.items():
-            self.p("iso_folder[{}]='{}/'".format(k, v), f)
+            self.p(f"iso_folder[{k}]='{v}/'", f)
 
     def gen_print_array_hdd_folder(self, f):
         if ((len(self.hdd_folder) > 1) or (self.hdd_folder and self.isos)) and len(
@@ -931,7 +922,7 @@ class ActionBatch:
         ) == 1:
             self.p("declare -A hdd_folder", f)
             for k, v in self.hdd_folder.items():
-                self.p("hdd_folder[{}]='{}'".format(k, v), f)
+                self.p(f"hdd_folder[{k}]='{v}'", f)
 
     def gen_print_rsync_assets(self, f):
         self.p(
@@ -941,7 +932,7 @@ declare -A asset_folders""",
             f,
         )
         for k, v in self.asset_folders.items():
-            self.p("asset_folders[{}]='{}'".format(k, v), f)
+            self.p(f"asset_folders[{k}]='{v}'", f)
         self.p(
             """while read src; do
     folder=""
@@ -989,7 +980,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     ),
                     f,
                     "| head -n 1",
-                    "| grep {} | head -n 1".format(self.mask),
+                    f"| grep {self.mask} | head -n 1",
                 )
             else:
                 self.p(
@@ -1053,7 +1044,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             self.p(cfg.pre_rsync_repo(self.repos), f)
             self.p(cfg.rsync_repo1, f)
             for ren in self.renames:
-                self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+                self.p(f"        dest=${{dest//{ren[0]}/{ren[1]}}}", f)
             if self.build_id_from_iso:
                 self.p(
                     """        buildid1=$(grep $repo __envsub/files_iso_buildid.lst | grep -o -E '(Build|Snapshot)[^-]*' | head -n 1)
@@ -1151,7 +1142,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
 
             for ren in self.renames:
-                self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+                self.p(f"        dest=${{dest//{ren[0]}/{ren[1]}}}", f)
             suffix = "*$arch*"
             if self.archs_repo == ".":
                 suffix = "*"
@@ -1187,7 +1178,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 else:
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
-                    self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+                    self.p(f"        dest=${{dest//{ren[0]}/{ren[1]}}}", f)
                 self.p(
                     cfg.rsync_repodir2(),
                     f,
@@ -1221,7 +1212,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 else:
                     self.p(cfg.rsync_repodir1_dest(r.attrib["dest"]), f)
                 for ren in self.renames:
-                    self.p("        dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+                    self.p(f"        dest=${{dest//{ren[0]}/{ren[1]}}}", f)
                 if self.ag.brand == "obs":
                     self.p(
                         cfg.rsync_repodir2(),
@@ -1260,7 +1251,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
         if self.assets and self.assets_flavor:
             self.p("declare -A asset_tags", f)
             for k, v in self.asset_tags.items():
-                self.p("asset_tags[{}]='{}'".format(k, v), f)
+                self.p(f"asset_tags[{k}]='{v}'", f)
 
         if not self.flavors and not self.flavor_aliases:
             return
@@ -1281,7 +1272,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 ),
                 f,
                 "| grep $arch | head -n 1",
-                "| grep {} | grep $arch | head -n 1".format(self.mask),
+                f"| grep {self.mask} | grep $arch | head -n 1",
             )
         else:
             self.p(
@@ -1307,20 +1298,16 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
             destpath = repo.get("folder", repo.tag)
             destpath = destpath.rstrip("/")
             dest = os.path.basename(destpath)
-            self.p(' echo " REPO_{}={}-$buildex" \\\\'.format(imultiarch, dest), f)
-            self.p(
-                ' echo " REPO_{}={}-$buildex" \\\\'.format(repo.tag.upper(), dest), f
-            )
+            self.p(f' echo " REPO_{imultiarch}={dest}-$buildex" \\\\', f)
+            self.p(f' echo " REPO_{repo.tag.upper()}={dest}-$buildex" \\\\', f)
             imultiarch = imultiarch + 1
             if repo.get("debug", ""):
                 self.p(
-                    ' echo " REPO_{}={}-Debug-$buildex" \\\\'.format(imultiarch, dest),
+                    f' echo " REPO_{imultiarch}={dest}-Debug-$buildex" \\\\',
                     f,
                 )
                 self.p(
-                    ' echo " REPO_{}_DEBUG={}-Debug-$buildex" \\\\'.format(
-                        repo.tag.upper(), dest
-                    ),
+                    f' echo " REPO_{repo.tag.upper()}_DEBUG={dest}-Debug-$buildex" \\\\',
                     f,
                 )
                 self.p(
@@ -1332,13 +1319,11 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 imultiarch = imultiarch + 1
             if repo.get("source", ""):
                 self.p(
-                    ' echo " REPO_{}={}-Source-$buildex" \\\\'.format(imultiarch, dest),
+                    f' echo " REPO_{imultiarch}={dest}-Source-$buildex" \\\\',
                     f,
                 )
                 self.p(
-                    ' echo " REPO_{}_SOURCE={}-Source-$buildex" \\\\'.format(
-                        repo.tag.upper(), dest
-                    ),
+                    f' echo " REPO_{repo.tag.upper()}_SOURCE={dest}-Source-$buildex" \\\\',
                     f,
                 )
                 self.p(
@@ -1353,7 +1338,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     cfg.openqa_call_repo_unconditional(),
                     f,
                     "REPO0_ISO",
-                    "{}-$buildex".format(dest),
+                    f"{dest}-$buildex",
                 )
                 mirrorsalreadyadded = True
 
@@ -1404,7 +1389,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
         else:
             if self.iso_5:
                 if self.fixed_iso:
-                    self.p(' echo " ISO={} \\\\"'.format(self.fixed_iso), f)
+                    self.p(f' echo " ISO={self.fixed_iso} \\\\"', f)
                 self.p(cfg.openqa_call_start_iso(self.checksum), f, "ISO", "ISO_5")
             else:
                 self.p(cfg.openqa_call_start_iso(self.checksum), f)
@@ -1430,7 +1415,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                     self.p(s, f, "REPO_0", "REPO_999", "REPO0_ISO", destiso + ".iso")
                 if self.iso_5:
                     pref = self.iso_5.replace("-", "_").rstrip("_DVD")
-                    self.p(cfg.openqa_call_repo5, f, "REPOALIAS", "SLE_{}".format(pref))
+                    self.p(cfg.openqa_call_repo5, f, "REPOALIAS", f"SLE_{pref}")
                 break  # for now only REPO_0
 
         arch_expression = ""
@@ -1457,7 +1442,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 f,
             )
 
-        self.p(" i={}".format(i), f)
+        self.p(f" i={i}", f)
 
         if self.repos or self.repolink:
             if self.ag.brand == "ibs":
@@ -1504,12 +1489,10 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                 )
 
             for ren in self.renames:
-                self.p("            dest=${{dest//{}/{}}}".format(ren[0], ren[1]), f)
+                self.p(f"            dest=${{dest//{ren[0]}/{ren[1]}}}", f)
             if i == 0:
                 self.p(
-                    "            [ $i != 0 ] || {{ {};  }}".format(
-                        cfg.openqa_call_repo0(self.iso_extract_ignore_repo_from_iso)
-                    ),
+                    f"            [ $i != 0 ] || {{ {cfg.openqa_call_repo0(self.iso_extract_ignore_repo_from_iso)};  }}",
                     f,
                     "REPO0_ISO",
                     "$dest",
@@ -1541,7 +1524,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
         if self.ag.staging():
             self.p("echo ' STAGING=__STAGING \\'", f)
         if self.variable:
-            self.p('echo " {} \\\\"'.format(self.variable), f)
+            self.p(f'echo " {self.variable} \\\\"', f)
 
         self.p(cfg.openqa_call_end(self.ag.version), f)
         self.p(cfg.openqa_call_news_end(self.distri, self.news, self.news_archs), f)
@@ -1661,7 +1644,7 @@ def gen_files(project):
         xmlfile, dist_path, version = parse_dir(root, project, files)
 
     if not xmlfile:
-        print("Cannot find xml file for {} ...".format(project), file=sys.stderr)
+        print(f"Cannot find xml file for {project} ...", file=sys.stderr)
         return 1
 
     if xmldir == "abs":
