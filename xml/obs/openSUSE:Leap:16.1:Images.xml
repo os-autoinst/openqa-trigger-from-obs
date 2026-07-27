@@ -1,0 +1,13 @@
+<openQA
+    project_pattern="openSUSE:Leap:(?P&lt;version&gt;16.1):Images:ToTest"
+    dist_path="images"
+    distri="opensuse"
+    archs="aarch64 ppc64le s390x x86_64">
+    <flavor name="Minimal-VM-for-kvm-and-xen" folder="*/kiwi-templates-Minimal:kvm-and-xen">
+        <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
+    </flavor>
+    <flavor name="Minimal-VM-Cloud" folder="*/kiwi-templates-Minimal:Cloud">
+        <hdd filemask=".*Minimal-VM.*-Cloud-.*\.qcow2$"/>
+    </flavor>
+    <flavor name="Container-Image" rsync="0"/>
+</openQA>
