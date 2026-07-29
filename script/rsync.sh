@@ -22,26 +22,23 @@ echo $$ > $environ/rsync.lock
 
 failures_count=0
 
-for subfolder in $environ/*/ ; do
-    [ -d "$subfolder" ] || subfolder="$environ"
-
-set +e
-(
+sync_subfolder() {
+    local subfolder="$1"
     set -e
-    [ -e "$subfolder/read_files.sh" ] || { >&2 echo "No file found: {$subfolder/read_files.sh}"; exit 1; }
+    [ -e "$subfolder/read_files.sh" ] || { >&2 echo "No file found: {$subfolder/read_files.sh}"; return 1; }
     if [ ! -e "$subfolder/print_rsync_iso.sh" ] && [ ! -e "$subfolder/print_rsync_repo.sh" ]; then
         >&2 echo "Neither of files found: {$subfolder/print_rsync_iso.sh} nor {$subfolder/print_rsync_repo.sh}"
-        exit 1
+        return 1
     fi
 
-    [ -e "$subfolder/print_openqa.sh" ] || { >&2 echo "No file found: {$subfolder/print_openqa.sh}"; exit 1; }
+    [ -e "$subfolder/print_openqa.sh" ] || { >&2 echo "No file found: {$subfolder/print_openqa.sh}"; return 1; }
 
     # nowhere to log yet as we haven't created $logfolder
-    bash -e "$subfolder/read_files.sh" ||  { >&2 echo "read_files.sh failed for $subfolder in enviroment $environ"; exit 1; }
+    bash -e "$subfolder/read_files.sh" ||  { >&2 echo "read_files.sh failed for $subfolder in enviroment $environ"; return 1; }
 
     if [ -e $subfolder/.run_last ] && [ -z "$(diff --brief $subfolder $subfolder/.run_last | grep '.lst')" ]; then
         >&2 echo "No changes found since last run, skipping {$subfolder}"
-        continue
+        return 0
     fi
 
     if [[ "$environ" == *ToTest* ]]; then
@@ -54,7 +51,7 @@ set +e
 
         if [ -n "$builds" ] && [ $(echo "$builds" | sort | uniq | wc -l) -gt 1 ]; then
             >&2 echo "Conflicting builds found {$builds}, exiting because of conflict in {$subfolder}"
-            exit 0
+            return 0
         fi
     fi
 
@@ -95,9 +92,15 @@ set +e
     [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
     ln -s -T "$current_dir" "$subfolder"/.run_last
 
-    (exit "$fail")
-)
-    res=$?
+    return "$fail"
+}
+
+for subfolder in $environ/*/ ; do
+    [ -d "$subfolder" ] || subfolder="$environ"
+
+set +e
+sync_subfolder "$subfolder"
+res=$?
     [ "$res" -eq 0 ] || : $((++failure_count))
     [ "$subfolder" != "$environ" ] || break
     [ "$res" -eq 0 ] || {
