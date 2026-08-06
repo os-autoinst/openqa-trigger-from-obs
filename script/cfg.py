@@ -105,10 +105,12 @@ for flavor in {FLAVORLIST,}; do
         + (repo0folder if repo0folder else "")
         + """
         iso_repo="/var/lib/openqa/factory/repo/${repo0folder}"
+        iso_repo_current_alias="/var/lib/openqa/factory/repo/fixed/VERSIONVALUE-${flavor}-${arch}-CURRENT"
         [ -z "FLAVORASREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORASREPOORS)$" ) -eq 0 ] || echo "[ -d "${iso_repo}" ] || {
     mkdir $iso_repo
     bsdtar xf /var/lib/openqa/factory/iso/$dest -C $iso_repo
-    ln -sf "$iso_repo" "/var/lib/openqa/factory/repo/fixed/VERSIONVALUE-${flavor}-${arch}-CURRENT"
+    rm -rf "$iso_repo_current_alias"
+    ln -s "$iso_repo" "$iso_repo_current_alias"
 }"
         [ -z "FLAVORTOREPOORS" ] || [ $( echo "$flavor" | grep -E -c "^(FLAVORTOREPOORS)$" ) -eq 0 ] || echo "cp -l /var/lib/openqa/factory/iso/$dest /var/lib/openqa/factory/repo/"
     done
