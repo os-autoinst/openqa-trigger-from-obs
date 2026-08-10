@@ -26,6 +26,10 @@
         <flavor name="agama-installer" iso="extract_as_repo" ignore_repo_from_iso="1" distri="opensuse"/>
         <flavor name="agama-install" iso="1" distri="microos"/>
     </batch>
+    <batch name="dvd-agama" folder="images/local/*product*" archs="x86_64" repos="base">
+        <flavor name="offline-installer" iso="1" distri="opensuse"/>
+        <flavor name="offline-installer" iso="1" distri="microos"/>
+    </batch>
     <batch name="jeos" folder="appliances/x86_64" archs="x86_64" repos="base">
         <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen">
             <hdd filemask=".*kvm-and-xen.*\.qcow2$"/>
