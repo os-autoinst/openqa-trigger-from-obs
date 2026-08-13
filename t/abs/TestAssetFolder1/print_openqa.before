@@ -1,0 +1,55 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=my-Test.x86_64-1.1.1-Build1.111.qcow2.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.qcow2.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=QCOW2 \
+ HDD_1=my-Test.x86_64-1.1.1-Build1.111.qcow2 \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.raw.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=RAWXZ \
+ HDD_1=my-Test.x86_64-1.1.1-Build1.111.raw.xz \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_256=my-Test.x86_64-1.1.1-Build1.111.raw.gz.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_HDD_1=$(cut -b-64 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.raw.gz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=RAWGZ \
+ HDD_1=my-Test.x86_64-1.1.1-Build1.111.raw.gz \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_1=my-Test.x86_64-1.1.1-Build1.111.tar.xz \
+ ASSET_256=my-Test.x86_64-1.1.1-Build1.111.tar.xz.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_ASSET_1=$(cut -b-64 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.tar.xz.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=TARXZ \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=x86_64 \
+ ASSET_1=my-Test.x86_64-1.1.1-Build1.111.appx \
+ ASSET_256=my-Test.x86_64-1.1.1-Build1.111.appx.sha256 \
+ BUILD=1.111 \
+ CHECKSUM_ASSET_1=$(cut -b-64 /var/lib/openqa/factory/other/my-Test.x86_64-1.1.1-Build1.111.appx.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=distri \
+ FLAVOR=APPX \
+ VERSION=1 \
+ _DEPRIORITIZEBUILD=1
+
