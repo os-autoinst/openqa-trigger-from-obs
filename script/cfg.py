@@ -95,7 +95,7 @@ for flavor in {FLAVORLIST,}; do
         [[ ! $dest =~ \.iso$  ]] || asset_folder=iso
         [[ ! $dest =~ \.spdx\.json$  ]] || asset_folder=iso
         [[ ! $dest =~ \.tar$  ]] || asset_folder=iso
-        [[ ! $dest =~ \.(qcow2|raw|vhd|vmdk|vhdx|xz)$ ]] || asset_folder=hdd
+        [[ ! $dest =~ \.(qcow2|raw|vhd|vmdk|vhdx)(\.(xz|gz))?$ ]] || asset_folder=hdd
         """
         + rsync_commands(checksum)
         + """

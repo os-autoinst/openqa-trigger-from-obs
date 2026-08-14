@@ -1,0 +1,22 @@
+<!-- The purpose of this test is to pin down the destination folder that assets are
+     rsynced to: disk images, including compressed ones, belong to factory/hdd,
+     everything else belongs to factory/other. The folder has to agree with the
+     openQA variable the asset is announced as (HDD_x vs ASSET_x), otherwise the
+     asset is looked up in a directory it was never copied to. -->
+<openQA project_pattern="TestAssetFolder(?P&lt;version&gt;[1-9])" dist_path="test" archs="x86_64" media1="0">
+    <flavor name="QCOW2" distri="distri">
+        <asset filemask="qcow2$"/>
+    </flavor>
+    <flavor name="RAWXZ" distri="distri">
+        <asset filemask="raw\.xz$"/>
+    </flavor>
+    <flavor name="RAWGZ" distri="distri">
+        <asset filemask="raw\.gz$"/>
+    </flavor>
+    <flavor name="TARXZ" distri="distri">
+        <asset filemask="tar\.xz$"/>
+    </flavor>
+    <flavor name="APPX" distri="distri">
+        <asset filemask="appx$"/>
+    </flavor>
+</openQA>
