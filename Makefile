@@ -37,6 +37,9 @@ test_regen_all:
 test_update_before_files: test_regen_all
 	(cd t && bash test_before_after_diff.sh --update-before *bs/*)
 
+.PHONY: all
+all: test_update_before_files test
+
 # Override to use uv, e.g. PYTHON_RUN="uv run"
 PYTHON_RUN ?=
 
