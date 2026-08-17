@@ -62,8 +62,8 @@
         </flavor>
     </batch>
     <batch name="wsl" folder="appliances/x86_64" archs="x86_64" repos="base" distri="opensuse">
-        <flavor name="WSL" folder="kiwi-images-wsl">
-            <asset filemask=".*\.appx$"/>
+        <flavor name="WSL" folder="kiwi-images-tbz">
+            <asset filemask=".*\.tar\.xz$"/>
         </flavor>
     </batch>
     <batch name="project-aeon" folder="appliances/x86_64" archs="x86_64" distri="aeon">
