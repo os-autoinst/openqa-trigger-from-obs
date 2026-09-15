@@ -1,0 +1,22 @@
+<openQA
+    project_pattern="openSUSE:(?P&lt;version&gt;Factory):LegacyARM:ToTest"
+    distri="opensuse"
+    repo_path="images/local"
+    media1="0"
+    >
+    <batch name="base" archs="armv7hl">
+        <flavor name="Tumbleweed-NET" folder="images/local/*product*" iso="1">
+            <repos>
+                <oss folder="0openSUSE" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" source="{coreutils*,yast2-network*}" mirror="1" dest="openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl" exclude="*armv6l* *armv6hl*"/>
+            </repos>
+        </flavor>
+    </batch>
+    <batch name="jeos-armv7hl" folder="appliances/armv7l" archs="armv7hl" repos="base">
+        <flavor name="JeOS-for-AArch64" folder="JeOS:JeOS-efi-pxe">
+            <hdd filemask=".*JeOS-efi.*\.raw.xz$"/>
+        </flavor>
+        <flavor name="JeOS-for-RPi" folder="JeOS:JeOS-raspberrypi2">
+            <hdd filemask=".*raspberrypi2.*\.raw.xz$" folder="JeOS:JeOS-raspberrypi2"/>
+        </flavor>
+    </batch>
+</openQA>
