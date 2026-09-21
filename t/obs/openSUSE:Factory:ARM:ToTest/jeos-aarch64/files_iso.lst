@@ -1,3 +1,6 @@
-openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2024.05.15-Snapshot20240610.raw.xz
-openSUSE-Tumbleweed-ARM-JeOS-raspberrypi.aarch64-2024.05.15-Snapshot20240610.raw.xz
-openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-Cloud-Snapshot20240610.qcow2
+openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64-2026.07.14-Snapshot20260919.raw.xz
+openSUSE-Tumbleweed-ARM-JeOS-raspberrypi.aarch64-2026.07.14-Snapshot20260919.raw.xz
+openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-Snapshot20260919.qcow2
+openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-sdboot-Snapshot20260919.qcow2
+openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-Cloud-Snapshot20260919.qcow2
+openSUSE-Tumbleweed-Minimal-VM.aarch64-1.0.0-kvm-and-xen-grub-bls-Snapshot20260919.qcow2

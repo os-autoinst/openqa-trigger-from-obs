@@ -1,27 +1,26 @@
 /usr/bin/openqa-cli api -X post isos?async=1 \
  ARCH=aarch64 \
- ASSET_256=openSUSE-MicroOS-DVD-aarch64-Snapshot20221106-Media.iso.sha256 \
- BUILD=20221106 \
- CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS-DVD-aarch64-Snapshot20221106-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ ASSET_256=openSUSE-MicroOS-DVD-aarch64-Snapshot20260919-Media.iso.sha256 \
+ BUILD=20260919 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-MicroOS-DVD-aarch64-Snapshot20260919-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
  DISTRI=microos \
  FLAVOR=DVD \
  FULLURL=1 \
- INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
- ISO=openSUSE-MicroOS-DVD-aarch64-Snapshot20221106-Media.iso \
- MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
- MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919 \
+ ISO=openSUSE-MicroOS-DVD-aarch64-Snapshot20260919-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919 \
  MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
- REPO_0=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
- REPO_1=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106-Debug \
- REPO_2=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106-Source \
- REPO_3=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64.license-Snapshot20221106 \
- REPO_OSS=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
- REPO_OSS_DEBUG=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106-Debug \
+ REPO_0=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919 \
+ REPO_1=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919-Debug \
+ REPO_2=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919-Source \
+ REPO_OSS=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919 \
+ REPO_OSS_DEBUG=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919-Debug \
  REPO_OSS_DEBUG_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
- REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106-Source \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919-Source \
  REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
- SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20221106 \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-oss-armv6hl-armv7hl-aarch64-Snapshot20260919 \
  VERSION=Tumbleweed \
  _OBSOLETE=1
 
-/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/microos-aarch64/Tumbleweed --snapshot 20221106 /var/lib/openqa/factory/iso/openSUSE-MicroOS-DVD-aarch64-Snapshot20221106-Media.iso
+/var/lib/openqa/osc-plugin-factory/factory-package-news/factory-package-news.py save --dir /var/lib/snapshot-changes/microos-aarch64/Tumbleweed --snapshot 20260919 /var/lib/openqa/factory/iso/openSUSE-MicroOS-DVD-aarch64-Snapshot20260919-Media.iso

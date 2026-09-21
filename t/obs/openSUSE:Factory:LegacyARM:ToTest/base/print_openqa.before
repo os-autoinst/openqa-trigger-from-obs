@@ -1,0 +1,25 @@
+/usr/bin/openqa-cli api -X post isos?async=1 \
+ ARCH=armv7hl \
+ ASSET_256=openSUSE-Tumbleweed-NET-armv7hl-Snapshot20260919-Media.iso.sha256 \
+ BUILD=20260919 \
+ CHECKSUM_ISO=$(cut -b-64 /var/lib/openqa/factory/other/openSUSE-Tumbleweed-NET-armv7hl-Snapshot20260919-Media.iso.sha256 | grep -E '[0-9a-f]{5,40}' | head -n1) \
+ DISTRI=opensuse \
+ FLAVOR=NET \
+ FULLURL=1 \
+ INST_INSTALL_URL=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919 \
+ ISO=openSUSE-Tumbleweed-NET-armv7hl-Snapshot20260919-Media.iso \
+ MIRROR_HTTP=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919 \
+ MIRROR_HTTPS=https://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919 \
+ MIRROR_PREFIX=http://openqa.opensuse.org/assets/repo \
+ REPO_0=openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919 \
+ REPO_1=openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919-Debug \
+ REPO_2=openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919-Source \
+ REPO_OSS=openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919 \
+ REPO_OSS_DEBUG=openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919-Debug \
+ REPO_OSS_DEBUG_PACKAGES='java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*' \
+ REPO_OSS_SOURCE=openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919-Source \
+ REPO_OSS_SOURCE_PACKAGES='coreutils*,yast2-network*' \
+ SUSEMIRROR=http://openqa.opensuse.org/assets/repo/openSUSE-Tumbleweed-LegacyARM-oss-armv6hl-armv7hl-Snapshot20260919 \
+ VERSION=Tumbleweed \
+ _OBSOLETE=1
+
