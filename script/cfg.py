@@ -70,12 +70,12 @@ def flavor_sha_lookup(default_sha):
 
 
 def rsync_commands(checksum):
-    res = '''echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"'''
+    res = '''echo "time rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$src /var/lib/openqa/factory/$asset_folder/$dest"'''
     if checksum:
         res = (
             res
             + '''
-        echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$srcSHAEXT /var/lib/openqa/factory/other/$destSHAEXT"'''
+        echo "time rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/${iso_folder[$flavor]}*$srcSHAEXT /var/lib/openqa/factory/other/$destSHAEXT"'''
         )
     return res
 
@@ -144,8 +144,8 @@ FLAVORSHALOOKUP
                 fi
             done
             [[ $src =~ .iso$ ]] && asset="iso" || asset="hdd"
-            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/$asset/"
-            echo "rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$srcSHAEXT /var/lib/openqa/factory/other/"
+            echo "time rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$src /var/lib/openqa/factory/$asset/"
+            echo "time rsync --timeout=3600 -tlp4 --specials PRODUCTISOPATH/$folder/$srcSHAEXT /var/lib/openqa/factory/other/"
             echo ""
         done < <(grep ${arch} __envsub/files_iso.lst | LANG=C.UTF-8 sort)
     done
@@ -188,8 +188,8 @@ rsync_repo2 = """
         repoDest=$destPrefix-$buildid$destSuffix
         repoCur=$destPrefix-CURRENT$destSuffix
         [ -z "__STAGING" ] || repoCur=$destPrefix-__STAGING-CURRENT$destSuffix
-        echo "rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/fixed/$repoCur"
-        echo "rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
+        echo "time rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/$src/ /var/lib/openqa/factory/repo/fixed/$repoCur"
+        echo "time rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$repoCur/ /var/lib/openqa/factory/repo/$repoCur/ /var/lib/openqa/factory/repo/$repoDest/"
     done < <(grep $repo$additional_repo_suffix __envsub/files_repo.lst)
 done
 """
@@ -221,8 +221,8 @@ def rsync_repodir2():
         dest=${dest//-Media2/}
         Mdia=Media2
         [[ ! $src =~ .*\.license ]] || Mdia=Media2.license
-        echo rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/*$Mdia/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/
-        echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
+        echo time rsync --timeout=3600 -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/*$Mdia/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/
+        echo time rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-debuginfo/ /var/lib/openqa/factory/repo/$dest-$buildid-debuginfo
     done < <(grep ${arch//i686/i586} __envsub/files_repo.lst | grep Media2 )
 done
 """
@@ -236,8 +236,8 @@ while read src; do
     dest=$src
     dest=${dest%-Build*}
 
-    echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT
-    echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
+    echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials RSYNCFILTER PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT
+    echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
 done < <(cat __envsub/files_repo.lst | grep -v Debug | grep -v Source | grep -v .license )
 """
 
@@ -247,8 +247,8 @@ while read src; do
     dest=$src
     dest=${dest%-Build*}
 
-    echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials  RSYNCFILTER PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
-    echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
+    echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials  RSYNCFILTER PRODUCTREPOPATH/$dest/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
+    echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid/
 done < <(cat __envsub/files_repo.lst | grep Debug )
 """
 
@@ -258,12 +258,12 @@ def rsync_repomultiarch(destpath, debug, source):
     dest = os.path.basename(destpath)
     res = (
         """
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials PRODUCTREPOPATH/"""
+echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials PRODUCTREPOPATH/"""
         + destpath
         + """/ /var/lib/openqa/factory/repo/fixed/"""
         + dest
         + """-CURRENT
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
+echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
         + dest
         + """-CURRENT/ /var/lib/openqa/factory/repo/fixed/"""
         + dest
@@ -282,14 +282,14 @@ echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/li
         res = (
             res
             + """
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials """
+echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials """
             + debugfilter
             + """ PRODUCTREPOPATH/"""
             + destpath
             + """-Debug/ /var/lib/openqa/factory/repo/fixed/"""
             + dest
             + """-Debug-CURRENT/
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
+echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
             + dest
             + """-Debug-CURRENT/ /var/lib/openqa/factory/repo/fixed/"""
             + dest
@@ -307,14 +307,14 @@ echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/li
         res = (
             res
             + """
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials """
+echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials """
             + sourcefilter
             + """ PRODUCTREPOPATH/"""
             + destpath
             + """-Source/ /var/lib/openqa/factory/repo/fixed/"""
             + dest
             + """-Source-CURRENT/
-echo rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
+echo time rsync --timeout=RSYNCTIMEOUT -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/"""
             + dest
             + """-Source-CURRENT/ /var/lib/openqa/factory/repo/fixed/"""
             + dest
@@ -386,12 +386,12 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
         res = (
             res
             + """
-            echo rsync --timeout=3600 -rtlp4 --delete --specials """
+            echo time rsync --timeout=3600 -rtlp4 --delete --specials """
             + xtra
             + """ PRODUCTREPOPATH/"""
             + folder
             + """/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/
-            echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/$dest-$buildid-Debug
+            echo time rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Debug/ /var/lib/openqa/factory/repo/$dest-$buildid-Debug
 """
         )
     res = (
@@ -417,12 +417,12 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
         res = (
             res
             + """
-            echo rsync --timeout=3600 -rtlp4 --delete --specials """
+            echo time rsync --timeout=3600 -rtlp4 --delete --specials """
             + xtra
             + """ PRODUCTREPOPATH/"""
             + folder
             + """/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/
-            echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/$dest-$buildid-Source
+            echo time rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT-Source/ /var/lib/openqa/factory/repo/$dest-$buildid-Source
 """
         )
     res = (
@@ -436,10 +436,10 @@ buildid=$(cat __envsub/files_iso.lst | grep -E 'FLAVORORS' | grep -o -E '(Build|
     res = (
         res
         + """
-        echo rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/"""
+        echo time rsync --timeout=3600 -rtlp4 --delete --specials PRODUCTREPOPATH/"""
         + folder
         + """/$src/  /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/
-        echo rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid
+        echo time rsync --timeout=3600 -rtlp4 --delete --specials --link-dest /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/fixed/$dest-CURRENT/ /var/lib/openqa/factory/repo/$dest-$buildid
     done < <(LANG=C.UTF-8 sort __envsub/files_repo_"""
         + repo
         + """.lst )
