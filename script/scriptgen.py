@@ -1276,6 +1276,7 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
                         "-source",
                     )
 
+
     def gen_print_openqa(self, f):
         print(cfg.header, file=f)
         self.p(cfg.pre_openqa_call_start(self.repos), f)
