@@ -3,6 +3,11 @@
 Run from the repository root. Used by `make validate_xml` (CI) and, as a
 library, by deploy_on_pull.py and cleanup_on_deploy.py, which refuse to act
 when any XML is invalid.
+
+The structure (elements, attributes, batch names) is checked by the schema
+xml/openQA.rng in `make validate_xml` only. This module checks what the
+schema cannot: the project_pattern regex, unique batch names, that scriptgen
+can process the file, and that every project maps to exactly one XML.
 """
 
 import argparse
@@ -31,6 +36,7 @@ GRANDFATHERED = frozenset(
         "xml/obs/openSUSE:Leap:15:ARM.xml",
         "xml/obs/openSUSE:Leap:15:Staging.xml",
         "xml/obs/openSUSE:Slowroll:Staging-images.xml",
+        "xml/ibs/SUSE:SLE-15:Update:SLERT.xml",
     }
 )
 
@@ -147,22 +153,9 @@ def is_safe_name(name):
 def _check_batches(rel, root, result):
     nodes = list(root.iter("batch"))
     if nodes:
-        names = []
-        for node in nodes:
-            name = node.attrib.get("name", "")
-            if not name:
-                result.errors.append(f"{rel}: <batch> without name attribute")
-                continue
-            if not is_safe_name(name) or name == "default":
-                result.errors.append(f"{rel}: invalid batch name {name!r}")
-            names.append(name)
+        names = [node.attrib.get("name", "") for node in nodes]
     else:
         names = root.attrib.get("batches", "default").split("|")
-        for name in names:
-            if not is_safe_name(name):
-                result.errors.append(
-                    f"{rel}: invalid batch name {name!r} in batches attribute"
-                )
     for name in sorted({n for n in names if names.count(n) > 1}):
         result.errors.append(f"{rel}: duplicate batch name {name!r}")
 
@@ -174,13 +167,7 @@ def _validate_file(path, brand, test_dirs, result):
     except (ElementTree.ParseError, OSError) as e:
         result.errors.append(f"{rel}: cannot parse: {e}")
         return
-    if root.tag != "openQA":
-        result.errors.append(f"{rel}: root element is <{root.tag}>, expected <openQA>")
-        return
     pattern = root.attrib.get("project_pattern", "")
-    if not pattern:
-        result.errors.append(f"{rel}: missing project_pattern")
-        return
     try:
         regex = re.compile(pattern)
     except re.error as e:

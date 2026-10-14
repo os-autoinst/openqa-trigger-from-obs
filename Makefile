@@ -64,9 +64,13 @@ test_regen_all:
 test_update_before_files: test_regen_all
 	(cd t && bash test_before_after_diff.sh --update-before *bs/*)
 
+# xml/ibs is a symlink into the plugin repository, checked only when present
+XML_DIRS ?= xml/obs xml/abs $(shell test -d xml/ibs && echo xml/ibs)
+
 .PHONY: validate_xml
 validate_xml:
-	python3 script/validate_xml.py
+	find -H $(XML_DIRS) -name '*.xml' -exec xmllint --noout --quiet --relaxng xml/openQA.rng {} +
+	python3 script/validate_xml.py $(XML_DIRS)
 
 .PHONY: all
 all: validate_xml test_update_before_files test test_python_style unit_tests
