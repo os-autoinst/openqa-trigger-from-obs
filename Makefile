@@ -50,8 +50,12 @@ test_regen_all:
 test_update_before_files: test_regen_all
 	(cd t && bash test_before_after_diff.sh --update-before *bs/*)
 
+.PHONY: validate_xml
+validate_xml:
+	python3 script/validate_xml.py
+
 .PHONY: all
-all: test_update_before_files test test_python_style unit_tests
+all: validate_xml test_update_before_files test test_python_style unit_tests
 
 # Override to use uv, e.g. PYTHON_RUN="uv run"
 PYTHON_RUN ?=
