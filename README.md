@@ -80,6 +80,11 @@ will generate the scripts using the `alice` rsync user.
    that `make validate_xml` rejects, e.g. one whose `project_pattern` is a regex
    that no *t/obs/ProjectName* folder matches: the automatic deployment (see
    below) could not tell which project folder to create for it.
+   `make validate_xml` also checks every XML against the schema
+   *xml/openQA.rng*, which needs `xmllint` (package `libxml2-tools`). The
+   schema allows only the elements and attributes that `script/scriptgen.py`
+   reads, so it catches misspelt attributes. If you teach `scriptgen.py` a new
+   attribute, add it to the schema as well.
 7. Review and test bash commands generated in, which will be executed in
    production:
    * t/obs/ProjectName/print_rsync_iso.before
@@ -132,7 +137,9 @@ after every `git pull`. It runs, as the owner of the checkout:
 
 Both store the last processed commit and the projects to retry in
 *.deploy-state/*, take `--dry-run` and `--from REV`, and do nothing if any XML
-fails `make validate_xml`. Only the brand of the checkout (obs) is handled.
+fails the checks of `script/validate_xml.py`. The schema is checked by
+`make validate_xml` in CI only, so the server does not need `xmllint`. Only
+the brand of the checkout (obs) is handled.
 
 First-time setup (as the user that owns the checkout, e.g. `geekotest`):
 
