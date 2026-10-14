@@ -54,6 +54,7 @@ class ActionGenerator:
         self.archs = "aarch64 armv7l armv7hl ppc64le riscv64 s390x x86_64"
         self.media1 = "1"
         self.sha = "256"
+        self.rsync_timeout = "3600"
 
     def staging(self):
         m = re.match(r".*Staging:(?P<staging>[A-Z]).*", self.envdir)
@@ -90,6 +91,8 @@ class ActionGenerator:
             self.distri = root.attrib["distri"]
         if root.attrib.get("media1", ""):
             self.media1 = root.attrib["media1"]
+        if root.attrib.get("rsynctimeout", ""):
+            self.rsync_timeout = root.attrib["rsynctimeout"]
 
         self.openqa_cli = root.attrib.get("openqa_cli", self.openqa_cli)
 
@@ -150,6 +153,8 @@ class ActionGenerator:
             batch.variable = node.attrib["variable"]
         if node.tag == "batch" and node.attrib.get("sha", ""):
             batch.sha = node.attrib["sha"]
+        if node.attrib.get("rsynctimeout", ""):
+            batch.rsync_timeout = node.attrib["rsynctimeout"]
         if node.tag != "openQA":
             batch.iso_path = node.attrib.get("iso_path", "")
 
@@ -203,7 +208,7 @@ class ActionBatch:
         self.mirror_repo = ""
         self.repos = []
         self.reposmultiarch = []  # these repos need not to be processed for each arch
-        self.rsync_timeout = "3600"
+        self.rsync_timeout = actionGenerator.rsync_timeout
         self.repolink = ""
         self.build_id_from_iso = 0
         self.repodirs = []
@@ -279,6 +284,7 @@ class ActionBatch:
         s = s.replace("PRODUCTPATH", self.productpath() + xtrapath)
         s = s.replace("PRODUCTISOPATH", self.productisopath() + xtrapath)
         s = s.replace("PRODUCTREPOPATH", self.productrepopath() + xtrapath)
+        s = s.replace("RSYNCTIMEOUT", str(self.rsync_timeout))
         if self.subfolder and self.subfolder != "default":
             s = s.replace("__envsub", self.ag.envdir + "/" + self.subfolder)
         else:
