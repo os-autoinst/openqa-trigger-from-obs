@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           command: |
-            zypper -n in --no-recommends diffutils make python3 tar git-core
+            zypper -n in --no-recommends diffutils make python3 tar git-core libxml2-tools
       - checkout
       - run: git clean -df
       - run: make validate_xml
