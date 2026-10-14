@@ -1,0 +1,8 @@
+[Unit]
+Description=Regenerate openqa-trigger-from-obs scripts and remove stale dirs
+After=openqa-trigger-from-obs-update.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/openqa-trigger-from-obs/script/deploy-hook.sh tick
+User=geekotest

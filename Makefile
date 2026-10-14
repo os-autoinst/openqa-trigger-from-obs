@@ -21,6 +21,20 @@ openSUSE%: FORCE
 .PHONY: FORCE
 FORCE:
 
+# Run script/deploy-hook.sh after every `git pull`
+.PHONY: install_hooks
+install_hooks:
+	@hooks="$$(git rev-parse --git-path hooks)" && target="$$(pwd)/script/deploy-hook.sh" && \
+	if [ -n "$$(git config core.hooksPath)" ]; then \
+		echo "core.hooksPath is set, link $$target as post-merge hook there by hand" >&2; exit 1; \
+	elif [ "$$(readlink -f "$$hooks/post-merge")" = "$$target" ]; then \
+		echo "$$hooks/post-merge is already installed"; \
+	elif [ -e "$$hooks/post-merge" ] || [ -L "$$hooks/post-merge" ]; then \
+		echo "$$hooks/post-merge exists, refusing to overwrite it" >&2; exit 1; \
+	else \
+		mkdir -p "$$hooks" && ln -s "$$target" "$$hooks/post-merge" && echo "installed $$hooks/post-merge"; \
+	fi
+
 install_apparmor:
 	install -d -m 755 "$(DESTDIR)"/etc/apparmor.d
 	install -d -m 755 "$(DESTDIR)"/etc/apparmor.d/local

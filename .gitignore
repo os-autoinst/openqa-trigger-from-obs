@@ -6,4 +6,6 @@
 /t/**/print_rsync_repo.sh
 /t/**/print_openqa.sh
 /rsync.secret
+/.deploy-state/
+/.deploy.lock
 **/__pycache__
