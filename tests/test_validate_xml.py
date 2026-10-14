@@ -139,8 +139,6 @@ def test_missing_dirs_are_skipped(root):
     "content, message",
     [
         ("<openQA", "cannot parse"),
-        ('<other project_pattern="A:B"/>', "root element is <other>"),
-        ("<openQA/>", "missing project_pattern"),
         ('<openQA project_pattern="A:(B"/>', "invalid project_pattern"),
     ],
 )
@@ -151,27 +149,12 @@ def test_broken_xml(root, content, message):
     assert validate_xml.main(["xml/obs"]) == 1
 
 
-@pytest.mark.parametrize(
-    "batches, message",
-    [
-        ('<batch archs="x86_64"/>', "<batch> without name attribute"),
-        ('<batch name="a"/><batch name="a"/>', "duplicate batch name 'a'"),
-        ('<batch name="a/b"/>', "invalid batch name 'a/b'"),
-        ('<batch name=".hidden"/>', "invalid batch name '.hidden'"),
-        ('<batch name="default"/>', "invalid batch name 'default'"),
-    ],
-)
-def test_bad_batches(root, batches, message):
-    write_xml(root, "A.xml", "A:B", batches)
-    assert errors() == ["xml/obs/A.xml: " + message]
-
-
-def test_bad_batches_attribute(root):
-    write_xml(root, "A.xml", "A:B", attrs=' batches="a|a|../x"')
-    assert errors() == [
-        "xml/obs/A.xml: invalid batch name '../x' in batches attribute",
-        "xml/obs/A.xml: duplicate batch name 'a'",
-    ]
+# the other batch name checks are in the schema, see test_xml_schema.py
+def test_duplicate_batches(root):
+    write_xml(root, "A.xml", "A:B", '<batch name="a"/><batch name="a"/>')
+    assert errors() == ["xml/obs/A.xml: duplicate batch name 'a'"]
+    write_xml(root, "A.xml", "A:B", attrs=' batches="a|b|a"')
+    assert errors() == ["xml/obs/A.xml: duplicate batch name 'a'"]
 
 
 def test_scriptgen_failure(root):
