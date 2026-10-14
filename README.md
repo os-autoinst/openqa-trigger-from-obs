@@ -4,6 +4,9 @@
 This project is aiming to simplify the integration between the Open
 Build Service (OBS) and openqa.opensuse.org (o3).
 
+See [FEATURES.md](FEATURES.md) for what the XML attributes do and how the
+generated scripts behave.
+
 ## Concepts
 
 OBS projects have a wide variety of content, types and configuration and keep
