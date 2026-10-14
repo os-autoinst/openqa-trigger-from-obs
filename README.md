@@ -76,7 +76,10 @@ will generate the scripts using the `alice` rsync user.
    the same way they are created in *read_files.sh*
 5. Generate rsync and openqa commands based on these new *.lst files
    `make test_update_before_files`
-6. Run consistency test `make test`
+6. Run consistency test `make test` and `make validate_xml`. CI rejects an XML
+   that `make validate_xml` rejects, e.g. one whose `project_pattern` is a regex
+   that no *t/obs/ProjectName* folder matches: the automatic deployment (see
+   below) could not tell which project folder to create for it.
 7. Review and test bash commands generated in, which will be executed in
    production:
    * t/obs/ProjectName/print_rsync_iso.before
@@ -110,6 +113,45 @@ python3 script/scriptgen.py Leap:15.2:ToTest
 ```
 bash script/rsync.sh Leap:15.2:ToTest
 ```
+
+### Automatic deployment after `git pull`
+
+`script/deploy-hook.sh` keeps the project folders in sync with the repository
+after every `git pull`. It runs, as the owner of the checkout:
+
+1. `script/deploy_on_pull.py`: runs `scriptgen.py` for the projects whose XML
+   changed, for all projects if `scriptgen.py`, `cfg.py` or the brand plugin
+   changed, and creates and generates the project folders of a newly added XML.
+   The folder name is the `project_pattern` if it is a literal name, otherwise
+   the *t/obs/ProjectName* folders that match it.
+2. `script/cleanup_on_deploy.py`: deletes batch folders whose batch is no
+   longer in the XML, and project folders whose XML was deleted or no longer
+   matches them. Folders with customized scripts (no `GENERATED` header) are
+   kept and reported. Projects that `rsync.sh` is syncing (live `rsync.lock`)
+   are skipped and retried on the next run.
+
+Both store the last processed commit and the projects to retry in
+*.deploy-state/*, take `--dry-run` and `--from REV`, and do nothing if any XML
+fails `make validate_xml`. Only the brand of the checkout (obs) is handled.
+
+First-time setup (as the user that owns the checkout, e.g. `geekotest`):
+
+```
+python3 script/deploy_on_pull.py --dry-run
+python3 script/cleanup_on_deploy.py --dry-run
+script/deploy-hook.sh tick   # regenerates all project folders, stores the state
+make install_hooks           # runs script/deploy-hook.sh as git post-merge hook
+```
+
+`make install_hooks` refuses to replace an existing *post-merge* hook. Instead
+of the hook, `systemd/openqa-trigger-from-obs-deploy.service` can run
+`script/deploy-hook.sh tick` after each update: enable the commented
+`OnSuccess=` line in `systemd/openqa-trigger-from-obs-update.service`. A
+`git pull --rebase` that has to rebase local commits does not run the
+*post-merge* hook; the next update catches up.
+
+To run the scripts by hand while the hook may run, hold the same lock:
+`flock .deploy.lock python3 script/deploy_on_pull.py`.
 
 ## Further information
 
