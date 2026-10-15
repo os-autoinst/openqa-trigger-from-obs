@@ -1,6 +1,7 @@
 import os
 import subprocess
 from pathlib import Path
+from xml.etree import ElementTree
 
 import pytest
 
@@ -82,6 +83,119 @@ def errors(dirs=("xml/obs",)):
 )
 def test_literal_project(pattern, expected):
     assert validate_xml.literal_project(pattern) == expected
+
+
+STAGING = "openSUSE:(?P<version>Factory):(Staging:[A-Z]|Rings:1-MinimalX)"
+
+
+@pytest.mark.parametrize(
+    "pattern, expected",
+    [
+        ("A:[A-C]", ["A:A", "A:B", "A:C"]),
+        ("A:(B|C:[1-2])", ["A:B", "A:C:1", "A:C:2"]),
+        (r"A:[x\-]", ["A:-", "A:x"]),
+        ("A:(?P<v>B)?", ["A:", "A:B"]),
+        ("A:B{2}", ["A:BB"]),
+        ("A:[0-1]{1,2}", ["A:0", "A:00", "A:01", "A:1", "A:10", "A:11"]),
+        (r"A:1\.2", ["A:1.2"]),
+        ("A:[A-Z][A-Z]", None),
+        ("A:[^B]", None),
+        ("A:B+", None),
+        ("A:B{2,}", None),
+        ("A:.", None),
+        (r"A:\d", None),
+        ("A:(?=B)B", None),
+        ("^A$", None),
+        ("A:(", None),
+    ],
+)
+def test_expand_pattern(pattern, expected):
+    assert validate_xml.expand_pattern(pattern) == expected
+
+
+def enabled(pattern, *elements):
+    body = "".join(f"<projects_enabled {e}/>" for e in elements)
+    root = ElementTree.fromstring(f"<openQA>{body}</openQA>")
+    return validate_xml.enabled_names(root, pattern)
+
+
+@pytest.mark.parametrize(
+    "pattern, slots",
+    [
+        ("A:B", []),
+        ("A:[A-Z]", ["[A-Z]"]),
+        ("A:(?P<v>[0-9]+):B", ["[0-9]+"]),
+        (r"A:\[x\]:[]a]{1,2}", ["[]a]{1,2}"]),
+        (r"A:[\]x]", [r"[\]x]"]),
+        ("A:[0-9]+:[A-Z]", ["[0-9]+", "[A-Z]"]),
+    ],
+)
+def test_find_slots(pattern, slots):
+    assert [pattern[a:b] for a, b in validate_xml.find_slots(pattern)] == slots
+
+
+def test_enabled_names():
+    assert enabled(STAGING) == (None, [])
+    names, errs = enabled(STAGING, 'range="A..O" project="Z,Y,A"')
+    assert errs == []
+    letters = [chr(c) for c in range(ord("A"), ord("P"))] + ["Y", "Z"]
+    assert names == ["openSUSE:Factory:Rings:1-MinimalX"] + [
+        f"openSUSE:Factory:Staging:{c}" for c in letters
+    ]
+    assert enabled("T(?P<version>[0-9]+)", 'range="1..3" project="1025,2"') == (
+        ["T1", "T1025", "T2", "T3"],
+        [],
+    )
+    assert enabled("L:(?P<version>15.[3-9]):T", 'range="5..6"') == (
+        ["L:15.5:T", "L:15.6:T"],
+        [],
+    )
+    assert enabled("A:[A-Z]", 'project="B"', 'range="A..B"') == (["A:A", "A:B"], [])
+
+
+@pytest.mark.parametrize(
+    "pattern, element, message",
+    [
+        ("A:[A-Z]", 'range="A...O"', "invalid range 'A...O'"),
+        ("A:[A-Z]", 'range="A-O"', "invalid range 'A-O'"),
+        ("A:[A-Z]", 'range="O..A"', "the start is after the end"),
+        ("A:[A-Z]", 'range="A..9"', "single letters or both numbers"),
+        ("A:[A-Z]", 'range="AA..AC"', "single letters or both numbers"),
+        ("A:[A-Za-z]", 'range="a..C"', "same case"),
+        ("A:[0-9]+", 'range="0..9999"', "more than 256 values"),
+        ("A:[A-Z]", 'range="A..C" project="99"', "'99' is not of the same class"),
+        ("A:[A-Z]", 'project="A,9"', "'9' is not of the same class"),
+        ("A:[A-Z]", 'project="A-1"', "'A-1' is not of the same class"),
+        ("A:[A-Z]", 'range="1..3"', "'1' does not match '[A-Z]'"),
+        ("A:[1-9]", 'project="512"', "'512' does not match '[1-9]'"),
+        ("A:[0-9]+", 'project="MyProject"', "'MyProject' does not match"),
+        ("A:B", 'range="1..2"', "exactly one character class in 'A:B', found 0"),
+        ("A:[0-9]+:[A-Z]", 'range="1..2"', "found 2"),
+        ("A.B:[A-Z]", 'range="A..B"', "outside the character class must be literal"),
+    ],
+)
+def test_enabled_names_errors(pattern, element, message):
+    _, errs = enabled(pattern, element)
+    assert any(message in e for e in errs), errs
+
+
+def test_range_limit(monkeypatch):
+    monkeypatch.setattr(validate_xml, "MAX_ENABLED", 9)
+    _, errs = enabled("A:[0-9]+", 'range="0..9"')
+    assert errs == ["invalid range '0..9': more than 9 values"], errs
+    assert enabled("A:[0-9]+", 'range="1..9"')[1] == []
+
+
+def test_current_staging_projects(monkeypatch):
+    monkeypatch.chdir(REPO)
+    result = validate_xml.validate(["xml/obs"])
+    names = result.enabled["xml/obs/openSUSE:Factory:Staging.xml"]
+    assert len(names) == 17
+    assert "openSUSE:Factory:Staging:Z" in names
+    assert "openSUSE:Factory:Staging:P" not in names
+    for name in names:
+        xmlfile, _, _ = scriptgen.find_xml(name, "obs")
+        assert os.path.normpath(xmlfile) == "xml/obs/openSUSE:Factory:Staging.xml"
 
 
 def test_project_names_falls_back_to_test_dirs():
@@ -200,6 +314,38 @@ def test_literal_name_shadowed_by_other_xml(root):
     (root / "t" / "obs" / "A:C").mkdir()
     assert errors() == [
         "A:B: matched by more than one XML: xml/obs/A.xml, xml/obs/B.xml"
+    ]
+
+
+def test_projects_enabled(root):
+    body = '<projects_enabled range="A..B" project="D"/>' + FLAVOR
+    write_xml(root, "S.xml", "S:(?P<version>F):[A-Z]", body)
+    (root / "t" / "obs" / "S:F:A").mkdir()
+    (root / "t" / "obs" / "S:F:C").mkdir()
+    result = validate_xml.validate(["xml/obs"])
+    assert result.errors == []
+    assert result.enabled == {"xml/obs/S.xml": ["S:F:A", "S:F:B", "S:F:D"]}
+    assert result.warnings == [
+        "xml/obs/S.xml: test dir t/obs/S:F:C is not in <projects_enabled>"
+    ]
+
+
+def test_projects_enabled_errors(root):
+    body = '<projects_enabled range="A..C" project="99"/>' + FLAVOR
+    write_xml(root, "S.xml", "S:[A-Z]", body)
+    assert errors() == [
+        (
+            "xml/obs/S.xml: project '99' is not of the same class as the other "
+            "values (letters or a number)"
+        )
+    ]
+
+
+def test_enabled_name_matching_two_xmls(root):
+    write_xml(root, "S.xml", "S:[A-Z]", '<projects_enabled range="A..C"/>' + FLAVOR)
+    write_xml(root, "B.xml", "S:B")
+    assert errors() == [
+        "S:B: matched by more than one XML: xml/obs/B.xml, xml/obs/S.xml"
     ]
 
 
