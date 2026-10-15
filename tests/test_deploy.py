@@ -488,13 +488,37 @@ def test_deleted_xml_removes_project(repo):
     assert not repo.path("Baz:Qux").exists()
 
 
-def test_orphan_with_customized_scripts_is_kept(repo):
+@pytest.mark.parametrize("archive", [False, True])
+def test_deleted_xml_removes_customized_project(repo, archive):
+    repo.path("Baz:Qux", "read_files.sh").write_text("echo custom\n")
+    if archive:
+        repo.path("xml", "archive", "obs").mkdir(parents=True)
+        repo.git("mv", "xml/obs/Baz.xml", "xml/archive/obs/Baz.xml")
+    else:
+        repo.git("rm", "-q", "xml/obs/Baz.xml")
+    repo.commit()
+    proc = repo.cleanup()
+    assert proc.returncode == 0, proc.out
+    assert "removing it with its customized scripts in Baz:Qux" in proc.out
+    assert not repo.path("Baz:Qux").exists()
+
+
+def test_deleted_xml_with_live_lock_is_retried_with_customized_scripts(repo):
     repo.path("Baz:Qux", "read_files.sh").write_text("echo custom\n")
     repo.git("rm", "-q", "xml/obs/Baz.xml")
     repo.commit()
+    rsync = subprocess.Popen(["sleep", "60"])
+    try:
+        repo.path("Baz:Qux", "rsync.lock").write_text(f"{rsync.pid}\n")
+        proc = repo.cleanup()
+        assert proc.returncode == 1
+        assert repo.state("cleanup")["forced"] == ["Baz:Qux"]
+    finally:
+        rsync.kill()
+        rsync.wait()
     proc = repo.cleanup()
-    assert "kept because of customized scripts in Baz:Qux" in proc.out
-    assert repo.path("Baz:Qux").exists()
+    assert proc.returncode == 0, proc.out
+    assert not repo.path("Baz:Qux").exists()
 
 
 def test_changed_pattern_keeps_customized_orphan(repo):
