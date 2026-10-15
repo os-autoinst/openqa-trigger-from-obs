@@ -111,22 +111,49 @@ def changed_xmls(changes):
     return [(s, p) for s, p in changes if p.startswith(prefix) and p.endswith(".xml")]
 
 
+def _old_roots(rev, paths):
+    """{path: XML root element} of each path as of rev; unparsable ones are skipped."""
+    roots = {}
+    for path in paths:
+        try:
+            roots[path] = ElementTree.fromstring(git("show", f"{rev}:{path}"))
+        except (subprocess.CalledProcessError, ElementTree.ParseError):
+            continue
+    return roots
+
+
 def old_patterns(rev, paths):
     """Compiled project_pattern of each path as of rev; unparsable ones are skipped."""
     patterns = {}
-    for path in paths:
+    for path, root in _old_roots(rev, paths).items():
         try:
-            content = git("show", f"{rev}:{path}")
-            pattern = ElementTree.fromstring(content).attrib.get("project_pattern", "")
+            pattern = root.attrib.get("project_pattern", "")
             if pattern:
                 patterns[path] = re.compile(pattern)
-        except (subprocess.CalledProcessError, ElementTree.ParseError, re.error):
+        except re.error:
             continue
     return patterns
 
 
+def old_enabled(rev, paths):
+    """{path: set of names} of <projects_enabled> as of rev, for the paths that
+    had valid <projects_enabled> elements then."""
+    enabled = {}
+    for path, root in _old_roots(rev, paths).items():
+        try:
+            names, errors = validate_xml.enabled_names(
+                root, root.attrib.get("project_pattern", "")
+            )
+        except re.error:
+            continue
+        if names is not None and not errors:
+            enabled[path] = set(names)
+    return enabled
+
+
 def validate(log):
-    """Validate the XMLs of the current brand. Returns the patterns or None."""
+    """Validate the XMLs of the current brand. Returns the validate_xml.Result
+    or None if any XML is invalid."""
     if not os.path.isdir(xml_dir()):
         log.error(f"{xml_dir()} not found, run from the repository root")
         return None
@@ -136,7 +163,7 @@ def validate(log):
     if result.errors:
         log.error(f"{xml_dir()} is invalid, nothing done")
         return None
-    return result.patterns
+    return result
 
 
 def state_path(name):

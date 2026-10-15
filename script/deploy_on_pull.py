@@ -7,7 +7,12 @@ scriptgen.py for:
 - every project dir, if scriptgen.py, cfg.py or the brand plugin changed;
 - every project dir mapped to a changed XML, or matched by the old pattern of
   a changed or deleted XML;
-- the project dirs of a newly added XML, which are created first.
+- the missing project dirs listed by <projects_enabled> of an added or
+  changed XML (or of every XML, without state or with --all), which are
+  created first;
+- the project dirs of a newly added XML without <projects_enabled>, which are
+  created first: its literal project_pattern, or the t/<brand> test dirs that
+  match it (validate_xml.project_names()).
 
 Projects that fail are retried on the next run.
 """
@@ -31,11 +36,13 @@ def is_project_name(name):
     return ":" in name and validate_xml.is_safe_name(name)
 
 
-def plan(old, head, patterns, pending, log):
+def plan(old, head, result, pending, log):
     """Return (targets, create, errors, failed_xmls).
 
-    targets: project dirs to generate, create: the ones to mkdir first.
+    result is the validate_xml.Result of the XMLs. targets: project dirs to
+    generate, create: the ones to mkdir first.
     """
+    patterns = result.patterns
     dirs = common.project_dirs()
     mapped = {d: common.mapped_xml(d) for d in dirs}
     targets = set()
@@ -44,6 +51,7 @@ def plan(old, head, patterns, pending, log):
     failed_xmls = []
 
     added = []
+    changed = set()
     if old is None:
         full = True
     else:
@@ -72,14 +80,23 @@ def plan(old, head, patterns, pending, log):
             targets.add(p)
 
     test_dirs = validate_xml.tracked_test_dirs(common.brand())
-    for xml in sorted(set(added)):
-        if xml not in patterns:
-            log.info(f"{xml}: no longer exists, skipped")
-            continue
+    added = set(added)
+    for xml in sorted(added - set(patterns)):
+        log.info(f"{xml}: no longer exists, skipped")
+    for xml in sorted(patterns):
         existing = {d for d in dirs if mapped[d] == xml}
-        names = (
-            set(validate_xml.project_names(patterns[xml].pattern, test_dirs)) - existing
-        )
+        if xml in result.enabled:
+            # the dirs of <projects_enabled> are created whenever the XML changes
+            if not (full or xml in added or xml in changed):
+                continue
+            names = set(result.enabled[xml]) - existing
+        elif xml in added:
+            names = (
+                set(validate_xml.project_names(patterns[xml].pattern, test_dirs))
+                - existing
+            )
+        else:
+            continue
         ok = True
         for name in sorted(names):
             if not is_project_name(name):
@@ -93,14 +110,16 @@ def plan(old, head, patterns, pending, log):
                 ok = False
             else:
                 create.add(name)
-        if not existing and not names:
+        if xml not in result.enabled and not existing and not names:
             errors.append(
-                f"{xml}: added, but no project name can be derived from its project_pattern; "
-                f"make the pattern literal or add a t/{common.brand()}/<Project> test dir"
+                f"{xml}: added, but no project name can be derived from its "
+                "project_pattern; make the pattern literal, add <projects_enabled> "
+                f"or add a t/{common.brand()}/<Project> test dir"
             )
             ok = False
-        targets.update(existing)
         targets.update(n for n in names if n in create)
+        if xml in added:
+            targets.update(existing)
         if not ok:
             failed_xmls.append(xml)
     return sorted(targets), create, errors, failed_xmls
@@ -135,8 +154,8 @@ def main(argv=None):
     log = common.Logger("deploy_on_pull")
     os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-    patterns = common.validate(log)
-    if patterns is None:
+    result = common.validate(log)
+    if result is None:
         return 1
 
     head = common.head()
@@ -153,7 +172,7 @@ def main(argv=None):
     elif old != head:
         log.info(f"processing {old[:12]}..{head[:12]}")
 
-    targets, create, errors, failed = plan(old, head, patterns, pending, log)
+    targets, create, errors, failed = plan(old, head, result, pending, log)
     new_pending = list(failed)
     for e in errors:
         log.error(e)
