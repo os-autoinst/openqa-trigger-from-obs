@@ -53,6 +53,10 @@ def test_repository_xmls_are_valid():
             '<alias name="n" alias="a"/><renames><x to="y"/></renames>'
             "</flavor></openQA>"
         ),
+        (
+            '<openQA project_pattern="A:[A-Z]"><projects_enabled range="A..O" project="Z"/>'
+            '<projects_enabled project="Y,X"/><projects_enabled range="P..Q"/></openQA>'
+        ),
     ],
 )
 def test_valid(tmp_path, content):
@@ -101,6 +105,27 @@ def test_valid(tmp_path, content):
             "libvirt",
         ),
         ('<openQA project_pattern="A:B"><news/><other/></openQA>', "other"),
+        # projects_enabled
+        (
+            '<openQA project_pattern="A:[A-Z]"><projects_enabled/></openQA>',
+            "projects_e",
+        ),
+        (
+            '<openQA project_pattern="A:[A-Z]"><projects_enabled range="A...O"/></openQA>',
+            "projects_enabled",
+        ),
+        (
+            '<openQA project_pattern="A:[A-Z]"><projects_enabled range="A-O"/></openQA>',
+            "projects_enabled",
+        ),
+        (
+            '<openQA project_pattern="A:[A-Z]"><projects_enabled project="A,,B"/></openQA>',
+            "projects_enabled",
+        ),
+        (
+            '<openQA project_pattern="A:[A-Z]"><projects_enabled rang="A..B"/></openQA>',
+            "projects_enabled",
+        ),
     ],
 )
 def test_invalid(tmp_path, content, message):
