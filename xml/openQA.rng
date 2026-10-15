@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Schema of the project XML files in xml/<brand>/, checked by `make validate_xml`.
+
+  It allows only the elements and attributes that script/scriptgen.py reads,
+  so a misspelt attribute fails instead of being ignored. When scriptgen.py
+  learns a new attribute, add it here and describe it in FEATURES.md.
+
+  script/validate_xml.py checks what a schema cannot: that project_pattern is
+  a valid regex, that batch names are unique, and that scriptgen can process
+  the file.
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <start>
+    <element name="openQA">
+      <attribute name="project_pattern">
+        <data type="string"><param name="minLength">1</param></data>
+      </attribute>
+      <optional>
+        <attribute name="batches">
+          <data type="string">
+            <param name="pattern">[^/|.][^/|]*(\|[^/|.][^/|]*)*</param>
+          </data>
+        </attribute>
+      </optional>
+      <optional><attribute name="dist_path"/></optional>
+      <optional><attribute name="domain"/></optional>
+      <optional><attribute name="iso_path"/></optional>
+      <optional><attribute name="media1"/></optional>
+      <optional><attribute name="metavars"/></optional>
+      <optional><attribute name="openqa_cli"/></optional>
+      <optional><attribute name="repo_path"/></optional>
+      <optional><attribute name="version"/></optional>
+      <!-- without <batch> children the root node is the batch -->
+      <ref name="batch-attributes"/>
+      <!-- with <batch> children, the other children are ignored -->
+      <zeroOrMore>
+        <choice>
+          <ref name="batch"/>
+          <ref name="flavor"/>
+          <ref name="news"/>
+          <ref name="projects_enabled"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </start>
+
+  <!--
+    The projects the deploy hooks create, read by script/validate_xml.py and
+    the deploy hooks only (scriptgen ignores it). The values replace the one
+    character class of project_pattern, e.g. range="A..O" project="Z" for
+    "Staging:[A-Z]". The range is inclusive, project is comma-separated.
+  -->
+  <define name="projects_enabled">
+    <element name="projects_enabled">
+      <choice>
+        <group>
+          <ref name="projects-range"/>
+          <optional><ref name="projects-project"/></optional>
+        </group>
+        <ref name="projects-project"/>
+      </choice>
+    </element>
+  </define>
+
+  <define name="projects-range">
+    <attribute name="range">
+      <data type="string"><param name="pattern">[^.]+\.\.[^.]+</param></data>
+    </attribute>
+  </define>
+
+  <define name="projects-project">
+    <attribute name="project">
+      <data type="string"><param name="pattern">[^,]+(,[^,]+)*</param></data>
+    </attribute>
+  </define>
+
+  <define name="batch-attributes">
+    <optional><attribute name="archs"/></optional>
+    <optional><attribute name="checksum"/></optional>
+    <optional><attribute name="distri"/></optional>
+    <optional><attribute name="folder"/></optional>
+    <optional><attribute name="mask"/></optional>
+    <optional><attribute name="repo0folder"/></optional>
+    <optional><attribute name="repos"/></optional>
+    <optional><attribute name="rsynctimeout"/></optional>
+    <optional><attribute name="variable"/></optional>
+  </define>
+
+  <!-- the batch name is the name of its folder in the project dir -->
+  <define name="batch">
+    <element name="batch">
+      <attribute name="name">
+        <data type="string">
+          <param name="pattern">[^/.][^/]*</param>
+          <except><value>default</value></except>
+        </data>
+      </attribute>
+      <ref name="batch-attributes"/>
+      <optional><attribute name="iso_path"/></optional>
+      <optional><attribute name="sha"><ref name="sha"/></attribute></optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="flavor"/>
+          <ref name="news"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="news">
+    <element name="news">
+      <optional><attribute name="archs"/></optional>
+      <optional><attribute name="iso"/></optional>
+    </element>
+  </define>
+
+  <define name="sha">
+    <choice>
+      <value>256</value>
+      <value>512</value>
+    </choice>
+  </define>
+
+  <define name="flavor">
+    <element name="flavor">
+      <optional><attribute name="name"/></optional>
+      <optional><attribute name="archs"/></optional>
+      <optional><attribute name="dist_path"/></optional>
+      <optional><attribute name="distri"/></optional>
+      <optional><attribute name="extract_as_repo"/></optional>
+      <optional><attribute name="fixed_iso"/></optional>
+      <optional><attribute name="flavor"/></optional>
+      <optional><attribute name="folder"/></optional>
+      <optional><attribute name="ignore_repo_from_iso"/></optional>
+      <optional><attribute name="iso"/></optional>
+      <optional><attribute name="iso1"/></optional>
+      <optional><attribute name="iso_5"/></optional>
+      <optional><attribute name="legacy_builds"/></optional>
+      <optional><attribute name="ln_iso_to_repo"/></optional>
+      <optional><attribute name="media1"/></optional>
+      <optional><attribute name="news"/></optional>
+      <optional><attribute name="offset"/></optional>
+      <optional><attribute name="realisoflavor"/></optional>
+      <!-- ignored by scriptgen.py, but used in xml/obs -->
+      <optional><attribute name="repos"/></optional>
+      <optional><attribute name="rsync"/></optional>
+      <optional><attribute name="sha"><ref name="sha"/></attribute></optional>
+      <optional><attribute name="staging_pattern"/></optional>
+      <optional><attribute name="version_from_media"/></optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="alias"/>
+          <ref name="asset"/>
+          <ref name="assets"/>
+          <ref name="file"/>
+          <ref name="isos"/>
+          <ref name="renames"/>
+          <ref name="repos"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="alias">
+    <element name="alias">
+      <optional><attribute name="alias"/></optional>
+      <optional><attribute name="name"/></optional>
+      <optional><attribute name="prefix"/></optional>
+      <optional><attribute name="suffix"/></optional>
+    </element>
+  </define>
+
+  <define name="filemask">
+    <attribute name="filemask">
+      <data type="string"><param name="minLength">1</param></data>
+    </attribute>
+  </define>
+
+  <define name="asset">
+    <element name="asset">
+      <ref name="filemask"/>
+      <optional><attribute name="archs"/></optional>
+      <optional><attribute name="flavor"/></optional>
+      <optional><attribute name="folder"/></optional>
+      <optional><attribute name="rsync"/></optional>
+    </element>
+  </define>
+
+  <!-- the element name of each asset is its type, e.g. <libvirt> -->
+  <define name="assets">
+    <element name="assets">
+      <optional><attribute name="archs"/></optional>
+      <optional><attribute name="flavor"/></optional>
+      <optional><attribute name="folder"/></optional>
+      <zeroOrMore>
+        <element>
+          <anyName/>
+          <ref name="filemask"/>
+          <optional><attribute name="folder"/></optional>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="file">
+    <element>
+      <choice>
+        <name>hdd</name>
+        <name>iso</name>
+      </choice>
+      <ref name="filemask"/>
+      <optional><attribute name="folder"/></optional>
+    </element>
+  </define>
+
+  <!-- the element names are the ISO names -->
+  <define name="isos">
+    <element name="isos">
+      <zeroOrMore>
+        <element><anyName/><empty/></element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="renames">
+    <element name="renames">
+      <zeroOrMore>
+        <element>
+          <anyName/>
+          <optional><attribute name="from"/></optional>
+          <attribute name="to"/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <!-- the element name of each repository is its name, e.g. <oss> -->
+  <define name="repos">
+    <element name="repos">
+      <optional><attribute name="archs"/></optional>
+      <optional><attribute name="build_id_from_iso"/></optional>
+      <zeroOrMore>
+        <element>
+          <anyName/>
+          <optional><attribute name="archs"/></optional>
+          <optional><attribute name="debug"/></optional>
+          <optional><attribute name="dest"/></optional>
+          <optional><attribute name="exclude"/></optional>
+          <optional><attribute name="folder"/></optional>
+          <optional><attribute name="gen"/></optional>
+          <optional><attribute name="mid"/></optional>
+          <optional><attribute name="mirror"/></optional>
+          <optional><attribute name="multiarch"/></optional>
+          <optional><attribute name="name"/></optional>
+          <optional><attribute name="rename"/></optional>
+          <optional><attribute name="rsynctimeout"/></optional>
+          <optional><attribute name="source"/></optional>
+          <optional><attribute name="suffix"/></optional>
+          <!-- ignored by scriptgen.py, but used in xml/obs: it is a
+               <flavor> attribute -->
+          <optional><attribute name="version_from_media"/></optional>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+</grammar>

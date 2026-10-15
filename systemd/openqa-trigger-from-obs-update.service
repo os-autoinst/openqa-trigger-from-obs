@@ -1,6 +1,9 @@
 [Unit]
 Description=Update openqa-trigger-from-obs git repository
 After=network-online.target
+# The post-merge git hook (make install_hooks) runs script/deploy-hook.sh after
+# each pull. To run it from systemd instead, enable this (systemd >= 249):
+#OnSuccess=openqa-trigger-from-obs-deploy.service
 
 [Service]
 Type=oneshot

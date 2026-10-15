@@ -1,4 +1,5 @@
-<openQA project_pattern="TestBatches(?P&lt;version&gt;[1-9])" dist_path="test" archs="x86_64" media1="0">
+<openQA project_pattern="TestBatches(?P&lt;version&gt;[0-9]+)" dist_path="test" archs="x86_64" media1="0">
+    <projects_enabled range="1..5" project="1025,512"/> <!-- project="MyProject" would fail: not a number and does not match the pattern -->
     <batch name="caribe" sha="512">
         <flavor name="HDD" distri="pemon">
             <hdd filemask="raw.xz$"/>
