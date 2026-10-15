@@ -250,6 +250,83 @@ def test_new_regex_xml_creates_projects_of_test_dirs(repo):
     assert repo.generated("Reg:1")
 
 
+STG = "Stg:(?P<version>Fac):(Staging:[A-Z]|Rings:1)"
+
+
+def stg_xml(repo, *elements):
+    body = "".join(f"<projects_enabled {e}/>" for e in elements)
+    repo.xml("Stg.xml", STG, body + FLAVOR)
+
+
+def test_new_xml_creates_enabled_projects(repo):
+    stg_xml(repo, 'range="A..B" project="Z"')
+    repo.commit()
+    proc = repo.deploy()
+    assert proc.returncode == 0, proc.out
+    projects = ["Stg:Fac:Rings:1", "Stg:Fac:Staging:A", "Stg:Fac:Staging:B"]
+    projects.append("Stg:Fac:Staging:Z")
+    assert generating(proc) == projects
+    assert all(repo.generated(p) for p in projects)
+    assert not repo.path("Stg:Fac:Staging:C").exists()
+
+
+def test_widened_range_creates_new_projects(repo):
+    stg_xml(repo, 'range="A..B"')
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    repo.path("Stg:Fac:Staging:X").mkdir()
+    stg_xml(repo, 'range="A..C"')
+    repo.commit()
+    proc = repo.deploy()
+    assert proc.returncode == 0, proc.out
+    assert "Stg:Fac:Staging:C: creating project dir" in proc.out
+    assert "Stg:Fac:Staging:A: creating" not in proc.out
+    # a dir that is not enabled is still regenerated, rsync.sh syncs it
+    assert generating(proc) == [
+        "Stg:Fac:Rings:1",
+        "Stg:Fac:Staging:A",
+        "Stg:Fac:Staging:B",
+        "Stg:Fac:Staging:C",
+        "Stg:Fac:Staging:X",
+    ]
+
+
+@pytest.mark.parametrize("args", [(), ("--all",)])
+def test_missing_enabled_projects_are_created(repo, args):
+    stg_xml(repo, 'range="A..B"')
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    shutil.rmtree(repo.path("Stg:Fac:Staging:A"))
+    # an unchanged XML does not bring back a dir removed by hand
+    assert generating(repo.deploy()) == []
+    if not args:
+        shutil.rmtree(repo.path(".deploy-state"))
+    proc = repo.deploy(*args)
+    assert proc.returncode == 0, proc.out
+    assert "Stg:Fac:Staging:A: creating project dir" in proc.out
+    assert repo.generated("Stg:Fac:Staging:A")
+
+
+def test_deployed_xml_without_projects_enabled_creates_nothing(repo):
+    repo.path("t", "obs", "Multi:B").mkdir()
+    repo.path("t", "obs", "Multi:B", "files_iso.lst").write_text("")
+    repo.xml("Multi.xml", "Multi:(?P<version>[A-Z])", FLAVOR.replace("DISTRI", "X"))
+    repo.commit()
+    proc = repo.deploy()
+    assert proc.returncode == 0, proc.out
+    assert generating(proc) == ["Multi:A"]
+    assert not repo.path("Multi:B").exists()
+
+
+def test_invalid_projects_enabled_blocks_deploy(repo):
+    stg_xml(repo, 'range="A..C" project="99"')
+    repo.commit()
+    proc = repo.deploy()
+    assert proc.returncode == 1
+    assert "project '99' is not of the same class" in proc.out
+    assert "nothing done" in proc.out
+
+
 def test_new_xml_for_existing_dir_regenerates_it(repo):
     repo.git("rm", "-q", "xml/obs/Baz.xml")
     repo.xml("Renamed.xml", "Baz:Qux", FLAVOR.replace("DISTRI", "RENAMED"))
@@ -418,6 +495,74 @@ def test_orphan_with_customized_scripts_is_kept(repo):
     proc = repo.cleanup()
     assert "kept because of customized scripts in Baz:Qux" in proc.out
     assert repo.path("Baz:Qux").exists()
+
+
+def test_changed_pattern_keeps_customized_orphan(repo):
+    repo.path("Baz:Qux", "read_files.sh").write_text("echo custom\n")
+    repo.xml("Baz.xml", "Baz:Quux")
+    repo.commit()
+    proc = repo.cleanup()
+    assert "kept because of customized scripts in Baz:Qux" in proc.out
+    assert repo.path("Baz:Qux").exists()
+
+
+def test_narrowed_range_removes_disabled_projects(repo):
+    stg_xml(repo, 'range="A..C"')
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    assert repo.cleanup().returncode == 0
+    repo.path("Stg:Fac:Staging:C", "read_files.sh").write_text("echo custom\n")
+    stg_xml(repo, 'range="A..A"')
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    proc = repo.cleanup()
+    assert proc.returncode == 0, proc.out
+    assert "Stg:Fac:Staging:B: removing" in proc.out
+    assert not repo.path("Stg:Fac:Staging:B").exists()
+    assert (
+        "Stg:Fac:Staging:C: not in <projects_enabled> of xml/obs/Stg.xml any more, but kept"
+        in proc.out
+    )
+    assert repo.path("Stg:Fac:Staging:A").exists()
+
+
+def test_disabled_project_with_live_lock_is_retried(repo):
+    stg_xml(repo, 'range="A..B"')
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    assert repo.cleanup().returncode == 0
+    stg_xml(repo, 'project="A"')
+    repo.commit()
+    rsync = subprocess.Popen(["sleep", "60"])
+    try:
+        repo.path("Stg:Fac:Staging:B", "rsync.lock").write_text(f"{rsync.pid}\n")
+        proc = repo.cleanup()
+        assert proc.returncode == 1
+        assert repo.state("cleanup")["pending"] == ["Stg:Fac:Staging:B"]
+    finally:
+        rsync.kill()
+        rsync.wait()
+    proc = repo.cleanup()
+    assert proc.returncode == 0, proc.out
+    assert not repo.path("Stg:Fac:Staging:B").exists()
+
+
+def test_first_projects_enabled_only_reports(repo):
+    repo.path("t", "obs", "Stg:Fac:Staging:Q").mkdir()
+    repo.path("t", "obs", "Stg:Fac:Staging:Q", "files_iso.lst").write_text("")
+    repo.xml("Stg.xml", STG)
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    assert repo.generated("Stg:Fac:Staging:Q")
+    stg_xml(repo, 'range="A..B"')
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    proc = repo.cleanup()
+    assert proc.returncode == 0, proc.out
+    msg = "Stg:Fac:Staging:Q: not in <projects_enabled> of xml/obs/Stg.xml; remove"
+    assert msg in proc.out
+    assert repo.generated("Stg:Fac:Staging:Q")
+    assert msg not in repo.cleanup().out
 
 
 def test_unrelated_orphan_is_only_reported(repo):

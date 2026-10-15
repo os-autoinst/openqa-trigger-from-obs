@@ -9,6 +9,10 @@ every subfolder of a project dir, so a leftover dir keeps triggering jobs.
 - A project dir that no XML matches is deleted if the old pattern of an XML
   changed or deleted since the last run (.deploy-state/cleanup.json) matched
   it. Other unmatched dirs are only reported.
+- A project dir that was dropped from <projects_enabled> of its XML since the
+  last run is deleted unless it has customized scripts. Matched dirs that are
+  not enabled for another reason (e.g. when <projects_enabled> is first
+  added) are only reported.
 
 Dirs of a project that rsync.sh is syncing are skipped and retried on the
 next run.
@@ -60,7 +64,8 @@ class Cleanup:
         ]
         return [f for f in folders if common.has_custom_script(f)]
 
-    def orphan(self, project, removed):
+    def orphan(self, project, removed, reason="XML removed"):
+        """Remove project if removed. Customized scripts keep it."""
         if not removed:
             self.warn_once(
                 f"{project}: no XML matches it; remove it by hand if it is not needed"
@@ -69,20 +74,22 @@ class Cleanup:
         custom = self.custom_scripts(project)
         if custom:
             self.warn_once(
-                f"{project}: XML removed, but kept because of customized scripts in {', '.join(custom)}"
+                f"{project}: {reason}, but kept because of customized scripts in {', '.join(custom)}"
             )
             return
         if common.rsync_lock_live(project):
             self.log.warning(f"{project}: rsync.sh is running, will retry")
-            self.pending.append(project)
-            self.failed = True
+            self.retry(project)
             return
         if not self.dry_run and not common.take_rsync_lock(project):
             self.log.warning(f"{project}: cannot take rsync.lock, will retry")
-            self.pending.append(project)
-            self.failed = True
+            self.retry(project)
             return
         self.remove(project)
+
+    def retry(self, project):
+        self.pending.append(project)
+        self.failed = True
 
     def stale_batches(self, project):
         try:
@@ -144,15 +151,17 @@ def main(argv=None):
     log = common.Logger("cleanup_on_deploy")
     os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-    patterns = common.validate(log)
-    if patterns is None:
+    result = common.validate(log)
+    if result is None:
         return 1
+    patterns = result.patterns
 
     head = common.head()
     state = common.read_state(STATE)
     pending = set(state["pending"]) if state else set()
     old = args.from_rev or (state["sha"] if state else None)
     old_patterns = {}
+    disabled = set()
     if old is None:
         log.info("no state, unmatched project dirs are only reported")
     elif not common.commit_exists(old):
@@ -160,6 +169,12 @@ def main(argv=None):
     else:
         xml_changes = common.changed_xmls(common.changed_paths(old, head))
         old_patterns = common.old_patterns(old, [p for s, p in xml_changes if s != "A"])
+        old_enabled = common.old_enabled(
+            old, [p for s, p in xml_changes if s not in ("A", "D")]
+        )
+        for xml, names in old_enabled.items():
+            if os.path.normpath(xml) in result.enabled:
+                disabled |= names - set(result.enabled[os.path.normpath(xml)])
 
     cleanup = Cleanup(args.dry_run, state.get("warned", []) if state else [], log)
     for project in common.project_dirs():
@@ -173,6 +188,16 @@ def main(argv=None):
             cleanup.warn_once(
                 f"{project}: matched by more than one XML ({', '.join(matching)}), skipped"
             )
+        elif project not in result.enabled.get(matching[0], [project]):
+            reason = f"not in <projects_enabled> of {matching[0]} any more"
+            if project in disabled or project in pending:
+                cleanup.orphan(project, True, reason=reason)
+            else:
+                cleanup.warn_once(
+                    f"{project}: not in <projects_enabled> of {matching[0]}; "
+                    "remove it by hand if it is not needed"
+                )
+                cleanup.stale_batches(project)
         else:
             cleanup.stale_batches(project)
 

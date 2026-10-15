@@ -78,8 +78,9 @@ will generate the scripts using the `alice` rsync user.
    `make test_update_before_files`
 6. Run consistency test `make test` and `make validate_xml`. CI rejects an XML
    that `make validate_xml` rejects, e.g. one whose `project_pattern` is a regex
-   that no *t/obs/ProjectName* folder matches: the automatic deployment (see
-   below) could not tell which project folder to create for it.
+   without `<projects_enabled>` (see below) that no *t/obs/ProjectName* folder
+   matches: the automatic deployment could not tell which project folder to
+   create for it.
    `make validate_xml` also checks every XML against the schema
    *xml/openQA.rng*, which needs `xmllint` (package `libxml2-tools`). The
    schema allows only the elements and attributes that `script/scriptgen.py`
@@ -127,13 +128,42 @@ after every `git pull`. It runs, as the owner of the checkout:
 1. `script/deploy_on_pull.py`: runs `scriptgen.py` for the projects whose XML
    changed, for all projects if `scriptgen.py`, `cfg.py` or the brand plugin
    changed, and creates and generates the project folders of a newly added XML.
-   The folder name is the `project_pattern` if it is a literal name, otherwise
-   the *t/obs/ProjectName* folders that match it.
+   The project folders of an XML are listed by its `<projects_enabled>`
+   elements (see below). Without them, the folder name is the
+   `project_pattern` if it is a literal name, otherwise the
+   *t/obs/ProjectName* folders that match it; these are created only when the
+   XML is added.
 2. `script/cleanup_on_deploy.py`: deletes batch folders whose batch is no
-   longer in the XML, and project folders whose XML was deleted or no longer
-   matches them. Folders with customized scripts (no `GENERATED` header) are
-   kept and reported. Projects that `rsync.sh` is syncing (live `rsync.lock`)
-   are skipped and retried on the next run.
+   longer in the XML, project folders whose XML no longer matches them, and
+   project folders dropped from `<projects_enabled>`. Folders with customized
+   scripts (no `GENERATED` header) are kept and reported. Projects that
+   `rsync.sh` is syncing (live `rsync.lock`) are skipped and retried on the
+   next run.
+
+#### Enabled projects
+
+A `project_pattern` with a character class, such as
+`openSUSE:(?P<version>Factory):(Staging:[A-Z]|Rings:1-MinimalX)`, states which
+projects the deployment creates with `<projects_enabled>`:
+
+```xml
+<projects_enabled range="A..O" project="Z"/>
+```
+
+`range="X..Y"` is inclusive; both ends are single letters or both numbers.
+`project` adds comma-separated values of the same kind (letters or numbers).
+Several elements can be given; values are deduplicated. Each value replaces
+the one character class of the pattern (with its quantifier, e.g. `[0-9]+`)
+and must match it; the rest of the pattern must be literal or literal
+alternatives. The example enables `openSUSE:Factory:Staging:A` to `O`, `Z`
+and `openSUSE:Factory:Rings:1-MinimalX`. `make validate_xml` rejects an
+invalid element, and warns about *t/obs/ProjectName* folders that are not
+enabled. `scriptgen.py` ignores the element.
+
+`deploy_on_pull.py` creates the missing enabled folders whenever the XML
+changes (or with `--all`). `cleanup_on_deploy.py` deletes the folders that a
+change removed from the enabled set; folders that were not enabled before
+(e.g. when `<projects_enabled>` is first added) are only reported.
 
 Both store the last processed commit and the projects to retry in
 *.deploy-state/*, take `--dry-run` and `--from REV`, and do nothing if any XML
