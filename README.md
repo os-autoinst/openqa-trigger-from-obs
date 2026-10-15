@@ -136,9 +136,10 @@ after every `git pull`. It runs, as the owner of the checkout:
 2. `script/cleanup_on_deploy.py`: deletes batch folders whose batch is no
    longer in the XML, project folders whose XML no longer matches them, and
    project folders dropped from `<projects_enabled>`. Folders with customized
-   scripts (no `GENERATED` header) are kept and reported. Projects that
-   `rsync.sh` is syncing (live `rsync.lock`) are skipped and retried on the
-   next run.
+   scripts (no `GENERATED` header) are kept and reported. Project folders of
+   a deleted (or archived) XML are deleted even if they have customized
+   scripts. Projects that `rsync.sh` is syncing (live `rsync.lock`) are
+   skipped and retried on the next run.
 
 #### Enabled projects
 
@@ -164,6 +165,13 @@ enabled. `scriptgen.py` ignores the element.
 changes (or with `--all`). `cleanup_on_deploy.py` deletes the folders that a
 change removed from the enabled set; folders that were not enabled before
 (e.g. when `<projects_enabled>` is first added) are only reported.
+
+#### Archiving an XML
+
+XMLs of projects that are gone can be moved to *xml/archive/obs/*, outside
+*xml/obs*, so that neither `scriptgen.py` nor the checks see them. For the
+deployment this is a deletion: the next run deletes the project folders that
+the XML matched, including customized ones.
 
 Both store the last processed commit and the projects to retry in
 *.deploy-state/*, take `--dry-run` and `--from REV`, and do nothing if any XML

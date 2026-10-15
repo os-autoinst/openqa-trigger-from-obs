@@ -8,7 +8,9 @@ every subfolder of a project dir, so a leftover dir keeps triggering jobs.
   dir is checked on every run.
 - A project dir that no XML matches is deleted if the old pattern of an XML
   changed or deleted since the last run (.deploy-state/cleanup.json) matched
-  it. Other unmatched dirs are only reported.
+  it. If the XML was deleted (or moved out of xml/<brand>, e.g. archived),
+  the dir is deleted even if it has customized scripts; otherwise customized
+  scripts keep it. Other unmatched dirs are only reported.
 - A project dir that was dropped from <projects_enabled> of its XML since the
   last run is deleted unless it has customized scripts. Matched dirs that are
   not enabled for another reason (e.g. when <projects_enabled> is first
@@ -40,6 +42,7 @@ class Cleanup:
         self.warned = set(warned)
         self.new_warned = set()
         self.pending = []
+        self.forced = []
         self.failed = False
         self.log = log
 
@@ -64,31 +67,37 @@ class Cleanup:
         ]
         return [f for f in folders if common.has_custom_script(f)]
 
-    def orphan(self, project, removed, reason="XML removed"):
-        """Remove project if removed. Customized scripts keep it."""
+    def orphan(self, project, removed, forced=False, reason="XML removed"):
+        """Remove project if removed. Customized scripts keep it unless forced."""
         if not removed:
             self.warn_once(
                 f"{project}: no XML matches it; remove it by hand if it is not needed"
             )
             return
         custom = self.custom_scripts(project)
-        if custom:
+        if custom and not forced:
             self.warn_once(
                 f"{project}: {reason}, but kept because of customized scripts in {', '.join(custom)}"
             )
             return
         if common.rsync_lock_live(project):
             self.log.warning(f"{project}: rsync.sh is running, will retry")
-            self.retry(project)
+            self.retry(project, forced)
             return
         if not self.dry_run and not common.take_rsync_lock(project):
             self.log.warning(f"{project}: cannot take rsync.lock, will retry")
-            self.retry(project)
+            self.retry(project, forced)
             return
+        if custom:
+            self.log.warning(
+                f"{project}: {reason}, removing it with its customized scripts in {', '.join(custom)}"
+            )
         self.remove(project)
 
-    def retry(self, project):
+    def retry(self, project, forced):
         self.pending.append(project)
+        if forced:
+            self.forced.append(project)
         self.failed = True
 
     def stale_batches(self, project):
@@ -159,8 +168,10 @@ def main(argv=None):
     head = common.head()
     state = common.read_state(STATE)
     pending = set(state["pending"]) if state else set()
+    forced = set(state.get("forced", [])) & pending if state else set()
     old = args.from_rev or (state["sha"] if state else None)
     old_patterns = {}
+    deleted_patterns = {}
     disabled = set()
     if old is None:
         log.info("no state, unmatched project dirs are only reported")
@@ -169,6 +180,8 @@ def main(argv=None):
     else:
         xml_changes = common.changed_xmls(common.changed_paths(old, head))
         old_patterns = common.old_patterns(old, [p for s, p in xml_changes if s != "A"])
+        deleted = {p for s, p in xml_changes if s == "D"}
+        deleted_patterns = {p: r for p, r in old_patterns.items() if p in deleted}
         old_enabled = common.old_enabled(
             old, [p for s, p in xml_changes if s not in ("A", "D")]
         )
@@ -180,10 +193,17 @@ def main(argv=None):
     for project in common.project_dirs():
         matching = common.matching_xmls(project, patterns)
         if not matching:
-            removed = project in pending or any(
-                validate_xml.full_match(r, project) for r in old_patterns.values()
+            force = project in forced or any(
+                validate_xml.full_match(r, project) for r in deleted_patterns.values()
             )
-            cleanup.orphan(project, removed)
+            removed = (
+                force
+                or project in pending
+                or any(
+                    validate_xml.full_match(r, project) for r in old_patterns.values()
+                )
+            )
+            cleanup.orphan(project, removed, force)
         elif len(matching) > 1:
             cleanup.warn_once(
                 f"{project}: matched by more than one XML ({', '.join(matching)}), skipped"
@@ -207,6 +227,7 @@ def main(argv=None):
             {
                 "sha": head,
                 "pending": sorted(set(cleanup.pending)),
+                "forced": sorted(set(cleanup.forced)),
                 "warned": sorted(cleanup.new_warned),
             },
         )
