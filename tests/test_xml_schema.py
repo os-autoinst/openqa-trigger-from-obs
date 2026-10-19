@@ -85,6 +85,8 @@ def test_valid(tmp_path, content):
         # flavors and their children
         ('<openQA project_pattern="A:B"><flavor sha="128"/></openQA>', "attribute sha"),
         ('<openQA project_pattern="A:B"><flavor iso_path="x"/></openQA>', "iso_path"),
+        # scriptgen.py only reads repos of <batch>, not of <flavor>
+        ('<openQA project_pattern="A:B"><flavor repos="x"/></openQA>', "repos"),
         ('<openQA project_pattern="A:B"><flavor><hdd/></flavor></openQA>', "hdd"),
         (
             '<openQA project_pattern="A:B"><flavor><iso filemask=""/></flavor></openQA>',

@@ -144,8 +144,6 @@
       <optional><attribute name="news"/></optional>
       <optional><attribute name="offset"/></optional>
       <optional><attribute name="realisoflavor"/></optional>
-      <!-- ignored by scriptgen.py, but used in xml/obs -->
-      <optional><attribute name="repos"/></optional>
       <optional><attribute name="rsync"/></optional>
       <optional><attribute name="sha"><ref name="sha"/></attribute></optional>
       <optional><attribute name="staging_pattern"/></optional>
