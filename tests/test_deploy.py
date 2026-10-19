@@ -392,6 +392,30 @@ def test_pending_project_ending_in_xml(repo):
     assert "no longer exists" not in proc.out
 
 
+def test_live_rsync_lock_defers_generation(repo):
+    repo.xml("Baz.xml", "Baz:Qux", FLAVOR.replace("DISTRI", "NEWDISTRI"))
+    sha = repo.commit()
+    lock = repo.path("Baz:Qux", "rsync.lock")
+    rsync = subprocess.Popen(["sleep", "60"])
+    try:
+        lock.write_text(f"{rsync.pid}\n")
+        proc = repo.deploy()
+        assert proc.returncode == 1
+        assert "Baz:Qux: rsync.sh is running, will retry" in proc.out
+        assert generating(proc) == []
+        assert "NEWDISTRI" not in repo.path("Baz:Qux", "print_openqa.sh").read_text()
+        assert repo.state("deploy") == {"sha": sha, "pending": ["Baz:Qux"]}
+        assert lock.read_text() == f"{rsync.pid}\n"
+    finally:
+        rsync.kill()
+        rsync.wait()
+    proc = repo.deploy()
+    assert proc.returncode == 0, proc.out
+    assert generating(proc) == ["Baz:Qux"]
+    assert "NEWDISTRI" in repo.path("Baz:Qux", "print_openqa.sh").read_text()
+    assert not lock.exists()
+
+
 def test_invalid_xml_does_nothing(repo):
     sha = repo.head()
     repo.path("xml", "obs", "Baz.xml").write_text("<openQA")

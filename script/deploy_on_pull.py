@@ -14,7 +14,8 @@ scriptgen.py for:
   created first: its literal project_pattern, or the t/<brand> test dirs that
   match it (validate_xml.project_names()).
 
-Projects that fail are retried on the next run.
+Projects that fail or that rsync.sh is syncing (rsync.lock) are retried on
+the next run.
 """
 
 import argparse
@@ -190,8 +191,17 @@ def main(argv=None):
         if project in create:
             log.info(f"{project}: creating project dir")
             os.makedirs(project, exist_ok=True)
-        log.info(f"{project}: generating")
-        if not generate(project, log):
+        # rsync.sh reads the scripts while it runs, do not rewrite them then
+        if not common.take_rsync_lock(project):
+            log.warning(f"{project}: rsync.sh is running, will retry")
+            new_pending.append(project)
+            continue
+        try:
+            log.info(f"{project}: generating")
+            ok = generate(project, log)
+        finally:
+            common.release_rsync_lock(project)
+        if not ok:
             log.error(f"{project}: scriptgen failed, will retry")
             new_pending.append(project)
 

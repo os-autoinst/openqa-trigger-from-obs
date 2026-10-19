@@ -138,8 +138,10 @@ after every `git pull`. It runs, as the owner of the checkout:
    project folders dropped from `<projects_enabled>`. Folders with customized
    scripts (no `GENERATED` header) are kept and reported. Project folders of
    a deleted (or archived) XML are deleted even if they have customized
-   scripts. Projects that `rsync.sh` is syncing (live `rsync.lock`) are
-   skipped and retried on the next run.
+   scripts.
+
+Both skip the projects that `rsync.sh` is syncing (live `rsync.lock`) and
+retry them on the next run; they hold the lock while they change a project.
 
 #### Enabled projects
 
