@@ -14,8 +14,8 @@ scriptgen.py for:
   created first: its literal project_pattern, or the t/<brand> test dirs that
   match it (validate_xml.project_names()).
 
-Projects that fail or that rsync.sh is syncing (rsync.lock) are retried on
-the next run.
+Project dirs matched by more than one XML are not generated. Projects that
+fail or that rsync.sh is syncing (rsync.lock) are retried on the next run.
 """
 
 import argparse
@@ -54,6 +54,14 @@ def plan(old, head, result, pending, log):
     create = set()
     errors = []
     failed_xmls = []
+    ambiguous = set()
+    for d in dirs:
+        matching = common.matching_xmls(d, patterns)
+        if len(matching) > 1:
+            errors.append(
+                f"{d}: matched by more than one XML ({', '.join(matching)}), not generated"
+            )
+            ambiguous.add(d)
 
     added = []
     changed = set()
@@ -107,7 +115,10 @@ def plan(old, head, result, pending, log):
             if not is_project_name(name):
                 errors.append(f"{xml}: {name!r} is not a valid project dir name")
                 ok = False
-            elif common.mapped_xml(name) != xml:
+            elif (
+                common.mapped_xml(name) != xml
+                or len(common.matching_xmls(name, patterns)) > 1
+            ):
                 errors.append(
                     f"{xml}: project {name} would be generated from "
                     f"{common.mapped_xml(name) or 'no XML'}; fix the project_pattern"
@@ -127,7 +138,7 @@ def plan(old, head, result, pending, log):
             targets.update(existing)
         if not ok:
             failed_xmls.append(xml)
-    return sorted(targets), create, errors, failed_xmls
+    return sorted(targets - ambiguous), create, errors, failed_xmls
 
 
 def generate(project, log):

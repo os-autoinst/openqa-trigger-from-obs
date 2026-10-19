@@ -142,6 +142,7 @@ after every `git pull`. It runs, as the owner of the checkout:
 
 Both skip the projects that `rsync.sh` is syncing (live `rsync.lock`) and
 retry them on the next run; they hold the lock while they change a project.
+A project folder matched by more than one XML is not generated.
 
 #### Enabled projects
 

@@ -379,6 +379,22 @@ def test_unmapped_dir_is_skipped(repo):
     assert generating(proc) == ["Baz:Qux", "Foo:Bar:ToTest", "Multi:A"]
 
 
+def test_dir_matched_by_two_xmls_is_not_generated(repo):
+    repo.xml("Dup1.xml", "Dup:[AB]", '<projects_enabled project="A"/>' + FLAVOR)
+    repo.xml("Dup2.xml", "Dup:[BC]", '<projects_enabled project="C"/>' + FLAVOR)
+    repo.commit()
+    repo.path("Dup:B").mkdir()
+    proc = repo.deploy("--all")
+    assert proc.returncode == 1
+    assert (
+        "Dup:B: matched by more than one XML (xml/obs/Dup1.xml, xml/obs/Dup2.xml)"
+        in proc.out
+    )
+    assert "Dup:B" not in generating(proc)
+    assert not repo.generated("Dup:B")
+    assert {"Dup:A", "Dup:C"} <= set(generating(proc))
+
+
 def test_pending_project_ending_in_xml(repo):
     repo.xml("Dot.xml", r"Dot:P\.xml")
     repo.commit()
