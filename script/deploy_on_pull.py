@@ -36,6 +36,10 @@ def is_project_name(name):
     return ":" in name and validate_xml.is_safe_name(name)
 
 
+def is_xml_path(entry):
+    return entry.startswith(common.xml_dir() + "/") and entry.endswith(".xml")
+
+
 def plan(old, head, result, pending, log):
     """Return (targets, create, errors, failed_xmls).
 
@@ -74,7 +78,7 @@ def plan(old, head, result, pending, log):
         targets.update(d for d in dirs if mapped[d])
 
     for p in pending:
-        if p.endswith(".xml"):
+        if is_xml_path(p):
             added.append(p)
         elif mapped.get(p):
             targets.add(p)

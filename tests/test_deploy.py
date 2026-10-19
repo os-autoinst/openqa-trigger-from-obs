@@ -379,6 +379,19 @@ def test_unmapped_dir_is_skipped(repo):
     assert generating(proc) == ["Baz:Qux", "Foo:Bar:ToTest", "Multi:A"]
 
 
+def test_pending_project_ending_in_xml(repo):
+    repo.xml("Dot.xml", r"Dot:P\.xml")
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    state = repo.state("deploy")
+    state["pending"] = ["Dot:P.xml"]
+    repo.path(".deploy-state", "deploy.json").write_text(json.dumps(state))
+    proc = repo.deploy()
+    assert proc.returncode == 0, proc.out
+    assert generating(proc) == ["Dot:P.xml"]
+    assert "no longer exists" not in proc.out
+
+
 def test_invalid_xml_does_nothing(repo):
     sha = repo.head()
     repo.path("xml", "obs", "Baz.xml").write_text("<openQA")
