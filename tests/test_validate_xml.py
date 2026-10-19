@@ -277,6 +277,19 @@ def test_scriptgen_failure(root):
     assert found.startswith("xml/obs/A.xml: scriptgen cannot process it: KeyError")
 
 
+def test_batch_references(root):
+    body = f'<batch name="a" repos="b">{FLAVOR}</batch><batch name="b">{FLAVOR}</batch>'
+    write_xml(root, "A.xml", "A:B", body)
+    assert errors() == []
+    # a path is an external repository, not a batch
+    write_xml(root, "A.xml", "A:B", attrs=' repos="Other:Project/repo"')
+    assert errors() == []
+    write_xml(root, "A.xml", "A:B", attrs=' repos="missing"')
+    assert errors() == [
+        "xml/obs/A.xml: batch 'default': repos='missing' is not a batch"
+    ]
+
+
 def test_regex_xml_without_project_name_is_an_error(root):
     write_xml(root, "A.xml", "A:[0-9]")
     (found,) = errors()

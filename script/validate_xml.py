@@ -444,6 +444,17 @@ def _check_batches(rel, root, result):
         result.errors.append(f"{rel}: duplicate batch name {name!r}")
 
 
+def _check_batch_refs(rel, ag, result):
+    """repos="name" (without a "/") refers to a batch of the same XML, which
+    scriptgen.py dereferences while rendering."""
+    for batch in ag.batches:
+        link = batch.repolink
+        if link and "/" not in link and ag.batch_by_name(link) is None:
+            result.errors.append(
+                f"{rel}: batch {batch.subfolder!r}: repos={link!r} is not a batch"
+            )
+
+
 def _validate_file(path, brand, test_dirs, result):
     rel = os.path.normpath(path)
     try:
@@ -475,6 +486,8 @@ def _validate_file(path, brand, test_dirs, result):
         ag.doFile(path)
     except Exception as e:  # noqa: BLE001 - any failure makes the XML invalid
         result.errors.append(f"{rel}: scriptgen cannot process it: {e!r}")
+    else:
+        _check_batch_refs(rel, ag, result)
 
     if not names:
         if enabled is None and rel not in GRANDFATHERED:
