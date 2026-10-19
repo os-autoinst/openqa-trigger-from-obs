@@ -199,6 +199,13 @@ of the hook, `systemd/openqa-trigger-from-obs-deploy.service` can run
 `git pull --rebase` that has to rebase local commits does not run the
 *post-merge* hook; the next update catches up.
 
+The *post-merge* hook only runs when a pull brings new commits, so with the
+hook alone, work left for retry (a failed `scriptgen.py`, a project that
+`rsync.sh` was syncing) waits for the next commit. To retry it on every
+update, enable the `OnSuccess=` line as well; it can be combined with the
+hook, as both hold *.deploy.lock* and a run with nothing to do changes
+nothing.
+
 To run the scripts by hand while the hook may run, hold the same lock:
 `flock .deploy.lock python3 script/deploy_on_pull.py`.
 
