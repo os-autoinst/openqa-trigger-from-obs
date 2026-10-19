@@ -17,7 +17,8 @@ every subfolder of a project dir, so a leftover dir keeps triggering jobs.
   added) are only reported.
 
 Dirs of a project that rsync.sh is syncing are skipped and retried on the
-next run.
+next run. Batch subfolders of a project whose generation failed
+(deploy_on_pull.py will retry it) are kept until it succeeds.
 """
 
 import argparse
@@ -27,9 +28,10 @@ import sys
 
 try:
     from . import deploy_common as common
-    from . import scriptgen, validate_xml
+    from . import deploy_on_pull, scriptgen, validate_xml
 except ImportError:
     import deploy_common as common
+    import deploy_on_pull
     import scriptgen
     import validate_xml
 
@@ -100,7 +102,12 @@ class Cleanup:
             self.forced.append(project)
         self.failed = True
 
-    def stale_batches(self, project):
+    def stale_batches(self, project, deploy_pending):
+        if project in deploy_pending:
+            self.log.warning(
+                f"{project}: not generated yet, its old batches are kept until it is"
+            )
+            return
         try:
             ag = scriptgen.load_generator(project)
         except Exception as e:  # noqa: BLE001 - skip projects scriptgen cannot load
@@ -189,6 +196,9 @@ def main(argv=None):
             if os.path.normpath(xml) in result.enabled:
                 disabled |= names - set(result.enabled[os.path.normpath(xml)])
 
+    deploy_state = common.read_state(deploy_on_pull.STATE)
+    deploy_pending = set(deploy_state["pending"]) if deploy_state else set()
+
     cleanup = Cleanup(args.dry_run, state.get("warned", []) if state else [], log)
     for project in common.project_dirs():
         matching = common.matching_xmls(project, patterns)
@@ -217,9 +227,9 @@ def main(argv=None):
                     f"{project}: not in <projects_enabled> of {matching[0]}; "
                     "remove it by hand if it is not needed"
                 )
-                cleanup.stale_batches(project)
+                cleanup.stale_batches(project, deploy_pending)
         else:
-            cleanup.stale_batches(project)
+            cleanup.stale_batches(project, deploy_pending)
 
     if not args.dry_run:
         common.write_state(

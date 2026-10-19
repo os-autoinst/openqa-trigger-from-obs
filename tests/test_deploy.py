@@ -487,6 +487,28 @@ def test_removed_batch_is_deleted(repo):
     assert not repo.path("Foo:Bar:ToTest", "rsync.lock").exists()
 
 
+def test_batches_of_failed_generation_are_kept(repo):
+    repo.xml(
+        "Foo:Bar.xml",
+        "Foo:(?P<version>Bar):ToTest",
+        f'<batch name="three">{FLAVOR}</batch>',
+    )
+    repo.commit()
+    repo.path("Foo:Bar:ToTest", "three").write_text("in the way")
+    assert repo.deploy().returncode == 1
+    proc = repo.cleanup()
+    assert "Foo:Bar:ToTest: not generated yet, its old batches are kept" in proc.out
+    assert repo.path("Foo:Bar:ToTest", "one").exists()
+    assert repo.path("Foo:Bar:ToTest", "two").exists()
+
+    repo.path("Foo:Bar:ToTest", "three").unlink()
+    assert repo.deploy().returncode == 0
+    assert repo.cleanup().returncode == 0
+    assert not repo.path("Foo:Bar:ToTest", "one").exists()
+    assert not repo.path("Foo:Bar:ToTest", "two").exists()
+    assert repo.generated("Foo:Bar:ToTest", "three")
+
+
 def test_customized_and_foreign_subdirs_are_kept(repo):
     custom = repo.path("Foo:Bar:ToTest", "custom")
     shutil.copytree(repo.path("Foo:Bar:ToTest", "two"), custom)
