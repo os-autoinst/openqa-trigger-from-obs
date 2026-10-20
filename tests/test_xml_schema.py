@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pytest
 
+# TODO: This testsuite could be removed or only ran if a change in the schema happens, as it takes a long time to run and is not necessary for every test run.
+
 REPO = Path(__file__).resolve().parent.parent
 SCHEMA = REPO / "xml" / "openQA.rng"
 
