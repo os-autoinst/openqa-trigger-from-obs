@@ -198,6 +198,21 @@ def test_current_staging_projects(monkeypatch):
         assert os.path.normpath(xmlfile) == "xml/obs/openSUSE:Factory:Staging.xml"
 
 
+@pytest.mark.parametrize("brand", ["obs", "abs"])
+def test_project_names_map_to_their_xml(monkeypatch, brand):
+    """Covers XMLs without a t/<brand> dir, which test_regen_all skips."""
+    monkeypatch.chdir(REPO)
+    result = validate_xml.validate([f"xml/{brand}"])
+    test_dirs = validate_xml.tracked_test_dirs(brand)
+    for xml, regex in result.patterns.items():
+        names = result.enabled.get(xml) or validate_xml.project_names(
+            regex.pattern, test_dirs
+        )
+        for name in names:
+            xmlfile, _, _ = scriptgen.find_xml(name, brand)
+            assert os.path.normpath(xmlfile) == xml, name
+
+
 def test_project_names_falls_back_to_test_dirs():
     pattern = "Multi:(?P<version>[A-Z])"
     assert validate_xml.project_names(
