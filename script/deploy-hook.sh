@@ -10,6 +10,7 @@ set -u
 
 mode=hook
 case "${1:-}" in
+    hook) mode=hook;;
     tick) mode=tick ;;
     # post-merge after `git merge --squash`: nothing was committed
     1) exit 0 ;;
