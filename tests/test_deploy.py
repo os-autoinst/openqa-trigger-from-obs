@@ -773,6 +773,8 @@ def test_hook_exit_codes(repo, clone):
     assert clone.hook("0").returncode == 0
     # squash merge: nothing to do
     assert clone.hook("1").out == ""
+    assert "forcing regeneration of all projects" in clone.hook("--force", "tick").out
+    assert clone.hook("--bogus").returncode == 1
 
 
 def test_hook_needs_owner(clone, tmp_path):

@@ -123,7 +123,8 @@ bash script/rsync.sh Leap:15.2:ToTest
 ### Automatic deployment
 
 There is now the posibility to enable automated deployment (cleanup and generation)
-by calling `script/deploy-hook.sh [tick|hook]`, by default it runs in `hook` mode
+by calling `script/deploy-hook.sh [--force] [tick|hook]`, by default it runs in `hook` mode;
+`--force` regenerates all project folders (`deploy_on_pull.py --all`)
 
 1. `script/deploy_on_pull.py`: runs `scriptgen.py` for the projects whose XML
    changed, for all projects if `scriptgen.py`, `cfg.py` or the brand plugin
