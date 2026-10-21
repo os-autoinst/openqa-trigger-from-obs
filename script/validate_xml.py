@@ -400,8 +400,20 @@ def enabled_names(root, pattern):
                 continue
         project = element.attrib.get("project")
         extra = project.split(",") if project is not None else []
-        expected = range_class or (_value_class(extra[0]) if extra else None)
+        classes = [c for c in map(_value_class, extra) if c]
+        expected = range_class or (classes[0] if classes else None)
         for value in extra:
+            # a literal alternative of the pattern, e.g. Rings:1-MinimalX
+            if _value_class(value) is None:
+                literal = expand_pattern(pattern[:start] + "#" + pattern[end:]) or []
+                found = [
+                    n
+                    for n in literal
+                    if "#" not in n and (n == value or n.endswith(":" + value))
+                ]
+                if found:
+                    names.update(found)
+                    continue
             if _value_class(value) is None or _value_class(value) != expected:
                 errors.append(
                     f"project {value!r} is not of the same class as the other values "

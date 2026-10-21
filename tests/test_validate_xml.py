@@ -153,6 +153,14 @@ def test_enabled_names():
     assert enabled("A:[A-Z]", 'project="B"', 'range="A..B"') == (["A:A", "A:B"], [])
 
 
+def test_enabled_literal_project():
+    names = ["openSUSE:Factory:Rings:1-MinimalX", "openSUSE:Factory:Staging:A"]
+    assert enabled(STAGING, 'project="Rings:1-MinimalX,A"') == (names, [])
+    assert enabled(STAGING, 'project="Rings:1-MinimalX"') == (names[:1], [])
+    _, errs = enabled(STAGING, 'project="Rings:2"')
+    assert "project 'Rings:2' is not of the same class" in errs[0]
+
+
 @pytest.mark.parametrize(
     "pattern, element, message",
     [
@@ -190,8 +198,8 @@ def test_current_staging_projects(monkeypatch):
     monkeypatch.chdir(REPO)
     result = validate_xml.validate(["xml/obs"])
     names = result.enabled["xml/obs/openSUSE:Factory:Staging.xml"]
-    assert len(names) == 17
-    assert "openSUSE:Factory:Staging:Z" in names
+    assert len(names) == 16
+    assert "openSUSE:Factory:Rings:1-MinimalX" in names
     assert "openSUSE:Factory:Staging:P" not in names
     for name in names:
         xmlfile, _, _ = scriptgen.find_xml(name, "obs")

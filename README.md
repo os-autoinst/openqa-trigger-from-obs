@@ -186,7 +186,8 @@ projects the deployment creates with `<projects_enabled>`:
 ```
 
 `range="X..Y"` is inclusive; both ends are single letters or both numbers.
-`project` adds comma-separated values of the same kind (letters or numbers).
+`project` adds comma-separated values of the same kind (letters or numbers)
+or literal alternatives of the pattern, such as `Rings:1-MinimalX`.
 Several elements can be given; values are deduplicated. Each value replaces
 the one character class of the pattern (with its quantifier, e.g. `[0-9]+`)
 and must match it; the rest of the pattern must be literal or literal

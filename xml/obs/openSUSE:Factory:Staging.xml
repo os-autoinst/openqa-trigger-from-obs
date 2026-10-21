@@ -1,8 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../openQA.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <openQA
     project_pattern="openSUSE:(?P&lt;version&gt;Factory):(Staging:[A-Z]|Rings:1-MinimalX)"
     dist_path="images/x86_64"
     archs="x86_64">
-    <projects_enabled range="A..O" project="Z"/> <!-- [A-Z] allows only those characters, single projects can be specified too -->
+    <projects_enabled range="A..O"/>
+    <projects_enabled project="Rings:1-MinimalX"/>
     <flavor name="JeOS-for-kvm-and-xen" folder="kiwi-templates-Minimal:kvm-and-xen" staging_pattern="Tumbleweed-Minimal" iso1="Tumbleweed-DVD" distri="opensuse">
         <hdd filemask=".*Minimal.*kvm-and-xen.*\.qcow2$"/>
     </flavor>

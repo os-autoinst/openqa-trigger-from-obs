@@ -51,7 +51,8 @@
     The projects the deploy hooks create, read by script/validate_xml.py and
     the deploy hooks only (scriptgen ignores it). The values replace the one
     character class of project_pattern, e.g. range="A..O" project="Z" for
-    "Staging:[A-Z]". The range is inclusive, project is comma-separated.
+    "Staging:[A-Z]". The range is inclusive, project is comma-separated and
+    may name a literal alternative of the pattern.
   -->
   <define name="projects_enabled">
     <element name="projects_enabled">
