@@ -543,24 +543,7 @@ class ActionBatch:
 
     def gen_if_not_customized(self, folder, fname):
         filename = folder + "/" + fname
-        line1 = ""
-        line2 = ""
-        custom = 0
-        if os.path.exists(filename):
-            with open(filename, "r") as f:
-                line1 = f.readline()
-                line2 = f.readline()
-                if (
-                    line1
-                    and "GENERATED" not in line1
-                    and (
-                        not line1.lstrip().startswith("#")
-                        or line2
-                        and "GENERATED" not in line2
-                    )
-                ):
-                    custom = 1
-        if custom:
+        if is_customized(filename):
             print("Will not overwrite custom file: " + filename, file=sys.stderr)
             return
         with open(filename, "w") as f:
@@ -1572,6 +1555,20 @@ done < <(LANG=C.UTF-8 sort __envsub/files_asset.lst)""",
         self.p(cfg.openqa_call_news_end(self.distri, self.news, self.news_archs), f)
 
 
+def is_customized(filename):
+    """Return True if filename exists and lacks the GENERATED marker."""
+    if not os.path.exists(filename):
+        return False
+    with open(filename, "r") as f:
+        line1 = f.readline()
+        line2 = f.readline()
+    return bool(
+        line1
+        and "GENERATED" not in line1
+        and (not line1.lstrip().startswith("#") or line2 and "GENERATED" not in line2)
+    )
+
+
 def parse_dir(root, d, files):
     for f in files:
         if not f.endswith(".xml"):
@@ -1676,18 +1673,38 @@ def detect_xml_dir(project):
     return os.path.dirname(project)[-3:]
 
 
-def gen_files(project, rsync_user):
-    project = project.rstrip("/")
-    xmlfile = ""
-
-    xmldir = detect_xml_dir(project)
-
+def find_xml(project, xmldir):
+    """Return (xmlfile, dist_path, version) of the XML in xml/<xmldir> that
+    matches project, or ("", "", "")."""
+    xmlfile, dist_path, version = "", "", ""
     for root, _, files in os.walk("xml/" + xmldir):
         xmlfile, dist_path, version = parse_dir(root, project, files)
+    return xmlfile, dist_path, version
 
+
+def load_generator(project, rsync_user=""):
+    """Parse the XML of project into an ActionGenerator, without importing
+    the brand plugin. Returns None if no XML matches."""
+    project = project.rstrip("/")
+    xmldir = detect_xml_dir(project)
+    xmlfile, dist_path, version = find_xml(project, xmldir)
     if not xmlfile:
         print(f"Cannot find xml file for {project} ...", file=sys.stderr)
-        return 1
+        return None
+
+    a = ActionGenerator(os.getcwd(), project, dist_path, version, xmldir, rsync_user)
+    a.doFile(xmlfile)
+    return a
+
+
+def batch_subfolders(ag):
+    """Subfolders of the project dir that generation writes into."""
+    return {b.subfolder for b in ag.batches} - {"default"}
+
+
+def gen_files(project, rsync_user):
+    project = project.rstrip("/")
+    xmldir = detect_xml_dir(project)
 
     if xmldir == "abs":
         import abs  # noqa: F401
@@ -1696,12 +1713,9 @@ def gen_files(project, rsync_user):
             # https://github.com/astral-sh/ty/issues/2681 ignore unused-ignore-comment rule twice
             import ibs  # noqa: F401 # ty: ignore[unused-ignore-comment, unresolved-import, unused-ignore-comment]
 
-    a = ActionGenerator(os.getcwd(), project, dist_path, version, xmldir, rsync_user)
+    a = load_generator(project, rsync_user)
     if a is None:
-        print("Couldnt initialize", file=sys.stderr)
-        sys.exit(1)
-
-    a.doFile(xmlfile)
+        return 1
 
     for batch in a.batches:
         path = project

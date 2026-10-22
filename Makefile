@@ -21,6 +21,20 @@ openSUSE%: FORCE
 .PHONY: FORCE
 FORCE:
 
+# Run script/deploy-hook.sh after every `git pull`
+.PHONY: install_hooks
+install_hooks:
+	@hooks="$$(git rev-parse --git-path hooks)" && target="$$(pwd)/script/deploy-hook.sh" && \
+	if [ -n "$$(git config core.hooksPath)" ]; then \
+		echo "core.hooksPath is set, link $$target as post-merge hook there by hand" >&2; exit 1; \
+	elif [ "$$(readlink -f "$$hooks/post-merge")" = "$$target" ]; then \
+		echo "$$hooks/post-merge is already installed"; \
+	elif [ -e "$$hooks/post-merge" ] || [ -L "$$hooks/post-merge" ]; then \
+		echo "$$hooks/post-merge exists, refusing to overwrite it" >&2; exit 1; \
+	else \
+		mkdir -p "$$hooks" && ln -s "$$target" "$$hooks/post-merge" && echo "installed $$hooks/post-merge"; \
+	fi
+
 install_apparmor:
 	install -d -m 755 "$(DESTDIR)"/etc/apparmor.d
 	install -d -m 755 "$(DESTDIR)"/etc/apparmor.d/local
@@ -50,8 +64,16 @@ test_regen_all:
 test_update_before_files: test_regen_all
 	(cd t && bash test_before_after_diff.sh --update-before *bs/*)
 
+# xml/ibs is a symlink into the plugin repository, checked only when present
+XML_DIRS ?= xml/obs xml/abs $(shell test -d xml/ibs && echo xml/ibs)
+
+.PHONY: validate_xml
+validate_xml:
+	find -H $(XML_DIRS) -name '*.xml' -exec xmllint --noout --quiet --relaxng xml/openQA.rng {} +
+	python3 script/validate_xml.py $(XML_DIRS)
+
 .PHONY: all
-all: test_update_before_files test
+all: validate_xml test_update_before_files test test_python_style unit_tests
 
 # Override to use uv, e.g. PYTHON_RUN="uv run"
 PYTHON_RUN ?=
