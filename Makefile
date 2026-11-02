@@ -78,17 +78,20 @@ all: validate_xml test_update_before_files test test_python_style unit_tests
 # Override to use uv, e.g. PYTHON_RUN="uv run"
 PYTHON_RUN ?=
 
-.PHONY: ruff_check ruff_format ty_check test_python_style
-test_python_style: ruff_check ruff_format ty_check test_python_style
 .PHONY: unit_tests
+.PHONY: ruff_check ruff_format ruff_check_format format ty_check test_python_style
+test_python_style: ruff_check_format ruff_check_format ty_check
 unit_tests:
 	$(PYTHON_RUN) pytest -v
 
 ruff_check:
 	$(PYTHON_RUN) ruff check $(ARGS)
 
-ruff_format:
+ruff_check_format:
 	$(PYTHON_RUN) ruff format --check $(ARGS)
 
 ty_check:
 	$(PYTHON_RUN) ty check $(ARGS)
+
+format:
+	$(PYTHON_RUN) ruff format $(ARGS)
