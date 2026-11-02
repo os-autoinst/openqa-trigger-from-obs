@@ -300,6 +300,25 @@ def test_scriptgen_failure(root):
     assert found.startswith("xml/obs/A.xml: scriptgen cannot process it: KeyError")
 
 
+@pytest.mark.parametrize("batch", [None, "one"])
+@pytest.mark.parametrize("names", [("DVD", "DVD"), ("DVD|NET", "NET"), ("DVD|DVD",)])
+def test_duplicate_flavors(root, batch, names):
+    body = "".join(f'<flavor name="{name}" iso="iso"/>' for name in names)
+    if batch:
+        body = f'<batch name="{batch}">{body}</batch>'
+    write_xml(root, "A.xml", "A:B", body)
+    duplicate = "NET" if "NET" in names else "DVD"
+    assert errors() == [
+        f"xml/obs/A.xml: batch {batch or 'default'!r}: duplicate flavor name {duplicate!r}"
+    ]
+
+
+def test_same_flavor_in_different_batches(root):
+    body = "".join(f'<batch name="{name}">{FLAVOR}</batch>' for name in ("a", "b"))
+    write_xml(root, "A.xml", "A:B", body + FLAVOR)
+    assert errors() == []
+
+
 def test_batch_references(root):
     body = f'<batch name="a" repos="b">{FLAVOR}</batch><batch name="b">{FLAVOR}</batch>'
     write_xml(root, "A.xml", "A:B", body)

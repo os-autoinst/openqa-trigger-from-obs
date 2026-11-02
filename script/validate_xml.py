@@ -465,10 +465,13 @@ def _check_batches(rel, root, result):
         result.errors.append(f"{rel}: duplicate batch name {name!r}")
 
 
-def _check_batch_refs(rel, ag, result):
-    """repos="name" (without a "/") refers to a batch of the same XML, which
-    scriptgen.py dereferences while rendering."""
+def _check_generated_batches(rel, ag, result):
+    """Check flavor uniqueness and local repository references per batch."""
     for batch in ag.batches:
+        for name in sorted({n for n in batch.flavors if batch.flavors.count(n) > 1}):
+            result.errors.append(
+                f"{rel}: batch {batch.subfolder!r}: duplicate flavor name {name!r}"
+            )
         link = batch.repolink
         if link and "/" not in link and ag.batch_by_name(link) is None:
             result.errors.append(
@@ -508,7 +511,7 @@ def _validate_file(path, brand, test_dirs, result):
     except Exception as e:  # noqa: BLE001 - any failure makes the XML invalid
         result.errors.append(f"{rel}: scriptgen cannot process it: {e!r}")
     else:
-        _check_batch_refs(rel, ag, result)
+        _check_generated_batches(rel, ag, result)
 
     if not names:
         if enabled is None and rel not in GRANDFATHERED:

@@ -10,7 +10,6 @@
         <flavor name="HDD" distri="wayuu">
             <hdd filemask="raw.xz$"/>
         </flavor>
-        <flavor name="offline-dvd" distri="wanikua" iso="iso" />
         <flavor name="offline-dvd" distri="bare" iso="1" />
     </batch>
     <!-- Flavor for DVD is ignored because is not used inside a batch -->

@@ -86,6 +86,8 @@ will generate the scripts using the `alice` rsync user.
    schema allows only the elements and attributes that `script/scriptgen.py`
    reads, so it catches misspelt attributes. If you teach `scriptgen.py` a new
    attribute, add it to the schema as well.
+   Flavor names must be unique within each batch (including the implicit
+   default batch); the same name may be used in different batches.
 7. Review and test bash commands generated in, which will be executed in
    production:
    * t/obs/ProjectName/print_rsync_iso.before
