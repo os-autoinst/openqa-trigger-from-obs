@@ -69,6 +69,15 @@ def full_match(regex, name):
     return bool(m) and m.group(0) == name
 
 
+def matching_xmls(project, patterns, enabled):
+    """XMLs owning project: an enabled set restricts its pattern's matches."""
+    return sorted(
+        x
+        for x, regex in patterns.items()
+        if full_match(regex, project) and project in enabled.get(x, [project])
+    )
+
+
 class _NotEnumerable(Exception):
     pass
 
@@ -399,7 +408,7 @@ def enabled_names(root, pattern):
                 errors.append(f"invalid range {element.attrib['range']!r}: {e}")
                 continue
         project = element.attrib.get("project")
-        extra = project.split(",") if project is not None else []
+        extra = project.split(",") if project else []
         classes = [c for c in map(_value_class, extra) if c]
         expected = range_class or (classes[0] if classes else None)
         for value in extra:
@@ -548,8 +557,7 @@ def validate(dirs=DEFAULT_DIRS):
                 _validate_file(path, brand, test_dirs, result)
                 brand_xmls.append(os.path.normpath(path))
 
-        # every test dir and derived project name must map to exactly one XML,
-        # otherwise scriptgen picks one depending on the directory order
+        # Patterns may overlap, but each enabled project needs a unique owner.
         brand_patterns = {
             x: result.patterns[x] for x in brand_xmls if x in result.patterns
         }
@@ -560,12 +568,15 @@ def validate(dirs=DEFAULT_DIRS):
             else:
                 candidates.update(project_names(regex.pattern, test_dirs))
         for name in sorted(candidates):
-            matching = sorted(
-                x for x, r in brand_patterns.items() if full_match(r, name)
-            )
+            matching = matching_xmls(name, brand_patterns, result.enabled)
             if len(matching) > 1:
+                reason = (
+                    "enabled in"
+                    if all(x in result.enabled for x in matching)
+                    else "matched by"
+                )
                 result.errors.append(
-                    f"{name}: matched by more than one XML: {', '.join(matching)}"
+                    f"{name}: {reason} more than one XML: {', '.join(matching)}"
                 )
     return result
 

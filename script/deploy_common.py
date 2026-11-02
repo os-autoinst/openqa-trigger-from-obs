@@ -84,9 +84,9 @@ def project_dirs():
     )
 
 
-def matching_xmls(project, patterns):
-    """All XMLs whose pattern matches project, sorted."""
-    return sorted(x for x, r in patterns.items() if validate_xml.full_match(r, project))
+def matching_xmls(project, patterns, enabled=None):
+    """All XMLs owning project, or raw pattern matches without enabled sets."""
+    return validate_xml.matching_xmls(project, patterns, enabled or {})
 
 
 def mapped_xml(project):

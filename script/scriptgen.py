@@ -1599,6 +1599,17 @@ def parse_dir(root, d, files):
             #    print("OBS: no match [" + found_match.group(0) , file=sys.stderr)
             # print("OBS: no match [" + d + "] for " + r.pattern,file=sys.stderr)
             continue
+        if rootXml.find("projects_enabled") is not None:
+            try:
+                from .validate_xml import enabled_names
+            except ImportError:
+                from validate_xml import enabled_names
+
+            enabled, errors = enabled_names(rootXml, pattern)
+            if errors:
+                raise ValueError(f"{root}/{f}: {'; '.join(errors)}")
+            if enabled is not None and os.path.basename(d) not in enabled:
+                continue
         version = found_match.groupdict().get("version", "")
         if version.find("'") != -1:
             print(
