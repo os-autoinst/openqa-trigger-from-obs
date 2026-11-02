@@ -344,6 +344,37 @@ def test_test_dir_matching_two_xmls(root):
     ]
 
 
+def test_project_patterns_overlap_non_overlapping_enabled_projects(root):
+    body_Devel = '<projects_enabled  project="2"/>' + FLAVOR
+    body_Maint = '<projects_enabled range="0..1" project=""/>' + FLAVOR
+    write_xml(root, "openSUSE:Leap:Development.xml", "Leap:X.[0-9]", body_Devel)
+    write_xml(root, "openSUSE:Leap:Maintenance.xml", "Leap:X.[0-9]", body_Maint)
+    (root / "t" / "obs" / "Leap:X.2").mkdir()
+    (root / "t" / "obs" / "Leap:X.0").mkdir()
+    result = validate_xml.validate(["xml/obs"])
+    assert result.enabled == {
+        "xml/obs/openSUSE:Leap:Development.xml": ["Leap:X.2"],
+        "xml/obs/openSUSE:Leap:Maintenance.xml": ["Leap:X.0", "Leap:X.1"],
+    }
+    assert result.errors == []
+
+
+def test_project_patterns_overlap_allowed_different_enabled_projects(root):
+    body_Devel = '<projects_enabled  project="2"/>' + FLAVOR
+    body_Maint = '<projects_enabled range="0..1" project=""/>' + FLAVOR
+    body_Invalid = '<projects_enabled range="1..3" project=""/>' + FLAVOR
+    write_xml(root, "openSUSE:Leap:Development.xml", "Leap:X.[0-9]", body_Devel)
+    write_xml(root, "openSUSE:Leap:Maintenance.xml", "Leap:X.[0-9]", body_Maint)
+    write_xml(root, "openSUSE:Leap:Invalid.xml", "Leap:X.[0-9]", body_Invalid)
+    (root / "t" / "obs" / "Leap:X.2").mkdir()
+    (root / "t" / "obs" / "Leap:X.0").mkdir()
+    result = validate_xml.validate(["xml/obs"])
+    assert result.errors == [
+        "Leap:X.1: enabled in more than one XML: xml/obs/openSUSE:Leap:Maintenance.xml, xml/obs/openSUSE:Leap:Invalid.xml",
+        "Leap:X.2: enabled in more than one XML: xml/obs/openSUSE:Leap:Maintenance.xml, xml/obs/openSUSE:Leap:Invalid.xml",
+    ]
+
+
 def test_literal_name_shadowed_by_other_xml(root):
     write_xml(root, "A.xml", "A:[A-Z]")
     write_xml(root, "B.xml", "A:(?P<version>B)")
