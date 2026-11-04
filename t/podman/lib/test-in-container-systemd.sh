@@ -33,7 +33,7 @@ podman info >/dev/null 2>&1 || (echo podman doesnt seem to be running ; exit 1)
 
 map_port=""
 [ -z "$EXPOSE_PORT" ] || map_port="-p $EXPOSE_PORT:80"
-podman run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs:z --env METHOD=$METHOD --rm --name "$containername" -d -- registry.opensuse.org/devel/openqa/ci/containers/serviced
+podman run --privileged $map_port -v"$thisdir/../../..":/opt/openqa-trigger-from-obs:z --env METHOD=$METHOD --rm --name "$containername" -d -- ${CI_SERVICED_IMAGE}
 
 in_cleanup=0
 

@@ -86,6 +86,8 @@ will generate the scripts using the `alice` rsync user.
    schema allows only the elements and attributes that `script/scriptgen.py`
    reads, so it catches misspelt attributes. If you teach `scriptgen.py` a new
    attribute, add it to the schema as well.
+   Flavor names must be unique within each batch (including the implicit
+   default batch); the same name may be used in different batches.
 7. Review and test bash commands generated in, which will be executed in
    production:
    * t/obs/ProjectName/print_rsync_iso.before
@@ -144,7 +146,7 @@ by calling `script/deploy-hook.sh [--force] [tick|hook]`, by default it runs in 
 
 Both skip the projects that `rsync.sh` is syncing (live `rsync.lock`) and
 retry them on the next run; they hold the lock while they change a project.
-A project folder matched by more than one XML is not generated.
+A project folder owned by more than one XML is not generated.
 
 Running the deploy hooks will store the last commit and projects on a succesful
 run and tracks them in `.deploy-state`. 
@@ -194,7 +196,10 @@ and must match it; the rest of the pattern must be literal or literal
 alternatives. The example enables `openSUSE:Factory:Staging:A` to `O`, `Z`
 and `openSUSE:Factory:Rings:1-MinimalX`. `make validate_xml` rejects an
 invalid element, and warns about *t/obs/ProjectName* folders that are not
-enabled. `scriptgen.py` ignores the element.
+enabled. Patterns may overlap, but a project cannot be enabled in two XMLs
+of the same brand. Generation and deployment select the XML that enables the
+project; a matching XML without `<projects_enabled>` also claims it.
+Projects excluded from every matching XML's enabled set are not generated.
 
 `deploy_on_pull.py` creates the missing enabled folders whenever the XML
 changes (or with `--all`). `cleanup_on_deploy.py` deletes the folders that a

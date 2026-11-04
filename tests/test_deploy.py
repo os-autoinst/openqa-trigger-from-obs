@@ -281,13 +281,11 @@ def test_widened_range_creates_new_projects(repo):
     assert proc.returncode == 0, proc.out
     assert "Stg:Fac:Staging:C: creating project dir" in proc.out
     assert "Stg:Fac:Staging:A: creating" not in proc.out
-    # a dir that is not enabled is still regenerated, rsync.sh syncs it
     assert generating(proc) == [
         "Stg:Fac:Rings:1",
         "Stg:Fac:Staging:A",
         "Stg:Fac:Staging:B",
         "Stg:Fac:Staging:C",
-        "Stg:Fac:Staging:X",
     ]
 
 
@@ -379,20 +377,80 @@ def test_unmapped_dir_is_skipped(repo):
     assert generating(proc) == ["Baz:Qux", "Foo:Bar:ToTest", "Multi:A"]
 
 
-def test_dir_matched_by_two_xmls_is_not_generated(repo):
+def test_disabled_dir_matched_by_two_xmls_is_not_generated(repo):
     repo.xml("Dup1.xml", "Dup:[AB]", '<projects_enabled project="A"/>' + FLAVOR)
     repo.xml("Dup2.xml", "Dup:[BC]", '<projects_enabled project="C"/>' + FLAVOR)
     repo.commit()
     repo.path("Dup:B").mkdir()
     proc = repo.deploy("--all")
-    assert proc.returncode == 1
-    assert (
-        "Dup:B: matched by more than one XML (xml/obs/Dup1.xml, xml/obs/Dup2.xml)"
-        in proc.out
-    )
+    assert proc.returncode == 0, proc.out
     assert "Dup:B" not in generating(proc)
     assert not repo.generated("Dup:B")
     assert {"Dup:A", "Dup:C"} <= set(generating(proc))
+
+
+def test_overlapping_patterns_deploy_and_transfer_ownership(repo):
+    repo.xml(
+        "Dev.xml",
+        "Leap:(?P<version>16.[0-9])",
+        '<projects_enabled project="2"/><batch name="dev">' + FLAVOR + "</batch>",
+    )
+    repo.xml(
+        "Maint.xml",
+        "Leap:(?P<version>16.[0-9])",
+        '<projects_enabled range="0..1"/><batch name="maint">' + FLAVOR + "</batch>",
+    )
+    repo.commit()
+    proc = repo.deploy()
+    assert proc.returncode == 0, proc.out
+    assert repo.generated("Leap:16.2", "dev")
+    assert repo.generated("Leap:16.0", "maint")
+    assert repo.generated("Leap:16.1", "maint")
+    assert repo.cleanup().returncode == 0
+
+    repo.xml(
+        "Dev.xml",
+        "Leap:(?P<version>16.[0-9])",
+        '<projects_enabled project="3"/><batch name="dev">' + FLAVOR + "</batch>",
+    )
+    repo.xml(
+        "Maint.xml",
+        "Leap:(?P<version>16.[0-9])",
+        '<projects_enabled range="0..2"/><batch name="maint">' + FLAVOR + "</batch>",
+    )
+    repo.commit()
+    proc = repo.deploy()
+    assert proc.returncode == 0, proc.out
+    proc = repo.cleanup()
+    assert proc.returncode == 0, proc.out
+    assert repo.generated("Leap:16.2", "maint")
+    assert not repo.path("Leap:16.2", "dev").exists()
+    assert repo.generated("Leap:16.3", "dev")
+
+    repo.xml(
+        "Maint.xml",
+        "Leap:(?P<version>16.[0-9])",
+        '<projects_enabled range="0..1"/><batch name="maint">' + FLAVOR + "</batch>",
+    )
+    repo.commit()
+    assert repo.deploy().returncode == 0
+    proc = repo.cleanup()
+    assert proc.returncode == 0, proc.out
+    assert not repo.path("Leap:16.2").exists()
+    assert repo.generated("Leap:16.3", "dev")
+
+
+def test_duplicate_enabled_projects_block_deploy(repo):
+    for name in ("One.xml", "Two.xml"):
+        repo.xml(name, "Dup:[A-Z]", '<projects_enabled project="A"/>' + FLAVOR)
+    repo.commit()
+    proc = repo.deploy()
+    assert proc.returncode == 1
+    assert (
+        "Dup:A: enabled in more than one XML: xml/obs/One.xml, xml/obs/Two.xml"
+        in proc.out
+    )
+    assert not repo.path("Dup:A").exists()
 
 
 def test_pending_project_ending_in_xml(repo):

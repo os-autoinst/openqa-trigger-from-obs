@@ -56,7 +56,7 @@ def plan(old, head, result, pending, log):
     failed_xmls = []
     ambiguous = set()
     for d in dirs:
-        matching = common.matching_xmls(d, patterns)
+        matching = common.matching_xmls(d, patterns, result.enabled)
         if len(matching) > 1:
             errors.append(
                 f"{d}: matched by more than one XML ({', '.join(matching)}), not generated"
@@ -117,7 +117,7 @@ def plan(old, head, result, pending, log):
                 ok = False
             elif (
                 common.mapped_xml(name) != xml
-                or len(common.matching_xmls(name, patterns)) > 1
+                or len(common.matching_xmls(name, patterns, result.enabled)) > 1
             ):
                 errors.append(
                     f"{xml}: project {name} would be generated from "

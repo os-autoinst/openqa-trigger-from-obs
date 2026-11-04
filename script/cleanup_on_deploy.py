@@ -201,7 +201,18 @@ def main(argv=None):
 
     cleanup = Cleanup(args.dry_run, state.get("warned", []) if state else [], log)
     for project in common.project_dirs():
-        matching = common.matching_xmls(project, patterns)
+        matching = common.matching_xmls(project, patterns, result.enabled)
+        if not matching:
+            raw_matching = common.matching_xmls(project, patterns)
+            if raw_matching:
+                reason = f"not in <projects_enabled> of {', '.join(raw_matching)}"
+                if project in disabled or project in pending:
+                    cleanup.orphan(project, True, reason=reason + " any more")
+                else:
+                    cleanup.warn_once(
+                        f"{project}: {reason}; remove it by hand if it is not needed"
+                    )
+                continue
         if not matching:
             force = project in forced or any(
                 validate_xml.full_match(r, project) for r in deleted_patterns.values()
@@ -218,16 +229,6 @@ def main(argv=None):
             cleanup.warn_once(
                 f"{project}: matched by more than one XML ({', '.join(matching)}), skipped"
             )
-        elif project not in result.enabled.get(matching[0], [project]):
-            reason = f"not in <projects_enabled> of {matching[0]} any more"
-            if project in disabled or project in pending:
-                cleanup.orphan(project, True, reason=reason)
-            else:
-                cleanup.warn_once(
-                    f"{project}: not in <projects_enabled> of {matching[0]}; "
-                    "remove it by hand if it is not needed"
-                )
-                cleanup.stale_batches(project, deploy_pending)
         else:
             cleanup.stale_batches(project, deploy_pending)
 

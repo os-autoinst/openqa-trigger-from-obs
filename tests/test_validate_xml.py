@@ -300,6 +300,25 @@ def test_scriptgen_failure(root):
     assert found.startswith("xml/obs/A.xml: scriptgen cannot process it: KeyError")
 
 
+@pytest.mark.parametrize("batch", [None, "one"])
+@pytest.mark.parametrize("names", [("DVD", "DVD"), ("DVD|NET", "NET"), ("DVD|DVD",)])
+def test_duplicate_flavors(root, batch, names):
+    body = "".join(f'<flavor name="{name}" iso="iso"/>' for name in names)
+    if batch:
+        body = f'<batch name="{batch}">{body}</batch>'
+    write_xml(root, "A.xml", "A:B", body)
+    duplicate = "NET" if "NET" in names else "DVD"
+    assert errors() == [
+        f"xml/obs/A.xml: batch {batch or 'default'!r}: duplicate flavor name {duplicate!r}"
+    ]
+
+
+def test_same_flavor_in_different_batches(root):
+    body = "".join(f'<batch name="{name}">{FLAVOR}</batch>' for name in ("a", "b"))
+    write_xml(root, "A.xml", "A:B", body + FLAVOR)
+    assert errors() == []
+
+
 def test_batch_references(root):
     body = f'<batch name="a" repos="b">{FLAVOR}</batch><batch name="b">{FLAVOR}</batch>'
     write_xml(root, "A.xml", "A:B", body)
@@ -341,6 +360,41 @@ def test_test_dir_matching_two_xmls(root):
     (root / "t" / "obs" / "A:1").mkdir()
     assert errors() == [
         "A:1: matched by more than one XML: xml/obs/A.xml, xml/obs/B.xml"
+    ]
+
+
+def test_project_patterns_overlap_non_overlapping_enabled_projects(root):
+    body_Devel = '<projects_enabled  project="2"/>' + FLAVOR
+    body_Maint = '<projects_enabled range="0..1" project=""/>' + FLAVOR
+    write_xml(root, "openSUSE:Leap:Development.xml", r"Leap:X\.[0-9]", body_Devel)
+    write_xml(root, "openSUSE:Leap:Maintenance.xml", r"Leap:X\.[0-9]", body_Maint)
+    (root / "t" / "obs" / "Leap:X.2").mkdir()
+    (root / "t" / "obs" / "Leap:X.0").mkdir()
+    result = validate_xml.validate(["xml/obs"])
+    assert result.enabled == {
+        "xml/obs/openSUSE:Leap:Development.xml": ["Leap:X.2"],
+        "xml/obs/openSUSE:Leap:Maintenance.xml": ["Leap:X.0", "Leap:X.1"],
+    }
+    assert result.errors == []
+    for xml, names in result.enabled.items():
+        for name in names:
+            assert os.path.normpath(scriptgen.find_xml(name, "obs")[0]) == xml
+    assert scriptgen.find_xml("Leap:X.9", "obs") == ("", "", "")
+
+
+def test_project_patterns_overlap_allowed_different_enabled_projects(root):
+    body_Devel = '<projects_enabled  project="2"/>' + FLAVOR
+    body_Maint = '<projects_enabled range="0..1" project=""/>' + FLAVOR
+    body_Invalid = '<projects_enabled range="1..3" project=""/>' + FLAVOR
+    write_xml(root, "openSUSE:Leap:Development.xml", r"Leap:X\.[0-9]", body_Devel)
+    write_xml(root, "openSUSE:Leap:Maintenance.xml", r"Leap:X\.[0-9]", body_Maint)
+    write_xml(root, "openSUSE:Leap:Invalid.xml", r"Leap:X\.[0-9]", body_Invalid)
+    (root / "t" / "obs" / "Leap:X.2").mkdir()
+    (root / "t" / "obs" / "Leap:X.0").mkdir()
+    result = validate_xml.validate(["xml/obs"])
+    assert result.errors == [
+        "Leap:X.1: enabled in more than one XML: xml/obs/openSUSE:Leap:Invalid.xml, xml/obs/openSUSE:Leap:Maintenance.xml",
+        "Leap:X.2: enabled in more than one XML: xml/obs/openSUSE:Leap:Development.xml, xml/obs/openSUSE:Leap:Invalid.xml",
     ]
 
 
