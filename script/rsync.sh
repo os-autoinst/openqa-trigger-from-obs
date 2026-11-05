@@ -15,16 +15,20 @@ if [ -e "$environ/rsync.lock" ] && kill -0 $(cat "$environ/rsync.lock") 2>/dev/n
     (exit 1)
 fi
 
-trap "rm -f $environ/rsync.lock; exit" INT TERM EXIT
+cleanup_trap="rm -f $environ/rsync.lock; exit"
+trap "$cleanup_trap" INT TERM EXIT
 echo $$ > $environ/rsync.lock
 
 [ ! -f rsync.secret ] || export RSYNC_PASSWORD="$(cat rsync.secret)"
 
-failures_count=0
+failure_count=0
 
+# Runs in the main shell rather than in a subshell, so that signal traps fire
+# immediately. Every failing step must therefore return explicitly: errexit
+# would terminate the whole script and skip the remaining subfolders.
 sync_subfolder() {
     local subfolder="$1"
-    set -e
+    local builds version logdir current_dir f fail
     [ -e "$subfolder/read_files.sh" ] || { >&2 echo "No file found: {$subfolder/read_files.sh}"; return 1; }
     if [ ! -e "$subfolder/print_rsync_iso.sh" ] && [ ! -e "$subfolder/print_rsync_repo.sh" ]; then
         >&2 echo "Neither of files found: {$subfolder/print_rsync_iso.sh} nor {$subfolder/print_rsync_repo.sh}"
@@ -59,21 +63,21 @@ sync_subfolder() {
     logdir=$subfolder/.run_$(date +%y%m%d_%H%M%S)
     [ -z $version ] || logdir="$logdir"_"$version"
 
-    mkdir $logdir
+    mkdir $logdir || return 1
 
-    [ ! -e "$subfolder/print_rsync_iso.sh" ] || bash -e "$subfolder/print_rsync_iso.sh" > $logdir/rsync_iso.cmd 2> >(tee $logdir/generate_rsync_iso.err)
+    [ ! -e "$subfolder/print_rsync_iso.sh" ] || bash -e "$subfolder/print_rsync_iso.sh" > $logdir/rsync_iso.cmd 2> >(tee $logdir/generate_rsync_iso.err) || return 1
 
-    [ ! -e "$subfolder/print_rsync_repo.sh" ] || bash -e "$subfolder/print_rsync_repo.sh" > $logdir/rsync_repo.cmd 2> >(tee $logdir/generate_rsync_repo.err)
+    [ ! -e "$subfolder/print_rsync_repo.sh" ] || bash -e "$subfolder/print_rsync_repo.sh" > $logdir/rsync_repo.cmd 2> >(tee $logdir/generate_rsync_repo.err) || return 1
 
     # store state of files for eventual troubleshooting and avoid indefinite openqa retry
-    cp $subfolder/*.lst $logdir/
-    cp $subfolder/*.sh $logdir/
+    cp $subfolder/*.lst $logdir/ || return 1
+    cp $subfolder/*.sh $logdir/ || return 1
     # copy eventual status files
     for f in $environ/.* ; do
-        [ ! -f "$f" ] || cp $f $logdir/
+        [ ! -f "$f" ] || cp $f $logdir/ || return 1
     done
 
-    [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd
+    [ ! -e "$subfolder/print_openqa.sh" ] || bash -e "$subfolder/print_openqa.sh" 2>$logdir/generate_openqa.err > $logdir/openqa.cmd || return 1
 
     trap 'pkill -P $pid 2>/dev/null; kill $pid 2>/dev/null; exit 1' TERM INT
 
@@ -86,11 +90,11 @@ sync_subfolder() {
         [ "$fail" -eq 0 ] || break 
     done
 
-    trap - TERM INT
+    trap "$cleanup_trap" TERM INT
 
     # remove symbolic link if exists, because ln -f needs additional permissions for apparmor
-    [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last"
-    ln -s -T "$current_dir" "$subfolder"/.run_last
+    [ ! -L "$subfolder/.run_last" ] || rm "$subfolder/.run_last" || return 1
+    ln -s -T "$current_dir" "$subfolder"/.run_last || return 1
 
     return "$fail"
 }
