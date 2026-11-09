@@ -141,11 +141,19 @@
       <optional><attribute name="iso_5"/></optional>
       <optional><attribute name="legacy_builds"/></optional>
       <optional><attribute name="ln_iso_to_repo"/></optional>
-      <optional><attribute name="media1"/></optional>
+      <optional>
+          <choice>
+          <attribute name="media1">
+              <data type="boolean" />
+          </attribute>
+          <attribute name="rsync">
+              <data type="boolean" />
+          </attribute>
+          </choice>
+      </optional>
       <optional><attribute name="news"/></optional>
       <optional><attribute name="offset"/></optional>
       <optional><attribute name="realisoflavor"/></optional>
-      <optional><attribute name="rsync"/></optional>
       <optional><attribute name="sha"><ref name="sha"/></attribute></optional>
       <optional><attribute name="staging_pattern"/></optional>
       <optional><attribute name="version_from_media"/></optional>

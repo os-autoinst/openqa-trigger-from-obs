@@ -6,12 +6,12 @@
     distri="opensuse"
     archs="aarch64 x86_64">
     <projects_enabled project="0,1"/>
-    <flavor name="offline-installer" media1="0" iso="Leap-VERSIONVALUE-offline-installer-$arch.install.iso" sha="512" rsync="0">
+    <flavor name="offline-installer" media1="0" iso="Leap-VERSIONVALUE-offline-installer-$arch.install.iso" sha="512">
         <repos>
             <oss mirror="1" multiarch="1" version_from_media="1" folder="leap_oss" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" rsynctimeout="7200"/>
         </repos>
     </flavor>
-    <flavor name="online-installer" media1="0" iso="Leap-VERSIONVALUE-online-installer-$arch.install.iso" sha="512" rsync="0">
+    <flavor name="online-installer" media1="0" iso="Leap-VERSIONVALUE-online-installer-$arch.install.iso" sha="512">
         <!-- <repos>
             <oss mirror="1" multiarch="1" version_from_media="1" folder="leap_oss" debug="{java*,kernel-default-debug*,kernel-default-base-debug*,mraa-debug*,wicked-debug*}" rsynctimeout="7200"/>
         </repos> -->
