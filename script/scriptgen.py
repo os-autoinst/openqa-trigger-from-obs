@@ -1722,7 +1722,7 @@ def gen_files(project, rsync_user):
     if xmldir == "ibs":
         with suppress(ImportError):
             # https://github.com/astral-sh/ty/issues/2681 ignore unused-ignore-comment rule twice
-            import ibs  # noqa: F401 # ty: ignore[unused-ignore-comment, unresolved-import, unused-ignore-comment]
+            import ibs  # noqa: F401 # ty: ignore[unused-ignore-comment, import-not-found, unused-ignore-comment]
 
     a = load_generator(project, rsync_user)
     if a is None:
